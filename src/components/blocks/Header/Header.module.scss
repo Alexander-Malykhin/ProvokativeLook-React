@@ -1,0 +1,15 @@
+.header {
+  padding: rem(18) rem(40);
+
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(10);
+  }
+
+  &__image {
+    width: rem(22);
+    height: rem(22);
+  }
+}

@@ -1,0 +1,16 @@
+.item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: rem(16);
+
+  &__image {
+    width: rem(90);
+    height: rem(90);
+  }
+
+  &__title {
+    @include font(12, $fw-extra-light)
+  }
+}

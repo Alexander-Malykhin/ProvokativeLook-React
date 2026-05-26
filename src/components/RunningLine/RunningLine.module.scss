@@ -1,0 +1,49 @@
+.line {
+  width: 100%;
+  height: rem(40);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  background-color: $black;
+  color: $white;
+
+  &__track {
+    display: flex;
+    width: max-content;
+    animation-name: running-line;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: rem(18);
+    white-space: nowrap;
+    margin-right: rem(18);
+    flex-shrink: 0;
+
+    &_text {
+      @include font(12, $fw-extra-light);
+      color: $white;
+    }
+  }
+
+  &__dot {
+    width: rem(4);
+    height: rem(4);
+    border-radius: 50%;
+    background-color: $white;
+    flex-shrink: 0;
+  }
+}
+
+@keyframes running-line {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}

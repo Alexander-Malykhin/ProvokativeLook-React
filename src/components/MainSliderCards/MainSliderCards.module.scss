@@ -1,0 +1,89 @@
+.slider {
+  display: grid;
+  grid-template-columns: rem(210) 1fr;
+  gap: rem(20);
+
+  &__column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: rem(6);
+  }
+
+  &__title {
+    @include font(26, $fw-extra-light);
+  }
+
+  &__buttons {
+    display: flex;
+    gap: rem(10);
+  }
+
+  &__arrow {
+    width: rem(32);
+    height: rem(32);
+    border-radius: 50%;
+    border: none;
+    background-color: $white;
+    cursor: pointer;
+  }
+
+  &__arrow_image {
+    width: rem(16);
+    height: rem(16);
+  }
+
+  &__list {
+    display: flex;
+    gap: rem(20);
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__card {
+    flex: 0 0 rem(220);
+  }
+
+  &__card_image {
+    width: 100%;
+    height: rem(300);
+    margin-bottom: rem(12);
+
+    img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+  }
+
+  &__card_title {
+    @include font(12, $fw-extra-light);
+    color: $black;
+    margin-bottom: rem(8);
+  }
+
+  &__sizes {
+    display: flex;
+    gap: rem(6);
+    margin-bottom: rem(10);
+  }
+
+  &__size {
+    @include font(10, $fw-extra-light);
+    padding: rem(2) rem(6);
+    border: rem(1) solid $gray;
+    border-radius: rem(6);
+    color: $black;
+  }
+
+  &__price {
+    @include font(12, $fw-extra-light);
+    color: $black;
+  }
+}

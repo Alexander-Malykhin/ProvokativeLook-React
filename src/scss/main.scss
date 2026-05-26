@@ -1,0 +1,13 @@
+@use "base/reset.scss";
+
+//settings
+@use 'settings/fonts' as *;
+@use 'settings/colors' as *;
+@use 'settings/functions' as *;
+@use 'settings/mixins' as *;
+@use 'settings/containers' as *;
+
+* {
+  font-family: $ff-unbounded;
+  color: $black;
+}

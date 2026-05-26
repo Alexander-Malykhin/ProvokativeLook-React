@@ -1,0 +1,28 @@
+.promo {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: rem(24);
+
+  &__item {
+    height: rem(440);
+    display: grid;
+    grid-template-columns: minmax(0, 62%) max-content;
+    align-items: start;
+    background-color: $light-white;
+    overflow: hidden;
+    text-decoration: none;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  &__title {
+    margin: rem(96) rem(30) 0 rem(20);
+    @include font(36, $fw-extra-light);
+    color: $black;
+    white-space: nowrap;
+  }
+}

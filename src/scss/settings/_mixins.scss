@@ -1,0 +1,31 @@
+@use 'colors' as *;
+
+@mixin color-modifiers($property: color) {
+  &_black {
+    #{$property}: $black;
+  }
+
+  &_white {
+    #{$property}: $white;
+  }
+
+  &_gray {
+    #{$property}: $gray;
+  }
+
+  &_red {
+    #{$property}: $red;
+  }
+
+  &_green {
+    #{$property}: $green;
+  }
+
+  &_orange {
+    #{$property}: $orange;
+  }
+
+  &_violet {
+    #{$property}: $violet;
+  }
+}

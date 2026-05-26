@@ -1,0 +1,40 @@
+.banner {
+  display: grid;
+  grid-template-columns: 1fr;
+
+  gap: rem(66);
+
+  &__content {
+    display: flex;
+    justify-content: space-between;
+    gap: rem(10%);
+
+    background-color: $gray;
+  }
+
+  &__information {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: rem(46);
+
+    &_title {
+      max-width: rem(400);
+
+      &:first-child {
+        padding-left: rem(34);
+      }
+    }
+
+    &_footer {
+      padding: rem(34);
+    }
+
+    &_button {
+      @include font(20, $fw-regular);
+      border-bottom: rem(1) solid $black;
+      cursor: pointer;
+    }
+  }
+}

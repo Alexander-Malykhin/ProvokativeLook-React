@@ -1,0 +1,47 @@
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: rem(14);
+  padding: rem(16) rem(30);
+  border-radius: rem(10);
+  width: 100%;
+
+  &__text {
+    @include font(16, $fw-extra-light);
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: rem(22);
+    height: rem(22);
+  }
+
+  &__main {
+    background-color: $black;
+    border: rem(1) solid $black;
+  }
+
+  &__secondary {
+    background: transparent;
+    border: rem(1) solid currentColor;
+  }
+
+  &__text {
+    background: transparent;
+    border: none;
+    padding: 0;
+    border-radius: 0;
+    width: auto;
+
+    .button__text {
+      border-bottom: rem(1) solid currentColor;
+    }
+  }
+
+  &__color {
+    @include color-modifiers(color);
+  }
+}
