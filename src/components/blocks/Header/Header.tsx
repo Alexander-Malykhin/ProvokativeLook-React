@@ -9,7 +9,7 @@ import UserActions from "@components/blocks/Header/components/UserActions/UserAc
 
 const Header = () => {
     return (
-        <div className={styles.header}>
+        <header className={styles.header}>
             <MainLayoutContainer>
                 <div className={styles.header__content}>
                     <Logo/>
@@ -17,7 +17,7 @@ const Header = () => {
                     <UserActions/>
                 </div>
             </MainLayoutContainer>
-        </div>
+        </header>
     );
 };
 

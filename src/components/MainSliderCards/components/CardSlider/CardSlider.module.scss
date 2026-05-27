@@ -1,0 +1,38 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 rem(322);
+  gap: rem(16);
+
+  &__header {
+    width: 100%;
+    height: rem(430);
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: rem(8);
+  }
+
+  &__information {
+    display: flex;
+    flex-direction: column;
+    gap: rem(10);
+
+    &_tille {
+      @include font(14, $fw-extra-light)
+    }
+  }
+
+  &__price {
+    @include font(14, $fw-extra-light)
+  }
+}

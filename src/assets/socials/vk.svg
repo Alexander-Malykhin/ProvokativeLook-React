@@ -1,0 +1,20 @@
+<svg viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="26.000000" height="26.000000" fill="none" customFrame="#000000">
+	<defs>
+		<filter id="pixso_custom_mask_type_outline">
+			<feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0 " />
+		</filter>
+	</defs>
+	<mask id="mask_0" width="26.000000" height="26.000000" x="0.000000" y="0.000000" maskUnits="userSpaceOnUse">
+		<g filter="url(#pixso_custom_mask_type_outline)">
+			<g id="clip0_2_40">
+				<path id="Vector" d="M26 0L0 0L0 26L26 26L26 0Z" fill="rgb(255,255,255)" fill-rule="evenodd" />
+			</g>
+		</g>
+	</mask>
+	<g id="Clip path group" mask="url(#mask_0)">
+		<g id="Group">
+			<path id="Vector" d="M0 12.48C0 6.59688 0 3.65531 1.82765 1.82765C3.65531 0 6.59688 0 12.48 0L13.52 0C19.4031 0 22.3447 0 24.1724 1.82765C26 3.65531 26 6.59688 26 12.48L26 13.52C26 19.4031 26 22.3447 24.1724 24.1724C22.3447 26 19.4031 26 13.52 26L12.48 26C6.59688 26 3.65531 26 1.82765 24.1724C0 22.3447 0 19.4031 0 13.52L0 12.48Z" fill="rgb(34,34,34)" fill-opacity="0.699999988" fill-rule="nonzero" />
+			<path id="Vector" d="M13.8334 18.7312C7.90753 18.7312 4.52756 14.6687 4.38672 7.90869L7.35506 7.90869C7.45256 12.8703 9.64085 14.972 11.3742 15.4053L11.3742 7.90869L14.1693 7.90869L14.1693 12.1878C15.8809 12.0037 17.679 10.0537 18.2857 7.90869L21.0808 7.90869C20.615 10.552 18.665 12.502 17.2783 13.3037C18.665 13.9537 20.8859 15.6545 21.7309 18.7312L18.6541 18.7312C17.9933 16.6729 16.3468 15.0803 14.1693 14.8637L14.1693 18.7312L13.8334 18.7312Z" fill="rgb(255,255,255)" fill-rule="nonzero" />
+		</g>
+	</g>
+</svg>

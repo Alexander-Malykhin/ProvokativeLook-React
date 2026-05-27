@@ -6,5 +6,3 @@ export type Colors =
     | 'green'
     | 'orange'
     | 'violet';
-
-export type ButtonMode = 'main' | 'secondary' | 'text';

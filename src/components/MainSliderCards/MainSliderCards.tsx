@@ -2,14 +2,11 @@
 import { useHorizontalSlider } from '@/hooks/useHorizontalSlider';
 //styles
 import styles from './MainSliderCards.module.scss';
-//images
-import SliderArrowRightImage from '@assets/arrows/arrow-right-gray.svg';
-import SliderArrowLeftImage from '@assets/arrows/arrow-left-gray.svg';
 //layouts
 import SectionLayout from '@layouts/SectionLayout/SectionLayout';
-import MainLayoutContainer from '@layouts/MainLayoutContainer/MainLayoutContainer';
-//UI
-import Image from '@UI/buttons/Image/Image';
+//components
+import ActionColumn from "@components/MainSliderCards/components/ActionColumn/ActionColumn.tsx";
+import CardSlider from "@components/MainSliderCards/components/CardSlider/CardSlider.tsx";
 //types
 import type {MainSliderCardsInterface} from "@components/MainSliderCards/types/types.ts";
 
@@ -56,59 +53,72 @@ const products = [
         price: '7 700 ₽',
         sizes: ['48', '50', '52', '54'],
     },
+    {
+        id: 7,
+        title: 'Шуба',
+        image: 'products/product-1.png',
+        price: '17 700 ₽',
+        sizes: ['48', '50', '52', '54'],
+    },
+    {
+        id: 8,
+        title: 'Босоножки',
+        image: 'products/product-1.png',
+        price: '7 700 ₽',
+        sizes: ['48', '50', '52', '54'],
+    },
+    {
+        id: 9,
+        title: 'Комбинезон с накидкой',
+        image: 'products/product-1.png',
+        price: '11 700 ₽',
+        sizes: ['48', '50', '52', '54'],
+    },
+    {
+        id: 10,
+        title: 'Свитшот',
+        image: 'products/product-1.png',
+        price: '17 700 ₽',
+        sizes: ['48', '50', '52'],
+    },
+    {
+        id: 11,
+        title: 'Шуба',
+        image: 'products/product-1.png',
+        price: '17 700 ₽',
+        sizes: ['48', '50', '52', '54'],
+    },
+    {
+        id: 12,
+        title: 'Босоножки',
+        image: 'products/product-1.png',
+        price: '7 700 ₽',
+        sizes: ['48', '50', '52', '54'],
+    },
 ];
 
 const MainSliderCards = ({ title }: MainSliderCardsInterface) => {
     const { sliderRef, scrollSlider } = useHorizontalSlider(240);
 
-
     return (
         <SectionLayout>
-            <MainLayoutContainer className={styles.slider}>
-                <div className={styles.slider__column}>
-                    <h2 className={styles.slider__title}>{title}</h2>
-
-                    <div className={styles.slider__buttons}>
-                        <button
-                            type="button"
-                            className={styles.slider__arrow}
-                            onClick={() => scrollSlider('left')}
-                        >
-                            <Image src={SliderArrowLeftImage} className={styles.slider__arrow_image} />
-                        </button>
-
-                        <button
-                            type="button"
-                            className={styles.slider__arrow}
-                            onClick={() => scrollSlider('right')}
-                        >
-                            <Image src={SliderArrowRightImage} className={styles.slider__arrow_image} />
-                        </button>
-                    </div>
-                </div>
+            <div className={styles.slider}>
+                <ActionColumn
+                    title={title}
+                    scrollSlider={scrollSlider}
+                />
 
                 <div ref={sliderRef} className={styles.slider__list}>
-                    {products.map((item) => (
-                        <article key={item.id} className={styles.slider__card}>
-                            <div className={styles.slider__card_image}>
-                                <img src={`${import.meta.env.BASE_URL}${item.image}`} alt={item.title} />
-                            </div>
-
-                            <h3 className={styles.slider__card_title}>{item.title}</h3>
-
-                            <div className={styles.slider__sizes}>
-                                {item.sizes.map((size) => (
-                                    <span key={size} className={styles.slider__size}>
-                                        {size}
-                                    </span>
-                                ))}
-                            </div>
-
-                            <p className={styles.slider__price}>{item.price}</p>
-                        </article>
-                    ))}
+                    {products.map((item) =>
+                        <CardSlider key={item.id}
+                            image={item.image}
+                            title={item.title}
+                            sizes={item.sizes}
+                            price={item.price}
+                        />
+                    )}
                 </div>
-            </MainLayoutContainer>
+            </div>
         </SectionLayout>
     );
 };

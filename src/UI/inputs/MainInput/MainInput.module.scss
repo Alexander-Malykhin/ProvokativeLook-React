@@ -1,0 +1,54 @@
+.field {
+  width: 100%;
+  position: relative;
+
+  &__input {
+    @include font(16, $fw-extra-light);
+
+    background-color: $white;
+    height: 100%;
+    width: 100%;
+    padding: rem(24) rem(16);
+    color: $black;
+    border: rem(1) solid transparent;
+    border-radius: rem(10);
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+
+    &::placeholder {
+      @include font(16, $fw-extra-light);
+      color: rgba($black, 0.5);
+      transition: color 0.3s ease;
+    }
+
+    &:hover {
+      border-color: rgba($black, 0.18);
+      box-shadow: 0 rem(8) rem(24) rgba($black, 0.06);
+    }
+
+    &:focus {
+      border-color: rgba($black, 0.35);
+      box-shadow: 0 0 0 rem(4) rgba($black, 0.06);
+    }
+
+    &:focus::placeholder {
+      color: rgba($black, 0.35);
+    }
+
+    &_error {
+      border-color: $red;
+      box-shadow: 0 0 0 rem(3) rgba($red, 0.08);
+    }
+
+  }
+
+  &__error {
+    position: absolute;
+    left: rem(16);
+    top: calc(100% + rem(6));
+
+    @include font(12, $fw-extra-light);
+    color: $red;
+    line-height: 1;
+  }
+}

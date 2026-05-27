@@ -1,5 +1,6 @@
 import type {ReactNode} from 'react';
-import type {Colors, ButtonMode} from '@/types/color';
+import type {Colors} from '@/types/color';
+import type {ButtonMode, ButtonType} from "@/types/button.ts";
 
 export interface MainButtonInterface {
     children: ReactNode;
@@ -9,4 +10,5 @@ export interface MainButtonInterface {
     className?: string;
     color?: Colors;
     mode?: ButtonMode;
+    type?: ButtonType
 }

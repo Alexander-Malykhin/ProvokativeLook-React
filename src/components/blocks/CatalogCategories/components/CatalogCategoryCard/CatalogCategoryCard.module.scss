@@ -1,0 +1,65 @@
+.card {
+  position: relative;
+  padding: rem(40) rem(24);
+  overflow: hidden;
+  background: linear-gradient(
+                  180deg,
+                  rgba($gray, 1) 0%,
+                  rgba($gray, 0) 100%
+  );
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: rem(180);
+    background: linear-gradient(
+                    180deg,
+                    rgba($black, 0) 0%,
+                    rgba($black, 0.2) 100%
+    );
+    pointer-events: none;
+  }
+
+  &__information {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: rem(22);
+
+    &_title {
+      @include font(36, $fw-extra-light);
+      max-width: rem(300);
+    }
+
+    &_button {
+      @include font(16, $fw-extra-light);
+
+      border: rem(1) solid $gray;
+      border-radius: rem(10);
+      padding: rem(8);
+    }
+  }
+
+  &__image {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    max-width: 100%;
+    z-index: 1;
+
+    &_left {
+      transform: translateX(rem(-20));
+    }
+
+    &_middle {
+      transform: translateX(rem(40));
+    }
+
+    &_right {
+      transform: translateX(rem(-20));
+    }
+  }
+}

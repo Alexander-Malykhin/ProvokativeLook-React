@@ -20,6 +20,7 @@ export default defineConfig({
       '@UI': path.resolve(__dirname, './src/UI'),
       '@assets': path.resolve(__dirname, './src/assets'),
       '@hooks': path.resolve(__dirname, './src/hooks'),
+      '@helpers': path.resolve(__dirname, './src/helpers'),
       '@api': path.resolve(__dirname, './src/api'),
     },
   },

@@ -1,0 +1,16 @@
+.answers {
+  display: grid;
+  grid-template-columns: rem(210) minmax(0, 1fr);
+  gap: rem(20);
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: rem(6);
+
+  &__title {
+    @include font(26, $fw-extra-light);
+  }
+}

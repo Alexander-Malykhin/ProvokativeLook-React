@@ -1,0 +1,35 @@
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: rem(10);
+  cursor: pointer;
+
+  &__input {
+    display: none;
+  }
+
+  &__box {
+    position: relative;
+    flex: 0 0 rem(20);
+    width: rem(20);
+    height: rem(20);
+    border-radius: rem(4);
+    background-color: $white;
+  }
+
+  &__input:checked + &__box::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    width: rem(6);
+    height: rem(11);
+    border: solid $black;
+    border-width: 0 rem(2) rem(2) 0;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  &__text {
+    @include font(12, $fw-extra-light);
+  }
+}

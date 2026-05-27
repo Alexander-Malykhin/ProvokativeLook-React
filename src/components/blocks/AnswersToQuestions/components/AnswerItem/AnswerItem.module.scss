@@ -1,0 +1,72 @@
+.item {
+  border: rem(1) solid $gray;
+  border-radius: rem(10);
+  overflow: hidden;
+  background-color: $white;
+
+  &_head {
+    width: 100%;
+    padding: rem(15) rem(30);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(20);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+
+    @include font(18, $fw-regular);
+    color: $black;
+    text-align: left;
+  }
+
+  &_icon {
+    position: relative;
+    flex: 0 0 rem(16);
+    width: rem(16);
+    height: rem(16);
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 100%;
+      height: rem(1);
+      background-color: $black;
+      transition: transform 0.3s ease;
+    }
+
+    &::after {
+      transform: rotate(90deg);
+    }
+  }
+
+  &_body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease;
+  }
+
+  &_body_inner {
+    overflow: hidden;
+    padding: 0 rem(30);
+
+    p {
+      @include font(16, $fw-extra-light);
+      color: rgba($black, 0.6);
+      padding-bottom: rem(15);
+    }
+  }
+
+  &_active {
+    .item_icon::after {
+      transform: rotate(0deg);
+    }
+
+    .item_body {
+      grid-template-rows: 1fr;
+    }
+  }
+}

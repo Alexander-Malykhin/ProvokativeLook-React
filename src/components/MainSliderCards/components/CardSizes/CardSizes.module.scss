@@ -1,0 +1,13 @@
+.sizes {
+  display: flex;
+  align-items: center;
+  gap: rem(4);
+
+  &__item {
+    @include font(14, $fw-extra-light);
+    padding: rem(8);
+    border-radius: rem(10);
+    border: rem(1) solid $gray;
+  }
+}
+

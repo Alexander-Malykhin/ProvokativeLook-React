@@ -1,0 +1,42 @@
+.subscribe {
+  background-color: $gray;
+  padding: rem(64) 0;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: rem(35);
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: rem(20);
+
+    &_row {
+      display: grid;
+      justify-content: center;
+      grid-template-columns: repeat(2, minmax(rem(200), rem(440)));
+      gap: rem(24);
+    }
+
+    &__column {
+      display: flex;
+      flex-direction: column;
+      gap: rem(12);
+    }
+  }
+
+  &__text {
+    @include font(20, $fw-regular)
+  }
+
+  &__form_checkbox_error {
+    @include font(12, $fw-extra-light);
+    color: $red;
+    margin-left: rem(30);
+    margin-top: rem(-4);
+  }
+}

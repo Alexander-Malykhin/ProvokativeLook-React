@@ -5,32 +5,32 @@ import NavigationItem from "@components/Navigation/components/NavigationItem.tsx
 const navigation = [
     {
         id: 1,
-        text: 'Коллекция',
+        text: 'Новая коллекция',
         path: '/'
     },
     {
         id: 2,
-        text: 'Коллекция',
+        text: 'Каталог',
         path: '/'
     },
     {
         id: 3,
-        text: 'Коллекция',
+        text: 'О бренде',
         path: '/'
     },
     {
         id: 4,
-        text: 'Коллекция',
+        text: 'Доставка и оплата',
         path: '/'
     },
     {
         id: 5,
-        text: 'Коллекция',
+        text: 'Контакты',
         path: '/'
     },
     {
         id: 6,
-        text: 'Коллекция',
+        text: 'Распродажа',
         path: '/'
     },
 ]
