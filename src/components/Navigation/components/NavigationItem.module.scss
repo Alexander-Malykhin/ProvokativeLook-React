@@ -8,4 +8,8 @@
   &:last-child {
     color: $red;
   }
+
+  @media (max-width: rem($desktop-x)) {
+    @include font(12, $fw-light);
+  }
 }

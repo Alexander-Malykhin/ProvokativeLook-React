@@ -1,0 +1,8 @@
+.page {
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: rem(128);
+  }
+}

@@ -1,4 +1,6 @@
 .item {
+  flex: 0 0 auto;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -8,9 +10,22 @@
   &__image {
     width: rem(90);
     height: rem(90);
+    object-fit: contain;
   }
 
   &__title {
-    @include font(12, $fw-extra-light)
+    @include font(12, $fw-extra-light);
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: rem($mobile)) {
+  .item {
+    gap: rem(10);
+
+    &__image {
+      width: rem(72);
+      height: rem(72);
+    }
   }
 }

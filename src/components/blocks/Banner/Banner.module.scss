@@ -1,15 +1,32 @@
 .banner {
   display: grid;
   grid-template-columns: 1fr;
-
   gap: rem(66);
 
   &__content {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, max-content) minmax(rem(320), rem(430)) minmax(0, max-content);
+    align-items: stretch;
     justify-content: space-between;
-    gap: rem(10%);
-
     background-color: $gray;
+    overflow: hidden;
+    min-height: rem(160);
+    max-height: rem(640);
+
+    > img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+
+    > img:first-child {
+      object-position: right center;
+    }
+
+    > img:last-child {
+      object-position: left center;
+    }
   }
 
   &__information {
@@ -18,23 +35,67 @@
     justify-content: center;
     flex-direction: column;
     gap: rem(46);
+    padding: rem(40) rem(20);
+    text-align: center;
 
     &_title {
       max-width: rem(400);
+      text-align: left;
 
       &:first-child {
-        padding-left: rem(34);
+        padding-left: rem(32);
       }
     }
 
     &_footer {
-      padding: rem(34);
+      padding: rem(34) 0 0;
     }
 
     &_button {
       @include font(20, $fw-regular);
       border-bottom: rem(1) solid $black;
       cursor: pointer;
+    }
+  }
+
+  @media (max-width: rem($desktop-x)) {
+    &__information {
+
+      &_title {
+        max-width: rem(300);
+
+        &:first-child {
+          padding-left: rem(20);
+        }
+      }
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+
+    &__content {
+      grid-template-columns: 30% minmax(0, 1fr);
+
+      > img:last-child {
+        display: none;
+      }
+    }
+
+    &__information {
+      align-items: center;
+      justify-content: center;
+
+      &_title {
+        display: none;
+      }
+
+      &_footer {
+          padding: 0;
+      }
+
+      &_button {
+        @include font(14, $fw-regular);
+      }
     }
   }
 }

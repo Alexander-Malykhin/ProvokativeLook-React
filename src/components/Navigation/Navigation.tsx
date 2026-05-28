@@ -1,5 +1,6 @@
 //styles
 import styles from './Navigation.module.scss'
+//components
 import NavigationItem from "@components/Navigation/components/NavigationItem.tsx";
 
 const navigation = [
@@ -11,7 +12,7 @@ const navigation = [
     {
         id: 2,
         text: 'Каталог',
-        path: '/'
+        path: '/catalog'
     },
     {
         id: 3,

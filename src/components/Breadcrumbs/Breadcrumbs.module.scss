@@ -1,0 +1,21 @@
+.navigation {
+  display: flex;
+  flex-direction: column;
+  gap: rem(40);
+  padding: rem(40) 0;
+
+  &__item {
+    @include font(12, $fw-extra-light);
+    color: $black;
+  }
+
+  &__list {
+    display: flex;
+    align-items: center;
+    gap: rem(12);
+  }
+
+  &__title {
+    @include font(26, $fw-light)
+  }
+}

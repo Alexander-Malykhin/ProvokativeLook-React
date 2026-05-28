@@ -1,0 +1,40 @@
+.category {
+  display: grid;
+  gap: rem(24);
+
+
+  &_promo,
+  &_grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-rows: rem(584);
+  }
+
+  @media (max-width: rem($desktop-x)) {
+    gap: rem(24);
+
+    &_promo,
+    &_grid {
+      grid-auto-rows: rem(420);
+    }
+  }
+
+  @media (max-width: rem($tablet)) {
+    gap: rem(16);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    &_promo,
+    &_grid {
+      grid-auto-rows: rem(280);
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+    gap: rem(8);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    &_promo,
+    &_grid {
+      grid-auto-rows: rem(194);
+    }
+  }
+}

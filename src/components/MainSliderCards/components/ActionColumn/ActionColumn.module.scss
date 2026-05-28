@@ -30,4 +30,10 @@
       height: rem(13);
     }
   }
+
+  @media (max-width: rem($mobile)) {
+    &__buttons {
+      display: none;
+    }
+  }
 }

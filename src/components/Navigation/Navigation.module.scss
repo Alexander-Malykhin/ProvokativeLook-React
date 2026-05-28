@@ -1,5 +1,15 @@
 .navigation {
   display: flex;
   align-items: center;
-  gap: rem(40);
+  justify-content: space-between;
+  gap: rem(5);
+  flex: 0 1 rem(845);
+
+  @media (max-width: rem($desktop-x)) {
+    flex: 0 1 rem(600);
+  }
+
+  @media (max-width: rem($adaptive-tablet)) {
+    display: none;
+  }
 }

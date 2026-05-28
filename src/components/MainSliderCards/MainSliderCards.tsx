@@ -1,124 +1,99 @@
+import {useEffect, useState} from "react";
 //hooks
-import { useHorizontalSlider } from '@/hooks/useHorizontalSlider';
+import {useHorizontalSlider} from '@/hooks/useHorizontalSlider';
 //styles
 import styles from './MainSliderCards.module.scss';
 //layouts
 import SectionLayout from '@layouts/SectionLayout/SectionLayout';
+import MainLayoutContainer from '@layouts/MainLayoutContainer/MainLayoutContainer';
 //components
-import ActionColumn from "@components/MainSliderCards/components/ActionColumn/ActionColumn.tsx";
-import CardSlider from "@components/MainSliderCards/components/CardSlider/CardSlider.tsx";
+import ActionColumn from './components/ActionColumn/ActionColumn';
 //types
-import type {MainSliderCardsInterface} from "@components/MainSliderCards/types/types.ts";
+import type {MainSliderCardsInterface} from './types/types';
 
-const products = [
-    {
-        id: 1,
-        title: 'Шуба',
-        image: 'products/product-1.png',
-        price: '17 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 2,
-        title: 'Босоножки',
-        image: 'products/product-1.png',
-        price: '7 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 3,
-        title: 'Комбинезон с накидкой',
-        image: 'products/product-1.png',
-        price: '11 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 4,
-        title: 'Свитшот',
-        image: 'products/product-1.png',
-        price: '17 700 ₽',
-        sizes: ['48', '50', '52'],
-    },
-    {
-        id: 5,
-        title: 'Шуба',
-        image: 'products/product-1.png',
-        price: '17 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 6,
-        title: 'Босоножки',
-        image: 'products/product-1.png',
-        price: '7 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 7,
-        title: 'Шуба',
-        image: 'products/product-1.png',
-        price: '17 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 8,
-        title: 'Босоножки',
-        image: 'products/product-1.png',
-        price: '7 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 9,
-        title: 'Комбинезон с накидкой',
-        image: 'products/product-1.png',
-        price: '11 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 10,
-        title: 'Свитшот',
-        image: 'products/product-1.png',
-        price: '17 700 ₽',
-        sizes: ['48', '50', '52'],
-    },
-    {
-        id: 11,
-        title: 'Шуба',
-        image: 'products/product-1.png',
-        price: '17 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 12,
-        title: 'Босоножки',
-        image: 'products/product-1.png',
-        price: '7 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-];
+const MainSliderCards = ({title, children, withControls = true, withFullContainer = false, scrollStep = 240,}: MainSliderCardsInterface) => {
+    const { sliderRef, scrollSlider } = useHorizontalSlider(scrollStep);
 
-const MainSliderCards = ({ title }: MainSliderCardsInterface) => {
-    const { sliderRef, scrollSlider } = useHorizontalSlider(240);
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [dotsCount, setDotsCount] = useState(0);
+
+    useEffect(() => {
+        const slider = sliderRef.current;
+        if (!slider) return;
+
+        const updateDots = () => {
+            const step = slider.clientWidth;
+            if (!step) return;
+
+            const count = Math.ceil(slider.scrollWidth / step);
+            const index = Math.round(slider.scrollLeft / step);
+
+            setDotsCount(count);
+            setActiveIndex(Math.min(index, count - 1));
+        };
+
+        updateDots();
+
+        slider.addEventListener('scroll', updateDots);
+        window.addEventListener('resize', updateDots);
+
+        return () => {
+            slider.removeEventListener('scroll', updateDots);
+            window.removeEventListener('resize', updateDots);
+        };
+    }, [sliderRef]);
+
+    const scrollToSlide = (index: number) => {
+        const slider = sliderRef.current;
+        if (!slider) return;
+
+        slider.scrollTo({
+            left: slider.clientWidth * index,
+            behavior: 'smooth',
+        });
+    };
+
+    const content = (
+        <div
+            className={`${styles.slider} ${
+                withFullContainer ? styles.slider_container : ''
+            }`}
+        >
+            <ActionColumn
+                title={title}
+                scrollSlider={scrollSlider}
+                withControls={withControls}
+            />
+
+            {typeof children === 'function'
+                ? children({sliderRef, scrollSlider})
+                : children}
+
+            <div className={styles.slider__dots}>
+                {Array.from({length: dotsCount}).map((_, index) => (
+                    <button
+                        key={index}
+                        type="button"
+                        className={`${styles.slider__dot} ${
+                            activeIndex === index ? styles.slider__dot_active : ''
+                        }`}
+                        onClick={() => scrollToSlide(index)}
+                        aria-label={`Перейти к слайду ${index + 1}`}
+                    />
+                ))}
+            </div>
+        </div>
+    );
 
     return (
         <SectionLayout>
-            <div className={styles.slider}>
-                <ActionColumn
-                    title={title}
-                    scrollSlider={scrollSlider}
-                />
-
-                <div ref={sliderRef} className={styles.slider__list}>
-                    {products.map((item) =>
-                        <CardSlider key={item.id}
-                            image={item.image}
-                            title={item.title}
-                            sizes={item.sizes}
-                            price={item.price}
-                        />
-                    )}
-                </div>
-            </div>
+            {withFullContainer ? (
+                <MainLayoutContainer>
+                    {content}
+                </MainLayoutContainer>
+            ) : (
+                content
+            )}
         </SectionLayout>
     );
 };

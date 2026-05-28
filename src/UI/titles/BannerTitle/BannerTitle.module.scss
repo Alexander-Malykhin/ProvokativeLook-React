@@ -1,3 +1,11 @@
 .title {
   @include font(40, $fw-extra-light);
+
+  @media (max-width: rem($desktop-x)) {
+    @include font(30, $fw-extra-light);
+  }
+
+  @media (max-width: rem($mobile)) {
+    @include font(25, $fw-extra-light);
+  }
 }

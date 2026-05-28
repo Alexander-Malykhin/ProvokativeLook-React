@@ -6,7 +6,7 @@
 
   &__header {
     width: 100%;
-    height: rem(430);
+    height: auto;
   }
 
   &__image {
@@ -27,7 +27,7 @@
     flex-direction: column;
     gap: rem(10);
 
-    &_tille {
+    &_title {
       @include font(14, $fw-extra-light)
     }
   }

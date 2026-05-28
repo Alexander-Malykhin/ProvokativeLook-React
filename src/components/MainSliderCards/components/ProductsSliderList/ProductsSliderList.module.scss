@@ -1,0 +1,21 @@
+.list {
+  min-width: 0;
+  display: flex;
+  gap: rem(20);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  padding-right: rem(40);
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &_five {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - rem(80)) / 5);
+    padding-right: 0;
+  }
+}

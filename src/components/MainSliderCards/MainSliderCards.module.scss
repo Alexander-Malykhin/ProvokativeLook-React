@@ -13,22 +13,30 @@ $container: 1360;
           calc((100vw - rem($container)) / 2 + rem(10))
   );
 
-  &__list {
-    min-width: 0;
+  &_container {
+    padding-left: 0;
+  }
 
-    display: flex;
-    gap: rem(20);
+  @media (max-width: rem($mobile)) {
+    grid-template-columns: 1fr;
+    gap: rem(24);
 
-    overflow-x: auto;
-    overflow-y: hidden;
 
-    scroll-behavior: smooth;
-    scrollbar-width: none;
+    &__dots {
+      display: flex;
+      align-items: center;
+      gap: rem(6);
+    }
 
-    padding-right: rem(40);
+    &__dot {
+      width: 100%;
+      height: rem(2);
+      background-color: $gray;
+      cursor: pointer;
 
-    &::-webkit-scrollbar {
-      display: none;
+      &_active {
+        background-color: $black;
+      }
     }
   }
 }

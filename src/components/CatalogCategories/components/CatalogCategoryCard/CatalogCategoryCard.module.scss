@@ -1,0 +1,400 @@
+.card {
+  position: relative;
+  height: 100%;
+  padding: rem(40) rem(24);
+  overflow: hidden;
+
+  background: linear-gradient(
+                  180deg,
+                  #e4e4ec 0%,
+                  #f6f6fa 58%,
+                  #d8d8dc 100%
+  );
+
+  &::after {
+    display: none;
+  }
+
+  &__information {
+    position: relative;
+    z-index: 4;
+
+    max-width: 58%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: rem(22);
+  }
+
+  &__information_title {
+    @include font(36, $fw-extra-light);
+    line-height: 1.05;
+  }
+
+  &__information_button {
+    @include font(16, $fw-extra-light);
+    padding: rem(8);
+
+    border: rem(1) solid $gray;
+    border-radius: rem(10);
+  }
+
+  &__imageBox {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 3;
+
+    width: 78%;
+    height: 84%;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+
+    pointer-events: none;
+  }
+
+  &__image {
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+
+    object-fit: contain;
+    object-position: right bottom;
+  }
+
+  &_1 &__imageBox {
+    width: rem(250);
+  }
+
+  &_2 &__imageBox {
+    width: rem(400);
+    transform: translate(0, rem(220));
+  }
+
+  &_3 &__imageBox {
+    width: rem(250);
+    transform: translate(rem(-30), rem(0));
+  }
+
+  &_4 &__imageBox {
+    width: 100%;
+    height: 100%;
+    transform: translate(rem(120), rem(0));
+  }
+
+  &_5 &__imageBox {
+    width: rem(400);
+    height: 100%;
+    transform: translate(rem(-20), rem(120));
+  }
+
+  &_6 &__imageBox {
+    width: rem(350);
+    height: 100%;
+    transform: translate(rem(0), rem(0));
+  }
+
+  &_7 &__imageBox {
+    width: rem(300);
+  }
+
+  &_8 &__imageBox {
+    width: rem(300);
+    height: 100%;
+    transform: translate(rem(-60), rem(200));
+  }
+
+  &_9 &__imageBox {
+    width: rem(420);
+    height: 100%;
+
+  }
+
+  &_10 &__imageBox {
+    width: rem(350);
+    height: 100%;
+    transform: translate(rem(0), rem(220));
+  }
+
+  &_11 &__imageBox {
+    width: rem(350);
+    height: 100%;
+    transform: translate(rem(50), rem(100));
+  }
+
+  &_12 &__imageBox {
+    width: rem(250);
+    height: 100%;
+    transform: translate(rem(-50), rem(-50));
+  }
+
+  &_13 &__imageBox {
+    width: rem(350);
+    height: 100%;
+    transform: translate(rem(10), rem(300));
+  }
+
+  &_14 &__imageBox {
+    width: rem(550);
+    height: 100%;
+    transform: translate(rem(250), rem(200));
+  }
+
+  @media (max-width: rem($desktop-x)) {
+    padding: rem(28) rem(18);
+
+    &__information {
+      max-width: 60%;
+    }
+
+    &__information_title {
+      @include font(26, $fw-extra-light);
+    }
+
+    &_1 &__imageBox {
+      width: rem(210);
+    }
+
+    &_2 &__imageBox {
+      width: rem(330);
+      transform: translate(0, rem(150));
+    }
+
+    &_3 &__imageBox {
+      width: rem(215);
+      transform: translate(rem(-20), 0);
+    }
+
+    &_4 &__imageBox {
+      width: 100%;
+      transform: translate(rem(90), 0);
+    }
+
+    &_5 &__imageBox {
+      width: rem(330);
+      transform: translate(rem(-15), rem(90));
+    }
+
+    &_6 &__imageBox {
+      width: rem(300);
+    }
+
+    &_7 &__imageBox {
+      width: rem(250);
+    }
+
+    &_8 &__imageBox {
+      width: rem(250);
+      transform: translate(rem(-40), rem(140));
+    }
+
+    &_9 &__imageBox {
+      width: rem(350);
+    }
+
+    &_10 &__imageBox {
+      width: rem(290);
+      transform: translate(0, rem(150));
+    }
+
+    &_11 &__imageBox {
+      width: rem(290);
+      transform: translate(rem(35), rem(70));
+    }
+
+    &_12 &__imageBox {
+      width: rem(210);
+      transform: translate(rem(-35), rem(-35));
+    }
+
+    &_13 &__imageBox {
+      width: rem(290);
+      transform: translate(rem(5), rem(200));
+    }
+
+    &_14 &__imageBox {
+      width: rem(450);
+      transform: translate(rem(190), rem(140));
+    }
+  }
+
+  @media (max-width: rem($tablet)) {
+    padding: rem(10);
+
+    &::after {
+      height: rem(70);
+    }
+
+    &__information {
+      gap: 0;
+      max-width: 70%;
+    }
+
+    &__information_title {
+      @include font(14, $fw-extra-light);
+    }
+
+    &__information_button {
+      display: none;
+    }
+
+    &__imageBox {
+      height: 100%;
+      right: 0;
+      bottom: 0;
+    }
+
+    &_1 &__imageBox {
+      width: rem(120);
+    }
+
+    &_2 &__imageBox {
+      width: rem(190);
+      transform: translate(0, rem(85));
+    }
+
+    &_3 &__imageBox {
+      width: rem(125);
+      transform: translate(rem(-10), 0);
+    }
+
+    &_4 &__imageBox {
+      width: rem(220);
+      transform: translate(rem(70), rem(10));
+    }
+
+    &_5 &__imageBox {
+      width: rem(190);
+      transform: translate(rem(-8), rem(55));
+    }
+
+    &_6 &__imageBox {
+      width: rem(170);
+    }
+
+    &_7 &__imageBox {
+      width: rem(145);
+    }
+
+    &_8 &__imageBox {
+      width: rem(145);
+      transform: translate(rem(-22), rem(80));
+    }
+
+    &_9 &__imageBox {
+      width: rem(200);
+    }
+
+    &_10 &__imageBox {
+      width: rem(165);
+      transform: translate(0, rem(85));
+    }
+
+    &_11 &__imageBox {
+      width: rem(165);
+      transform: translate(rem(20), rem(45));
+    }
+
+    &_12 &__imageBox {
+      width: rem(125);
+      transform: translate(rem(-20), rem(-20));
+    }
+
+    &_13 &__imageBox {
+      width: rem(165);
+      transform: translate(0, rem(115));
+    }
+
+    &_14 &__imageBox {
+      width: rem(260);
+      transform: translate(rem(115), rem(85));
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+    padding: rem(6);
+
+    &::after {
+      height: rem(48);
+    }
+
+    &__information {
+      max-width: 72%;
+    }
+
+    &__information_title {
+      @include font(10, $fw-extra-light);
+    }
+
+    &_1 &__imageBox {
+      width: rem(82);
+    }
+
+    &_2 &__imageBox {
+      width: rem(130);
+      transform: translate(0, rem(60));
+    }
+
+    &_3 &__imageBox {
+      width: rem(86);
+      transform: translate(rem(-6), 0);
+    }
+
+    &_4 &__imageBox {
+      width: rem(155);
+      transform: translate(rem(48), rem(8));
+    }
+
+    &_5 &__imageBox {
+      width: rem(130);
+      transform: translate(rem(-5), rem(38));
+    }
+
+    &_6 &__imageBox {
+      width: rem(118);
+    }
+
+    &_7 &__imageBox {
+      width: rem(100);
+    }
+
+    &_8 &__imageBox {
+      width: rem(100);
+      transform: translate(rem(-14), rem(55));
+    }
+
+    &_9 &__imageBox {
+      width: rem(140);
+    }
+
+    &_10 &__imageBox {
+      width: rem(115);
+      transform: translate(0, rem(60));
+    }
+
+    &_11 &__imageBox {
+      width: rem(115);
+      transform: translate(rem(14), rem(30));
+    }
+
+    &_12 &__imageBox {
+      width: rem(86);
+      transform: translate(rem(-12), rem(-12));
+    }
+
+    &_13 &__imageBox {
+      width: rem(115);
+      transform: translate(0, rem(100));
+    }
+
+    &_14 &__imageBox {
+      width: rem(180);
+      transform: translate(rem(80), rem(60));
+    }
+  }
+}

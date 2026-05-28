@@ -9,4 +9,13 @@
     height: 100%;
     object-fit: contain;
   }
+
+  @media (max-width: rem($desktop-x)) {
+    max-width: rem(120);
+    height: auto;
+  }
+
+  @media (max-width: rem($adaptive-tablet)) {
+    max-width: rem(100);
+  }
 }

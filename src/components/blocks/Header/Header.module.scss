@@ -5,11 +5,41 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: rem(10);
+    gap: rem(5);
   }
 
   &__image {
     width: rem(22);
     height: rem(22);
+  }
+
+  &__action {
+    display: flex;
+    align-items: center;
+    gap: rem(12);
+  }
+
+  @media (max-width: rem($adaptive-tablet)) {
+    padding: rem(12) rem(10);
+  }
+}
+
+.burger {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: rem(24);
+  width: rem(24);
+  gap: rem(8);
+
+  &__line {
+    width: 100%;
+    height: rem(1);
+    background-color: $black;
+  }
+
+  @media (max-width: rem($adaptive-tablet)) {
+    display: flex;
   }
 }

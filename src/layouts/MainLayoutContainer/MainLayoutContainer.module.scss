@@ -3,4 +3,20 @@
   width: 100%;
   margin: 0 auto;
   padding: 0 rem(10);
+
+  @media (max-width: rem($desktop-x)) {
+    max-width: rem($adaptive-desktop-x + 20);
+  }
+
+  @media (max-width: rem($adaptive-tablet)) {
+    max-width: rem($tablet + 20);
+  }
+
+  @media (max-width: rem($mobile)) {
+    max-width: rem($adaptive-mobile + 20);
+  }
+
+  @media (max-width: rem(575)) {
+    max-width: 100%;
+  }
 }

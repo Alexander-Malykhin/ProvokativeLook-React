@@ -1,9 +1,9 @@
 /* Error: 2 arguments required, but only 1 was passed.
  *   ,
- * 5 |   gap: rem(66);
+ * 4 |   gap: rem(66);
  *   |        ^^^^^^^
  *   '
- *   Banner.module.scss 5:8  root stylesheet */
+ *   Banner.module.scss 4:8  root stylesheet */
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
@@ -13,5 +13,5 @@ body::before {
   padding: 1em;
   margin-bottom: 1em;
   border-bottom: 2px solid black;
-  content: "Error: 2 arguments required, but only 1 was passed.\a   \2577 \a 5 \2502    gap: rem(66);\d\a   \2502         ^^^^^^^\a   \2575 \a   Banner.module.scss 5:8  root stylesheet";
+  content: "Error: 2 arguments required, but only 1 was passed.\a   \2577 \a 4 \2502    gap: rem(66);\d\a   \2502         ^^^^^^^\a   \2575 \a   Banner.module.scss 4:8  root stylesheet";
 }

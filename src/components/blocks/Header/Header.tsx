@@ -12,7 +12,14 @@ const Header = () => {
         <header className={styles.header}>
             <MainLayoutContainer>
                 <div className={styles.header__content}>
-                    <Logo/>
+                    <div className={styles.header__action}>
+                        <button className={styles.burger}>
+                            <span className={styles.burger__line}></span>
+                            <span className={styles.burger__line}></span>
+                            <span className={styles.burger__line}></span>
+                        </button>
+                        <Logo/>
+                    </div>
                     <Navigation/>
                     <UserActions/>
                 </div>
