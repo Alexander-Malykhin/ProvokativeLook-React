@@ -1,0 +1,17 @@
+/* Error: 2 arguments required, but only 1 was passed.
+ *   ,
+ * 2 |   padding: 0 rem(24);
+ *   |              ^^^^^^^
+ *   '
+ *   OrderBonuses.module.scss 2:14  root stylesheet */
+
+body::before {
+  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
+      "Droid Sans Mono", monospace, monospace;
+  white-space: pre;
+  display: block;
+  padding: 1em;
+  margin-bottom: 1em;
+  border-bottom: 2px solid black;
+  content: "Error: 2 arguments required, but only 1 was passed.\a   \2577 \a 2 \2502    padding: 0 rem(24);\d\a   \2502               ^^^^^^^\a   \2575 \a   OrderBonuses.module.scss 2:14  root stylesheet";
+}

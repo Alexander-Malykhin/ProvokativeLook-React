@@ -1,0 +1,148 @@
+.about {
+  display: flex;
+  flex-direction: column;
+  gap: rem(20);
+
+  &__row {
+    display: grid;
+    grid-template-columns: minmax(0, rem(900)) minmax(0, 1fr);
+    gap: rem(24);
+  }
+
+  &__image {
+    width: 100%;
+    height: rem(290);
+    object-fit: cover;
+    object-position: center center;
+    display: block;
+  }
+
+  &__column {
+    padding: rem(24);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: rem(24);
+    border-top: rem(1) solid rgba($black, 0.1);
+    border-bottom: rem(1) solid rgba($black, 0.1);
+  }
+
+  &__text {
+    @include font(16, $fw-light);
+    line-height: 1.5;
+
+    &_container {
+      max-width: rem(850);
+    }
+  }
+
+  &__accent {
+    @include font(18, $fw-light);
+    text-transform: uppercase;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: rem(24);
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: rem(5);
+
+    &_title {
+      @include font(16, $fw-medium);
+    }
+  }
+
+  @media (max-width: rem($desktop-x)) {
+    &__row {
+      grid-template-columns: minmax(0, 1fr) minmax(0, rem(360));
+      gap: rem(20);
+    }
+
+    &__text {
+      line-height: 1.1;
+    }
+
+    &__image {
+      height: rem(320);
+    }
+  }
+
+  @media (max-width: rem($adaptive-tablet)) {
+    &__row {
+      grid-template-columns: 1fr;
+      gap: rem(20);
+    }
+
+    &__image {
+      height: rem(300);
+      order: 2;
+    }
+
+    &__text {
+      line-height: 1.5;
+    }
+
+    &__column {
+      order: 1;
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+    gap: rem(24);
+
+    &__column {
+      padding: rem(20) 0;
+      gap: rem(20);
+    }
+
+    &__text {
+      @include font(14, $fw-light);
+      line-height: 1.45;
+    }
+
+    &__accent {
+      @include font(15, $fw-light);
+    }
+
+    &__image {
+      height: rem(240);
+    }
+
+    &__list {
+      gap: rem(22);
+    }
+
+    &__item {
+      gap: rem(8);
+
+      &_title {
+        @include font(15, $fw-medium);
+      }
+    }
+  }
+
+  @media (max-width: rem($adaptive-mobile-x)) {
+    &__column {
+      padding: rem(16) 0;
+      gap: rem(18);
+    }
+
+    &__image {
+      height: rem(180);
+    }
+
+    &__text {
+      @include font(13, $fw-light);
+      line-height: 1.45;
+    }
+
+    &__accent {
+      @include font(14, $fw-light);
+    }
+  }
+}

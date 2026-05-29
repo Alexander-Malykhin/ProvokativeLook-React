@@ -24,7 +24,7 @@ const catalogCards = [
     },
     {
         id: 2,
-        title: 'Верхняя одежда',
+        title: 'Верхняя #br# одежда',
         path: '/catalog/verhnyaya-odezhda',
         image: card2,
     },
@@ -78,7 +78,7 @@ const catalogCards = [
     },
     {
         id: 11,
-        title: 'Толстовки и худи',
+        title: 'Толстовки #br# и худи',
         path: '/catalog/zhakety-i-zhilety',
         image: card11,
     },

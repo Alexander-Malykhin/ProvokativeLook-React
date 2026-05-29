@@ -1,3 +1,5 @@
+import {useState} from "react";
+import {Link} from "react-router-dom";
 //styles
 import styles from './Footer.module.scss'
 //layouts
@@ -14,10 +16,9 @@ import YouTubeIcon from '@assets/socials/youtube.svg';
 //UI
 import Text from "@UI/typography/Text/Text.tsx";
 import TextAccent from "@UI/typography/TextAccent/TextAccent.tsx";
+import Image from "@UI/buttons/Image/Image.tsx";
 //helper
 import {convertAliasTitle} from "@helpers/convertAliasTitle.tsx";
-import {Link} from "react-router-dom";
-import Image from "@UI/buttons/Image/Image.tsx";
 
 export const footerData = {
     contacts: {
@@ -169,6 +170,8 @@ const Footer = () => {
 
     const {contacts, navigation, company, design, socials} = footerData;
 
+    const [opened, setOpened] = useState<string | null>('Каталог');
+
     return (
         <footer className={styles.footer}>
             <MainLayoutContainer>
@@ -208,15 +211,37 @@ const Footer = () => {
                     </div>
 
                     <nav className={styles.footer__nav}>
-                        {navigation.map(item => (
-                            <div className={styles.footer__nav__item} key={item.title}>
-                                <h3 className={styles.footer__nav__item_title}>{item.title}</h3>
-                                <div className={styles.footer__nav__item_list}>
-                                    {item.links.map(link => <Link to={link.path} key={link.label}
-                                                                  className={styles.footer__nav__item_link}>{link.label}</Link>)}
+                        {navigation.map(item => {
+                            const isOpen = opened === item.title;
+
+                            return (
+                                <div
+                                    className={`${styles.footer__nav__item} ${isOpen ? styles.footer__nav__item_open : ''}`}
+                                    key={item.title}
+                                >
+                                    <button
+                                        type="button"
+                                        className={styles.footer__nav__item_head}
+                                        onClick={() => setOpened(isOpen ? null : item.title)}
+                                    >
+                                        <span className={styles.footer__nav__item_title}>{item.title}</span>
+                                        <span className={styles.footer__nav__item_arrow}/>
+                                    </button>
+
+                                    <div className={styles.footer__nav__item_list}>
+                                        {item.links.map(link => (
+                                            <Link
+                                                to={link.path}
+                                                key={link.label}
+                                                className={styles.footer__nav__item_link}
+                                            >
+                                                {link.label}
+                                            </Link>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </nav>
 
                     <div className={styles.footer__socials}>
@@ -224,7 +249,8 @@ const Footer = () => {
                         <div className={styles.footer__socials_list}>
                             {socials.map(item => (
                                 <a href={item.path} className={styles.footer__socials_item} key={item.name}>
-                                    <Image src={item.icon} alt={item.name} className={styles.footer__socials_item_image}/>
+                                    <Image src={item.icon} alt={item.name}
+                                           className={styles.footer__socials_item_image}/>
                                 </a>
                             ))}
                         </div>
@@ -243,7 +269,8 @@ const Footer = () => {
             </div>
 
             <div className={styles.footer__cookie}>
-                <Text>Мы используем файлы cookie, чтобы обеспечить наилучшее обслуживание. <TextAccent mode={"link"} path={'#'}>Подробнее</TextAccent></Text>
+                <Text>Мы используем файлы cookie, чтобы обеспечить наилучшее обслуживание. <TextAccent mode={"link"}
+                                                                                                       path={'#'}>Подробнее</TextAccent></Text>
 
                 <button className={styles.footer__cookie_button}>
                     <span className={styles.footer__cookie_button_line}></span>

@@ -35,4 +35,8 @@
   &__price {
     @include font(14, $fw-extra-light)
   }
+
+  @media (max-width: rem($mobile)) {
+    flex: 1 0 rem(254);
+  }
 }

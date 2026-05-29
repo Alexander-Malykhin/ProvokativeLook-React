@@ -1,0 +1,36 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: rem(40);
+  padding: rem(24);
+  border-radius: rem(10);
+  border: 1px solid rgba($black, 0.1);
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: rem(40);
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(5);
+
+    &_description {
+      @include font(14, $fw-light);
+      color: rgba($black, 0.6);
+    }
+
+    &_price {
+      @include font(20, $fw-light);
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: rem(8);
+  }
+}

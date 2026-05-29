@@ -46,7 +46,7 @@
   &_body {
     display: grid;
     grid-template-rows: 0fr;
-    transition: grid-template-rows 0.3s ease;
+    transition: grid-template-rows 0.3s ease-in-out;
   }
 
   &_body_inner {
@@ -67,6 +67,25 @@
 
     .item_body {
       grid-template-rows: 1fr;
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+    &_head {
+      padding: rem(16);
+      gap: rem(8);
+
+      @include font(14, $fw-regular);
+    }
+
+    &_body_inner {
+      overflow: hidden;
+      padding: 0 rem(16);
+
+      p {
+        @include font(14, $fw-extra-light);
+        padding-bottom: rem(16);
+      }
     }
   }
 }

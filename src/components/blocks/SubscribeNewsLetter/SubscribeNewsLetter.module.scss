@@ -30,7 +30,8 @@
   }
 
   &__text {
-    @include font(20, $fw-regular)
+    @include font(20, $fw-regular);
+    text-align: center;
   }
 
   &__form_checkbox_error {
@@ -38,5 +39,24 @@
     color: $red;
     margin-left: rem(30);
     margin-top: rem(-4);
+  }
+
+  @media (max-width: rem($mobile)) {
+    padding: rem(56) 0;
+
+    &__form {
+
+      &_row {
+        display: grid;
+        justify-content: center;
+        grid-template-columns: 1fr;
+        gap: rem(10);
+      }
+    }
+
+    &__text {
+      @include font(14, $fw-regular);
+      text-align: center;
+    }
   }
 }

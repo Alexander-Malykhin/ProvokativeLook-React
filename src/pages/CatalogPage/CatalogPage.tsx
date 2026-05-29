@@ -5,11 +5,11 @@ import Header from "@components/blocks/Header/Header.tsx";
 //blocks
 import Reviews from "@components/blocks/Reviews/Reviews.tsx";
 import AnswersToQuestions from "@components/blocks/AnswersToQuestions/AnswersToQuestions.tsx";
-//import SubscribeNewsLetter from "@components/blocks/SubscribeNewsLetter/SubscribeNewsLetter.tsx";
+import SubscribeNewsLetter from "@components/blocks/SubscribeNewsLetter/SubscribeNewsLetter.tsx";
 import Category from "@components/blocks/Category/Category.tsx";
 //components
 import RunningLine from "@components/RunningLine/RunningLine.tsx";
-//import Footer from "@components/blocks/Footer/Footer.tsx";
+import Footer from "@components/blocks/Footer/Footer.tsx";
 import Breadcrumbs from "@components/Breadcrumbs/Breadcrumbs.tsx";
 
 
@@ -23,9 +23,9 @@ const CatalogPage = () => {
                 <Category/>
                 <Reviews/>
                 <AnswersToQuestions/>
-                {/*<SubscribeNewsLetter/>*/}
+                <SubscribeNewsLetter/>
             </main>
-            {/*<Footer/>*/}
+            <Footer/>
         </>
     );
 };

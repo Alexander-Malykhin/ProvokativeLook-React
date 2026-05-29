@@ -5,4 +5,10 @@
     flex-direction: column;
     gap: rem(128);
   }
+
+  @media (max-width: rem($mobile)) {
+    &__main {
+      gap: rem(56);
+    }
+  }
 }

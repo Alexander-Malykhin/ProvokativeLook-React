@@ -13,14 +13,19 @@ $container: 1360;
           calc((100vw - rem($container)) / 2 + rem(10))
   );
 
+  padding-right: max(
+          rem(10),
+          calc((100vw - rem($container)) / 2 + rem(10))
+  );
+
   &_container {
     padding-left: 0;
+    padding-right: 0;
   }
 
   @media (max-width: rem($mobile)) {
     grid-template-columns: 1fr;
     gap: rem(24);
-
 
     &__dots {
       display: flex;

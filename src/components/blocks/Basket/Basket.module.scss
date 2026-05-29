@@ -1,0 +1,11 @@
+.basket {
+  display: grid;
+  grid-template-columns: 1fr minmax(rem(200), rem(322));
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: rem(24);
+
+  @media (max-width: rem($adaptive-tablet)) {
+    grid-template-columns: 1fr;
+  }
+}

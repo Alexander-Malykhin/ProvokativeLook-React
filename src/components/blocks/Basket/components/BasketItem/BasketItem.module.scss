@@ -1,0 +1,143 @@
+.item {
+  display: flex;
+  align-items: center;
+  gap: rem(24);
+  padding: rem(16) 0;
+  border-bottom: rem(1) solid rgba($black, 0.10);
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: rem(16);
+    width: 100%;
+    min-width: 0;
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__top {
+    display: grid;
+    grid-template-columns: rem(90) 1fr;
+    gap: rem(24);
+  }
+
+  &__image {
+    width: rem(90);
+    height: auto;
+    object-fit: cover;
+  }
+
+  &__content {
+    min-width: 0;
+    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: rem(8);
+
+    &_title {
+      @include font(20, $fw-light);
+      padding: rem(8) 0;
+    }
+
+    &_buttons {
+      display: block;
+    }
+  }
+
+  &__body {
+    max-width: 100%;
+
+    &_description {
+      @include font(14, $fw-light);
+      color: rgba($black, 0.6);
+    }
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: rem(8);
+
+    &_price {
+      @include font(20, $fw-light);
+    }
+  }
+
+  &__mobile {
+    &_body {
+      display: none;
+    }
+  }
+
+  &__bottom {
+    display: none;
+  }
+
+  @media (max-width: rem($mobile)) {
+    gap: rem(8);
+
+    &__top {
+      gap: rem(8);
+    }
+
+    &__header {
+      &_buttons {
+        display: none;
+      }
+
+      &_title {
+        @include font(16, $fw-light);
+        padding: 0;
+      }
+    }
+
+    &__body {
+      &_description {
+        display: none;
+      }
+    }
+
+    &__footer {
+      &_counter {
+        display: none;
+      }
+      &_price {
+        @include font(20, $fw-light);
+      }
+    }
+
+    &__mobile {
+      display: block;
+
+      &_body {
+        display: flex;
+        flex-direction: column;
+        gap: rem(2);
+
+        &_description {
+          @include font(12, $fw-light);
+          color: rgba($black, 0.6);
+        }
+      }
+    }
+
+    &__bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: rem(8);
+    }
+  }
+}

@@ -17,9 +17,9 @@
 
   &__information {
     position: relative;
-    z-index: 4;
+    z-index: 2;
 
-    max-width: 58%;
+
 
     display: flex;
     flex-direction: column;
@@ -29,7 +29,7 @@
 
   &__information_title {
     @include font(36, $fw-extra-light);
-    line-height: 1.05;
+    line-height: 1;
   }
 
   &__information_button {
@@ -44,10 +44,7 @@
     position: absolute;
     right: 0;
     bottom: 0;
-    z-index: 3;
-
-    width: 78%;
-    height: 84%;
+    z-index: 5;
 
     display: flex;
     align-items: flex-end;
@@ -69,56 +66,57 @@
 
   &_1 &__imageBox {
     width: rem(250);
+    transform: translate(rem(40),0);
   }
 
   &_2 &__imageBox {
     width: rem(400);
-    transform: translate(0, rem(220));
+    transform: translate(rem(40), rem(220));
   }
 
   &_3 &__imageBox {
     width: rem(250);
-    transform: translate(rem(-30), rem(0));
+    transform: translate(rem(40), rem(0));
   }
 
   &_4 &__imageBox {
-    width: 100%;
-    height: 100%;
-    transform: translate(rem(120), rem(0));
+    width: rem(500);
+    transform: translate(rem(130), rem(-20));
   }
 
   &_5 &__imageBox {
-    width: rem(400);
-    height: 100%;
-    transform: translate(rem(-20), rem(120));
-  }
-
-  &_6 &__imageBox {
-    width: rem(350);
+    width: rem(320);
     height: 100%;
     transform: translate(rem(0), rem(0));
   }
 
+  &_6 &__imageBox {
+    width: rem(340);
+    height: 100%;
+    transform: translate(rem(30), rem(0));
+  }
+
   &_7 &__imageBox {
     width: rem(300);
+    transform: translate(rem(30), rem(-30));
   }
 
   &_8 &__imageBox {
     width: rem(300);
     height: 100%;
-    transform: translate(rem(-60), rem(200));
+    transform: translate(rem(-30), rem(200));
   }
 
   &_9 &__imageBox {
-    width: rem(420);
+    width: rem(400);
     height: 100%;
-
+    transform: translate(rem(0), rem(-40));
   }
 
   &_10 &__imageBox {
     width: rem(350);
     height: 100%;
-    transform: translate(rem(0), rem(220));
+    transform: translate(rem(35), rem(220));
   }
 
   &_11 &__imageBox {
@@ -128,9 +126,9 @@
   }
 
   &_12 &__imageBox {
-    width: rem(250);
+    width: rem(280);
     height: 100%;
-    transform: translate(rem(-50), rem(-50));
+    transform: translate(rem(0), rem(-10));
   }
 
   &_13 &__imageBox {
@@ -148,77 +146,75 @@
   @media (max-width: rem($desktop-x)) {
     padding: rem(28) rem(18);
 
-    &__information {
-      max-width: 60%;
-    }
-
     &__information_title {
       @include font(26, $fw-extra-light);
     }
 
     &_1 &__imageBox {
-      width: rem(210);
+      width: rem(180);
+      transform: translate(rem(10), rem(0));
     }
 
     &_2 &__imageBox {
-      width: rem(330);
-      transform: translate(0, rem(150));
+      width: rem(180);
+      transform: translate(rem(-20), rem(-20));
     }
 
     &_3 &__imageBox {
-      width: rem(215);
-      transform: translate(rem(-20), 0);
+      width: rem(180);
+      transform: translate(rem(0), 0);
     }
 
     &_4 &__imageBox {
       width: 100%;
-      transform: translate(rem(90), 0);
+      transform: translate(rem(80), rem(-10));
     }
 
     &_5 &__imageBox {
-      width: rem(330);
-      transform: translate(rem(-15), rem(90));
+      width: rem(230);
+      transform: translate(rem(-20), rem(0));
     }
 
     &_6 &__imageBox {
-      width: rem(300);
+      width: rem(250);
     }
 
     &_7 &__imageBox {
-      width: rem(250);
+      width: rem(200);
+      transform: translate(rem(-20), rem(0));
     }
 
     &_8 &__imageBox {
-      width: rem(250);
-      transform: translate(rem(-40), rem(140));
+      width: rem(200);
+      transform: translate(rem(-20), rem(160));
     }
 
     &_9 &__imageBox {
-      width: rem(350);
+      width: rem(260);
     }
 
     &_10 &__imageBox {
-      width: rem(290);
+      width: rem(250);
       transform: translate(0, rem(150));
     }
 
     &_11 &__imageBox {
-      width: rem(290);
+      width: rem(250);
       transform: translate(rem(35), rem(70));
     }
 
     &_12 &__imageBox {
-      width: rem(210);
-      transform: translate(rem(-35), rem(-35));
+      width: rem(180);
+      transform: translate(rem(-20), rem(-35));
     }
 
     &_13 &__imageBox {
-      width: rem(290);
+      width: rem(240);
       transform: translate(rem(5), rem(200));
     }
 
     &_14 &__imageBox {
-      width: rem(450);
+      width: rem(400);
       transform: translate(rem(190), rem(140));
     }
   }
@@ -226,27 +222,10 @@
   @media (max-width: rem($tablet)) {
     padding: rem(10);
 
-    &::after {
-      height: rem(70);
-    }
 
     &__information {
       gap: 0;
       max-width: 70%;
-    }
-
-    &__information_title {
-      @include font(14, $fw-extra-light);
-    }
-
-    &__information_button {
-      display: none;
-    }
-
-    &__imageBox {
-      height: 100%;
-      right: 0;
-      bottom: 0;
     }
 
     &_1 &__imageBox {
@@ -275,6 +254,7 @@
 
     &_6 &__imageBox {
       width: rem(170);
+      transform: translate(rem(10), rem(0));
     }
 
     &_7 &__imageBox {
@@ -291,7 +271,7 @@
     }
 
     &_10 &__imageBox {
-      width: rem(165);
+      width: rem(160);
       transform: translate(0, rem(85));
     }
 
@@ -306,12 +286,12 @@
     }
 
     &_13 &__imageBox {
-      width: rem(165);
+      width: rem(150);
       transform: translate(0, rem(115));
     }
 
     &_14 &__imageBox {
-      width: rem(260);
+      width: rem(250);
       transform: translate(rem(115), rem(85));
     }
   }
@@ -319,16 +299,8 @@
   @media (max-width: rem($mobile)) {
     padding: rem(6);
 
-    &::after {
-      height: rem(48);
-    }
-
-    &__information {
-      max-width: 72%;
-    }
-
     &__information_title {
-      @include font(10, $fw-extra-light);
+      @include font(12, $fw-extra-light);
     }
 
     &_1 &__imageBox {

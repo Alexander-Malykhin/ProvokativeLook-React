@@ -32,6 +32,10 @@
   }
 
   @media (max-width: rem($mobile)) {
+    &__title {
+      @include font(24, $fw-extra-light);
+    }
+
     &__buttons {
       display: none;
     }

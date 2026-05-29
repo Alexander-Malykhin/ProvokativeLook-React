@@ -9,14 +9,14 @@
   }
 
   @media (max-width: rem($adaptive-tablet)) {
-    max-width: rem($tablet + 20);
+    max-width: rem($mobile + 20);
   }
 
   @media (max-width: rem($mobile)) {
     max-width: rem($adaptive-mobile + 20);
   }
 
-  @media (max-width: rem(575)) {
-    max-width: 100%;
+  @media (max-width: rem($adaptive-mobile-x)) {
+    max-width: $mobile-x;
   }
 }

@@ -17,7 +17,7 @@ const navigation = [
     {
         id: 3,
         text: 'О бренде',
-        path: '/'
+        path: '/about'
     },
     {
         id: 4,
@@ -27,7 +27,7 @@ const navigation = [
     {
         id: 5,
         text: 'Контакты',
-        path: '/'
+        path: '/contacts'
     },
     {
         id: 6,

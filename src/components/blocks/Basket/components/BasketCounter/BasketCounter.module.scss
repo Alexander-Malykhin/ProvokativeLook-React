@@ -1,0 +1,103 @@
+.counter {
+  display: flex;
+  align-items: center;
+  gap: rem(8);
+
+  &__label {
+    @include font(14, $fw-light);
+    color: rgba($black, 0.5);
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    gap: rem(12);
+  }
+
+  &__value {
+    min-width: rem(12);
+    text-align: center;
+    @include font(16, $fw-light);
+  }
+
+  &__button {
+    width: rem(12);
+    height: rem(12);
+    position: relative;
+    flex-shrink: 0;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+
+      width: rem(8);
+      height: rem(8);
+
+      border-top: rem(1.5) solid rgba($black, 0.5);
+      border-right: rem(1.5) solid rgba($black, 0.5);
+    }
+
+    &_prev::before {
+      transform: translate(-30%, -50%) rotate(-135deg);
+    }
+
+    &_next::before {
+      transform: translate(-70%, -50%) rotate(45deg);
+    }
+  }
+
+  @media (max-width: rem($adaptive-tablet)) {
+    gap: rem(4);
+
+    &__label {
+      display: none;
+    }
+
+    &__controls {
+      display: flex;
+      align-items: center;
+      gap: rem(4);
+    }
+
+    &__value {
+      padding: rem(8) rem(4);
+      border-radius: rem(5);
+      background-color: rgba($black, 0.05);
+      height: rem(32);
+    }
+
+    &__button {
+      padding: rem(8) rem(4);
+      width: rem(32);
+      height: rem(32);
+      border-radius: rem(6);
+      background-color: rgba($black, 0.1);;
+
+      position: relative;
+      flex-shrink: 0;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+
+        width: rem(8);
+        height: rem(8);
+
+        border-top: rem(1.5) solid rgba($black, 0.5);
+        border-right: rem(1.5) solid rgba($black, 0.5);
+      }
+
+      &_prev::before {
+        transform: translate(-30%, -50%) rotate(-135deg);
+      }
+
+      &_next::before {
+        transform: translate(-70%, -50%) rotate(45deg);
+      }
+    }
+  }
+}

@@ -9,9 +9,14 @@ import MainLayoutContainer from '@layouts/MainLayoutContainer/MainLayoutContaine
 const titles: Record<string, string> = {
     catalog: 'Каталог',
     contacts: 'Контакты',
+    basket: 'Корзина'
 };
 
-const Breadcrumbs = () => {
+interface BreadcrumbsInterface {
+    title?:string
+}
+
+const Breadcrumbs = ({title}:BreadcrumbsInterface) => {
     const {pathname} = useLocation();
 
     const parts = pathname.split('/').filter(Boolean);
@@ -51,7 +56,7 @@ const Breadcrumbs = () => {
                 </nav>
 
                 <h1 className={styles.navigation__title}>
-                    {currentPageTitle}
+                    {title || currentPageTitle}
                 </h1>
             </MainLayoutContainer>
         </SectionLayout>

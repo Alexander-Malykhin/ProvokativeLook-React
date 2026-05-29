@@ -13,7 +13,7 @@
     border: rem(1) solid transparent;
     border-radius: rem(10);
     outline: none;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
 
     &::placeholder {
       @include font(16, $fw-extra-light);
@@ -50,5 +50,16 @@
     @include font(12, $fw-extra-light);
     color: $red;
     line-height: 1;
+  }
+
+  @media (max-width: rem($mobile)) {
+    &__input {
+      @include font(14, $fw-extra-light);
+      padding: rem(16) rem(24);
+
+      &::placeholder {
+        @include font(14, $fw-extra-light);
+      }
+    }
   }
 }

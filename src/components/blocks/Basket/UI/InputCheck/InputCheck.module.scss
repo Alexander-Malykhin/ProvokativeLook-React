@@ -1,0 +1,32 @@
+.check {
+  width: rem(14);
+  height: rem(14);
+  display: flex;
+  cursor: pointer;
+
+  &__input {
+    display: none;
+  }
+
+  &__box {
+    width: rem(14);
+    height: rem(14);
+    border: rem(1) solid $black;
+    border-radius: 50%;
+    position: relative;
+    flex: 0 0 rem(14);
+  }
+
+  &__input:checked + &__box::before {
+    content: '';
+    position: absolute;
+    width: rem(8);
+    height: rem(8);
+    border-radius: 50%;
+    background-color: $black;
+
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}

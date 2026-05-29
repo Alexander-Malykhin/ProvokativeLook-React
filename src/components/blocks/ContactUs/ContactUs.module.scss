@@ -1,0 +1,146 @@
+.contacts {
+  display: grid;
+  grid-template-columns: minmax(0, rem(550)) minmax(0, rem(780));
+  max-height: rem(440);
+  gap: rem(24);
+
+  &__column {
+    display: flex;
+    flex-direction: column;
+    gap: rem(32);
+    justify-content: space-between;
+  }
+
+  &__row {
+    display: flex;
+    flex-direction: column;
+    gap: rem(10);
+  }
+
+  &__label {
+    @include font(14, $fw-light);
+    color: rgba($black, 0.5);
+  }
+
+  &__phone {
+    @include font(20, $fw-light);
+  }
+
+  &__text {
+    @include font(18, $fw-light);
+    max-width: rem(460);
+  }
+
+  &__list {
+    display: flex;
+    align-items: center;
+    gap: rem(16);
+  }
+
+  &__item {
+    width: rem(40);
+    height: rem(40);
+    flex: 0 0 rem(40);
+
+    &_image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+  }
+
+  &__map {
+    width: 100%;
+    height: rem(440);
+    object-fit: cover;
+    object-position: center center;
+    display: block;
+  }
+
+  @media (max-width: rem($desktop-x)) {
+    grid-template-columns: minmax(0, rem(360)) minmax(0, 1fr);
+    gap: rem(10);
+
+    &__column {
+      gap: rem(20);
+    }
+
+    &__map {
+      height: rem(360);
+    }
+  }
+
+  @media (max-width: rem($tablet)) {
+    grid-template-columns: minmax(0, rem(330)) minmax(0, 1fr);
+    gap: rem(16);
+
+    &__phone {
+      @include font(18, $fw-light)
+    }
+
+    &__text {
+      @include font(16, $fw-light);
+    }
+
+    &__column {
+      gap: rem(24);
+    }
+
+    &__map {
+      height: rem(340);
+      object-position: center center;
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+    grid-template-columns: 1fr;
+    gap: rem(24);
+    max-height: 100%;
+
+    &__column {
+      gap: rem(24);
+      justify-content: flex-start;
+    }
+
+    &__phone {
+      @include font(18, $fw-light)
+    }
+
+    &__text {
+      @include font(14, $fw-light);
+    }
+
+    &__item {
+      width: rem(36);
+      height: rem(36);
+      flex-basis: rem(36);
+    }
+
+    &__map {
+      height: rem(300);
+      object-fit: cover;
+      object-position: center center;
+    }
+  }
+
+  @media (max-width: rem($adaptive-mobile-x)) {
+    &__phone {
+      @include font(18, $fw-light)
+    }
+
+    &__text {
+      @include font(14, $fw-light);
+    }
+
+    &__label {
+      @include font(12, $fw-light);
+    }
+
+    &__map {
+      height: rem(480);
+      object-fit: cover;
+      object-position: 80% 20%;
+    }
+  }
+}

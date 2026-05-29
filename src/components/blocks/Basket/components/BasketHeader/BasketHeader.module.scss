@@ -1,0 +1,30 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: rem(16);
+  padding-bottom: rem(8);
+  border-bottom: rem(1) solid rgba($black, 0.10);
+
+  &__select {
+    display: flex;
+    align-items: center;
+    gap: rem(16);
+    cursor: pointer;
+
+    span:last-child {
+      @include font(14, $fw-light);
+    }
+  }
+
+  &__delete {
+    @include font(14, $fw-light);
+    color: rgba($black, 0.6);
+
+    &:disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+  }
+}
