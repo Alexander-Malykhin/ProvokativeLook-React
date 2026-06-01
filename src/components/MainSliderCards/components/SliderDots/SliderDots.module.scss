@@ -1,0 +1,20 @@
+.dots {
+  display: none;
+
+  @media (max-width: rem($mobile)) {
+    display: flex;
+    align-items: center;
+    gap: rem(6);
+  }
+
+  &__item {
+    width: 100%;
+    height: rem(2);
+    background-color: $gray;
+    cursor: pointer;
+
+    &_active {
+      background-color: $black;
+    }
+  }
+}

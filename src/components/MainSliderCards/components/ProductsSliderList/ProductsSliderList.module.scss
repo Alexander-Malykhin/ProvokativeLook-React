@@ -18,4 +18,33 @@
     grid-auto-columns: calc((100% - rem(80)) / 5);
     padding-right: 0;
   }
+
+  @media (max-width: rem($desktop-x)) {
+    &_grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: rem(16) rem(12);
+      overflow: visible;
+      padding-right: 0;
+    }
+
+    &_grid.list_five {
+      grid-auto-flow: unset;
+      grid-auto-columns: unset;
+    }
+
+    &_grid > *:nth-child(n + 5) {
+      display: none;
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+    &_grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: rem(16) rem(12);
+      overflow: visible;
+      padding-right: 0;
+    }
+  }
 }

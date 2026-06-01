@@ -1,0 +1,19 @@
+.burger {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: rem(24);
+  width: rem(24);
+  gap: rem(8);
+
+  &__line {
+    width: 100%;
+    height: rem(1);
+    background-color: $black;
+  }
+
+  @media (max-width: rem($adaptive-tablet)) {
+    display: flex;
+  }
+}

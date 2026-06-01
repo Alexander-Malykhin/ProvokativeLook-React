@@ -45,4 +45,10 @@
   &__color {
     @include color-modifiers(color);
   }
+
+  @media (max-width: rem($mobile)) {
+    &__text {
+      @include font(14, $fw-extra-light);
+    }
+  }
 }

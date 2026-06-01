@@ -1,0 +1,19 @@
+.category {
+  display: flex;
+  flex-direction: column;
+  gap: rem(40);
+
+  &__content {
+    display: grid;
+    grid-template-columns: minmax(rem(200), rem(322)) 1fr;
+    gap: rem(24);
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

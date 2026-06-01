@@ -1,0 +1,90 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: rem(40);
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: rem(32);
+    width: 100%;
+  }
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: rem(40) rem(20);
+}
+
+.filter {
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: rem(40);
+
+  &__list {
+    display: flex;
+    align-items: center;
+    gap: rem(36);
+  }
+
+  &__item,
+  &__button {
+    padding: 0;
+    border: none;
+    background: transparent;
+
+    @include font(14, $fw-light);
+
+    cursor: pointer;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: rem(8);
+
+    &::after {
+      content: '';
+      width: rem(8);
+      height: rem(8);
+      border-right: rem(1) solid $black;
+      border-bottom: rem(1) solid $black;
+      transform: rotate(45deg) translateY(rem(-2));
+    }
+  }
+
+  &__button {
+    margin-left: auto;
+  }
+}
+
+.sort {
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  gap: rem(8);
+
+  padding: 0 0 rem(4);
+  border: none;
+  border-bottom: rem(1) solid $black;
+  background: transparent;
+
+  @include font(14, $fw-light);
+
+  cursor: pointer;
+
+  &::after {
+    content: '';
+    width: rem(8);
+    height: rem(8);
+    border-right: rem(1) solid $black;
+    border-bottom: rem(1) solid $black;
+    transform: rotate(45deg) translateY(rem(-2));
+  }
+}

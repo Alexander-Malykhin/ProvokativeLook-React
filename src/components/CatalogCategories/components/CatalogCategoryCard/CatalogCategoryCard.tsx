@@ -5,14 +5,17 @@ import styles from './CatalogCategoryCard.module.scss';
 import Image from '@UI/buttons/Image/Image.tsx';
 import type { CategoryCardInterface } from '@components/CatalogCategories/types/types.ts';
 import { convertAliasTitle } from '@helpers/convertAliasTitle.tsx';
+import Title from "@UI/typography/Title/Title.tsx";
 
 const CatalogCategoryCard = ({id, image, path, title, variant = 'promo', buttonText = 'Смотреть все',}: CategoryCardInterface) => {
-    return (
-        <article className={`${styles.card} ${id ? styles[`card_${id}`] : ''}`}>
+    const cardClassName = `${styles.card} ${id ? styles[`card_${id}`] : ''}`;
+
+    const cardContent = (
+        <>
             <div className={styles.card__information}>
-                <h2 className={styles.card__information_title}>
+                <Title className={styles.card__information_title} size="xl">
                     {convertAliasTitle(title)}
-                </h2>
+                </Title>
 
                 {variant === 'promo' && (
                     <Link to={path} className={styles.card__information_button}>
@@ -24,6 +27,20 @@ const CatalogCategoryCard = ({id, image, path, title, variant = 'promo', buttonT
             <div className={styles.card__imageBox}>
                 <Image src={image} className={styles.card__image} />
             </div>
+        </>
+    );
+
+    if (variant === 'grid') {
+        return (
+            <Link to={path} className={cardClassName}>
+                {cardContent}
+            </Link>
+        );
+    }
+
+    return (
+        <article className={cardClassName}>
+            {cardContent}
         </article>
     );
 };

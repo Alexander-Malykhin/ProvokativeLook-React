@@ -22,7 +22,7 @@ const HomePage = () => {
     return (
         <>
             <Header/>
-            <RunningLine text={'Доставка по России 300 ₽'}/>
+            <RunningLine/>
             <main className={styles.page__main}>
                 <Banner/>
                 <Bestsellers/>

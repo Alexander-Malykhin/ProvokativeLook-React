@@ -5,6 +5,7 @@ import CatalogPage from "@pages/CatalogPage/CatalogPage.tsx";
 import ContactsPage from "@pages/ContactsPage/ContactsPage.tsx";
 import AboutPage from "@pages/AboutPage/AboutPage.tsx";
 import BasketPage from "@pages/BasketPage/BasketPage.tsx";
+import CatalogCategoryPage from "@pages/CatalogCategoryPage/CatalogCategoryPage.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -14,6 +15,10 @@ export const router = createBrowserRouter([
     {
         path: "/catalog",
         element: <CatalogPage/>
+    },
+    {
+        path: "/catalog/:categorySlug",
+        element: <CatalogCategoryPage />,
     },
     {
         path: "/contacts",

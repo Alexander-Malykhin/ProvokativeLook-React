@@ -1,15 +1,17 @@
 import type { ReactNode, RefObject } from 'react';
-import type { SliderDirection } from '@/hooks/useHorizontalSlider';
+
+interface SliderChildrenProps {
+    sliderRef: RefObject<HTMLDivElement | null>;
+    scrollSlider: (direction: 'left' | 'right') => void;
+}
 
 export interface MainSliderCardsInterface {
     title: string;
+    children: ReactNode | ((props: SliderChildrenProps) => ReactNode);
     withControls?: boolean;
     withFullContainer?: boolean;
     scrollStep?: number;
-    children:
-        | ReactNode
-        | ((props: {
-        sliderRef: RefObject<HTMLDivElement | null>;
-        scrollSlider: (direction: SliderDirection) => void;
-    }) => ReactNode);
+    mode?: 'slider' | 'grid';
+    showMoreButton?: boolean;
+    moreButtonText?: string;
 }

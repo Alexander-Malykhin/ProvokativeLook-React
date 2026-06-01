@@ -91,7 +91,7 @@ const products = [
 
 const News = () => {
     return (
-        <MainSliderCards title="Новинки">
+        <MainSliderCards title="Новинки"  mode="grid">
             {({ sliderRef }) => (
                 <ProductsSliderList
                     sliderRef={sliderRef}

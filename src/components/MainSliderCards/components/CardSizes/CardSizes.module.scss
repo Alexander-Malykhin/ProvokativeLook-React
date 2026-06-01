@@ -9,5 +9,11 @@
     border-radius: rem(10);
     border: rem(1) solid $gray;
   }
+
+  @media (max-width: rem($mobile)) {
+    &__item {
+      @include font(10, $fw-extra-light);
+    }
+  }
 }
 

@@ -6,6 +6,8 @@ import MainLayoutContainer from "@layouts/MainLayoutContainer/MainLayoutContaine
 import Logo from "@components/Logo/Logo.tsx";
 import Navigation from "@components/Navigation/Navigation.tsx";
 import UserActions from "@components/blocks/Header/components/UserActions/UserActions.tsx";
+//UI
+import BurgerButton from "@UI/buttons/BurgerButton/BurgerButton.tsx";
 
 const Header = () => {
     return (
@@ -13,11 +15,7 @@ const Header = () => {
             <MainLayoutContainer>
                 <div className={styles.header__content}>
                     <div className={styles.header__action}>
-                        <button className={styles.burger}>
-                            <span className={styles.burger__line}></span>
-                            <span className={styles.burger__line}></span>
-                            <span className={styles.burger__line}></span>
-                        </button>
+                        <BurgerButton/>
                         <Logo/>
                     </div>
                     <Navigation/>

@@ -4,10 +4,12 @@
   gap: rem(24);
 
   &__item {
-    height: rem(440);
+    aspect-ratio: 667 / 435;
+    min-height: rem(150);
+    max-height: rem(435);
+
     display: grid;
-    grid-template-columns: 62% 38%;
-    align-items: stretch;
+    grid-template-columns: 1fr max-content;
     background-color: $light-white;
     overflow: hidden;
     text-decoration: none;
@@ -17,49 +19,55 @@
     width: 100%;
     height: 100%;
     display: block;
-    object-fit: cover;
-    object-position: center;
+    object-fit: contain;
+    object-position: left center;
   }
 
-  &__title {
+  &__information {
     align-self: start;
-    justify-self: end;
-    margin: rem(96) rem(30) 0 rem(20);
-    @include font(36, $fw-extra-light);
-    color: $black;
+    justify-self: start;
+
+    margin: rem(96) rem(30) 0 0;
+    transform: translateX(rem(-10));
     white-space: nowrap;
   }
 
   @media (max-width: rem($desktop-x)) {
     gap: rem(16);
 
-    &__item {
-      height: rem(320);
-      grid-template-columns: 60% 40%;
-    }
-
     &__title {
       margin: rem(60) rem(20) 0 0;
+      @include font(28, $fw-extra-light);
+    }
+  }
+
+  @media (max-width: rem($tablet)) {
+    &__title {
+      margin: rem(40) rem(20) 0 0;
       @include font(24, $fw-extra-light);
     }
   }
 
   @media (max-width: rem($mobile)) {
     grid-template-columns: 1fr;
-    gap: rem(8);
 
     &__item {
-      height: rem(150);
-      grid-template-columns: 58% 42%;
-      align-items: center;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+
+      aspect-ratio: 560 / 320;
+      max-height: none;
+    }
+
+    &__image {
+      width: 100%;
+      height: 100%;
     }
 
     &__title {
-      align-self: center;
-      justify-self: end;
-      margin: 0 rem(18) 0 0;
-      @include font(18, $fw-extra-light);
-      text-align: right;
+      margin: rem(40) rem(20) 0 0;
+      transform: none;
     }
   }
 }

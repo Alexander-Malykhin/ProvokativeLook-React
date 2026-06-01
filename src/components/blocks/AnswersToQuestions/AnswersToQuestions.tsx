@@ -30,7 +30,7 @@ const AnswersToQuestions = () => {
     const [activeId, setActiveId] = useState<number | null>(2);
 
     return (
-        <MainSliderCards title="Ответы #br# на вопросы" withControls={false} withFullContainer>
+        <MainSliderCards title="Ответы #br# на вопросы" withControls={false} withFullContainer mode={'grid'}>
             <AnswerList
                 answers={answers}
                 activeId={activeId}

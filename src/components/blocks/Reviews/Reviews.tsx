@@ -31,7 +31,7 @@ const reviews = [
 
 const Reviews = () => {
     return (
-        <MainSliderCards title="Отзывы" scrollStep={690}>
+        <MainSliderCards title="Отзывы" scrollStep={690} mode={'grid'}>
             {({ sliderRef }) => (
                 <ReviewsList sliderRef={sliderRef} reviews={reviews} />
             )}

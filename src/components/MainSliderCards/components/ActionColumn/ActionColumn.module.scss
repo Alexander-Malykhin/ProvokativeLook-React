@@ -4,10 +4,6 @@
   justify-content: space-between;
   padding-top: rem(6);
 
-  &__title {
-    @include font(26, $fw-extra-light);
-  }
-
   &__buttons {
     display: flex;
     align-items: center;
@@ -31,10 +27,8 @@
     }
   }
 
-  @media (max-width: rem($mobile)) {
-    &__title {
-      @include font(24, $fw-extra-light);
-    }
+  @media (max-width: rem($desktop-x)) {
+    padding-top: 0;
 
     &__buttons {
       display: none;

@@ -1,9 +1,9 @@
 //components
 import CatalogCategories from "@components/CatalogCategories/CatalogCategories.tsx";
 //images
-import CardLeftImage from "@assets/category/promo/card-1.png";
-import CardMiddleImage from "@assets/category/promo/card-2.png";
-import CardRightImage from "@assets/category/promo/card-3.png";
+import CardLeftImage from "@assets/category/list-trimmed/card-1.png";
+import CardMiddleImage from "@assets/category/list-trimmed/card-2.png";
+import CardRightImage from "@assets/category/list-trimmed/card-3.png";
 
 const CatalogPromo = () => {
 
@@ -17,7 +17,7 @@ const CatalogPromo = () => {
         },
         {
             id: 2,
-            title: 'Верхняя одежда',
+            title: 'Верхняя #br# одежда',
             image: CardMiddleImage,
             path: '#',
             position: 'middle',

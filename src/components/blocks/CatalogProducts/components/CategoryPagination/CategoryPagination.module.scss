@@ -1,0 +1,39 @@
+.pagination {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: rem(16);
+
+  &__description {
+    @include font(14, $fw-light);
+  }
+
+
+  &__content {
+    display: flex;
+    align-items: center;
+    gap: rem(4);
+  }
+
+  &__item,
+  &__button {
+    background-color: rgba($black, 0.04);
+    border-radius: rem(5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: rem(40);
+    height: rem(40);
+    text-decoration: none;
+    color: inherit;
+  }
+
+  &__item {
+    @include font(14, $fw-light);
+    padding: rem(8);
+
+    &_active {
+      border: rem(1) solid rgba($black, 0.1);
+    }
+  }
+}

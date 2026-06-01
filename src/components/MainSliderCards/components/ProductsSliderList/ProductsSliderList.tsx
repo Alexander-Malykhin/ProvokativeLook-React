@@ -1,28 +1,17 @@
-import type { RefObject } from 'react';
-
+//styles
 import styles from './ProductsSliderList.module.scss';
-
+//components
 import CardSlider from '@components/MainSliderCards/components/CardSlider/CardSlider';
+//types
+import type {ProductsSliderListProps} from "@components/MainSliderCards/components/ProductsSliderList/types/types.ts";
 
-interface Product {
-    id: number;
-    title: string;
-    image: string;
-    price: string;
-    sizes: string[];
-}
-
-interface ProductsSliderListProps {
-    sliderRef: RefObject<HTMLDivElement | null>;
-    products: Product[];
-    variant?: 'default' | 'five';
-}
-
-const ProductsSliderList = ({sliderRef, products, variant = 'default',}: ProductsSliderListProps) => {
+const ProductsSliderList = ({sliderRef, products, variant = 'default', mode = 'slider',}: ProductsSliderListProps) => {
     return (
         <div
             ref={sliderRef}
-            className={`${styles.list} ${styles[`list_${variant}`]}`}
+            className={`${styles.list} ${styles[`list_${variant}`]} ${
+                styles[`list_${mode}`]
+            }`}
         >
             {products.map((item) => (
                 <CardSlider

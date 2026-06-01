@@ -23,9 +23,38 @@ $container: 1360;
     padding-right: 0;
   }
 
+  &__more {
+    display: none;
+  }
+
+  &__dots {
+    display: none;
+  }
+
+  @media (max-width: rem($desktop-x)) {
+    &_grid {
+      display: flex;
+      flex-direction: column;
+      gap: rem(16);
+    }
+
+    &_grid &__more {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      width: 100%;
+      height: rem(48);
+      border-radius: rem(6);
+      background-color: $black;
+      color: $white;
+
+      @include font(12, $fw-extra-light);
+    }
+  }
+
   @media (max-width: rem($mobile)) {
-    grid-template-columns: 1fr;
-    gap: rem(24);
+    gap: rem(20);
 
     &__dots {
       display: flex;

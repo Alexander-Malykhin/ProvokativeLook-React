@@ -1,5 +1,5 @@
 export interface RunningLineInterface {
-    text: string;
+    text?: string;
     repeat?: number;
     speed?: number;
     className?: string;

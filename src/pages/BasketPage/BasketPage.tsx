@@ -15,7 +15,7 @@ const BasketPage = () => {
     return (
         <>
             <Header/>
-            <RunningLine text={'Доставка по России 300 ₽'}/>
+            <RunningLine/>
             <Breadcrumbs/>
             <main className={styles.page__main}>
                 <Basket/>

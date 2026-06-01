@@ -15,7 +15,7 @@ const AboutPage = () => {
     return (
         <>
             <Header/>
-            <RunningLine text={'Доставка по России 300 ₽'}/>
+            <RunningLine/>
             <Breadcrumbs title={'О нас'}/>
             <main className={styles.page__main}>
                 <About/>

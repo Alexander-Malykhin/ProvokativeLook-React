@@ -1,6 +1,6 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from 'react';
 //hooks
-import {useHorizontalSlider} from '@/hooks/useHorizontalSlider';
+import { useHorizontalSlider } from '@/hooks/useHorizontalSlider';
 //styles
 import styles from './MainSliderCards.module.scss';
 //layouts
@@ -9,9 +9,11 @@ import MainLayoutContainer from '@layouts/MainLayoutContainer/MainLayoutContaine
 //components
 import ActionColumn from './components/ActionColumn/ActionColumn';
 //types
-import type {MainSliderCardsInterface} from './types/types';
+import type { MainSliderCardsInterface } from './types/types';
+//UI
+import MainButton from "@UI/buttons/MainButton/MainButton.tsx";
 
-const MainSliderCards = ({title, children, withControls = true, withFullContainer = false, scrollStep = 240,}: MainSliderCardsInterface) => {
+const MainSliderCards = ({title, children, withControls = true, withFullContainer = false, scrollStep = 240, mode = 'slider', showMoreButton = false, moreButtonText = 'Показать больше',}: MainSliderCardsInterface) => {
     const { sliderRef, scrollSlider } = useHorizontalSlider(scrollStep);
 
     const [activeIndex, setActiveIndex] = useState(0);
@@ -57,7 +59,7 @@ const MainSliderCards = ({title, children, withControls = true, withFullContaine
         <div
             className={`${styles.slider} ${
                 withFullContainer ? styles.slider_container : ''
-            }`}
+            } ${styles[`slider_${mode}`]}`}
         >
             <ActionColumn
                 title={title}
@@ -66,31 +68,37 @@ const MainSliderCards = ({title, children, withControls = true, withFullContaine
             />
 
             {typeof children === 'function'
-                ? children({sliderRef, scrollSlider})
+                ? children({ sliderRef, scrollSlider })
                 : children}
 
-            <div className={styles.slider__dots}>
-                {Array.from({length: dotsCount}).map((_, index) => (
-                    <button
-                        key={index}
-                        type="button"
-                        className={`${styles.slider__dot} ${
-                            activeIndex === index ? styles.slider__dot_active : ''
-                        }`}
-                        onClick={() => scrollToSlide(index)}
-                        aria-label={`Перейти к слайду ${index + 1}`}
-                    />
-                ))}
-            </div>
+            {mode === 'grid' && showMoreButton && (
+                <MainButton type="button" className={styles.slider__more}>
+                    {moreButtonText}
+                </MainButton>
+            )}
+
+            {!showMoreButton && (
+                <div className={styles.slider__dots}>
+                    {Array.from({ length: dotsCount }).map((_, index) => (
+                        <button
+                            key={index}
+                            type="button"
+                            className={`${styles.slider__dot} ${
+                                activeIndex === index ? styles.slider__dot_active : ''
+                            }`}
+                            onClick={() => scrollToSlide(index)}
+                            aria-label={`Перейти к слайду ${index + 1}`}
+                        />
+                    ))}
+                </div>
+            )}
         </div>
     );
 
     return (
         <SectionLayout>
             {withFullContainer ? (
-                <MainLayoutContainer>
-                    {content}
-                </MainLayoutContainer>
+                <MainLayoutContainer>{content}</MainLayoutContainer>
             ) : (
                 content
             )}

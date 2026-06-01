@@ -91,7 +91,7 @@ const products = [
 
 const Bestsellers = () => {
     return (
-        <MainSliderCards title="Бестселлеры">
+        <MainSliderCards title="Бестселлеры" mode="grid">
             {({ sliderRef }) => (
                 <ProductsSliderList sliderRef={sliderRef} products={products}/>
             )}

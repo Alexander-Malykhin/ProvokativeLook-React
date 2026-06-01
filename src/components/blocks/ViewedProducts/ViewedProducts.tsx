@@ -94,12 +94,15 @@ const ViewedProducts = () => {
             title="Вы смотрели"
             withFullContainer
             scrollStep={5 * 160}
+            mode="grid"
+            showMoreButton
         >
             {({ sliderRef }) => (
                 <ProductsSliderList
                     sliderRef={sliderRef}
                     products={products}
                     variant="five"
+                    mode="grid"
                 />
             )}
         </MainSliderCards>
