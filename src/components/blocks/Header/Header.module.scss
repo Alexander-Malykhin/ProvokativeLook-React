@@ -19,7 +19,7 @@
     gap: rem(12);
   }
 
-  @media (max-width: rem($adaptive-tablet)) {
+  @media (max-width: rem($tablet)) {
     padding: rem(12) rem(10);
   }
 }

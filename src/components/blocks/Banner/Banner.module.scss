@@ -65,13 +65,38 @@
         max-width: rem(300);
 
         &:first-child {
-          padding-left: rem(20);
+          padding-left: 0;
         }
       }
     }
   }
 
   @media (max-width: rem($mobile)) {
+    gap: rem(56);
+
+    &__content {
+      grid-template-columns: 30% minmax(0, 1fr);
+
+      > img:last-child {
+        display: none;
+      }
+    }
+
+    &__information {
+      align-items: center;
+      justify-content: center;
+
+      &_footer {
+        padding: 0;
+      }
+
+      &_button {
+        @include font(14, $fw-regular);
+      }
+    }
+  }
+
+  @media (max-width: rem($mobile-x)) {
     gap: rem(56);
 
     &__content {

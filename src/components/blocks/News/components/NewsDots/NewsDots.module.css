@@ -1,0 +1,17 @@
+/* Error: 2 arguments required, but only 1 was passed.
+ *   ,
+ * 6 |     height: rem(2);
+ *   |             ^^^^^^
+ *   '
+ *   NewsDots.module.scss 6:13  root stylesheet */
+
+body::before {
+  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
+      "Droid Sans Mono", monospace, monospace;
+  white-space: pre;
+  display: block;
+  padding: 1em;
+  margin-bottom: 1em;
+  border-bottom: 2px solid black;
+  content: "Error: 2 arguments required, but only 1 was passed.\a   \2577 \a 6 \2502      height: rem(2);\d\a   \2502              ^^^^^^\a   \2575 \a   NewsDots.module.scss 6:13  root stylesheet";
+}

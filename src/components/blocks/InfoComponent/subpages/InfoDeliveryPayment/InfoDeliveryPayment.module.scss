@@ -1,0 +1,28 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: rem(40);
+
+  &__column {
+    display: flex;
+    flex-direction: column;
+    gap: rem(4);
+  }
+
+  &__item {
+    @include font(16, $fw-light);
+  }
+
+  &__list {
+   display: flex;
+    flex-direction: column;
+    gap: rem(4);
+
+    &_item {
+      &::before {
+        content: '— ';
+      }
+      @include font(16, $fw-light);
+    }
+  }
+}

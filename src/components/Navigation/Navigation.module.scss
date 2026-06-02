@@ -9,7 +9,7 @@
     flex: 0 1 rem(600);
   }
 
-  @media (max-width: rem($adaptive-tablet)) {
+  @media (max-width: rem($tablet)) {
     display: none;
   }
 }

@@ -1,6 +1,13 @@
+import {useEffect, useRef, useState} from "react";
+//styles
+import styles from './News.module.scss'
+//layouts
+import SectionLayout from "@layouts/SectionLayout/SectionLayout.tsx";
 //components
-import MainSliderCards from '@components/MainSliderCards/MainSliderCards';
-import ProductsSliderList from '@components/MainSliderCards/components/ProductsSliderList/ProductsSliderList';
+import NewsColumn from "@components/blocks/News/components/NewsColumn/NewsColumn.tsx";
+import NewsSlider from "@components/blocks/News/components/NewsSlider/NewsSlider.tsx";
+import NewsDots from "@components/blocks/News/components/NewsDots/NewsDots.tsx";
+
 
 const products = [
     {
@@ -90,15 +97,80 @@ const products = [
 ];
 
 const News = () => {
+
+    const sliderRef = useRef<HTMLDivElement | null>(null);
+    const [activeIndex, setActiveIndex] = useState(0);
+
+    const getScrollStep = () => {
+        const slider = sliderRef.current;
+        const firstCard = slider?.firstElementChild as HTMLElement | null;
+
+        if (!slider || !firstCard) return 0;
+
+        const gap = parseFloat(window.getComputedStyle(slider).gap) || 0;
+
+        return firstCard.offsetWidth + gap;
+    };
+
+    const scrollToIndex = (index: number) => {
+        const slider = sliderRef.current;
+        const scrollStep = getScrollStep();
+
+        if (!slider) return;
+
+        slider.scrollTo({
+            left: scrollStep * index,
+            behavior: 'smooth',
+        });
+
+        setActiveIndex(index);
+    };
+
+    const handleScroll = (direction: 'prev' | 'next') => {
+        const nextIndex =
+            direction === 'next'
+                ? Math.min(activeIndex + 1, products.length - 1)
+                : Math.max(activeIndex - 1, 0);
+
+        scrollToIndex(nextIndex);
+    };
+
+    useEffect(() => {
+        const slider = sliderRef.current;
+
+        if (!slider) return;
+
+        const handleSliderScroll = () => {
+            const scrollStep = getScrollStep();
+
+            if (!scrollStep) return;
+
+            setActiveIndex(Math.round(slider.scrollLeft / scrollStep));
+        };
+
+        slider.addEventListener('scroll', handleSliderScroll);
+
+        return () => {
+            slider.removeEventListener('scroll', handleSliderScroll);
+        };
+    }, []);
+
     return (
-        <MainSliderCards title="Новинки"  mode="grid">
-            {({ sliderRef }) => (
-                <ProductsSliderList
-                    sliderRef={sliderRef}
-                    products={products}
-                />
-            )}
-        </MainSliderCards>
+        <SectionLayout className={styles.news}>
+            <NewsColumn
+                onPrev={() => handleScroll('prev')}
+                onNext={() => handleScroll('next')}
+            />
+            <NewsSlider
+                sliderRef={sliderRef}
+                products={products}
+            />
+            <NewsDots
+                count={products.length}
+                activeIndex={activeIndex}
+                onDotClick={scrollToIndex}
+            />
+        </SectionLayout>
     );
 };
 

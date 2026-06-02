@@ -1,7 +1,12 @@
 import { useState } from 'react';
+//styles
+import styles from './AnswersToQuestions.module.scss'
+//layouts
+import SectionLayout from "@layouts/SectionLayout/SectionLayout.tsx";
+import MainLayoutContainer from "@layouts/MainLayoutContainer/MainLayoutContainer.tsx";
 //components
-import MainSliderCards from '@components/MainSliderCards/MainSliderCards';
 import AnswerList from "@components/blocks/AnswersToQuestions/components/AnswerList/AnswerList.tsx";
+import AnswerColumn from "@components/blocks/AnswersToQuestions/components/AnswerColumn/AnswerColumn.tsx";
 
 const answers = [
     {
@@ -30,13 +35,16 @@ const AnswersToQuestions = () => {
     const [activeId, setActiveId] = useState<number | null>(2);
 
     return (
-        <MainSliderCards title="Ответы #br# на вопросы" withControls={false} withFullContainer mode={'grid'}>
-            <AnswerList
-                answers={answers}
-                activeId={activeId}
-                setActiveId={setActiveId}
-            />
-        </MainSliderCards>
+        <SectionLayout>
+            <MainLayoutContainer className={styles.answers}>
+                <AnswerColumn/>
+                <AnswerList
+                    answers={answers}
+                    activeId={activeId}
+                    setActiveId={setActiveId}
+                />
+            </MainLayoutContainer>
+        </SectionLayout>
     );
 };
 

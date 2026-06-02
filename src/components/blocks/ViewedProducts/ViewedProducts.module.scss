@@ -1,0 +1,22 @@
+.view {
+  display: grid;
+  grid-template-columns: rem(210) minmax(0, 1fr);
+  gap: rem(22);
+  height: auto;
+
+  &__button {
+    display: none;
+  }
+
+  @media (max-width: rem($desktop)) {
+    display: flex;
+    flex-direction: column;
+    gap: rem(22);
+  }
+
+  @media (max-width: rem($tablet)) {
+    &__button {
+      display: flex;
+    }
+  }
+}

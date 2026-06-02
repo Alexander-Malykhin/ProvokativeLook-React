@@ -1,0 +1,17 @@
+/* Error: 2 arguments required, but only 1 was passed.
+ *   ,
+ * 3 |   grid-template-columns: 1fr minmax(rem(200), rem(322));
+ *   |                                     ^^^^^^^^
+ *   '
+ *   Order.module.scss 3:37  root stylesheet */
+
+body::before {
+  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
+      "Droid Sans Mono", monospace, monospace;
+  white-space: pre;
+  display: block;
+  padding: 1em;
+  margin-bottom: 1em;
+  border-bottom: 2px solid black;
+  content: "Error: 2 arguments required, but only 1 was passed.\a   \2577 \a 3 \2502    grid-template-columns: 1fr minmax(rem(200), rem(322));\d\a   \2502                                      ^^^^^^^^\a   \2575 \a   Order.module.scss 3:37  root stylesheet";
+}

@@ -5,18 +5,18 @@
   padding: 0 rem(10);
 
   @media (max-width: rem($desktop-x)) {
-    max-width: rem($adaptive-desktop-x + 20);
+    max-width: rem($desktop-x + 20);
   }
 
-  @media (max-width: rem($adaptive-tablet)) {
+  @media (max-width: rem($tablet)) {
     max-width: rem($mobile + 20);
   }
 
   @media (max-width: rem($mobile)) {
-    max-width: rem($adaptive-mobile + 20);
+    max-width: rem($mobile + 20);
   }
 
-  @media (max-width: rem($adaptive-mobile-x)) {
+  @media (max-width: rem($mobile-x)) {
     max-width: $mobile-x;
   }
 }

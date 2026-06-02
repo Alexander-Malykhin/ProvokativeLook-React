@@ -1,3 +1,4 @@
+import {useNavigate, useLocation} from "react-router-dom";
 //styles
 import styles from './OrderForm.module.scss'
 //UI
@@ -5,6 +6,17 @@ import MainButton from "@UI/buttons/MainButton/MainButton.tsx";
 import FormRow from "@components/blocks/Basket/UI/FormRow/FormRow.tsx";
 
 const OrderForm = () => {
+
+    const navigate = useNavigate()
+
+    const {pathname} = useLocation()
+
+    const pathOrder = pathname.split('/')[1] === 'order';
+
+    const handleClick = () => {
+        navigate('/order');
+    };
+
     return (
         <form className={styles.form}>
             <div className={styles.form__header}>
@@ -17,9 +29,11 @@ const OrderForm = () => {
                 </div>
             </div>
 
-            <MainButton type={'submit'}>
-                Оформить заказ
-            </MainButton>
+            {!pathOrder && (
+                <MainButton type={'button'} onClick={handleClick}>
+                    Оформить заказ
+                </MainButton>
+            )}
         </form>
     );
 };

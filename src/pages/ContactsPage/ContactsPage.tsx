@@ -1,18 +1,22 @@
 //styles
 import styles from './ContactsPage.module.scss'
+//header
 import Header from "@components/blocks/Header/Header.tsx";
-import Breadcrumbs from "@components/Breadcrumbs/Breadcrumbs.tsx";
-import SubscribeNewsLetter from "@components/blocks/SubscribeNewsLetter/SubscribeNewsLetter.tsx";
-import Footer from "@components/blocks/Footer/Footer.tsx";
-import RunningLine from "@components/RunningLine/RunningLine.tsx";
-import ContactUs from "@components/blocks/ContactUs/ContactUs.tsx";
 //blocks
+import ContactUs from "@components/blocks/ContactUs/ContactUs.tsx";
+import SubscribeNewsLetter from "@components/blocks/SubscribeNewsLetter/SubscribeNewsLetter.tsx";
+//footer
+import Footer from "@components/blocks/Footer/Footer.tsx";
+//components
+import RunningLine from "@components/RunningLine/RunningLine.tsx";
+import Breadcrumbs from "@components/Breadcrumbs/Breadcrumbs.tsx";
+
 
 const ContactsPage = () => {
     return (
         <>
             <Header/>
-            <RunningLine text={'Доставка по России 300 ₽'}/>
+            <RunningLine/>
             <Breadcrumbs title={'Связаться с нами'}/>
             <main className={styles.page__main}>
                 <ContactUs/>

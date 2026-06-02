@@ -1,18 +1,3 @@
-.list {
-  min-width: 0;
-  display: flex;
-  gap: rem(20);
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-  padding-right: rem(40);
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
 .item {
   flex: 0 0 rem(670);
   min-height: rem(265);
@@ -44,14 +29,8 @@
     color: $black;
     max-width: rem(580);
   }
-}
 
-@media (max-width: rem($mobile)) {
-  .list {
-    gap: rem(12);
-  }
-
-  .item {
+  @media (max-width: rem($mobile)) {
     flex: 0 0 rem(254);
     min-height: auto;
     padding: rem(24);

@@ -6,6 +6,9 @@ import ContactsPage from "@pages/ContactsPage/ContactsPage.tsx";
 import AboutPage from "@pages/AboutPage/AboutPage.tsx";
 import BasketPage from "@pages/BasketPage/BasketPage.tsx";
 import CatalogCategoryPage from "@pages/CatalogCategoryPage/CatalogCategoryPage.tsx";
+import InfoPage from "@pages/InfoPage/InfoPage.tsx";
+import FavoritesPage from "@pages/FavoritesPage/FavoritesPage.tsx";
+import OrderPage from "@pages/OrderPage/OrderPage.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -31,6 +34,18 @@ export const router = createBrowserRouter([
     {
         path: "/basket",
         element: <BasketPage/>
+    },
+    {
+        path: "/order",
+        element: <OrderPage/>
+    },
+    {
+        path: '/favorites',
+        element: <FavoritesPage />,
+    },
+    {
+        path: '/:url',
+        element: <InfoPage />,
     }
 ], {
     basename: "/local/react-app",

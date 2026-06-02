@@ -1,0 +1,22 @@
+.news {
+  display: grid;
+  grid-template-columns: rem(210) minmax(0, 1fr);
+  gap: rem(22);
+  height: auto;
+
+  padding-left: max(
+          rem(10),
+          calc((100vw - rem($desktop)) / 2 + rem(10))
+  );
+
+  padding-right: max(
+          rem(10),
+          calc((100vw - rem($desktop)) / 2 + rem(10))
+  );
+
+  @media (max-width: rem($mobile)) {
+    display: flex;
+    flex-direction: column;
+    gap: rem(24);
+  }
+}

@@ -13,7 +13,7 @@
     background-color: $black;
   }
 
-  @media (max-width: rem($adaptive-tablet)) {
+  @media (max-width: rem($tablet)) {
     display: flex;
   }
 }

@@ -30,11 +30,39 @@ export const catalogTags = [
     { slug: 'rasprodazha', title: 'Распродажа' },
 ];
 
-const baseTitles: Record<string, string> = {
+export const baseTitles: Record<string, string> = {
     catalog: 'Каталог',
     contacts: 'Контакты',
     basket: 'Корзина',
+    order:'Оформление заказа'
 };
+
+export const infoPages = [
+    {
+        id: 1,
+        url: 'delivery-payment',
+        title: 'Доставка и оплата',
+    },
+    {
+        id: 2,
+        url: 'loyalty-program',
+        title: 'Программа лояльности',
+    },
+    {
+        id: 3,
+        url: 'return-policy',
+        title: 'Условия возврата',
+    },
+    {
+        id: 4,
+        url: 'gift-certificates',
+        title: 'Подарочные сертификаты',
+    },
+];
+
+const infoTitles = Object.fromEntries(
+    infoPages.map(({ url, title }) => [url, title])
+);
 
 const categoryTitles = Object.fromEntries(
     [...catalogCategories, ...catalogTags].map(({ slug, title }) => [slug, title])
@@ -43,6 +71,7 @@ const categoryTitles = Object.fromEntries(
 export const titles: Record<string, string> = {
     ...baseTitles,
     ...categoryTitles,
+    ...infoTitles
 };
 
 const Breadcrumbs = ({title}:BreadcrumbsInterface) => {

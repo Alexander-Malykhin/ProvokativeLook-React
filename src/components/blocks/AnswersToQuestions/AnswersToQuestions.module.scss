@@ -2,4 +2,10 @@
   display: grid;
   grid-template-columns: rem(210) minmax(0, 1fr);
   gap: rem(20);
+
+  @media (max-width: rem($mobile)) {
+    display: flex;
+    flex-direction: column;
+    gap: rem(24);
+  }
 }

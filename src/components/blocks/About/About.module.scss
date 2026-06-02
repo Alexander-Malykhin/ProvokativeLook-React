@@ -72,7 +72,7 @@
     }
   }
 
-  @media (max-width: rem($adaptive-tablet)) {
+  @media (max-width: rem($tablet)) {
     &__row {
       grid-template-columns: 1fr;
       gap: rem(20);
@@ -126,7 +126,7 @@
     }
   }
 
-  @media (max-width: rem($adaptive-mobile-x)) {
+  @media (max-width: rem($mobile-x)) {
     &__column {
       padding: rem(16) 0;
       gap: rem(18);

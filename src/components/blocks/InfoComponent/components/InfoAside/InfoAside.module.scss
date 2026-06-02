@@ -1,0 +1,14 @@
+.aside {
+  display: flex;
+  flex-direction: column;
+
+  &__item {
+    @include font(16, $fw-light);
+    padding: rem(16) rem(24);
+
+    &_active {
+      background-color: $gray;
+      border-radius: rem(10);
+    }
+  }
+}

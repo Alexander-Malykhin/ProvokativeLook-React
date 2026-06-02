@@ -5,6 +5,7 @@ import AboutImage from '@assets/about/about.png'
 //layouts
 import SectionLayout from "@layouts/SectionLayout/SectionLayout.tsx";
 import MainLayoutContainer from "@layouts/MainLayoutContainer/MainLayoutContainer.tsx";
+//UI
 import Image from "@UI/buttons/Image/Image.tsx";
 
 const About = () => {

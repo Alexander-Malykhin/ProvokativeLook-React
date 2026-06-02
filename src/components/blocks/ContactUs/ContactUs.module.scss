@@ -124,7 +124,7 @@
     }
   }
 
-  @media (max-width: rem($adaptive-mobile-x)) {
+  @media (max-width: rem($mobile-x)) {
     &__phone {
       @include font(18, $fw-light)
     }

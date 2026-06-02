@@ -174,7 +174,7 @@
     }
   }
 
-  @media (max-width: rem($adaptive-tablet)) {
+  @media (max-width: rem($tablet)) {
     &__content {
       grid-template-columns: 1fr;
       grid-template-areas:

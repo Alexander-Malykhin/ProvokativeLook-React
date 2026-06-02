@@ -48,7 +48,7 @@
     }
   }
 
-  @media (max-width: rem($adaptive-tablet)) {
+  @media (max-width: rem($tablet)) {
     gap: rem(4);
 
     &__label {

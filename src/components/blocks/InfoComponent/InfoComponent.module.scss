@@ -1,0 +1,6 @@
+.info {
+  display: grid;
+  grid-template-columns: rem(322) minmax(rem(0), rem(1014));
+  align-items: flex-start;
+  gap: rem(24);
+}

@@ -1,5 +1,13 @@
-import MainSliderCards from "@components/MainSliderCards/MainSliderCards.tsx";
-import ProductsSliderList from "@components/MainSliderCards/components/ProductsSliderList/ProductsSliderList.tsx";
+import {useRef, useState} from "react";
+//styles
+import styles from './ViewedProducts.module.scss'
+//layouts
+import SectionLayout from "@layouts/SectionLayout/SectionLayout.tsx";
+import MainLayoutContainer from "@layouts/MainLayoutContainer/MainLayoutContainer.tsx";
+//components
+import ViewedColumn from "@components/blocks/ViewedProducts/components/ViewedColumn/ViewedColumn.tsx";
+import ViewedSlider from "@components/blocks/ViewedProducts/components/ViewedSlider/ViewedSlider.tsx";
+import MainButton from "@UI/buttons/MainButton/MainButton.tsx";
 
 const products = [
     {
@@ -89,23 +97,51 @@ const products = [
 ];
 
 const ViewedProducts = () => {
+
+    const sliderRef = useRef<HTMLDivElement | null>(null);
+    const [visibleCount, setVisibleCount] = useState(4);
+
+    const visibleProducts = products.slice(0, visibleCount);
+    const hasMore = visibleCount < products.length;
+
+    const handleScroll = (direction: 'prev' | 'next') => {
+        const slider = sliderRef.current;
+
+        if (!slider) return;
+
+        slider.scrollBy({
+            left: direction === 'next' ? slider.clientWidth : -slider.clientWidth,
+            behavior: 'smooth',
+        });
+    };
+
+    const handleShowMore = () => {
+        setVisibleCount((prev) => prev + 4);
+    };
+
+
     return (
-        <MainSliderCards
-            title="Вы смотрели"
-            withFullContainer
-            scrollStep={5 * 160}
-            mode="grid"
-            showMoreButton
-        >
-            {({ sliderRef }) => (
-                <ProductsSliderList
+        <SectionLayout>
+            <MainLayoutContainer className={styles.view}>
+                <ViewedColumn
+                    onPrev={() => handleScroll('prev')}
+                    onNext={() => handleScroll('next')}
+                />
+                <ViewedSlider
                     sliderRef={sliderRef}
                     products={products}
-                    variant="five"
-                    mode="grid"
+                    visibleProducts={visibleProducts}
                 />
-            )}
-        </MainSliderCards>
+                {hasMore && (
+                    <MainButton
+                        className={styles.view__button}
+                        onClick={handleShowMore}
+                    >
+                        Показать больше
+                    </MainButton>
+                )}
+            </MainLayoutContainer>
+        </SectionLayout>
     );
 };
 

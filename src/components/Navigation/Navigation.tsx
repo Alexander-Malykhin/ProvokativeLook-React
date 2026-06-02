@@ -22,7 +22,7 @@ const navigation = [
     {
         id: 4,
         text: 'Доставка и оплата',
-        path: '/'
+        path: '/delivery-payment'
     },
     {
         id: 5,

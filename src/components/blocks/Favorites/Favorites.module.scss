@@ -1,0 +1,11 @@
+.favorites {
+  display: flex;
+  flex-direction: column;
+  gap: rem(40);
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: rem(24);
+  }
+}

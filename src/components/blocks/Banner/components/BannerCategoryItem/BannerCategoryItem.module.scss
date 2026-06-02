@@ -27,5 +27,9 @@
       width: rem(72);
       height: rem(72);
     }
+
+    &__title {
+      @include font(10, $fw-extra-light);
+    }
   }
 }

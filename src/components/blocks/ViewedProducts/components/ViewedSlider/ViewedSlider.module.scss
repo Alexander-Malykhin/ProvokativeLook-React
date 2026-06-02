@@ -1,0 +1,32 @@
+.list {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - #{rem(24)} * 3) / 4);
+  gap: rem(24);
+
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (max-width: rem($tablet)) {
+    display: none;
+  }
+}
+
+.mobileList {
+  display: none;
+
+  @media (max-width: rem($tablet)) {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: rem(8);
+  }
+
+  @media (max-width: rem($mobile)) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

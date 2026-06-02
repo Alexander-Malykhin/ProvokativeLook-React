@@ -1,0 +1,130 @@
+.order {
+  display: grid;
+  grid-template-columns: 1fr minmax(rem(200), rem(322));
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: rem(24);
+
+  @media (max-width: rem($tablet)) {
+    grid-template-columns: 1fr;
+  }
+
+  &__footer {
+    display: flex;
+    flex-direction: column;
+    gap: rem(18);
+  }
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: rem(64);
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: rem(22);
+  }
+
+  &__title {
+    @include font(20, $fw-light);
+    padding: rem(24) rem(16);
+    background-color: rgba($black, 0.1);
+    border-radius: rem(10);
+  }
+
+  &__fields {
+    display: flex;
+    flex-direction: column;
+    gap: rem(6);
+  }
+}
+
+.field {
+  padding: rem(8) rem(16) rem(16) rem(16);
+  border: rem(1) solid rgba($black, 0.1);
+  border-radius: rem(10);
+
+  display: flex;
+  flex-direction: column;
+  gap: rem(6);
+
+  &__label {
+    @include font(12, $fw-light);
+    color: rgba($black, 0.6);
+  }
+
+  &__input {
+    @include font(16, $fw-light);
+
+    border: none;
+    outline: none;
+    box-shadow: none;
+
+    &:focus,
+    &:focus-visible {
+      outline: none;
+      box-shadow: none;
+    }
+  }
+}
+
+.deliveryRadio {
+  display: flex;
+  align-items: center;
+  gap: rem(16);
+  padding: rem(16);
+  border-top: rem(1) solid rgba($black, 0.1);
+  border-bottom: rem(1) solid rgba($black, 0.1);
+  cursor: pointer;
+  overflow: hidden;
+
+  &__dot {
+    width: rem(10);
+    height: rem(10);
+    border-radius: 50%;
+    border: rem(1) solid $black;
+    flex: 0 0 rem(10);
+  }
+
+  &__content {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: rem(16);
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  &__title {
+    @include font(16, $fw-medium);
+  }
+
+  &__address {
+    @include font(16, $fw-light);
+  }
+
+  &__description {
+    @include font(14, $fw-light);
+    color: rgba($black, 0.4);
+  }
+
+  &__content span {
+    flex-shrink: 0;
+  }
+
+  &__content span:nth-child(2) {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 1;
+  }
+
+  &__information {
+    display: flex;
+    align-items: center;
+    gap: rem(16);
+    flex-shrink: 0;
+  }
+}

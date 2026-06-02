@@ -5,7 +5,7 @@
   justify-content: space-between;
   gap: rem(24);
 
-  @media (max-width: rem($adaptive-tablet)) {
+  @media (max-width: rem($tablet)) {
     grid-template-columns: 1fr;
   }
 }
