@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: rem(22);
+
+  &__title {
+    @include font(20, $fw-light);
+    padding: rem(24) rem(16);
+    background-color: rgba($black, 0.1);
+    border-radius: rem(10);
+  }
+
+  &__fields {
+    display: flex;
+    flex-direction: column;
+    gap: rem(6);
+  }
+
+  &__ratio {
+    display: flex;
+    flex-direction: column;
+  }
+}

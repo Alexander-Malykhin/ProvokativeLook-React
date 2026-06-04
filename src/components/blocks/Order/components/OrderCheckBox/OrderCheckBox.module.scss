@@ -1,0 +1,51 @@
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: rem(8);
+  cursor: pointer;
+  position: relative;
+
+  &__input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &__box {
+    width: rem(16);
+    height: rem(16);
+    border: rem(1) solid $gray;
+    border-radius: rem(4);
+    flex-shrink: 0;
+    position: relative;
+    background-color: $gray;
+    transition: background-color 0.2s ease;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: rem(5);
+      height: rem(9);
+      border-right: rem(2) solid $black;
+      border-bottom: rem(2) solid $black;
+      transform: translate(-50%, -50%) rotate(45deg) scale(0);
+      transition: transform 0.2s ease;
+    }
+  }
+
+  &__input:checked + &__box::after {
+    transform: translate(-50%, -50%) rotate(45deg) scale(1);
+  }
+
+  &__content {
+    @include font(12, $fw-light);
+    color: $black;
+  }
+
+  &__link {
+    background: transparent;
+    border-bottom: rem(1) solid currentColor;
+  }
+}

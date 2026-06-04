@@ -1,0 +1,42 @@
+.field {
+  padding: rem(8) rem(16) rem(16) rem(16);
+  border: rem(1) solid rgba($black, 0.1);
+  border-radius: rem(10);
+
+  display: flex;
+  flex-direction: column;
+  gap: rem(6);
+
+  &__label {
+    @include font(12, $fw-light);
+    color: rgba($black, 0.6);
+  }
+
+  &__error {
+    @include font(12, $fw-light);
+    color: $red;
+  }
+
+  &__input {
+    @include font(16, $fw-light);
+
+    border: none;
+    outline: none;
+    box-shadow: none;
+
+    &:focus,
+    &:focus-visible {
+      outline: none;
+      box-shadow: none;
+    }
+  }
+
+  &__content {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: rem(16);
+    white-space: nowrap;
+    overflow: hidden;
+  }
+}

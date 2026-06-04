@@ -1,0 +1,13 @@
+.profile {
+  display: grid;
+  grid-template-columns: minmax(rem(0), rem(322)) 1fr;
+  align-items: flex-start;
+
+  gap: rem(140);
+
+  &__column {
+    display: flex;
+    flex-direction: column;
+    gap: rem(54);
+  }
+}

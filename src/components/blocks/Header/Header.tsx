@@ -8,6 +8,8 @@ import Navigation from "@components/Navigation/Navigation.tsx";
 import UserActions from "@components/blocks/Header/components/UserActions/UserActions.tsx";
 //UI
 import BurgerButton from "@UI/buttons/BurgerButton/BurgerButton.tsx";
+//modals
+import NavigationProfileModal from "@components/modals/NavigationProfileModal/NavigationProfileModal.tsx";
 
 const Header = () => {
     return (
@@ -20,6 +22,7 @@ const Header = () => {
                     </div>
                     <Navigation/>
                     <UserActions/>
+                    <NavigationProfileModal/>
                 </div>
             </MainLayoutContainer>
         </header>

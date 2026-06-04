@@ -4,33 +4,18 @@ import styles from './CategoryPromo.module.scss';
 //layouts
 import SectionLayout from '@layouts/SectionLayout/SectionLayout';
 import MainLayoutContainer from '@layouts/MainLayoutContainer/MainLayoutContainer';
-//images
-import PromoLeftImage from '@assets/promo/promo-left.png';
-import PromoRightImage from '@assets/promo/promo-right.png';
 //UI
 import Image from '@UI/buttons/Image/Image';
 import Title from "@UI/typography/Title/Title.tsx";
+//api
+import {navigationHomePromo} from "@api/static/navigationHomePromo.ts";
 
-const promoItems = [
-    {
-        id: 1,
-        title: 'Обувь',
-        image: PromoLeftImage,
-        path: '/catalog/shoes',
-    },
-    {
-        id: 2,
-        title: 'Аксессуары',
-        image: PromoRightImage,
-        path: '/catalog/accessories',
-    },
-];
 
 const CategoryPromo = () => {
     return (
         <SectionLayout>
             <MainLayoutContainer className={styles.promo}>
-                {promoItems.map((item) => (
+                {navigationHomePromo.map((item) => (
                     <Link key={item.id} to={item.path} className={styles.promo__item}>
                         <Image src={item.image} alt={item.title} className={styles.promo__image}/>
 

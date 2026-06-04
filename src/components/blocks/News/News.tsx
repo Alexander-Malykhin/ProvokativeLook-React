@@ -156,7 +156,7 @@ const News = () => {
     }, []);
 
     return (
-        <SectionLayout className={styles.news}>
+        <SectionLayout className={styles.news} id="new-collection">
             <NewsColumn
                 onPrev={() => handleScroll('prev')}
                 onNext={() => handleScroll('next')}

@@ -1,3 +1,4 @@
+import {useNavigate} from "react-router";
 //styles
 import styles from './Banner.module.scss'
 //images
@@ -14,6 +15,9 @@ import MainButton from '@/UI/buttons/MainButton/MainButton';
 
 
 const Banner = () => {
+
+    const navigate = useNavigate();
+
     return (
         <SectionLayout className={styles.banner}>
             <div className={styles.banner__content}>
@@ -26,7 +30,7 @@ const Banner = () => {
                         Свобода самовыражения
                     </BannerTitle>
                     <div className={styles.banner__information_footer}>
-                        <MainButton mode="text" color="black">
+                        <MainButton mode="text" color="black" onClick={() => navigate('/#new-collection')}>
                             Новая коллекция
                         </MainButton>
                     </div>

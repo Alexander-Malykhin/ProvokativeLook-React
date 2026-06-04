@@ -1,0 +1,38 @@
+.page {
+  margin-top: rem(60);
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: rem(40);
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: rem(480);
+    gap: rem(8);
+  }
+
+  &__title {
+    @include font(128, $fw-extra-light);
+    color: rgba($black, 0.2);
+  }
+
+  &__subtitle {
+    @include font(28, $fw-light);
+  }
+
+  &__description {
+    text-align: center;
+    @include font(18, $fw-light);
+  }
+
+  &__button {
+    max-width: max-content;
+  }
+}

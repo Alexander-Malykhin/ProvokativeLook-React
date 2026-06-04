@@ -1,4 +1,8 @@
+import type { MouseEvent } from "react";
 import {useNavigate} from "react-router";
+import type { AppDispatch } from "@store/store";
+import { toggle } from "@store/slices/toggleMenuProfileSlice";
+import { useDispatch } from "react-redux";
 //styles
 import styles from './UserActions.module.scss'
 //UI
@@ -8,6 +12,7 @@ import Image from "@UI/buttons/Image/Image.tsx";
 
 const UserActions = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
 
     const actions = [
         {
@@ -18,7 +23,7 @@ const UserActions = () => {
         {
             id: 2,
             image: `${import.meta.env.BASE_URL}header/user.svg`,
-            path: '/profile',
+            func: () => dispatch(toggle()),
         },
         {
             id: 3,
@@ -32,7 +37,12 @@ const UserActions = () => {
         },
     ];
 
-    const handleClick = (item: any) => {
+    const handleClick = (
+        event: MouseEvent<HTMLButtonElement>,
+        item: any
+    ) => {
+        event.stopPropagation();
+
         if (item.path) {
             navigate(item.path);
             return;
@@ -46,7 +56,7 @@ const UserActions = () => {
             {actions.map((item) => (
                 <ActionButton
                     key={item.id}
-                    onClick={() => handleClick(item)}
+                    onClick={(event) => handleClick(event, item)}
                     className={styles.actions__image}
                 >
                     <Image src={item.image} alt="action-icon" />

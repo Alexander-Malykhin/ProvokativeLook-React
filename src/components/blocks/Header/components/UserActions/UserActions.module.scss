@@ -5,6 +5,10 @@
   gap: rem(5);
   flex: 0 1 rem(160);
 
+  &__item {
+    position: relative;
+  }
+
   @media (max-width: rem($desktop-x)) {
     flex: 0 1 rem(120);
   }

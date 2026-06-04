@@ -8,93 +8,9 @@ import MainLayoutContainer from "@layouts/MainLayoutContainer/MainLayoutContaine
 import ViewedColumn from "@components/blocks/ViewedProducts/components/ViewedColumn/ViewedColumn.tsx";
 import ViewedSlider from "@components/blocks/ViewedProducts/components/ViewedSlider/ViewedSlider.tsx";
 import MainButton from "@UI/buttons/MainButton/MainButton.tsx";
+//api
+import {products} from "@api/static/products.ts";
 
-const products = [
-    {
-        id: 1,
-        title: 'Шуба',
-        image: 'products/product-1.png',
-        price: '17 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 2,
-        title: 'Босоножки',
-        image: 'products/product-1.png',
-        price: '7 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 3,
-        title: 'Комбинезон с накидкой',
-        image: 'products/product-1.png',
-        price: '11 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 4,
-        title: 'Свитшот',
-        image: 'products/product-1.png',
-        price: '17 700 ₽',
-        sizes: ['48', '50', '52'],
-    },
-    {
-        id: 5,
-        title: 'Шуба',
-        image: 'products/product-1.png',
-        price: '17 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 6,
-        title: 'Босоножки',
-        image: 'products/product-1.png',
-        price: '7 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 7,
-        title: 'Шуба',
-        image: 'products/product-1.png',
-        price: '17 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 8,
-        title: 'Босоножки',
-        image: 'products/product-1.png',
-        price: '7 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 9,
-        title: 'Комбинезон с накидкой',
-        image: 'products/product-1.png',
-        price: '11 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 10,
-        title: 'Свитшот',
-        image: 'products/product-1.png',
-        price: '17 700 ₽',
-        sizes: ['48', '50', '52'],
-    },
-    {
-        id: 11,
-        title: 'Шуба',
-        image: 'products/product-1.png',
-        price: '17 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 12,
-        title: 'Босоножки',
-        image: 'products/product-1.png',
-        price: '7 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-];
 
 const ViewedProducts = () => {
 

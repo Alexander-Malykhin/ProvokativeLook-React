@@ -1,19 +1,52 @@
 .burger {
   display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: rem(24);
+  position: relative;
   width: rem(24);
-  gap: rem(8);
-
-  &__line {
-    width: 100%;
-    height: rem(1);
-    background-color: $black;
-  }
+  height: rem(24);
 
   @media (max-width: rem($tablet)) {
     display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__line {
+    position: absolute;
+    width: 100%;
+    height: rem(1);
+    background-color: $black;
+    transition: 0.3s;
+
+    &:nth-child(1) {
+      top: rem(4);
+    }
+
+    &:nth-child(2) {
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    &:nth-child(3) {
+      bottom: rem(4);
+    }
+  }
+
+  &_active {
+    .burger__line {
+      &:nth-child(1) {
+        top: 50%;
+        transform: translateY(-50%) rotate(45deg);
+      }
+
+      &:nth-child(2) {
+        opacity: 0;
+      }
+
+      &:nth-child(3) {
+        bottom: auto;
+        top: 50%;
+        transform: translateY(-50%) rotate(-45deg);
+      }
+    }
   }
 }

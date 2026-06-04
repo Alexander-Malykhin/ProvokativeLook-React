@@ -1,9 +1,9 @@
 /* Error: 2 arguments required, but only 1 was passed.
  *   ,
- * 6 |   height: rem(24);
- *   |           ^^^^^^^
+ * 4 |   width: rem(24);
+ *   |          ^^^^^^^
  *   '
- *   BurgerButton.module.scss 6:11  root stylesheet */
+ *   BurgerButton.module.scss 4:10  root stylesheet */
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
@@ -13,5 +13,5 @@ body::before {
   padding: 1em;
   margin-bottom: 1em;
   border-bottom: 2px solid black;
-  content: "Error: 2 arguments required, but only 1 was passed.\a   \2577 \a 6 \2502    height: rem(24);\d\a   \2502            ^^^^^^^\a   \2575 \a   BurgerButton.module.scss 6:11  root stylesheet";
+  content: "Error: 2 arguments required, but only 1 was passed.\a   \2577 \a 4 \2502    width: rem(24);\d\a   \2502           ^^^^^^^\a   \2575 \a   BurgerButton.module.scss 4:10  root stylesheet";
 }

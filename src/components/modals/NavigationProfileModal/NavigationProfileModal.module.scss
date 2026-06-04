@@ -1,0 +1,36 @@
+.modal {
+  position: absolute;
+  top: calc(100% + #{rem(14)});
+
+  right: 0;
+
+  width: rem(268);
+  background: $white;
+  z-index: 20;
+
+  box-shadow: 0 rem(8) rem(24) rgba(0, 0, 0, 0.15);
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__item {
+    @include font(12, $fw-light);
+    padding: rem(10);
+
+    transition: all 0.3s ease-in-out;
+
+    &_active {
+      background-color: $gray;
+    }
+
+    &:hover {
+      background-color: $gray;
+    }
+  }
+
+  &__button {
+
+  }
+}

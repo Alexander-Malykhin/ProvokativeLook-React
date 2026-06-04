@@ -1,7 +1,7 @@
-import type {ReactNode} from "react";
+import type { ReactNode, MouseEvent } from "react";
 
 export interface ActionButtonInterface {
-    children:ReactNode,
-    onClick?: () => void,
+    children: ReactNode;
+    onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
     className?: string;
 }
