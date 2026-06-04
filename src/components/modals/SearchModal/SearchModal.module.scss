@@ -1,0 +1,164 @@
+.search {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  &__overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+
+    background-color: rgba($black, 0.45);
+  }
+
+  &__top {
+    border-bottom: rem(1) solid rgba($black, 0.1);
+  }
+
+  &__bottom {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(40);
+
+    padding: rem(27) rem(40);
+  }
+
+  &__content {
+    position: relative;
+    z-index: 2;
+    background-color: $white;
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+    gap: rem(10);
+  }
+
+  &__category {
+    display: flex;
+    align-items: center;
+    gap: rem(10);
+    padding: rem(20) rem(40);
+
+    &_item {
+      @include font(12, $fw-light);
+      color: $black;
+      background-color: $gray;
+      padding: rem(9) rem(14);
+      border-radius: rem(100);
+    }
+  }
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: rem(12);
+
+  width: 100%;
+  margin: 0 auto;
+
+  &__image {
+    width: rem(22);
+    height: rem(22);
+    flex-shrink: 0;
+  }
+
+  &__input {
+    @include font(14, $fw-light);
+    color: $black;
+    width: 100%;
+
+    outline: none;
+    padding: rem(8) rem(12);
+
+    &::placeholder {
+      color: rgba($black, 0.6);
+    }
+
+    &::-webkit-search-cancel-button {
+      display: none;
+    }
+  }
+}
+
+.button__search {
+  @include font(14, $fw-light);
+  color: $white;
+  padding: rem(10) rem(20);
+  background-color: $black;
+  border-radius: rem(5);
+}
+
+.button__close {
+  @include font(14, $fw-light);
+  color: $black;
+  padding: rem(10) rem(20);
+  border: rem(1) solid $black;
+  border-radius: rem(5);
+}
+
+.popular {
+  display: grid;
+  align-items: flex-start;
+  gap: rem(24);
+  grid-template-columns: minmax(rem(0), rem(435)) 1fr;
+
+  padding: rem(0) rem(40) rem(40) rem(40);
+}
+
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: rem(50);
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: rem(16);
+
+    &_title {
+      @include font(14, $fw-light);
+      color: rgba($black, 0.6);
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: rem(16);
+
+    &_item {
+      @include font(14, $fw-light);
+      color: $black;
+    }
+
+    &_category {
+      @include font(14, $fw-light);
+      color: $black;
+
+      display: flex;
+      align-items: center;
+      gap: rem(19);
+    }
+  }
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: rem(16);
+
+  &__content {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: rem(24);
+  }
+}

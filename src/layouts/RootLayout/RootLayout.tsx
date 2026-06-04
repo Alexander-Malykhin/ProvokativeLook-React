@@ -7,6 +7,7 @@ import Footer from "@components/blocks/Footer/Footer.tsx";
 import ScrollToHash from '@components/ScrollToHash/ScrollToHash';
 import NavigationMobile from "@components/NavigationMobile/NavigationMobile.tsx";
 import RunningLine from "@components/RunningLine/RunningLine.tsx";
+import SearchModal from "@components/modals/SearchModal/SearchModal.tsx";
 
 const RootLayout = () => {
     return (
@@ -17,6 +18,7 @@ const RootLayout = () => {
             <Outlet />
             <Footer />
             <NavigationMobile/>
+            <SearchModal/>
         </>
     );
 };

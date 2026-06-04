@@ -1,8 +1,9 @@
 import type { MouseEvent } from "react";
-import {useNavigate} from "react-router";
 import type { AppDispatch } from "@store/store";
-import { toggle } from "@store/slices/toggleMenuProfileSlice";
+import {useNavigate} from "react-router";
 import { useDispatch } from "react-redux";
+import {add} from "@store/slices/toggleSearchSlice"
+import { toggle } from "@store/slices/toggleMenuProfileSlice";
 //styles
 import styles from './UserActions.module.scss'
 //UI
@@ -18,7 +19,7 @@ const UserActions = () => {
         {
             id: 1,
             image: `${import.meta.env.BASE_URL}header/search.svg`,
-            func: () => console.log('search'),
+            func: () => dispatch(add()),
         },
         {
             id: 2,

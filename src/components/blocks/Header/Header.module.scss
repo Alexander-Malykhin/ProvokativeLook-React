@@ -1,4 +1,11 @@
 .header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: $white;
+  box-shadow: 0 rem(2) rem(4) rgba($black, 0.1);
+
+
   padding: rem(18) rem(40);
 
   &__content {
