@@ -1,0 +1,42 @@
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: rem(5);
+  flex: 0 1 rem(845);
+
+  &__item_skeleton {
+    width: 80px;
+    height: 20px;
+    background: rgba(0,0,0,0.06);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(
+                      90deg,
+                      transparent,
+                      rgba(255,255,255,0.55),
+                      transparent
+      );
+      animation: skeleton-loading 1.4s infinite;
+    }
+  }
+
+  @keyframes skeleton-loading {
+    100% { transform: translateX(100%); }
+  }
+
+  @media (max-width: rem($desktop-x)) {
+    flex: 0 1 rem(600);
+  }
+
+  @media (max-width: rem($tablet)) {
+    display: none;
+  }
+}

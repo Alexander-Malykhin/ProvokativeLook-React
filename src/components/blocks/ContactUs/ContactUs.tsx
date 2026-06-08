@@ -1,17 +1,23 @@
 //styles
 import styles from './ContactUs.module.scss'
-//images
-import MapImage from '@assets/contacts/map.png';
-import TelegramIcon from '@assets/socials/tg.svg';
-import WhatsAppIcon from '@assets/socials/whats-app.svg';
 //layouts
 import SectionLayout from "@layouts/SectionLayout/SectionLayout.tsx";
 import MainLayoutContainer from "@layouts/MainLayoutContainer/MainLayoutContainer.tsx";
 //UI
 import Image from "@UI/buttons/Image/Image.tsx";
+//components
+import ContactUsSkeleton from "@components/blocks/ContactUs/components/ContactUsSkeleton.tsx";
+//api
+import { useGetContactsQuery } from "@store/api/contacts/contactsApi.ts";
 
 
 const ContactUs = () => {
+    const { data, isLoading, isError } = useGetContactsQuery();
+
+    if (isLoading) return <ContactUsSkeleton />;
+
+    if (isError || !data) return null;
+
     return (
         <SectionLayout>
             <MainLayoutContainer className={styles.contacts}>
@@ -20,8 +26,8 @@ const ContactUs = () => {
                         <span className={styles.contacts__label}>
                             Телефон:
                         </span>
-                        <a href={'tel:+79281090545'} className={styles.contacts__phone}>
-                            +7 (928) 109-05-45
+                        <a href={`tel:${data.phone.replace(/\D/g, '')}`} className={styles.contacts__phone}>
+                            {data.phone}
                         </a>
                     </div>
 
@@ -29,34 +35,52 @@ const ContactUs = () => {
                         <span className={styles.contacts__label}>
                             Электронная почта:
                         </span>
-                        <a href={'mailto:provokatsiashop@gmail.com'} className={styles.contacts__text}>
-                            provokatsiashop@gmail.com
+                        <a href={`mailto:${data.email}`} className={styles.contacts__text}>
+                            {data.email}
                         </a>
                     </div>
 
                     <div className={styles.contacts__row}>
                         <span className={styles.contacts__label}>
-                           Фактический адрес:
+                            Фактический адрес:
                         </span>
                         <p className={styles.contacts__text}>
-                            344045, г. Ростов-на-Дону, ул. Думенко 3/2, ТЦ «Пчёлка», офис 54
+                            {data.address}
                         </p>
                     </div>
 
                     <p className={styles.contacts__text}>
-                        Работаем с 09:00-19:00, Пн-Вс
+                        {data.workTime}
                     </p>
 
                     <div className={styles.contacts__list}>
-                        <a href={'#'} className={styles.contacts__item}>
-                            <Image src={TelegramIcon} alt={'telegram-icon'} className={styles.contacts__item_image}/>
-                        </a>
-                        <a  href={'#'} className={styles.contacts__item}>
-                            <Image src={WhatsAppIcon} alt={'whatsApp-icon'} className={styles.contacts__item_image}/>
-                        </a>
+                        {data.links.map((item) => (
+                            <a
+                                key={item.id}
+                                href={item.link}
+                                target="_blank"
+                                rel="noreferrer"
+                                className={styles.contacts__item}
+                            >
+                                {item.icon && (
+                                    <Image
+                                        src={item.icon}
+                                        alt={`${item.title}-icon`}
+                                        className={styles.contacts__item_image}
+                                    />
+                                )}
+                            </a>
+                        ))}
                     </div>
                 </div>
-                <Image src={MapImage} alt={'map-icon'} className={styles.contacts__map}/>
+
+                {data.map && (
+                    <Image
+                        src={data.map}
+                        alt="map"
+                        className={styles.contacts__map}
+                    />
+                )}
             </MainLayoutContainer>
         </SectionLayout>
     );

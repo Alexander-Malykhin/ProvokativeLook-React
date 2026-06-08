@@ -66,5 +66,5 @@ export const router = createBrowserRouter([
         ],
     },
 ], {
-    basename: '/local/react-app/',
+    basename: '/',
 });

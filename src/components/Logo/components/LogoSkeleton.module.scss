@@ -1,0 +1,43 @@
+.logo {
+  display: block;
+  width: rem(168);
+  height: rem(40);
+  flex-shrink: 0;
+
+  &_skeleton {
+    position: relative;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: rem(6);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(
+                      90deg,
+                      transparent,
+                      rgba(255, 255, 255, 0.55),
+                      transparent
+      );
+      animation: skeleton-loading 1.4s infinite;
+    }
+  }
+
+  @media (max-width: rem($desktop-x)) {
+    width: rem(120);
+    height: rem(32);
+  }
+
+  @media (max-width: rem($tablet)) {
+    width: rem(100);
+    height: rem(28);
+  }
+}
+
+@keyframes skeleton-loading {
+  100% {
+    transform: translateX(100%);
+  }
+}

@@ -40,7 +40,24 @@ export default defineConfig({
   },
 
   build: {
-    outDir: '../local/react-app',
+    outDir: '../site/local/react-app',
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        entryFileNames: 'assets/app.js',
+        chunkFileNames: 'assets/[name].js',
+        assetFileNames: 'assets/[name][extname]',
+      },
+    },
+  },
+
+  server: {
+    proxy: {
+      '/local/api': {
+        target: 'https://24.provokativelook.ru',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   },
 })

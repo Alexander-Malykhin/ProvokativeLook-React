@@ -1,0 +1,118 @@
+.contacts {
+  &__column {
+    display: flex;
+    flex-direction: column;
+    gap: rem(20);
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: rem(12);
+  }
+
+  &__list {
+    display: flex;
+    gap: rem(12);
+    margin-top: rem(20);
+  }
+
+  &__item {
+    width: rem(40);
+    height: rem(40);
+    border-radius: rem(6);
+    position: relative;
+    overflow: hidden;
+    background: rgba($black, 0.06);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(90deg, transparent, rgba($white,0.55), transparent);
+      animation: skeleton-loading 1.4s infinite;
+    }
+  }
+}
+
+.skeleton {
+  &__label {
+    width: rem(120);
+    height: rem(18);
+    border-radius: rem(6);
+    background: rgba($black, 0.06);
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(90deg, transparent, rgba($white,0.55), transparent);
+      animation: skeleton-loading 1.4s infinite;
+    }
+  }
+
+  &__text {
+    flex: 1;
+    height: rem(18);
+    border-radius: rem(6);
+    background: rgba($black, 0.06);
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(90deg, transparent, rgba($white,0.55), transparent);
+      animation: skeleton-loading 1.4s infinite;
+    }
+  }
+
+  &__icon {
+    width: rem(40);
+    height: rem(40);
+    border-radius: rem(6);
+    background: rgba($black, 0.06);
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(90deg, transparent, rgba($white,0.55), transparent);
+      animation: skeleton-loading 1.4s infinite;
+    }
+  }
+
+  &__map {
+    width: 100%;
+    height: rem(280);
+    margin-top: rem(24);
+    border-radius: rem(6);
+    background: rgba($black, 0.06);
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(90deg, transparent, rgba($white,0.55), transparent);
+      animation: skeleton-loading 1.4s infinite;
+    }
+  }
+}
+
+@keyframes skeleton-loading {
+  100% {
+    transform: translateX(100%);
+  }
+}
