@@ -1,11 +1,8 @@
 //styles
 import styles from './ReviewsDots.module.scss'
+//types
+import type {ReviewsDotsInterface} from "@components/blocks/Reviews/components/ReviewsDots/types.ts";
 
-interface ReviewsDotsInterface {
-    count: number;
-    activeIndex: number;
-    onDotClick: (index: number) => void;
-}
 
 const ReviewsDots = ({count, activeIndex, onDotClick}: ReviewsDotsInterface) => {
     return (

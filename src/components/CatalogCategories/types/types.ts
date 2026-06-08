@@ -1,13 +1,14 @@
 export interface CategoryCardInterface {
     id?: number;
     title: string;
-    image: string;
+    image: string | null;
     path: string;
     buttonText?: string;
     variant?: 'grid' | 'promo';
 }
 
 export interface CatalogCategoriesInterface {
-    cards: readonly CategoryCardInterface[];
+    cards: CategoryCardInterface[];
     variant?: 'grid' | 'promo';
+    isLoading?: boolean;
 }

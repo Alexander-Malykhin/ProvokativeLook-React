@@ -31,7 +31,7 @@
   }
 
   @media (max-width: rem($mobile)) {
-    flex: 0 0 rem(254);
+    flex: 1 0 clamp(rem(254), calc(100vw - rem(40)), rem(420));
     min-height: auto;
     padding: rem(24);
     gap: rem(18);

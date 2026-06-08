@@ -6,7 +6,7 @@ import path from 'node:path'
 export default defineConfig({
   plugins: [react()],
 
-  base: '/local/react-app/',
+  base: '/',
 
   resolve: {
     alias: {

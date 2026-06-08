@@ -1,5 +1,5 @@
-export interface ImageInterface  {
-    src: string,
-    alt?: string,
-    className?:string
+export interface ImageInterface {
+    src: string | null;
+    alt?: string;
+    className?: string;
 }

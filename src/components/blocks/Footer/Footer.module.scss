@@ -16,139 +16,7 @@
       "contacts nav"
       "socials bottom";
     gap: rem(24);
-    padding: rem(40) rem(20) rem(24) rem(20);
-  }
-
-  &__contacts {
-    grid-area: contacts;
-    display: flex;
-    flex-direction: column;
-    gap: rem(24);
-
-    &_description {
-      display: flex;
-      flex-direction: column;
-      gap: rem(12);
-    }
-  }
-
-  &__nav {
-    grid-area: nav;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(rem(140), rem(210)));
-    gap: rem(24);
-
-    &__item {
-      display: flex;
-      flex-direction: column;
-      gap: rem(24);
-
-      &_head {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background: none;
-        border: none;
-        padding: 0;
-        text-align: left;
-        cursor: default;
-      }
-
-      &_title {
-        @include font(12, $fw-regular);
-      }
-
-      &_arrow {
-        display: none;
-      }
-
-      &_list {
-        display: flex;
-        flex-direction: column;
-        gap: rem(10);
-      }
-
-      &_link {
-        @include font(12, $fw-extra-light);
-      }
-    }
-  }
-
-  &__socials {
-    grid-area: socials;
-    display: flex;
-    flex-direction: column;
-    gap: rem(10);
-
-    &_list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: rem(16);
-    }
-
-    &_item {
-      width: max-content;
-      height: rem(26);
-    }
-
-    &_image {
-      display: block;
-      width: max-content;
-      height: rem(26);
-    }
-  }
-
-  &__bottom {
-    grid-area: bottom;
-    display: flex;
-    align-items: flex-end;
-    gap: rem(24);
-
-    &_legal {
-      display: flex;
-      flex: 0 0 rem(440);
-    }
-
-    &_design {
-      max-width: max-content;
-    }
-  }
-
-
-  &__cookie {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    padding: rem(10) rem(40);
-
-    &_button {
-      position: absolute;
-      right: rem(14);
-      top: 50%;
-      transform: translateY(-50%);
-
-      width: rem(16);
-      height: rem(16);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    &_button_line {
-      position: absolute;
-      width: rem(12);
-      height: rem(1);
-      background-color: $black;
-
-      &:first-child {
-        transform: rotate(45deg);
-      }
-
-      &:last-child {
-        transform: rotate(-45deg);
-      }
-    }
+    padding: rem(40) rem(20) rem(24);
   }
 
   @media (max-width: rem($desktop-x)) {
@@ -156,140 +24,20 @@
       grid-template-columns: minmax(rem(200), rem(350)) 1fr;
       gap: rem(20);
     }
-
-    &__bottom {
-      grid-area: bottom;
-      display: flex;
-      align-items: flex-end;
-      gap: rem(20);
-
-      &_legal {
-        display: flex;
-        flex: 0 1 auto;
-      }
-
-      &_design {
-        max-width: max-content;
-      }
-    }
   }
 
   @media (max-width: rem($tablet)) {
     &__content {
       grid-template-columns: 1fr;
       grid-template-areas:
-      "nav"
-      "contacts"
-      "socials"
-      "bottom";
-    }
-
-    &__bottom {
-      flex-direction: column;
-      align-items: flex-start;
-
-      &_legal {
-        flex: 1 1 auto;
-      }
+        "nav"
+        "contacts"
+        "socials"
+        "bottom";
     }
   }
 
   @media (max-width: rem($mobile)) {
     margin-top: rem(56);
-
-    &__nav {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-
-      &__item {
-        gap: 0;
-        padding: rem(10) 0;
-
-        &_head {
-          cursor: pointer;
-          width: 100%;
-        }
-
-        &_arrow {
-          display: block;
-          width: rem(8);
-          height: rem(8);
-          border-right: rem(1) solid $black;
-          border-bottom: rem(1) solid $black;
-          transform: rotate(45deg);
-          transition: transform .25s ease;
-        }
-
-        &_list {
-          display: flex;
-          flex-direction: column;
-          gap: rem(10);
-
-          max-height: 0;
-          overflow: hidden;
-          padding-top: 0;
-
-          opacity: 0;
-          transition:
-                  max-height .3s ease,
-                  padding-top .3s ease,
-                  opacity .2s ease;
-        }
-
-        &_open {
-          .footer__nav__item_arrow {
-            transform: rotate(-135deg);
-          }
-
-          .footer__nav__item_list {
-            max-height: rem(220);
-            padding-top: rem(14);
-            opacity: 1;
-          }
-        }
-      }
-    }
-
-    &__socials {
-      &_list {
-        gap: rem(2);
-        flex-wrap: nowrap;
-        justify-content: space-between;
-      }
-    }
-  }
-}
-
-.select {
-  display: flex;
-  align-items: center;
-  gap: rem(4);
-
-  &__label {
-    @include font(16, $fw-extra-light);
-    color: $black;
-  }
-
-  &__field {
-    @include font(16, $fw-extra-light);
-
-    color: $black;
-    background: transparent;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    text-decoration: underline;
-    text-underline-offset: rem(3);
-  }
-
-  @media (max-width: rem($mobile)) {
-    &__label {
-      @include font(14, $fw-extra-light);
-    }
-
-    &__field {
-      @include font(14, $fw-extra-light);
-    }
   }
 }

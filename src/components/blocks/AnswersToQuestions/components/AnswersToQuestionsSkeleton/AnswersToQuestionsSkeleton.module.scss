@@ -1,0 +1,58 @@
+.answers {
+  display: grid;
+  grid-template-columns: minmax(0, rem(420)) minmax(0, 1fr);
+  gap: rem(40);
+
+  &__column {
+    display: flex;
+    flex-direction: column;
+    gap: rem(24);
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: rem(16);
+  }
+}
+
+.skeleton {
+  &__title,
+  &__button,
+  &__item {
+    position: relative;
+    overflow: hidden;
+    background: rgba($black, 0.06);
+    border-radius: rem(6);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(90deg, transparent, rgba($white, 0.55), transparent);
+      animation: skeleton-loading 1.4s infinite;
+    }
+  }
+
+  &__title {
+    width: rem(280);
+    height: rem(48);
+  }
+
+  &__button {
+    width: rem(180);
+    height: rem(38);
+  }
+
+  &__item {
+    width: 100%;
+    height: rem(74);
+  }
+}
+
+@keyframes skeleton-loading {
+  100% {
+    transform: translateX(100%);
+  }
+}

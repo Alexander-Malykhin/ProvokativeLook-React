@@ -1,0 +1,85 @@
+.reviews {
+  display: flex;
+  gap: rem(40);
+
+  &__column {
+    min-width: rem(320);
+    display: flex;
+    flex-direction: column;
+    gap: rem(20);
+  }
+
+  &__slider {
+    display: flex;
+    gap: rem(20);
+    flex: 1;
+  }
+}
+
+.skeleton {
+  &__title,
+  &__controls,
+  &__card,
+  &__name,
+  &__text,
+  &__date {
+    position: relative;
+    overflow: hidden;
+    background: rgba($black, 0.06);
+    border-radius: rem(6);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(
+                      90deg,
+                      transparent,
+                      rgba($white, 0.55),
+                      transparent
+      );
+      animation: skeleton-loading 1.4s infinite;
+    }
+  }
+
+  &__title {
+    width: rem(240);
+    height: rem(42);
+  }
+
+  &__controls {
+    width: rem(120);
+    height: rem(40);
+  }
+
+  &__card {
+    width: rem(420);
+    height: rem(280);
+    padding: rem(24);
+  }
+
+  &__name {
+    width: rem(180);
+    height: rem(24);
+    margin-bottom: rem(20);
+  }
+
+  &__text {
+    width: 100%;
+    height: rem(18);
+    margin-bottom: rem(12);
+  }
+
+  &__date {
+    width: rem(100);
+    height: rem(18);
+    margin-top: rem(20);
+  }
+}
+
+@keyframes skeleton-loading {
+  100% {
+    transform: translateX(100%);
+  }
+}

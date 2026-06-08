@@ -2,11 +2,24 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: rem(5);
-  flex: 0 1 rem(845);
+  gap: clamp(rem(6), 1vw, rem(18));
+  flex: 1 1 auto;
+  max-width: rem(845);
+  min-width: 0;
+
+  &__item {
+    @include font(14, $fw-light);
+    white-space: nowrap;
+
+    &_sale {
+      color: $red;
+    }
+  }
 
   @media (max-width: rem($desktop-x)) {
-    flex: 0 1 rem(600);
+    &__item {
+      @include font(12, $fw-light);
+    }
   }
 
   @media (max-width: rem($tablet)) {

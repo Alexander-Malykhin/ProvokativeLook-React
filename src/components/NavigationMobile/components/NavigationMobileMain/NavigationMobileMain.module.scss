@@ -1,0 +1,30 @@
+.main {
+  display: flex;
+  flex-direction: column;
+
+  &__item {
+    @include font(14, $fw-light);
+
+    height: rem(40);
+    width: 100%;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    padding: 0;
+    border: none;
+    background: none;
+    color: $black;
+    text-align: left;
+
+    &_image {
+      width: rem(17);
+      height: rem(17);
+    }
+
+    &_sale {
+      color: $red;
+    }
+  }
+}

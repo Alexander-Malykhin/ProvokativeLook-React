@@ -285,7 +285,7 @@
   }
 
   @media (max-width: rem($mobile)) {
-    padding: rem(6);
+    padding: rem(12) rem(8);
 
     &__information_title {
       @include font(12, $fw-extra-light);

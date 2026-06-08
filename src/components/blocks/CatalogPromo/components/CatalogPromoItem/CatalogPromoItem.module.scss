@@ -1,0 +1,151 @@
+.item {
+  position: relative;
+  height: 100%;
+  aspect-ratio: 1 / 1.35;
+  min-height: rem(300);
+  padding: rem(40) rem(24);
+  overflow: hidden;
+
+  background: linear-gradient(
+                  180deg,
+                  #e4e4ec 0%,
+                  #f6f6fa 58%,
+                  #d8d8dc 100%
+  );
+
+  &__information {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: rem(22);
+
+    max-width: 70%;
+  }
+
+  &__information_title {
+    @include font(24, $fw-extra-light);
+    line-height: 1.2;
+  }
+
+  &__information_button {
+    @include font(16, $fw-extra-light);
+    padding: rem(8);
+
+    color: $black;
+    text-decoration: none;
+
+    border: rem(1) solid $gray;
+    border-radius: rem(10);
+  }
+
+  &__imageBox {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+
+    width: 62%;
+
+    pointer-events: none;
+  }
+
+  &__image {
+    display: block;
+    width: 100%;
+    height: auto;
+
+    object-fit: contain;
+    object-position: right bottom;
+  }
+
+  &_1 &__imageBox {
+    width: 60%;
+    transform: translate(rem(20), 0);
+  }
+
+  &_2 &__imageBox {
+    width: 60%;
+    transform: translate(rem(15), 0);
+  }
+
+  &_3 &__imageBox {
+    width: 60%;
+    transform: translate(rem(15), 0);
+  }
+
+  @media (max-width: rem($desktop-x)) {
+    padding: rem(28) rem(18);
+
+    &__information {
+      gap: rem(18);
+    }
+
+    &__information_title {
+      @include font(22, $fw-extra-light);
+    }
+
+    &__information_button {
+      @include font(14, $fw-extra-light);
+      padding: rem(7);
+    }
+
+    &__imageBox {
+      width: 60%;
+    }
+  }
+
+  @media (max-width: rem($tablet)) {
+    min-height: rem(230);
+    padding: rem(10);
+
+    &__information {
+      gap: rem(8);
+      max-width: 70%;
+    }
+
+    &__information_title {
+      @include font(18, $fw-extra-light);
+    }
+
+    &__information_button {
+      @include font(12, $fw-extra-light);
+      padding: rem(6);
+    }
+
+    &__imageBox {
+      width: 62%;
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+    min-height: rem(300);
+    padding: rem(24);
+
+    &__information {
+      gap: rem(8);
+      max-width: 70%;
+    }
+
+    &__information_title {
+      @include font(20, $fw-extra-light);
+      line-height: 1;
+    }
+
+    &__information_button {
+      @include font(12, $fw-extra-light);
+      padding: rem(6);
+      border-radius: rem(10);
+    }
+
+    &__imageBox {
+      width: 70%;
+    }
+  }
+}

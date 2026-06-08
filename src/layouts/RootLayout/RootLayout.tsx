@@ -8,10 +8,12 @@ import ScrollToHash from '@components/ScrollToHash/ScrollToHash';
 import NavigationMobile from "@components/NavigationMobile/NavigationMobile.tsx";
 import RunningLine from "@components/RunningLine/RunningLine.tsx";
 import SearchModal from "@components/modals/SearchModal/SearchModal.tsx";
+import ScrollToTop from "@components/ScrollToTop/ScrollToTop.tsx";
 
 const RootLayout = () => {
     return (
         <>
+            <ScrollToTop />
             <ScrollToHash />
             <Header />
             <RunningLine/>

@@ -19,14 +19,14 @@ const HomePage = () => {
         <>
             <main className={styles.page__main}>
                 <Banner/>
-                <Bestsellers/>
+                <Bestsellers />
                 <CategoryPromo/>
-                <News/>
-                <CatalogPromo/>
-                <ViewedProducts/>
+                <News />
+                <CatalogPromo />
+                <ViewedProducts />
                 <Reviews/>
                 <AnswersToQuestions/>
-                <SubscribeNewsLetter/>
+                <SubscribeNewsLetter />
             </main>
         </>
     );

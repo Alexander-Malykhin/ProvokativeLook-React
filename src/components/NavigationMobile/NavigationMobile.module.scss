@@ -8,56 +8,5 @@
 
   background-color: $white;
 
-  padding: rem(20) rem(20);
-
-  &__list {
-    display: flex;
-    flex-direction: column;
-
-    &_back {
-      margin-top: rem(24);
-    }
-  }
-
-  &__item {
-    @include font(14, $fw-light);
-
-    height: rem(40);
-    width: 100%;
-
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-
-    &_image {
-      width: rem(17);
-      height: rem(17);
-    }
-  }
-
-  &__back {
-    @include font(16, $fw-regular);
-
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: rem(5);
-
-    width: 100%;
-    padding: 0;
-    border: none;
-    background: none;
-    color: $black;
-    text-align: left;
-
-    &_image {
-      height: auto;
-      width: rem(20);
-      transform: rotate(-180deg);
-    }
-  }
-
-  &__item_sale {
-    color: $red;
-  }
+  padding: rem(20);
 }

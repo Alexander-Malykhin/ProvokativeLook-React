@@ -1,0 +1,116 @@
+.banner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(rem(32), 5vw, rem(66));
+
+  &__content {
+    display: grid;
+    grid-template-columns:
+      minmax(0, max-content)
+      minmax(rem(280), rem(430))
+      minmax(0, max-content);
+    align-items: stretch;
+    justify-content: space-between;
+    background-color: $gray;
+    overflow: hidden;
+    min-height: clamp(rem(220), 42vw, rem(640));
+    max-height: rem(640);
+  }
+
+  &__information {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: clamp(rem(20), 3vw, rem(46));
+    padding: clamp(rem(24), 4vw, rem(40)) rem(20);
+  }
+
+  &__category {
+    display: flex;
+    justify-content: center;
+    gap: clamp(rem(12), 2vw, rem(24));
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: rem($tablet)) {
+    &__content {
+      grid-template-columns: minmax(0, 1fr);
+      min-height: rem(420);
+    }
+
+    &__information {
+      order: 1;
+      min-height: rem(220);
+    }
+
+    .skeleton__image {
+      display: none;
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+    &__content {
+      min-height: rem(360);
+    }
+
+    &__information {
+      min-height: rem(200);
+      padding: rem(32) rem(16);
+    }
+  }
+}
+
+.skeleton {
+  &__image,
+  &__title,
+  &__button,
+  &__category {
+    position: relative;
+    overflow: hidden;
+    background: rgba($black, 0.06);
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(
+                      90deg,
+                      transparent,
+                      rgba($white, 0.55),
+                      transparent
+      );
+      animation: skeleton-loading 1.4s infinite;
+    }
+  }
+
+  &__image {
+    width: clamp(rem(260), 35vw, rem(520));
+    min-height: clamp(rem(320), 42vw, rem(640));
+  }
+
+  &__title {
+    width: clamp(rem(220), 28vw, rem(360));
+    height: clamp(rem(28), 4vw, rem(44));
+    border-radius: rem(6);
+  }
+
+  &__button {
+    width: clamp(rem(140), 14vw, rem(180));
+    height: rem(28);
+    border-radius: rem(6);
+  }
+
+  &__category {
+    width: clamp(rem(72), 9vw, rem(118));
+    height: clamp(rem(72), 9vw, rem(118));
+    border-radius: 50%;
+  }
+}
+
+@keyframes skeleton-loading {
+  100% {
+    transform: translateX(100%);
+  }
+}

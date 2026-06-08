@@ -7,25 +7,41 @@ import MainLayoutContainer from '@layouts/MainLayoutContainer/MainLayoutContaine
 //UI
 import Image from '@UI/buttons/Image/Image';
 import Title from "@UI/typography/Title/Title.tsx";
+//components
+import CategoryPromoSkeleton from "@components/blocks/CategoryPromo/components/CategoryPromoSkeleton.tsx";
 //api
-import {navigationHomePromo} from "@api/static/navigationHomePromo.ts";
-
+import { useGetHomeQuery } from "@store/api/home/homeApi.ts";
 
 const CategoryPromo = () => {
+    const { data, isLoading, isError } = useGetHomeQuery();
+
+    if (isLoading) return <CategoryPromoSkeleton />;
+    if (isError || !data) return null;
+
+    const promoItems = data.promoCategory.filter(
+        (item) => item.properties.CATEGORY_SHOW_PROMO === 'Да'
+    );
+
     return (
         <SectionLayout>
             <MainLayoutContainer className={styles.promo}>
-                {navigationHomePromo.map((item) => (
-                    <Link key={item.id} to={item.path} className={styles.promo__item}>
-                        <Image src={item.image} alt={item.title} className={styles.promo__image}/>
+                {promoItems.map((item) => (
+                    <Link key={item.id} to={item.properties.CATEGORY_LINK} className={styles.promo__item}>
+                        {item.properties.CATEGORY_IMAGE_PROMO && (
+                            <Image
+                                src={item.properties.CATEGORY_IMAGE_PROMO}
+                                alt={item.properties.CATEGORY_NAME_PROMO}
+                                className={styles.promo__image}
+                            />
+                        )}
 
                         <div className={styles.promo__information}>
-                            <Title className={styles.promo__title} size={'xl'}>
-                                {item.title}
+                            <Title className={styles.promo__title} size="xl">
+                                {item.properties.CATEGORY_NAME_PROMO}
                             </Title>
                         </div>
                     </Link>
-                ))}
+                )).reverse()}
             </MainLayoutContainer>
         </SectionLayout>
     );

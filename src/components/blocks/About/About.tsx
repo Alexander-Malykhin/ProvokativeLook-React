@@ -21,6 +21,8 @@ const About = () => {
         return null
     };
 
+    console.log(data.image)
+
     return (
         <SectionLayout>
             <MainLayoutContainer className={styles.about}>

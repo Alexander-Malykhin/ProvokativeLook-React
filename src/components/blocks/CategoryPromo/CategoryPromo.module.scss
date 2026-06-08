@@ -46,6 +46,11 @@
       margin: rem(40) rem(20) 0 0;
       @include font(24, $fw-extra-light);
     }
+
+    &__information {
+      margin: rem(60) rem(25) 0 0;
+
+    }
   }
 
   @media (max-width: rem($mobile)) {
@@ -65,9 +70,14 @@
       height: 100%;
     }
 
-    &__title {
-      margin: rem(40) rem(20) 0 0;
+    &__information {
+      margin: clamp(rem(24), 8vw, rem(50)) clamp(rem(16), 5vw, rem(30)) 0 0;
       transform: none;
+    }
+
+    &__title {
+      font-size: clamp(rem(18), 1vw, rem(24));
+      font-weight: $fw-extra-light;
     }
   }
 }

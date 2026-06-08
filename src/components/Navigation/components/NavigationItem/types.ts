@@ -6,3 +6,6 @@ export interface NavigationItemInterface {
     color: Colors,
     path: string
 }
+
+export class NavigationMobileMainInterface {
+}

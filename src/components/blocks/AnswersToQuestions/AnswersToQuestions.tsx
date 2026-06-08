@@ -1,46 +1,37 @@
 import { useState } from 'react';
 //styles
-import styles from './AnswersToQuestions.module.scss'
+import styles from './AnswersToQuestions.module.scss';
 //layouts
 import SectionLayout from "@layouts/SectionLayout/SectionLayout.tsx";
 import MainLayoutContainer from "@layouts/MainLayoutContainer/MainLayoutContainer.tsx";
 //components
 import AnswerList from "@components/blocks/AnswersToQuestions/components/AnswerList/AnswerList.tsx";
 import AnswerColumn from "@components/blocks/AnswersToQuestions/components/AnswerColumn/AnswerColumn.tsx";
-
-const answers = [
-    {
-        id: 1,
-        title: 'Как сделать заказ?',
-        text: 'Lorem ipsum dolor sit amet consectetur. Tristique dolor eu in hendrerit risus adipiscing.',
-    },
-    {
-        id: 2,
-        title: 'Как работает доставка?',
-        text: 'Lorem ipsum dolor sit amet consectetur. Tristique dolor eu in hendrerit risus adipiscing.',
-    },
-    {
-        id: 3,
-        title: 'Как отследить заказ?',
-        text: 'Lorem ipsum dolor sit amet consectetur. Tristique dolor eu in hendrerit risus adipiscing.',
-    },
-    {
-        id: 4,
-        title: 'Как вернуть заказ?',
-        text: 'Lorem ipsum dolor sit amet consectetur. Tristique dolor eu in hendrerit risus adipiscing.',
-    },
-];
+import AnswersToQuestionsSkeleton from './components/AnswersToQuestionsSkeleton/AnswersToQuestionsSkeleton';
+//api
+import { useGetHomeQuery } from "@store/api/home/homeApi.ts";
 
 const AnswersToQuestions = () => {
-    const [activeId, setActiveId] = useState<number | null>(2);
+    const { data, isLoading, isError } = useGetHomeQuery();
+    const [activeId, setActiveId] = useState<number | null>(null);
+
+    if (isLoading) return <AnswersToQuestionsSkeleton />;
+    if (isError || !data) return null;
+
+    const answers = data.answers.map((item) => ({
+        id: item.id,
+        title: item.properties.ANSWERS_TITLE,
+        text: item.properties.ANSWERS_TEXT,
+    }));
 
     return (
         <SectionLayout>
             <MainLayoutContainer className={styles.answers}>
-                <AnswerColumn/>
+                <AnswerColumn />
+
                 <AnswerList
                     answers={answers}
-                    activeId={activeId}
+                    activeId={activeId ?? answers[0]?.id ?? null}
                     setActiveId={setActiveId}
                 />
             </MainLayoutContainer>

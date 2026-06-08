@@ -1,28 +1,25 @@
+import { NavLink } from "react-router-dom";
 //styles
-import styles from './Navigation.module.scss'
-//components
-import NavigationItem from "@components/Navigation/components/NavigationItem/NavigationItem.tsx";
-import NavigationSkeleton from "@components/Navigation/components/NavigationSkeleton/NavigationSkeleton.tsx";
-//api
-import { useGetNavigationQuery } from "@store/api/navigation/navigationApi.ts";
+import styles from "./Navigation.module.scss";
+//types
+import type { NavigationInterface } from "./types";
 
-const Navigation = () => {
-    const { data, isLoading, isError } = useGetNavigationQuery();
-
-    if (isLoading) return <NavigationSkeleton />;
-
-    if (isError || !data) return null;
-
+const Navigation = ({ items }: NavigationInterface) => {
     return (
         <nav className={styles.navigation}>
-            {data.map((item) => (
-                <NavigationItem color="black" path={item.link} key={item.id}>
+            {items.map((item) => (
+                <NavLink
+                    key={item.id}
+                    to={item.link}
+                    className={`${styles.navigation__item} ${
+                        item.code === "sale" ? styles.navigation__item_sale : ""
+                    }`}
+                >
                     {item.title}
-                </NavigationItem>
+                </NavLink>
             ))}
         </nav>
     );
 };
-
 
 export default Navigation;

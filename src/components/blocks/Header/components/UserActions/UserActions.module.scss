@@ -9,7 +9,19 @@
     position: relative;
   }
 
+  &__image {
+    width: rem(22);
+    height: rem(22);
+  }
+
   @media (max-width: rem($desktop-x)) {
     flex: 0 1 rem(120);
+  }
+
+  @media (max-width: rem($mobile)) {
+    &__image {
+      width: rem(24);
+      height: rem(24);
+    }
   }
 }

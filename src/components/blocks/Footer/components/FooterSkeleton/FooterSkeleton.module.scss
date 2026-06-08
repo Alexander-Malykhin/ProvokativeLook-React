@@ -1,0 +1,87 @@
+.skeleton {
+  margin-top: rem(128);
+  display: flex;
+  flex-direction: column;
+
+  &__line {
+    border-top: rem(1) solid $gray;
+    border-bottom: rem(1) solid $gray;
+    margin-top: rem(12);
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: minmax(rem(260), rem(440)) 1fr;
+    grid-template-areas:
+      "contacts nav"
+      "socials bottom";
+    gap: rem(24);
+    padding: rem(40) rem(20) rem(24);
+  }
+
+  &__select,
+  &__contacts,
+  &__nav,
+  &__socials,
+  &__bottom {
+    border-radius: rem(8);
+    background: linear-gradient(
+                    90deg,
+                    rgba($gray, 0.25),
+                    rgba($gray, 0.45),
+                    rgba($gray, 0.25)
+    );
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.2s infinite linear;
+  }
+
+  &__select {
+    width: rem(260);
+    height: rem(24);
+  }
+
+  &__contacts {
+    grid-area: contacts;
+    height: rem(140);
+  }
+
+  &__nav {
+    grid-area: nav;
+    height: rem(170);
+  }
+
+  &__socials {
+    grid-area: socials;
+    height: rem(60);
+  }
+
+  &__bottom {
+    grid-area: bottom;
+    height: rem(80);
+  }
+
+  @media (max-width: rem($tablet)) {
+    &__content {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "nav"
+        "contacts"
+        "socials"
+        "bottom";
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+    margin-top: rem(56);
+  }
+}
+
+@keyframes skeleton-loading {
+  from {
+    background-position: 100% 0;
+  }
+
+  to {
+    background-position: -100% 0;
+  }
+}

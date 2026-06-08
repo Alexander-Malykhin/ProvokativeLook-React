@@ -1,11 +1,8 @@
 //styles
 import styles from './ReviewsItem.module.scss';
+//types
+import type {ReviewsItemInterface} from "@components/blocks/Reviews/components/ReviewsItem/types.ts";
 
-interface ReviewsItemInterface {
-    name: string;
-    date: string;
-    text: string;
-}
 
 const ReviewsItem = ({ name, date, text }: ReviewsItemInterface) => {
     return (

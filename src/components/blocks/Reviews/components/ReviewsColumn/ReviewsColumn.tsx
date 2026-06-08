@@ -5,11 +5,8 @@ import ArrowRightImage from "@assets/arrows/arrow-right-gray.svg"
 import ArrowLeftImage from "@assets/arrows/arrow-left-gray.svg";
 //UI
 import Image from "@UI/buttons/Image/Image.tsx";
-
-interface ReviewsColumnInterface {
-    onPrev: () => void;
-    onNext: () => void;
-}
+//types
+import type {ReviewsColumnInterface} from "@components/blocks/Reviews/components/ReviewsColumn/types.ts";
 
 const ReviewsColumn = ({onPrev, onNext}: ReviewsColumnInterface) => {
     return (

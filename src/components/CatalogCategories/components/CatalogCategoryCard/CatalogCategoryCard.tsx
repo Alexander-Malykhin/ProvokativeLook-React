@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom';
-
+//styles
 import styles from './CatalogCategoryCard.module.scss';
-
-import Image from '@UI/buttons/Image/Image.tsx';
-import type { CategoryCardInterface } from '@components/CatalogCategories/types/types.ts';
+//helpers
 import { convertAliasTitle } from '@helpers/convertAliasTitle.tsx';
+//UI
 import Title from "@UI/typography/Title/Title.tsx";
+import Image from '@UI/buttons/Image/Image.tsx';
+//types
+import type { CategoryCardInterface } from '@components/CatalogCategories/types/types.ts';
 
 const CatalogCategoryCard = ({id, image, path, title, variant = 'promo', buttonText = 'Смотреть все',}: CategoryCardInterface) => {
     const cardClassName = `${styles.card} ${id ? styles[`card_${id}`] : ''}`;

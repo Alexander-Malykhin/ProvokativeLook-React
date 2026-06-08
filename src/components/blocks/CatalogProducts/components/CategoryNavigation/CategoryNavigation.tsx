@@ -1,23 +1,23 @@
 import { NavLink } from 'react-router-dom';
 //styles
-import styles from './CategoryNavigation.module.scss'
+import styles from './CategoryNavigation.module.scss';
 
 const categories = [
     { title: 'СМОТРЕТЬ ВСЁ', path: '/catalog' },
-    { title: 'КОМБИНЕЗОНЫ И КОСТЮМЫ', path: '/catalog/kombinezony-i-kostyumy' },
-    { title: 'ВЕРХНЯЯ ОДЕЖДА', path: '/catalog/verhnyaya-odezhda' },
-    { title: 'ПЛАТЬЯ И САРАФАНЫ', path: '/catalog/platya-i-sarafany' },
-    { title: 'ОБУВЬ', path: '/catalog/obuv' },
-    { title: 'БЛУЗЫ И РУБАШКИ', path: '/catalog/bluzy-i-rubashki' },
-    { title: 'БРЮКИ И ШОРТЫ', path: '/catalog/bryuki-i-shorty' },
-    { title: 'КОМПЛЕКТЫ', path: '/catalog/komplekty' },
-    { title: 'ТОПЫ И ФУТБОЛКИ', path: '/catalog/topy-i-futbolki' },
-    { title: 'ЮБКИ', path: '/catalog/yubki' },
-    { title: 'СВИТЕРЫ И КАРДИГАНЫ', path: '/catalog/svitery-i-kardigany' },
-    { title: 'ТОЛСТОВКИ И ХУДИ', path: '/catalog/tolstovki-i-hudi' },
-    { title: 'ДЖИНСЫ', path: '/catalog/dzhinsy' },
-    { title: 'ЖАКЕТЫ', path: '/catalog/zhakety' },
-    { title: 'АКСЕССУАРЫ', path: '/catalog/aksessuary' },
+    { title: 'КОМБИНЕЗОНЫ И КОСТЮМЫ', path: '/catalog/costumes' },
+    { title: 'ВЕРХНЯЯ ОДЕЖДА', path: '/catalog/outerwear' },
+    { title: 'ПЛАТЬЯ И САРАФАНЫ', path: '/catalog/dresses' },
+    { title: 'ОБУВЬ', path: '/catalog/shoes' },
+    { title: 'БЛУЗЫ И РУБАШКИ', path: '/catalog/shirts' },
+    { title: 'БРЮКИ И ШОРТЫ', path: '/catalog/shorts' },
+    { title: 'КОМПЛЕКТЫ', path: '/catalog/sets' },
+    { title: 'ТОПЫ И ФУТБОЛКИ', path: '/catalog/tops' },
+    { title: 'ЮБКИ', path: '/catalog/skirts' },
+    { title: 'СВИТЕРЫ И КАРДИГАНЫ', path: '/catalog/sweaters' },
+    { title: 'ТОЛСТОВКИ И ХУДИ', path: '/catalog/hoodie' },
+    { title: 'ДЖИНСЫ', path: '/catalog/jeans' },
+    { title: 'ЖАКЕТЫ', path: '/catalog/jackets' },
+    { title: 'АКСЕССУАРЫ', path: '/catalog/accessories' },
 ];
 
 const catalogTags = [

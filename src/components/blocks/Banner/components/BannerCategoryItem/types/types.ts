@@ -1,5 +1,5 @@
 export interface BannerCategoryItemInterface {
-    image: string,
+    image: string | null,
     title: string,
     path: string
 }

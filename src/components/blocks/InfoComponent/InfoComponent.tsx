@@ -23,7 +23,7 @@ const pages: InfoComponentInterface[] = [
         id: 2,
         url: 'delivery-payment',
         title: 'Доставка и оплата',
-        content: <InfoDeliveryPayment/>
+        content: <InfoDeliveryPayment />,
     },
     {
         id: 3,
@@ -35,7 +35,7 @@ const pages: InfoComponentInterface[] = [
         id: 4,
         url: 'return-policy',
         title: 'Условия возврата',
-        content: <InfoReturnPolicy/>,
+        content: <InfoReturnPolicy />,
     },
     {
         id: 5,
@@ -43,13 +43,13 @@ const pages: InfoComponentInterface[] = [
         title: 'Подарочные сертификаты',
         content: 'Текст про подарочные сертификаты',
     },
-]
+];
 
 const InfoComponent = () => {
 
-    const {url} = useParams()
+    const { url } = useParams();
 
-    const activePage = pages.find(item => item.url === url) || pages[0]
+    const activePage = pages.find((item) => item.url === url) || pages[0];
 
     return (
         <SectionLayout>
