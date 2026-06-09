@@ -13,6 +13,7 @@ import FavoritesPage from "@pages/FavoritesPage/FavoritesPage.tsx";
 import OrderPage from "@pages/OrderPage/OrderPage.tsx";
 import ProfilePage from "@pages/ProfilePage/ProfilePage.tsx";
 import NotFoundPage from "@pages/NotFoundPage/NotFoundPage.tsx";
+import ProductPage from "@pages/ProductPage/ProductPage.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -58,6 +59,10 @@ export const router = createBrowserRouter([
             {
                 path: 'profile/:url',
                 element: <ProfilePage />,
+            },
+            {
+                path: 'product/:id',
+                element: <ProductPage />,
             },
             {
                 path: '*',

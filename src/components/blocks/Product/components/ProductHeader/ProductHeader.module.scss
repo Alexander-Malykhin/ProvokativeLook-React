@@ -1,0 +1,24 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: rem(8);
+
+  &__title {
+    @include font(24, $fw-light);
+  }
+
+  &__articul {
+    @include font(13, $fw-light);
+    color: rgba($black, 0.6);
+  }
+
+  @media (max-width: rem($mobile)) {
+    &__title {
+      @include font(20, $fw-light);
+    }
+
+    &__articul {
+      @include font(12, $fw-light);
+    }
+  }
+}

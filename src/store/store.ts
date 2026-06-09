@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import toggleMenuProfileReducer from "@store/slices/toggleMenuProfileSlice.ts";
 import toggleMenuNavigationReducer from "@store/slices/toggleMenuNavigationSlice.ts";
 import toggleSearchReducer from "@store/slices/toggleSearchSlice.ts";
+import toggleModalTableSizes from "@store/slices/toggleModalTableSizesSlice.ts";
 //api
 import { aboutApi } from "@store/api/about/aboutApi.ts";
 import { contactsApi } from "@store/api/contacts/contactsApi.ts";
@@ -15,6 +16,7 @@ export const store = configureStore({
         toggleMenuProfile: toggleMenuProfileReducer,
         toggleMenuNavigation: toggleMenuNavigationReducer,
         toggleSearch: toggleSearchReducer,
+        toggleModalTableSizes:toggleModalTableSizes,
 
         [aboutApi.reducerPath]: aboutApi.reducer,
         [contactsApi.reducerPath]: contactsApi.reducer,

@@ -1,0 +1,28 @@
+.price {
+  display: flex;
+  align-items: center;
+  gap: rem(24);
+
+  &__main {
+    @include font(24, $fw-light);
+  }
+
+  &__discount {
+    @include font(24, $fw-light);
+    color: rgba($black, 0.6);
+    text-decoration: line-through;
+    text-decoration-color: rgba($black, 0.6);
+  }
+
+  @media (max-width: rem($mobile)) {
+    gap: rem(16);
+
+    &__main {
+      @include font(16, $fw-regular);
+    }
+
+    &__discount {
+      @include font(16, $fw-regular);
+    }
+  }
+}

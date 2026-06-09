@@ -1,0 +1,41 @@
+.composition {
+  padding-top: rem(2);
+  border-top: rem(1) solid rgba($black, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: rem(12);
+
+  &__description {
+    @include font(13, $fw-light);
+  }
+
+  &__accent {
+    @include font(13, $fw-light);
+    color: rgba($black, 0.5);
+  }
+
+  &__list {
+    display: flex;
+    align-items: center;
+    gap: rem(8);
+  }
+
+  &__item {
+    width: rem(32);
+    height: rem(32);
+    object-fit: contain;
+  }
+
+  @media (max-width: rem($mobile)) {
+    gap: rem(8);
+
+    &__description {
+      @include font(12, $fw-light);
+    }
+
+    &__accent {
+      @include font(12, $fw-light);
+      color: $black;
+    }
+  }
+}

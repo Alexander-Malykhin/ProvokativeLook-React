@@ -1,0 +1,27 @@
+.navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: rem(4) rem(10);
+
+  &__link,
+  &__slash {
+    @include font(13, $fw-light);
+    color: $black;
+  }
+
+  &__link {
+    text-decoration: none;
+
+    &:last-child {
+      color: rgba($black, 0.6);
+    }
+  }
+
+  &__slash {
+    color: rgba($black, 0.6);
+  }
+
+  @media (max-width: rem($mobile)) {
+    display: none;
+  }
+}

@@ -1,0 +1,72 @@
+.sizes {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: rem(16);
+
+  &__title {
+    @include font(16, $fw-light);
+    text-transform: uppercase;
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: rem(8);
+  }
+
+  &__item {
+    @include font(16, $fw-light);
+    padding: rem(12);
+    color: $black;
+    border-radius: rem(10);
+    border: rem(1) solid $gray;
+
+    &_active {
+      background-color: $black;
+      color: $white;
+    }
+  }
+
+  &__button {
+    position: relative;
+    display: inline-block;
+    width: max-content;
+
+    @include font(16, $fw-light);
+    color: rgba($black, 0.5);
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: rem(-2);
+
+      width: 100%;
+      height: rem(1);
+
+      background-color: rgba($black, 0.5);
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+    gap: rem(8);
+
+    &__title {
+      @include font(12, $fw-light);
+    }
+
+    &__list {
+      gap: rem(6);
+    }
+
+    &__item {
+      @include font(12, $fw-light);
+      padding: rem(8);
+    }
+
+    &__button {
+      @include font(12, $fw-light);
+    }
+  }
+}

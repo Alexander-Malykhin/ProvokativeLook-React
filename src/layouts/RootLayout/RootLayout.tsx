@@ -1,14 +1,16 @@
 import { Outlet } from 'react-router-dom';
+
 //header
-import Header from "@components/blocks/Header/Header.tsx";
+import Header from '@components/blocks/Header/Header.tsx';
 //footer
-import Footer from "@components/blocks/Footer/Footer.tsx";
+import Footer from '@components/blocks/Footer/Footer.tsx';
 //components
 import ScrollToHash from '@components/ScrollToHash/ScrollToHash';
-import NavigationMobile from "@components/NavigationMobile/NavigationMobile.tsx";
-import RunningLine from "@components/RunningLine/RunningLine.tsx";
-import SearchModal from "@components/modals/SearchModal/SearchModal.tsx";
-import ScrollToTop from "@components/ScrollToTop/ScrollToTop.tsx";
+import NavigationMobile from '@components/NavigationMobile/NavigationMobile.tsx';
+import RunningLine from '@components/RunningLine/RunningLine.tsx';
+import SearchModal from '@components/modals/SearchModal/SearchModal.tsx';
+import TableSizes from '@components/modals/TableSizes/TableSizes.tsx';
+import ScrollToTop from '@components/ScrollToTop/ScrollToTop.tsx';
 
 const RootLayout = () => {
     return (
@@ -16,11 +18,12 @@ const RootLayout = () => {
             <ScrollToTop />
             <ScrollToHash />
             <Header />
-            <RunningLine/>
+            <RunningLine />
             <Outlet />
             <Footer />
-            <NavigationMobile/>
-            <SearchModal/>
+            <NavigationMobile />
+            <SearchModal />
+            <TableSizes />
         </>
     );
 };

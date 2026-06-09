@@ -1,0 +1,119 @@
+.slider {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: rem(24);
+
+  &__main {
+    display: block;
+    width: 100%;
+    aspect-ratio: 899 / 1199;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: rem(24);
+  }
+
+  &__item {
+    display: block;
+    width: 100%;
+    aspect-ratio: 899 / 1199;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  &__dots {
+    display: none;
+  }
+
+  @media (max-width: rem($tablet)) {
+    gap: 0;
+
+    &__main {
+      display: none;
+    }
+
+    &__list {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    &__item {
+      flex: 0 0 100%;
+      scroll-snap-align: start;
+
+      aspect-ratio: 1 / 1.25;
+      height: auto;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    &__dots {
+      position: absolute;
+      left: 50%;
+      bottom: rem(24);
+      transform: translateX(-50%);
+
+      display: flex;
+      align-items: center;
+      gap: rem(12);
+    }
+
+    &__dot {
+      position: relative;
+
+      width: rem(18);
+      height: rem(18);
+      border-radius: 50%;
+
+      background-color: rgba($white, 0.6);
+
+      &_active {
+        background-color: rgba($white, 0.6);
+
+        &::after {
+          content: '';
+          position: absolute;
+          left: 50%;
+          top: 50%;
+
+          width: rem(8);
+          height: rem(8);
+          border-radius: 50%;
+
+          background-color: $white;
+          transform: translate(-50%, -50%);
+        }
+      }
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+    &__dot {
+      position: relative;
+
+      width: rem(8);
+      height: rem(8);
+
+      &_active {
+
+        &::after {
+          width: rem(4);
+          height: rem(4);
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+}

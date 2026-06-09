@@ -1,0 +1,26 @@
+.params {
+  display: flex;
+  flex-direction: column;
+  gap: rem(8);
+  padding-top: rem(2);
+  border-top: rem(1) solid rgba($black, 0.1);
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: rem(4);
+
+    &_label {
+      @include font(13, $fw-light);
+      color: rgba($black, 0.5);
+    }
+
+    &_description {
+      @include font(13, $fw-light);
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+    display: none;
+  }
+}

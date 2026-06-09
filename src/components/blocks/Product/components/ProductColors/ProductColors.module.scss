@@ -1,0 +1,44 @@
+.colors {
+  display: flex;
+  flex-direction: column;
+  gap: rem(16);
+
+  &__list {
+    display: flex;
+    gap: rem(8);
+    align-items: center;
+  }
+
+  &__title {
+    @include font(16, $fw-light);
+    text-transform: uppercase;
+  }
+
+  &__item {
+    width: rem(24);
+    height: rem(24);
+    border-radius: 100%;
+    border: rem(1) solid $black;
+
+    &_black {
+      background-color: $black;
+    }
+
+    &_white {
+      background-color: $white;
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+    gap: rem(8);
+
+    &__title {
+      @include font(12, $fw-light);
+    }
+
+    &__item {
+      width: rem(18);
+      height: rem(18);
+    }
+  }
+}

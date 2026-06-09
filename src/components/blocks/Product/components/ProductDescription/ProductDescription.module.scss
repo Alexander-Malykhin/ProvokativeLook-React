@@ -1,0 +1,47 @@
+.description {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: rem(12);
+
+  &__text {
+    @include font(15, $fw-light);
+
+    max-height: rem(136);
+    overflow: hidden;
+
+    transition: max-height 0.35s ease;
+
+    &_open {
+      max-height: rem(1000);
+    }
+  }
+
+  &__accent {
+    @include font(15, $fw-light);
+    color: rgba($black, 0.6);
+  }
+
+  &__button {
+    position: relative;
+    display: inline-block;
+    width: max-content;
+
+    @include font(15, $fw-light);
+    color: $black;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: rem(-2);
+      width: 100%;
+      height: rem(1);
+      background-color: $black;
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+    display: none;
+  }
+}
