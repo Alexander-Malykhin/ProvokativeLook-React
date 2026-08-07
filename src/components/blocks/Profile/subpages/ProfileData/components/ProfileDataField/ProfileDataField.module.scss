@@ -1,0 +1,17 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: rem(7);
+  padding: rem(8) rem(16);
+  border: rem(1) solid rgba($black, 0.1);
+  border-radius: rem(10);
+
+  &__label {
+    @include font(12, $fw-light);
+    color: rgba($black, 0.6);
+  }
+
+  &__value {
+    @include font(16, $fw-light);
+  }
+}

@@ -1,6 +1,6 @@
-import type { ChangeEventHandler } from 'react';
+import type { ChangeEventHandler } from "react";
 
 export interface InputCheckInterface {
-    checked: boolean;
-    onChange: ChangeEventHandler<HTMLInputElement>;
+  checked: boolean;
+  onChange: ChangeEventHandler<HTMLInputElement>;
 }

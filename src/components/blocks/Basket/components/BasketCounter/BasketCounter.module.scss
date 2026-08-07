@@ -27,7 +27,7 @@
     flex-shrink: 0;
 
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 50%;
       left: 50%;
@@ -73,13 +73,13 @@
       width: rem(32);
       height: rem(32);
       border-radius: rem(6);
-      background-color: rgba($black, 0.1);;
+      background-color: rgba($black, 0.1);
 
       position: relative;
       flex-shrink: 0;
 
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 50%;
         left: 50%;

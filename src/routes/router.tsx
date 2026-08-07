@@ -1,75 +1,76 @@
-import {createBrowserRouter} from "react-router-dom";
-//layouts
-import RootLayout from "@layouts/RootLayout/RootLayout.tsx";
-//pages
-import HomePage from "@pages/HomePage/HomePage.tsx";
-import CatalogPage from "@pages/CatalogPage/CatalogPage.tsx";
-import ContactsPage from "@pages/ContactsPage/ContactsPage.tsx";
-import AboutPage from "@pages/AboutPage/AboutPage.tsx";
-import BasketPage from "@pages/BasketPage/BasketPage.tsx";
-import CatalogCategoryPage from "@pages/CatalogCategoryPage/CatalogCategoryPage.tsx";
-import InfoPage from "@pages/InfoPage/InfoPage.tsx";
-import FavoritesPage from "@pages/FavoritesPage/FavoritesPage.tsx";
-import OrderPage from "@pages/OrderPage/OrderPage.tsx";
-import ProfilePage from "@pages/ProfilePage/ProfilePage.tsx";
-import NotFoundPage from "@pages/NotFoundPage/NotFoundPage.tsx";
-import ProductPage from "@pages/ProductPage/ProductPage.tsx";
+import { createBrowserRouter } from "react-router-dom";
 
-export const router = createBrowserRouter([
+import RootLayout from "@layouts/RootLayout/RootLayout";
+import RouteErrorBoundary from "./RouteErrorBoundary";
+
+const page =
+  (loader: () => Promise<{ default: React.ComponentType }>) => async () => ({
+    Component: (await loader()).default,
+  });
+
+export const router = createBrowserRouter(
+  [
     {
-        path: '/',
-        element: <RootLayout />,
-        children: [
-            {
-                index: true,
-                element: <HomePage />,
-            },
-            {
-                path: 'catalog',
-                element: <CatalogPage />,
-            },
-            {
-                path: 'catalog/:categorySlug',
-                element: <CatalogCategoryPage />,
-            },
-            {
-                path: 'contacts',
-                element: <ContactsPage />,
-            },
-            {
-                path: 'about',
-                element: <AboutPage />,
-            },
-            {
-                path: 'basket',
-                element: <BasketPage />,
-            },
-            {
-                path: 'order',
-                element: <OrderPage />,
-            },
-            {
-                path: 'favorites',
-                element: <FavoritesPage />,
-            },
-            {
-                path: 'info/:url',
-                element: <InfoPage />,
-            },
-            {
-                path: 'profile/:url',
-                element: <ProfilePage />,
-            },
-            {
-                path: 'product/:id',
-                element: <ProductPage />,
-            },
-            {
-                path: '*',
-                element: <NotFoundPage />,
-            },
-        ],
+      path: "/",
+      element: <RootLayout />,
+      errorElement: <RouteErrorBoundary />,
+      children: [
+        {
+          index: true,
+          lazy: page(() => import("@pages/HomePage/HomePage")),
+        },
+        {
+          path: "catalog",
+          lazy: page(() => import("@pages/CatalogPage/CatalogPage")),
+        },
+        {
+          path: "catalog/:categorySlug",
+          lazy: page(
+            () => import("@pages/CatalogCategoryPage/CatalogCategoryPage"),
+          ),
+        },
+        {
+          path: "contacts",
+          lazy: page(() => import("@pages/ContactsPage/ContactsPage")),
+        },
+        {
+          path: "about",
+          lazy: page(() => import("@pages/AboutPage/AboutPage")),
+        },
+        {
+          path: "basket",
+          lazy: page(() => import("@pages/BasketPage/BasketPage")),
+        },
+        {
+          path: "order",
+          lazy: page(() => import("@pages/OrderPage/OrderPage")),
+        },
+        {
+          path: "favorites",
+          lazy: page(() => import("@pages/FavoritesPage/FavoritesPage")),
+        },
+        {
+          path: "info/:url",
+          lazy: page(() => import("@pages/InfoPage/InfoPage")),
+        },
+        {
+          path: "profile/:url",
+          lazy: page(() => import("@pages/ProfilePage/ProfilePage")),
+        },
+        {
+          path: "profile/:url/:id",
+          lazy: page(() => import("@pages/ProfilePage/ProfilePage")),
+        },
+        {
+          path: "product/:id",
+          lazy: page(() => import("@pages/ProductPage/ProductPage")),
+        },
+        {
+          path: "*",
+          lazy: page(() => import("@pages/NotFoundPage/NotFoundPage")),
+        },
+      ],
     },
-], {
-    basename: '/',
-});
+  ],
+  { basename: "/" },
+);

@@ -14,13 +14,13 @@
   }
 
   &__list {
-   display: flex;
+    display: flex;
     flex-direction: column;
     gap: rem(4);
 
     &_item {
       &::before {
-        content: '— ';
+        content: "— ";
       }
       @include font(16, $fw-light);
     }

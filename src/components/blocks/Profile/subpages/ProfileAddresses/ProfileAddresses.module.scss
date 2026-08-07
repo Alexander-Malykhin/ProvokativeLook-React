@@ -1,60 +1,49 @@
 .content {
   display: flex;
   flex-direction: column;
-  gap: rem(38);
-
+  gap: rem(30);
   width: 100%;
 
   &__title {
     @include font(20, $fw-light);
-  }
-
-  &__list {
-    display: flex;
-    flex-direction: column;
-  }
-
-  &__description {
-    @include font(16, $fw-light);
+    margin: 0;
   }
 }
 
-
 .button {
-  @include font(16, $fw-light);
-
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: rem(12);
-
+  gap: rem(10);
   width: 100%;
-  padding: rem(12);
+  padding: rem(16);
   border: rem(1) solid $black;
   border-radius: rem(10);
+  background-color: transparent;
+  color: $black;
+  cursor: pointer;
 
-  &__icon {
+  &__plus {
+    position: relative;
     width: rem(14);
     height: rem(14);
-    position: relative;
-    flex: 0 0 rem(14);
+  }
 
-    &_line {
-      position: absolute;
-      top: 50%;
-      left: 0;
+  &__plusLine {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: rem(14);
+    height: rem(1);
+    background-color: currentColor;
+    transform: translate(-50%, -50%);
 
-      width: 100%;
-      height: rem(1);
-      background-color: $black;
-
-      &:first-child {
-        transform: translateY(-50%);
-      }
-
-      &:last-child {
-        transform: translateY(-50%) rotate(90deg);
-      }
+    &:last-child {
+      transform: translate(-50%, -50%) rotate(90deg);
     }
+  }
+
+  &__text {
+    @include font(16, $fw-light);
   }
 }

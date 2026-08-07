@@ -20,7 +20,7 @@
 
     &_item {
       &::before {
-        content: '— ';
+        content: "— ";
       }
       @include font(16, $fw-light);
     }

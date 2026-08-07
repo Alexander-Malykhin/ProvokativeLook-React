@@ -1,0 +1,157 @@
+.city {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: rem(6);
+  min-width: 0;
+
+  &__label,
+  &__trigger,
+  &__input,
+  &__option {
+    @include font(16, $fw-extra-light);
+  }
+
+  &__label {
+    flex: 0 0 auto;
+    color: $black;
+  }
+
+  &__trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: rem(14);
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: $black;
+    cursor: pointer;
+
+    span:first-child {
+      text-decoration: underline;
+      text-underline-offset: rem(3);
+    }
+  }
+
+  &__arrow {
+    flex: 0 0 auto;
+    width: rem(8);
+    height: rem(8);
+    margin-top: rem(-4);
+    border-right: rem(1) solid rgba($black, 0.65);
+    border-bottom: rem(1) solid rgba($black, 0.65);
+    transform: rotate(45deg);
+    transition: transform 0.2s ease;
+
+    &_open {
+      margin-top: rem(4);
+      transform: rotate(225deg);
+    }
+  }
+
+  &__custom {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: rem(250);
+    border-bottom: rem(1) solid rgba($black, 0.28);
+  }
+
+  &__input {
+    width: 100%;
+    height: rem(34);
+    padding: 0 rem(34) 0 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: $black;
+
+    &::placeholder {
+      color: rgba($black, 0.38);
+    }
+  }
+
+  &__confirm {
+    position: absolute;
+    right: rem(2);
+    width: rem(20);
+    height: rem(20);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+
+    &::before {
+      position: absolute;
+      top: rem(4);
+      left: rem(6);
+      width: rem(6);
+      height: rem(10);
+      border-right: rem(1) solid $black;
+      border-bottom: rem(1) solid $black;
+      content: "";
+      transform: rotate(45deg);
+    }
+  }
+
+  &__menu {
+    position: absolute;
+    top: calc(100% + #{rem(10)});
+    left: 0;
+    z-index: 120;
+    width: rem(310);
+    max-width: calc(100vw - #{rem(32)});
+    overflow: hidden;
+    border: rem(1) solid rgba($black, 0.12);
+    border-radius: rem(2);
+    background: $white;
+    box-shadow: 0 rem(14) rem(34) rgba($black, 0.14);
+  }
+
+  &__option {
+    display: block;
+    width: 100%;
+    min-height: rem(50);
+    padding: rem(13) rem(16);
+    border: 0;
+    border-bottom: rem(1) solid rgba($black, 0.07);
+    background: $white;
+    color: $black;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    &:last-child {
+      border-bottom: 0;
+    }
+
+    &:hover,
+    &:focus-visible,
+    &_active {
+      background: $light-white;
+      outline: none;
+    }
+
+    &_other {
+      color: rgba($black, 0.68);
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+    &__label,
+    &__trigger,
+    &__input,
+    &__option {
+      @include font(14, $fw-extra-light);
+    }
+
+    &__menu {
+      width: rem(280);
+    }
+
+    &__custom {
+      width: rem(190);
+    }
+  }
+}

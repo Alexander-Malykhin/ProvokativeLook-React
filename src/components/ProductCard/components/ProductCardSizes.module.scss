@@ -1,0 +1,18 @@
+.sizes {
+  display: flex;
+  align-items: center;
+  gap: rem(4);
+
+  &__item {
+    @include font(14, $fw-extra-light);
+    padding: rem(8);
+    border: rem(1) solid $gray;
+    border-radius: rem(10);
+  }
+
+  @media (max-width: rem($mobile)) {
+    &__item {
+      @include font(10, $fw-extra-light);
+    }
+  }
+}

@@ -5,7 +5,9 @@
 
   &__content {
     display: grid;
-    grid-template-columns: minmax(0, max-content) minmax(rem(320), rem(430)) minmax(0, max-content);
+    grid-template-columns:
+      minmax(0, max-content) minmax(rem(320), rem(430))
+      minmax(0, max-content);
     align-items: stretch;
     justify-content: space-between;
     background-color: $gray;
@@ -60,7 +62,6 @@
 
   @media (max-width: rem($desktop-x)) {
     &__information {
-
       &_title {
         max-width: rem(300);
 
@@ -116,7 +117,7 @@
       }
 
       &_footer {
-          padding: 0;
+        padding: 0;
       }
 
       &_button {
@@ -125,4 +126,3 @@
     }
   }
 }
-

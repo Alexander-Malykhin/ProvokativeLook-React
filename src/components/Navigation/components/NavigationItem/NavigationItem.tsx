@@ -1,15 +1,21 @@
-import {Link} from "react-router-dom";
+import { NavLink } from "react-router-dom";
 //styles
-import styles from './NavigationItem.module.scss'
+import styles from "./NavigationItem.module.scss";
 //types
-import type {NavigationItemInterface} from "@components/Navigation/components/NavigationItem/types.ts";
+import type { NavigationItemProps } from "@components/Navigation/types/types.ts";
 
-const NavigationItem = ({children, color, path}: NavigationItemInterface) => {
-    return (
-        <Link to={path} className={`${styles.item} ${styles[`item__color_${color}`]}`}>
-            {children}
-        </Link>
-    );
+const NavigationItem = ({ item }: NavigationItemProps) => {
+  return (
+    <NavLink
+      key={item.id}
+      to={item.link}
+      className={`${styles.item} ${
+        item.code === "sale" ? styles.item__sale : ""
+      }`}
+    >
+      {item.title}
+    </NavLink>
+  );
 };
 
 export default NavigationItem;

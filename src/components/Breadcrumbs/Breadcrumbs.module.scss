@@ -16,7 +16,7 @@
   }
 
   &__title {
-    @include font(26, $fw-light)
+    @include font(26, $fw-light);
   }
 
   @media (max-width: rem($mobile)) {
@@ -27,7 +27,7 @@
     }
 
     &__title {
-      @include font(24, $fw-light)
+      @include font(24, $fw-light);
     }
   }
 }

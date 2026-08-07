@@ -7,8 +7,8 @@
   &__column {
     display: flex;
     flex-direction: column;
-    gap: rem(32);
     justify-content: space-between;
+    gap: rem(32);
   }
 
   &__row {
@@ -43,40 +43,30 @@
     flex: 0 0 rem(40);
 
     &_image {
+      display: block;
       width: 100%;
       height: 100%;
       object-fit: contain;
-      display: block;
     }
-  }
-
-  &__map {
-    width: 100%;
-    height: rem(440);
-    object-fit: cover;
-    object-position: center center;
-    display: block;
   }
 
   @media (max-width: rem($desktop-x)) {
     grid-template-columns: minmax(0, rem(360)) minmax(0, 1fr);
     gap: rem(10);
+    max-height: rem(360);
 
     &__column {
       gap: rem(20);
-    }
-
-    &__map {
-      height: rem(360);
     }
   }
 
   @media (max-width: rem($tablet)) {
     grid-template-columns: minmax(0, rem(330)) minmax(0, 1fr);
     gap: rem(16);
+    max-height: rem(340);
 
     &__phone {
-      @include font(18, $fw-light)
+      @include font(18, $fw-light);
     }
 
     &__text {
@@ -86,25 +76,20 @@
     &__column {
       gap: rem(24);
     }
-
-    &__map {
-      height: rem(340);
-      object-position: center center;
-    }
   }
 
   @media (max-width: rem($mobile)) {
     grid-template-columns: 1fr;
     gap: rem(24);
-    max-height: 100%;
+    max-height: none;
 
     &__column {
-      gap: rem(24);
       justify-content: flex-start;
+      gap: rem(24);
     }
 
     &__phone {
-      @include font(18, $fw-light)
+      @include font(18, $fw-light);
     }
 
     &__text {
@@ -116,17 +101,11 @@
       height: rem(36);
       flex-basis: rem(36);
     }
-
-    &__map {
-      height: rem(300);
-      object-fit: cover;
-      object-position: center center;
-    }
   }
 
   @media (max-width: rem($mobile-x)) {
     &__phone {
-      @include font(18, $fw-light)
+      @include font(18, $fw-light);
     }
 
     &__text {
@@ -135,12 +114,6 @@
 
     &__label {
       @include font(12, $fw-light);
-    }
-
-    &__map {
-      height: rem(480);
-      object-fit: cover;
-      object-position: 80% 20%;
     }
   }
 }

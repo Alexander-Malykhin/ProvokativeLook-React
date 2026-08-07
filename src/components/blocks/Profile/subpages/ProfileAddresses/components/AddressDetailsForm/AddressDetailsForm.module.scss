@@ -1,0 +1,113 @@
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: rem(16);
+  min-width: 0;
+
+  &__fields {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: rem(24);
+  }
+
+  &__field {
+    display: flex;
+    align-items: center;
+    gap: rem(14);
+    min-height: rem(42);
+    border-bottom: rem(1) solid rgba($black, 0.1);
+
+    &:focus-within {
+      border-color: rgba($black, 0.5);
+    }
+  }
+
+  &__input {
+    @include font(14, $fw-light);
+    width: 100%;
+    min-width: 0;
+    padding: rem(10) 0;
+    border: 0;
+    outline: none;
+    background-color: transparent;
+    color: $black;
+
+    &::placeholder {
+      color: rgba($black, 0.5);
+    }
+  }
+
+  &__comment {
+    display: flex;
+    flex-direction: column;
+    gap: rem(7);
+  }
+
+  &__textarea {
+    @include font(13, $fw-light);
+    width: 100%;
+    height: rem(82);
+    padding: rem(12);
+    border: rem(1) solid rgba($black, 0.1);
+    outline: none;
+    resize: none;
+  }
+
+  &__count {
+    @include font(11, $fw-light);
+    color: rgba($black, 0.5);
+  }
+
+  &__checkbox {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: rem(8);
+    width: fit-content;
+    cursor: pointer;
+  }
+
+  &__checkboxInput {
+    position: absolute;
+    width: rem(1);
+    height: rem(1);
+    opacity: 0;
+
+    &:checked + .details__checkboxBox .details__checkboxMark {
+      opacity: 1;
+    }
+  }
+
+  &__checkboxBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: rem(17);
+    height: rem(17);
+    border: rem(1) solid rgba($black, 0.2);
+    border-radius: rem(2);
+  }
+
+  &__checkboxMark {
+    width: rem(9);
+    height: rem(5);
+    border-left: rem(2) solid $black;
+    border-bottom: rem(2) solid $black;
+    opacity: 0;
+    transform: translateY(rem(-1)) rotate(-45deg);
+  }
+
+  &__checkboxText {
+    @include font(14, $fw-light);
+  }
+
+  @media (max-width: rem($mobile-x)) {
+    &__fields {
+      gap: rem(10);
+    }
+
+    &__input {
+      @include font(12, $fw-light);
+    }
+  }
+}

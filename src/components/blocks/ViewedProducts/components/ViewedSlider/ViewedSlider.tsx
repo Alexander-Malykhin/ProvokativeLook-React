@@ -1,38 +1,30 @@
-import type {RefObject} from "react";
-//styles
-import styles from './ViewedSlider.module.scss'
-//components
-import CardSlider from "@components/MainSliderCards/components/CardSlider/CardSlider.tsx";
+// styles
+import styles from "./ViewedSlider.module.scss";
+// components
+import ProductCard from "@components/ProductCard/ProductCard";
+// types
+import type { ViewedSliderProps } from "@components/blocks/ViewedProducts/types/types";
 
-interface Product {
-    id: number;
-    title: string;
-    image: string;
-    price: string;
-    sizes: string[];
-}
+const ViewedSlider = ({
+  sliderRef,
+  products,
+  visibleProducts,
+}: ViewedSliderProps) => {
+  return (
+    <>
+      <div ref={sliderRef} className={styles.list}>
+        {products.map((product) => (
+          <ProductCard key={product.id} {...product} />
+        ))}
+      </div>
 
-interface ViewedSliderInterface {
-    sliderRef: RefObject<HTMLDivElement | null>;
-    products: Product[];
-    visibleProducts:Product[];
-}
-
-const ViewedSlider = ({ sliderRef, products, visibleProducts }:ViewedSliderInterface) => {
-    return (
-        <>
-            <div className={styles.list} ref={sliderRef}>
-                {products.map((card) => (
-                    <CardSlider key={card.id} {...card} />
-                ))}
-            </div>
-
-            <div className={styles.mobileList}>
-                {visibleProducts.map((card) => (
-                    <CardSlider key={card.id} {...card} />
-                ))}
-            </div>
-        </>
-    );
+      <div className={styles.mobileList}>
+        {visibleProducts.map((product) => (
+          <ProductCard key={product.id} {...product} />
+        ))}
+      </div>
+    </>
+  );
 };
+
 export default ViewedSlider;

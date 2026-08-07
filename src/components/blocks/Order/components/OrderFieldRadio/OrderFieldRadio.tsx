@@ -1,45 +1,57 @@
-import {type ReactNode} from "react";
-import type { UseFormRegisterReturn } from 'react-hook-form';
-//styles
-import styles from './OrderFieldRadio.module.scss'
+import type { ChangeEvent, ReactNode } from "react";
+import type { UseFormRegisterReturn } from "react-hook-form";
 
-interface OrderRadioInterface {
-    name: string;
-    value: string;
-    checked?: boolean;
-    onChange?: (value: string) => void;
-    register?: UseFormRegisterReturn;
-    children?: ReactNode;
-    mode?: 'static' | 'dynamic';
-    description?: string;
+import styles from "./OrderFieldRadio.module.scss";
+
+interface OrderRadioProps {
+  name: string;
+  value: string;
+  checked?: boolean;
+  onChange?: (value: string) => void;
+  register?: UseFormRegisterReturn;
+  children?: ReactNode;
+  mode?: "static" | "dynamic";
 }
 
-const OrderFieldRadio = ({ name, value, checked, onChange, register, children, mode = 'static'}: OrderRadioInterface) => {
-    return (
-        <div className={styles.radio}>
-            <input
-                type="radio"
-                name={name}
-                value={value}
-                checked={checked}
-                onChange={() => onChange?.(value)}
-                className={styles.radio__input}
-                {...register}
-            />
+const OrderFieldRadio = ({
+  name,
+  value,
+  checked,
+  onChange,
+  register,
+  children,
+  mode = "static",
+}: OrderRadioProps) => {
+  const {
+    onChange: registerOnChange,
+    name: registeredName,
+    ...registerProps
+  } = register ?? {};
 
-            <span className={styles.radio__dot}/>
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    void registerOnChange?.(event);
+    onChange?.(value);
+  };
 
-            {mode === 'static' ? (
-                <span className={styles.radio__text}>
-                    {children}
-                </span>
-            ) : (
-                <div className={styles.radio__content}>
-                    {children}
-                </div>
-            )}
-        </div>
-    );
+  return (
+    <label className={styles.radio}>
+      <input
+        {...registerProps}
+        type="radio"
+        name={registeredName ?? name}
+        value={value}
+        checked={checked}
+        onChange={handleChange}
+        className={styles.radio__input}
+      />
+      <span className={styles.radio__dot} />
+      {mode === "static" ? (
+        <span className={styles.radio__text}>{children}</span>
+      ) : (
+        <span className={styles.radio__content}>{children}</span>
+      )}
+    </label>
+  );
 };
 
 export default OrderFieldRadio;

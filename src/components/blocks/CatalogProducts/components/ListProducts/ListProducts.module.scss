@@ -49,7 +49,7 @@
     gap: rem(8);
 
     &::after {
-      content: '';
+      content: "";
       width: rem(8);
       height: rem(8);
       border-right: rem(1) solid $black;
@@ -80,7 +80,7 @@
   cursor: pointer;
 
   &::after {
-    content: '';
+    content: "";
     width: rem(8);
     height: rem(8);
     border-right: rem(1) solid $black;

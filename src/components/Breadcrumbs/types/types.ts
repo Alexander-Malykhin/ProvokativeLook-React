@@ -1,3 +1,9 @@
 export interface BreadcrumbsInterface {
-    title?: string
+  title?: string;
+}
+
+export interface BreadcrumbItemInterface {
+  title: string;
+  path: string;
+  hidden: boolean;
 }

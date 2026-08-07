@@ -1,14 +1,14 @@
-//styles
-import styles from './ReviewsColumn.module.scss'
-//images
-import ArrowRightImage from "@assets/arrows/arrow-right-gray.svg"
+// styles
+import styles from "./ReviewsColumn.module.scss";
+// images
+import ArrowRightImage from "@assets/arrows/arrow-right-gray.svg";
 import ArrowLeftImage from "@assets/arrows/arrow-left-gray.svg";
-//UI
-import Image from "@UI/buttons/Image/Image.tsx";
-//types
-import type {ReviewsColumnInterface} from "@components/blocks/Reviews/components/ReviewsColumn/types.ts";
+// UI
+import Image from "@UI/buttons/Image/Image";
+// types
+import type {ReviewsColumnProps,} from "@components/blocks/Reviews/types/types";
 
-const ReviewsColumn = ({onPrev, onNext}: ReviewsColumnInterface) => {
+const ReviewsColumn = ({onPrev, onNext,}: ReviewsColumnProps) => {
     return (
         <div className={styles.column}>
             <h2 className={styles.column__title}>
@@ -16,12 +16,28 @@ const ReviewsColumn = ({onPrev, onNext}: ReviewsColumnInterface) => {
             </h2>
 
             <div className={styles.column__buttons}>
-                <button type="button" className={styles.column__arrow} onClick={onPrev}>
-                    <Image src={ArrowLeftImage} alt="arrow-icon" className={styles.column__arrow_image}/>
+                <button
+                    type="button"
+                    className={styles.column__arrow}
+                    onClick={onPrev}
+                >
+                    <Image
+                        src={ArrowLeftImage}
+                        alt="Стрелка влево"
+                        className={styles.column__arrow_image}
+                    />
                 </button>
 
-                <button type="button" className={styles.column__arrow} onClick={onNext}>
-                    <Image src={ArrowRightImage} alt="arrow-icon" className={styles.column__arrow_image}/>
+                <button
+                    type="button"
+                    className={styles.column__arrow}
+                    onClick={onNext}
+                >
+                    <Image
+                        src={ArrowRightImage}
+                        alt="Стрелка вправо"
+                        className={styles.column__arrow_image}
+                    />
                 </button>
             </div>
         </div>

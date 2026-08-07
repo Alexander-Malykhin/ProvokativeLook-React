@@ -18,7 +18,7 @@
   }
 
   &__input:checked + &__box::before {
-    content: '';
+    content: "";
     position: absolute;
     width: rem(8);
     height: rem(8);

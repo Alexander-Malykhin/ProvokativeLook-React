@@ -2,7 +2,6 @@
   display: grid;
   gap: rem(24);
 
-
   &_promo,
   &_grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));

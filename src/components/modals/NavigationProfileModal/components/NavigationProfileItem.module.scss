@@ -1,0 +1,14 @@
+.item {
+  @include font(12, $fw-light);
+  padding: rem(10);
+
+  transition: all 0.3s ease-in-out;
+
+  &__active {
+    background-color: $gray;
+  }
+
+  &:hover {
+    background-color: $gray;
+  }
+}

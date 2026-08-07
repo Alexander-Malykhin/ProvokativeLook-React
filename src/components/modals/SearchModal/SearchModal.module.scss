@@ -2,14 +2,8 @@
   position: fixed;
   inset: 0;
   z-index: 9999;
-
-  &__overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 1;
-
-    background-color: rgba($black, 0.45);
-  }
+  overflow-y: auto;
+  background-color: rgba($black, 0.45);
 
   &__top {
     border-bottom: rem(1) solid rgba($black, 0.1);
@@ -160,6 +154,5 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: rem(24);
-
   }
 }

@@ -1,5 +1,5 @@
-//styles
-import styles from './HomePage.module.scss';
+// layouts
+import PageStack from "@layouts/PageStack/PageStack";
 //blocks
 import Banner from "@components/blocks/Banner/Banner.tsx";
 import CategoryPromo from "@components/blocks/CategoryPromo/CategoryPromo.tsx";
@@ -12,24 +12,22 @@ import SubscribeNewsLetter from "@components/blocks/SubscribeNewsLetter/Subscrib
 import Bestsellers from "@components/blocks/Bestsellers/Bestsellers.tsx";
 import ViewedProducts from "@components/blocks/ViewedProducts/ViewedProducts.tsx";
 
-
 const HomePage = () => {
-
-    return (
-        <>
-            <main className={styles.page__main}>
-                <Banner/>
-                <Bestsellers />
-                <CategoryPromo/>
-                <News />
-                <CatalogPromo />
-                <ViewedProducts />
-                <Reviews/>
-                <AnswersToQuestions/>
-                <SubscribeNewsLetter />
-            </main>
-        </>
-    );
+  return (
+    <>
+      <PageStack>
+        <Banner />
+        <Bestsellers />
+        <CategoryPromo />
+        <News />
+        <CatalogPromo />
+        <ViewedProducts />
+        <Reviews />
+        <AnswersToQuestions />
+        <SubscribeNewsLetter />
+      </PageStack>
+    </>
+  );
 };
 
 export default HomePage;

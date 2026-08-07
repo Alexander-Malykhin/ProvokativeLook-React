@@ -1,33 +1,45 @@
-import {Link} from "react-router-dom";
-import type {UseFormRegisterReturn} from "react-hook-form";
-import {type ReactNode} from 'react';
-//styles
-import styles from './OrderCheckBox.module.scss';
+import type { ChangeEvent } from "react";
+import type { UseFormRegisterReturn } from "react-hook-form";
+import { Link } from "react-router-dom";
 
-interface OrderCheckBoxInterface {
-    checked?: boolean;
-    onChange?: (checked: boolean) => void;
-    register?: UseFormRegisterReturn;
-    mode?: 'static' | 'dynamic';
-    description?: ReactNode;
+import styles from "./OrderCheckBox.module.scss";
+
+interface OrderCheckBoxProps {
+  checked?: boolean;
+  onChange?: (checked: boolean) => void;
+  register?: UseFormRegisterReturn;
 }
 
-const OrderCheckBox = ({checked, onChange, register}: OrderCheckBoxInterface) => {
-    return (
-        <label className={styles.checkbox}>
-            <input
-                type="checkbox"
-                checked={checked}
-                onChange={e => onChange?.(e.target.checked)}
-                className={styles.checkbox__input}
-                {...register}
-            />
+const OrderCheckBox = ({ checked, onChange, register }: OrderCheckBoxProps) => {
+  const { onChange: registerOnChange, ...registerProps } = register ?? {};
 
-            <span className={styles.checkbox__box}/>
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    void registerOnChange?.(event);
+    onChange?.(event.target.checked);
+  };
 
-            <span className={styles.checkbox__content}>Соглашаюсь на обработку моих <Link to={'#'} className={styles.checkbox__link}>персональных данных</Link> в соответствии с <Link to={'#'} className={styles.checkbox__link}>политикой конфиденциальности</Link></span>
-        </label>
-    );
+  return (
+    <label className={styles.checkbox}>
+      <input
+        {...registerProps}
+        type="checkbox"
+        checked={checked}
+        onChange={handleChange}
+        className={styles.checkbox__input}
+      />
+      <span className={styles.checkbox__box} />
+      <span className={styles.checkbox__content}>
+        Соглашаюсь на обработку моих{" "}
+        <Link to="#" className={styles.checkbox__link}>
+          персональных данных
+        </Link>{" "}
+        в соответствии с{" "}
+        <Link to="#" className={styles.checkbox__link}>
+          политикой конфиденциальности
+        </Link>
+      </span>
+    </label>
+  );
 };
 
 export default OrderCheckBox;

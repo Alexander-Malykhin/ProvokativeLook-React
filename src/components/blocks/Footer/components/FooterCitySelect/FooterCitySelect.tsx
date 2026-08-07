@@ -1,24 +1,24 @@
+import { useState } from "react";
 //layouts
 import MainLayoutContainer from "@layouts/MainLayoutContainer/MainLayoutContainer.tsx";
+//components
+import CitySelect from "@components/CitySelect/CitySelect.tsx";
 //styles
 import styles from "./FooterCitySelect.module.scss";
 
 const FooterCitySelect = () => {
-    return (
-        <MainLayoutContainer>
-            <label className={styles.select}>
-                <span className={styles.select__label}>Доставка в</span>
+  const [city, setCity] = useState("Ростов-на-Дону");
 
-                <select className={styles.select__field} defaultValue="rostov">
-                    <option value="rostov">г. РОСТОВ-НА-ДОНУ</option>
-                    <option value="moscow">Москва</option>
-                    <option value="spb">Санкт-Петербург</option>
-                    <option value="krasnodar">Краснодар</option>
-                    <option value="other">Другой город...</option>
-                </select>
-            </label>
-        </MainLayoutContainer>
-    );
+  return (
+    <MainLayoutContainer>
+      <CitySelect
+        value={city}
+        onChange={setCity}
+        uppercase
+        className={styles.select}
+      />
+    </MainLayoutContainer>
+  );
 };
 
 export default FooterCitySelect;

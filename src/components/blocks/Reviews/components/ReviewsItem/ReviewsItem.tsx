@@ -1,20 +1,20 @@
-//styles
-import styles from './ReviewsItem.module.scss';
-//types
-import type {ReviewsItemInterface} from "@components/blocks/Reviews/components/ReviewsItem/types.ts";
+// styles
+import styles from "./ReviewsItem.module.scss";
+// types
+import type { ReviewsItemProps } from "@components/blocks/Reviews/types/types";
 
+const ReviewsItem = ({ name, date, text }: ReviewsItemProps) => {
+  return (
+    <article className={styles.item}>
+      <div className={styles.item__head}>
+        <span className={styles.item__name}>{name}</span>
 
-const ReviewsItem = ({ name, date, text }: ReviewsItemInterface) => {
-    return (
-        <article className={styles.item}>
-            <div className={styles.item__head}>
-                <span className={styles.item__name}>{name}</span>
-                <span className={styles.item__date}>{date}</span>
-            </div>
+        <span className={styles.item__date}>{date}</span>
+      </div>
 
-            <p className={styles.item__text}>{text}</p>
-        </article>
-    );
+      <p className={styles.item__text}>{text}</p>
+    </article>
+  );
 };
 
 export default ReviewsItem;

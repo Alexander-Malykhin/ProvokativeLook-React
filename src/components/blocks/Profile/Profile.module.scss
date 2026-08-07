@@ -9,5 +9,19 @@
     display: flex;
     flex-direction: column;
     gap: rem(54);
+    width: 100%;
+  }
+
+
+  @media (max-width: rem($tablet)) {
+    grid-template-columns: minmax(rem(0), rem(250)) 1fr;
+    gap: rem(80);
+  }
+
+
+  @media (max-width: rem($mobile)) {
+    display: flex;
+    flex-direction: column;
+    gap: rem(24);
   }
 }

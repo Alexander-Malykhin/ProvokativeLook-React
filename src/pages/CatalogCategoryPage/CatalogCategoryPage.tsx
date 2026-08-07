@@ -1,5 +1,5 @@
-//styles
-import styles from './CatalogCategoryPage.module.scss'
+// layouts
+import PageStack from "@layouts/PageStack/PageStack";
 //blocks
 import CatalogProducts from "@components/blocks/CatalogProducts/CatalogProducts.tsx";
 import AnswersToQuestions from "@components/blocks/AnswersToQuestions/AnswersToQuestions.tsx";
@@ -9,19 +9,18 @@ import SubscribeNewsLetter from "@components/blocks/SubscribeNewsLetter/Subscrib
 //components
 import Breadcrumbs from "@components/Breadcrumbs/Breadcrumbs.tsx";
 
-
 const CatalogCategoryPage = () => {
-    return (
-        <>
-            <Breadcrumbs />
-            <main className={styles.page__main}>
-                <CatalogProducts />
-                <Reviews/>
-                <AnswersToQuestions/>
-                <SubscribeNewsLetter/>
-            </main>
-        </>
-    );
+  return (
+    <>
+      <Breadcrumbs />
+      <PageStack>
+        <CatalogProducts />
+        <Reviews />
+        <AnswersToQuestions />
+        <SubscribeNewsLetter />
+      </PageStack>
+    </>
+  );
 };
 
 export default CatalogCategoryPage;

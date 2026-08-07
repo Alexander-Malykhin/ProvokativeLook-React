@@ -83,7 +83,7 @@
         background-color: rgba($white, 0.6);
 
         &::after {
-          content: '';
+          content: "";
           position: absolute;
           left: 50%;
           top: 50%;
@@ -107,7 +107,6 @@
       height: rem(8);
 
       &_active {
-
         &::after {
           width: rem(4);
           height: rem(4);

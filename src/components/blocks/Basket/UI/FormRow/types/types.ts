@@ -1,8 +1,8 @@
-import type {ReactNode} from "react";
+import type { ReactNode } from "react";
 
 export interface FormRowInterface {
-    mode?: 'description' | 'price';
-    label?: string;
-    value?: string;
-    children?: ReactNode;
+  mode?: "description" | "price";
+  label?: string;
+  value?: string;
+  children?: ReactNode;
 }

@@ -1,177 +1,29 @@
-import {useEffect, useRef, useState} from "react";
-//styles
-import styles from './News.module.scss'
-//layouts
-import SectionLayout from "@layouts/SectionLayout/SectionLayout.tsx";
-//components
-import NewsColumn from "@components/blocks/News/components/NewsColumn/NewsColumn.tsx";
-import NewsSlider from "@components/blocks/News/components/NewsSlider/NewsSlider.tsx";
-import NewsDots from "@components/blocks/News/components/NewsDots/NewsDots.tsx";
-
-
-const products = [
-    {
-        id: 1,
-        title: 'Шуба',
-        image: 'products/product-1.png',
-        price: '17 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 2,
-        title: 'Босоножки',
-        image: 'products/product-1.png',
-        price: '7 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 3,
-        title: 'Комбинезон с накидкой',
-        image: 'products/product-1.png',
-        price: '11 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 4,
-        title: 'Свитшот',
-        image: 'products/product-1.png',
-        price: '17 700 ₽',
-        sizes: ['48', '50', '52'],
-    },
-    {
-        id: 5,
-        title: 'Шуба',
-        image: 'products/product-1.png',
-        price: '17 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 6,
-        title: 'Босоножки',
-        image: 'products/product-1.png',
-        price: '7 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 7,
-        title: 'Шуба',
-        image: 'products/product-1.png',
-        price: '17 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 8,
-        title: 'Босоножки',
-        image: 'products/product-1.png',
-        price: '7 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 9,
-        title: 'Комбинезон с накидкой',
-        image: 'products/product-1.png',
-        price: '11 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 10,
-        title: 'Свитшот',
-        image: 'products/product-1.png',
-        price: '17 700 ₽',
-        sizes: ['48', '50', '52'],
-    },
-    {
-        id: 11,
-        title: 'Шуба',
-        image: 'products/product-1.png',
-        price: '17 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-    {
-        id: 12,
-        title: 'Босоножки',
-        image: 'products/product-1.png',
-        price: '7 700 ₽',
-        sizes: ['48', '50', '52', '54'],
-    },
-];
+import styles from "./News.module.scss";
+import SectionLayout from "@layouts/SectionLayout/SectionLayout";
+import { products } from "@api/static/products";
+import { useCarousel } from "@hooks/useCarousel";
+import CarouselHeader from "@components/Carousel/CarouselHeader";
+import CarouselDots from "@components/Carousel/CarouselDots";
+import NewsSlider from "./components/NewsSlider/NewsSlider";
 
 const News = () => {
+  const carousel = useCarousel({ itemCount: products.length });
 
-    const sliderRef = useRef<HTMLDivElement | null>(null);
-    const [activeIndex, setActiveIndex] = useState(0);
-
-    const getScrollStep = () => {
-        const slider = sliderRef.current;
-        const firstCard = slider?.firstElementChild as HTMLElement | null;
-
-        if (!slider || !firstCard) return 0;
-
-        const gap = parseFloat(window.getComputedStyle(slider).gap) || 0;
-
-        return firstCard.offsetWidth + gap;
-    };
-
-    const scrollToIndex = (index: number) => {
-        const slider = sliderRef.current;
-        const scrollStep = getScrollStep();
-
-        if (!slider) return;
-
-        slider.scrollTo({
-            left: scrollStep * index,
-            behavior: 'smooth',
-        });
-
-        setActiveIndex(index);
-    };
-
-    const handleScroll = (direction: 'prev' | 'next') => {
-        const nextIndex =
-            direction === 'next'
-                ? Math.min(activeIndex + 1, products.length - 1)
-                : Math.max(activeIndex - 1, 0);
-
-        scrollToIndex(nextIndex);
-    };
-
-    useEffect(() => {
-        const slider = sliderRef.current;
-
-        if (!slider) return;
-
-        const handleSliderScroll = () => {
-            const scrollStep = getScrollStep();
-
-            if (!scrollStep) return;
-
-            setActiveIndex(Math.round(slider.scrollLeft / scrollStep));
-        };
-
-        slider.addEventListener('scroll', handleSliderScroll);
-
-        return () => {
-            slider.removeEventListener('scroll', handleSliderScroll);
-        };
-    }, []);
-
-    return (
-        <SectionLayout className={styles.news} id="new-collection">
-            <NewsColumn
-                onPrev={() => handleScroll('prev')}
-                onNext={() => handleScroll('next')}
-            />
-            <NewsSlider
-                sliderRef={sliderRef}
-                products={products}
-            />
-            <NewsDots
-                count={products.length}
-                activeIndex={activeIndex}
-                onDotClick={scrollToIndex}
-            />
-        </SectionLayout>
-    );
+  return (
+    <SectionLayout className={styles.news} id="new-collection">
+      <CarouselHeader
+        title="Новинки"
+        onPrevious={carousel.showPrevious}
+        onNext={carousel.showNext}
+      />
+      <NewsSlider sliderRef={carousel.sliderRef} products={products} />
+      <CarouselDots
+        count={products.length}
+        activeIndex={carousel.activeIndex}
+        onChange={carousel.scrollToIndex}
+      />
+    </SectionLayout>
+  );
 };
 
 export default News;

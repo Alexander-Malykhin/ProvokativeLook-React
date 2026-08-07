@@ -1,23 +1,22 @@
-//styles
-import styles from './CatalogPromoDots.module.scss';
+// styles
+import styles from "./CatalogPromoDots.module.scss";
+// types
+import type {CatalogPromoDotsProps,} from "@components/blocks/CatalogPromo/types/types";
 
-type CatalogPromoDotsProps = {
-    count: number;
-    activeIndex: number;
-    onDotClick: (index: number) => void;
-};
-
-const CatalogPromoDots = ({ count, activeIndex, onDotClick }: CatalogPromoDotsProps) => {
+const CatalogPromoDots = ({count, activeIndex, onDotClick,}: CatalogPromoDotsProps) => {
     return (
         <div className={styles.dots}>
-            {Array.from({ length: count }).map((_, index) => (
+            {Array.from({length: count}).map((_, index) => (
                 <button
                     key={index}
                     type="button"
                     className={`${styles.dots__item} ${
-                        activeIndex === index ? styles.dots__item_active : ''
+                        activeIndex === index
+                            ? styles.dots__item_active
+                            : ""
                     }`}
                     onClick={() => onDotClick(index)}
+                    aria-label={`Перейти к слайду ${index + 1}`}
                 />
             ))}
         </div>

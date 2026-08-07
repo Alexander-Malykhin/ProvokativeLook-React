@@ -1,92 +1,44 @@
-//styles
-import styles from './ProfileReturn.module.scss';
-import { Link } from 'react-router-dom';
-//images
-import ProductImage from '@assets/products/product-1.png';
-import Image from '@UI/buttons/Image/Image.tsx';
+import { Link, useParams } from "react-router-dom";
 
-interface ProfileReturnInterface {
-    title: string;
-}
+import styles from "./ProfileReturn.module.scss";
+import type { ProfilePageProps } from "@components/blocks/Profile/types/types.ts";
+import { PROFILE_RETURNS } from "./data";
+import ReturnCard from "./components/ReturnCard/ReturnCard";
 
-interface ReturnProductInterface {
-    id: number;
-    image: string;
-}
+const ProfileReturn = ({ title }: ProfilePageProps) => {
+  const { id } = useParams<{ id?: string }>();
+  const selectedReturn = id
+    ? PROFILE_RETURNS.find((item) => item.id === Number(id))
+    : undefined;
+  const visibleReturns = id
+    ? selectedReturn
+      ? [selectedReturn]
+      : []
+    : PROFILE_RETURNS;
 
-interface ReturnItemInterface {
-    id: number;
-    status: string;
-    date: string;
-    orderNumber: string;
-    total: number;
-    productsCount: number;
-    products: ReturnProductInterface[];
-}
+  return (
+    <div className={styles.content}>
+      <h2 className={styles.content__title}>
+        {selectedReturn
+          ? `Возврат по заказу № ${selectedReturn.orderNumber}`
+          : title}
+      </h2>
 
-const returns: ReturnItemInterface[] = [
-    {
-        id: 1,
-        status: 'Деньги отправлены',
-        date: '21.02.2024',
-        orderNumber: '123111',
-        total: 20530,
-        productsCount: 2,
-        products: [
-            { id: 1, image: ProductImage },
-            { id: 2, image: ProductImage },
-        ],
-    },
-];
+      {id && (
+        <Link to="/profile/return" className={styles.content__back}>
+          Вернуться к возвратам
+        </Link>
+      )}
 
-const ProfileReturn = ({ title }: ProfileReturnInterface) => {
-    return (
-        <div className={styles.content}>
-            <h2 className={styles.content__title}>{title}</h2>
+      {id && !selectedReturn && <p>Возврат не найден.</p>}
 
-            <div className={styles.content__list}>
-                {returns.map(item => (
-                    <article className={styles.item} key={item.id}>
-                        <div className={styles.item__information}>
-                            <div className={styles.item__row}>
-                                <span className={styles.item__status}>
-                                    {item.status}
-                                </span>
-
-                                <h4 className={styles.item__title}>
-                                    Заявка на возврат от {item.date} г.
-                                </h4>
-                            </div>
-
-                            <div className={styles.item__row}>
-                                <span className={styles.item__description}>
-                                    Заказ № {item.orderNumber}
-                                </span>
-
-                                <span className={styles.item__description}>
-                                    Сумма: {item.total.toLocaleString('ru-RU')} ₽ / {item.productsCount} товаров
-                                </span>
-                            </div>
-
-                            <Link to="#" className={styles.item__more}>
-                                Подробнее о заказе
-                            </Link>
-                        </div>
-
-                        <div className={styles.item__slider}>
-                            {item.products.map(product => (
-                                <Image
-                                    key={product.id}
-                                    src={product.image}
-                                    className={styles.item__slider_image}
-                                />
-                            ))}
-                        </div>
-                    </article>
-                ))}
-            </div>
-        </div>
-    );
+      <div className={styles.content__list}>
+        {visibleReturns.map((item) => (
+          <ReturnCard key={item.id} item={item} />
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default ProfileReturn;

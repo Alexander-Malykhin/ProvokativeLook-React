@@ -1,5 +1,5 @@
-//styles
-import styles from './ProfilePage.module.scss'
+// layouts
+import PageStack from "@layouts/PageStack/PageStack";
 //blocks
 import Bestsellers from "@components/blocks/Bestsellers/Bestsellers.tsx";
 import Profile from "@components/blocks/Profile/Profile.tsx";
@@ -7,15 +7,15 @@ import Profile from "@components/blocks/Profile/Profile.tsx";
 import Breadcrumbs from "@components/Breadcrumbs/Breadcrumbs.tsx";
 
 const ProfilePage = () => {
-    return (
-        <>
-            <Breadcrumbs/>
-            <main className={styles.page__main}>
-                <Profile/>
-                <Bestsellers/>
-            </main>
-        </>
-    );
+  return (
+    <>
+      <Breadcrumbs />
+      <PageStack>
+        <Profile />
+        <Bestsellers />
+      </PageStack>
+    </>
+  );
 };
 
 export default ProfilePage;

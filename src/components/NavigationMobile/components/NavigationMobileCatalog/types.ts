@@ -1,4 +1,4 @@
 export interface NavigationMobileCatalogInterface {
-    onBack: () => void;
-    onClose: () => void;
+  onBack: () => void;
+  onClose: () => void;
 }

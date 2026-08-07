@@ -13,7 +13,10 @@
     border: rem(1) solid transparent;
     border-radius: rem(10);
     outline: none;
-    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    transition:
+      border-color 0.3s ease-in-out,
+      box-shadow 0.3s ease-in-out,
+      background-color 0.3s ease-in-out;
 
     &::placeholder {
       @include font(16, $fw-extra-light);
@@ -39,7 +42,6 @@
       border-color: $red;
       box-shadow: 0 0 0 rem(3) rgba($red, 0.08);
     }
-
   }
 
   &__error {

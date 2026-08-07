@@ -1,5 +1,5 @@
-//styles
-import styles from './AboutPage.module.scss'
+// layouts
+import PageStack from "@layouts/PageStack/PageStack";
 //blocks
 import About from "@components/blocks/About/About.tsx";
 import SubscribeNewsLetter from "@components/blocks/SubscribeNewsLetter/SubscribeNewsLetter.tsx";
@@ -7,15 +7,15 @@ import SubscribeNewsLetter from "@components/blocks/SubscribeNewsLetter/Subscrib
 import Breadcrumbs from "@components/Breadcrumbs/Breadcrumbs.tsx";
 
 const AboutPage = () => {
-    return (
-        <>
-            <Breadcrumbs title={'О нас'}/>
-            <main className={styles.page__main}>
-                <About/>
-                <SubscribeNewsLetter/>
-            </main>
-        </>
-    );
+  return (
+    <>
+      <Breadcrumbs title={"О нас"} />
+      <PageStack>
+        <About />
+        <SubscribeNewsLetter />
+      </PageStack>
+    </>
+  );
 };
 
 export default AboutPage;

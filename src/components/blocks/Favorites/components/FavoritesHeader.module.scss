@@ -4,7 +4,8 @@
   justify-content: space-between;
   gap: rem(4);
 
-  &__count, &__button {
+  &__count,
+  &__button {
     @include font(14, $fw-light);
     color: rgba($black, 0.6);
   }

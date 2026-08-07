@@ -1,16 +1,14 @@
 import { RouterProvider } from "react-router-dom";
-import {Provider} from "react-redux";
+import { Provider } from "react-redux";
 //router
-import {router} from "@routes/router.tsx";
+import { router } from "@routes/router.tsx";
 //store
-import {store} from "@store/store.ts";
+import { store } from "@store/store.ts";
 
-const App = () => {
-    return (
-       <Provider store={store}>
-           <RouterProvider router={router}/>
-       </Provider>
-    );
-};
+const App = () => (
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider>
+);
 
 export default App;

@@ -1,19 +1,22 @@
-import styles from './SwitchInput.module.scss';
-//types
-import type {SwitchInputInterface} from "@UI/inputs/SwitchInput/types/types.ts";
+import styles from "./SwitchInput.module.scss";
+import type { SwitchInputInterface } from "./types/types";
 
-const SwitchInput = ({ checked, onChange }: SwitchInputInterface) => {
-    return (
-        <div className={styles.switch}>
-            <input
-                type="checkbox"
-                className={styles.switch__input}
-                checked={checked}
-                onChange={(event) => onChange?.(event.target.checked)}
-            />
-            <span className={styles.switch__slider}></span>
-        </div>
-    );
-};
+const SwitchInput = ({
+  checked,
+  onChange,
+  disabled,
+  label = "Переключатель",
+}: SwitchInputInterface) => (
+  <label className={styles.switch} aria-label={label}>
+    <input
+      type="checkbox"
+      className={styles.switch__input}
+      checked={checked}
+      disabled={disabled}
+      onChange={(event) => onChange?.(event.target.checked)}
+    />
+    <span className={styles.switch__slider} />
+  </label>
+);
 
 export default SwitchInput;

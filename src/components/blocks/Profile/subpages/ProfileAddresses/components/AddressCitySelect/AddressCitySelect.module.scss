@@ -1,0 +1,86 @@
+.city {
+  position: relative;
+  z-index: 70;
+
+  width: fit-content;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: rem(10);
+
+    padding: 0;
+
+    border: 0;
+    background-color: transparent;
+
+    cursor: pointer;
+  }
+
+  &__value {
+    @include font(12, $fw-light);
+
+    color: $black;
+
+    text-decoration: underline;
+    text-underline-offset: rem(3);
+  }
+
+  &__arrow {
+    width: rem(7);
+    height: rem(7);
+
+    border-right: rem(1) solid $black;
+    border-bottom: rem(1) solid $black;
+
+    transform: translateY(rem(-2)) rotate(45deg);
+
+    transition: transform 0.2s ease;
+
+    &_open {
+      transform: translateY(rem(2)) rotate(225deg);
+    }
+  }
+
+  &__list {
+    position: absolute;
+    top: calc(100% + #{rem(10)});
+    left: 0;
+    z-index: 80;
+
+    display: flex;
+    flex-direction: column;
+
+    width: rem(220);
+    max-height: rem(260);
+
+    overflow-y: auto;
+
+    background-color: $white;
+
+    box-shadow: 0 rem(8) rem(24) rgba($black, 0.12);
+  }
+
+  &__item {
+    width: 100%;
+
+    padding: rem(11) rem(12);
+
+    border: 0;
+
+    background-color: transparent;
+
+    @include font(13, $fw-light);
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition: background-color 0.2s ease;
+
+    &:hover,
+    &_active {
+      background-color: $gray;
+    }
+  }
+}

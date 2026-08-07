@@ -1,48 +1,39 @@
+import {useState} from "react";
 //styles
-import styles from './ProfileNotifications.module.scss'
+import styles from "./ProfileNotifications.module.scss";
+//types
+import type { ProfilePageProps } from "@components/blocks/Profile/types/types.ts";
+//data
+import { type ProfileNotification, PROFILE_NOTIFICATIONS } from "./data";
+//components
+import NotNotification from "./components/NotNotification/NotNotification";
+import NotificationItem from "./components/NotificationItem/NotificationItem";
 
-interface ProfileNotificationsInterface {
-    title: string
-}
+const ProfileNotifications = ({ title }: ProfilePageProps) => {
 
-const ProfileNotifications = ({title}: ProfileNotificationsInterface) => {
+    const [notifications] = useState<ProfileNotification[]>(PROFILE_NOTIFICATIONS);
+
     return (
         <div className={styles.content}>
-            <h2 className={styles.content__title}>
-                {title}
-            </h2>
+            <h2 className={styles.content__title}>{title}</h2>
 
-            <div className={styles.list}>
-                <article className={styles.item}>
-                    <span className={styles.item__date}>15.02.2025</span>
+            {
+                notifications.length > 0 ?
+                    (
+                        <>
+                            <div className={styles.content__list}>
+                                {notifications.map((item) => (
+                                    <NotificationItem key={item.id} item={item} />
+                                ))}
+                            </div>
 
-                    <div className={styles.item__information}>
-                        <h4 className={styles.item__information_title}>Начислены бонусы ко дню рождения</h4>
-                        <p className={styles.item__information_description}>+ 1000 бонусов до 15.02.2025 г.
-                            включительно</p>
-                    </div>
-                </article>
-                <article className={styles.item}>
-                    <span className={styles.item__date}>15.02.2025</span>
-
-                    <div className={styles.item__information}>
-                        <h4 className={styles.item__information_title}>Начислен кэшбэк</h4>
-                        <p className={styles.item__information_description}>+ 100 бонусов</p>
-                    </div>
-                </article>
-                <article className={styles.item}>
-                    <span className={styles.item__date}>15.02.2025</span>
-
-                    <div className={styles.item__information}>
-                        <h4 className={styles.item__information_title}>Акция на новую коллекцию</h4>
-                        <p className={styles.item__information_description}>Скидка 5% при покупке от 80 000 ₽</p>
-                    </div>
-                </article>
-            </div>
-
-            <button className={styles.button}>
-                Загрузить еще
-            </button>
+                            <button type="button" className={styles.button}>
+                                Загрузить ещё
+                            </button>
+                        </>
+                    ) :
+                    <NotNotification />
+            }
         </div>
     );
 };

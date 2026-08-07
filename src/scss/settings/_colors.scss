@@ -1,8 +1,25 @@
 $black: #222222;
 $white: #ffffff;
-$light-white: #F2F2F2;
-$gray: #E0E0EA;
-$red: #FF0000;
-$green: #93C90F;
-$orange: #EF6A00;
-$violet: #68478D;
+$light-white: #f2f2f2;
+$gray: #e0e0ea;
+$red: #ff0000;
+$green: #93c90f;
+$orange: #ef6a00;
+$violet: #68478d;
+
+// semantic colors
+$text-muted: rgba($black, 0.6);
+$border-light: rgba($black, 0.1);
+$overlay: rgba($black, 0.48);
+
+// shared shape and elevation tokens
+$radius-sm: 0.3125rem;
+$radius-md: 0.625rem;
+$radius-lg: 1rem;
+$shadow-dropdown: 0 0.5rem 1.5rem rgba($black, 0.12);
+$shadow-modal: 0 1.25rem 3.75rem rgba($black, 0.18);
+
+// shared layers
+$z-header: 100;
+$z-dropdown: 500;
+$z-modal: 3000;

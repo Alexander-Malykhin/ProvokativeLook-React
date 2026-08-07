@@ -1,27 +1,27 @@
 //styles
-import styles from './BurgerButton.module.scss'
+import styles from "./BurgerButton.module.scss";
 //store
-import {useDispatch, useSelector} from 'react-redux';
-import type {RootState} from '@store/store';
-import {toggle} from '@store/slices/toggleMenuNavigationSlice';
-
+import { useAppDispatch, useAppSelector } from "@store/hooks";
+import { toggle } from "@store/slices/toggleMenuNavigationSlice";
 
 const BurgerButton = () => {
+  const dispatch = useAppDispatch();
 
-    const dispatch = useDispatch()
+  const active = useAppSelector((state) => state.toggleMenuNavigation.active);
 
-    const active = useSelector((state: RootState) => state.toggleMenuNavigation.active)
-
-    return (
-        <button
-            className={`${styles.burger} ${active ? styles.burger_active : ''}`}
-            onClick={() => dispatch(toggle())}
-        >
-            <span className={styles.burger__line}></span>
-            <span className={styles.burger__line}></span>
-            <span className={styles.burger__line}></span>
-        </button>
-    );
+  return (
+    <button
+      type="button"
+      aria-label={active ? "Закрыть меню" : "Открыть меню"}
+      aria-expanded={active}
+      className={`${styles.burger} ${active ? styles.burger_active : ""}`}
+      onClick={() => dispatch(toggle())}
+    >
+      <span className={styles.burger__line}></span>
+      <span className={styles.burger__line}></span>
+      <span className={styles.burger__line}></span>
+    </button>
+  );
 };
 
 export default BurgerButton;

@@ -1,0 +1,412 @@
+.card {
+  display: grid;
+  grid-template-columns: minmax(0, rem(380)) minmax(0, 1fr);
+  gap: rem(24);
+
+  padding: rem(16) 0;
+
+  border-bottom: rem(1) solid $border-light;
+
+  &:first-child {
+    border-top: rem(1) solid $border-light;
+  }
+
+  &__content {
+    display: grid;
+
+    grid-template-columns: max-content max-content max-content;
+    grid-template-areas:
+      "label orderId date"
+      "information information information"
+      "button button button";
+
+    align-items: center;
+    justify-content: space-between;
+
+    row-gap: rem(25);
+
+    width: 100%;
+    min-width: 0;
+  }
+
+  &__orderId {
+    grid-area: orderId;
+
+    width: max-content;
+
+    @include font(16, $fw-light);
+
+    color: $black;
+
+    white-space: nowrap;
+  }
+
+  &__date {
+    grid-area: date;
+
+    width: max-content;
+
+    @include font(12, $fw-light);
+
+    color: rgba($black, 0.6);
+
+    white-space: nowrap;
+  }
+
+  &__information {
+    grid-area: information;
+
+    display: grid;
+    grid-template-columns: max-content max-content 1fr;
+    align-items: center;
+
+    column-gap: rem(20);
+
+    width: 100%;
+
+    &_text {
+      @include font(14, $fw-light);
+
+      color: $black;
+    }
+
+    &_sum {
+      justify-self: start;
+
+      margin: 0;
+
+      @include font(20, $fw-light);
+
+      color: $black;
+    }
+
+    &_counter {
+      justify-self: end;
+
+      @include font(14, $fw-light);
+
+      color: $black;
+
+      white-space: nowrap;
+    }
+  }
+
+  &__label {
+    grid-area: label;
+
+    width: max-content;
+    height: max-content;
+
+    padding: rem(8) rem(16);
+
+    border-radius: rem(100);
+
+    @include font(12, $fw-light);
+
+    color: $white;
+
+    &_completed {
+      background-color: $green;
+    }
+
+    &_delivery {
+      background-color: $violet;
+    }
+
+    &_return {
+      background-color: $black;
+    }
+
+    &_cancelled {
+      background-color: $orange;
+    }
+  }
+
+  &__button {
+    grid-area: button;
+
+    justify-self: flex-start;
+
+    @include font(14, $fw-light);
+
+    color: rgba($black, 0.5);
+
+    text-decoration: underline;
+    text-underline-offset: rem(1);
+  }
+
+  &__list {
+    display: flex;
+    justify-content: flex-start;
+
+    gap: rem(10);
+
+    width: 100%;
+    min-width: 0;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    &_item,
+    &_end {
+      flex: 0 0 rem(90);
+
+      width: rem(90);
+      height: rem(120);
+    }
+
+    &_item {
+      overflow: hidden;
+    }
+
+    &_image {
+      display: block;
+
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
+    }
+
+    &_end {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background-color: $gray;
+
+      @include font(20, $fw-light);
+    }
+  }
+
+  @media (max-width: rem($desktop-x)) {
+    grid-template-columns: minmax(0, rem(340)) minmax(0, 1fr);
+    gap: rem(18);
+
+    &__content {
+      row-gap: rem(20);
+    }
+
+    &__information {
+      column-gap: rem(14);
+
+      &_text,
+      &_counter {
+        @include font(13, $fw-light);
+      }
+
+      &_sum {
+        @include font(18, $fw-light);
+      }
+    }
+
+    &__list {
+      gap: rem(8);
+
+      &_item,
+      &_end {
+        flex-basis: rem(90);
+
+        width: rem(90);
+        height: rem(120);
+      }
+    }
+  }
+
+  @media (max-width: rem($tablet)) {
+    grid-template-columns: minmax(0, rem(300)) minmax(0, 1fr);
+    gap: rem(14);
+
+    &__content {
+      grid-template-columns: max-content 1fr max-content;
+
+      column-gap: rem(10);
+      row-gap: rem(18);
+    }
+
+    &__orderId {
+      @include font(14, $fw-light);
+    }
+
+    &__date {
+      @include font(11, $fw-light);
+    }
+
+    &__information {
+      grid-template-columns: max-content max-content 1fr;
+
+      column-gap: rem(10);
+
+      &_text,
+      &_counter {
+        @include font(12, $fw-light);
+      }
+
+      &_sum {
+        @include font(17, $fw-light);
+      }
+    }
+
+    &__label {
+      padding: rem(6) rem(12);
+
+      @include font(10, $fw-light);
+    }
+
+    &__button {
+      @include font(12, $fw-light);
+    }
+
+    &__list {
+      gap: rem(6);
+
+      &_item,
+      &_end {
+        flex-basis: rem(90);
+
+        width: rem(90);
+        height: rem(120);
+      }
+
+      &_end {
+        @include font(18, $fw-light);
+      }
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+    display: flex;
+    flex-direction: column;
+
+    gap: rem(12);
+
+    padding: rem(10) 0;
+
+    &__content {
+      grid-template-columns: max-content 1fr max-content;
+
+      grid-template-areas:
+        "label label label"
+        "orderId . date"
+        "information information information"
+        "button button button";
+
+      column-gap: rem(8);
+      row-gap: rem(12);
+
+      width: 100%;
+    }
+
+    &__label {
+      padding: rem(5) rem(13);
+
+      @include font(12, $fw-light);
+    }
+
+    &__orderId {
+      justify-self: start;
+
+      @include font(14, $fw-light);
+    }
+
+    &__date {
+      justify-self: end;
+
+      @include font(12, $fw-light);
+    }
+
+    &__information {
+      grid-template-columns: max-content max-content 1fr;
+
+      column-gap: rem(8);
+
+      &_text {
+        justify-self: start;
+
+        @include font(12, $fw-light);
+      }
+
+      &_sum {
+        justify-self: start;
+
+        @include font(14, $fw-light);
+      }
+
+      &_counter {
+        justify-self: end;
+
+        @include font(12, $fw-light);
+      }
+    }
+
+    &__list {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+
+      gap: rem(4);
+
+      width: 100%;
+
+      overflow: visible;
+
+      &_item,
+      &_end {
+        width: 100%;
+        height: auto;
+
+        aspect-ratio: 3 / 4;
+      }
+
+      &_end {
+        @include font(12, $fw-light);
+      }
+    }
+
+    &__button {
+      @include font(11, $fw-light);
+    }
+  }
+
+  @media (max-width: rem($mobile-x)) {
+    &__content {
+      row-gap: rem(10);
+    }
+
+    &__orderId {
+      @include font(14, $fw-light);
+    }
+
+    &__date {
+      @include font(12, $fw-light);
+    }
+
+    &__information {
+      column-gap: rem(6);
+
+      &_text, &_counter {
+        @include font(12, $fw-light);
+      }
+
+      &_sum {
+        @include font(16, $fw-light);
+      }
+    }
+
+    &__button {
+      @include font(14, $fw-light);
+    }
+
+    &__list {
+      gap: rem(3);
+    }
+  }
+}

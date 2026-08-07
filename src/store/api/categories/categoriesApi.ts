@@ -1,19 +1,13 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-// constants
-import { API_BASE_URL } from '@store/constants.ts';
+import { baseApi } from "@store/api/baseApi";
 // types
-import type { CategoriesResponse } from '@store/api/categories/types.ts';
+import type { CategoriesResponse } from "@store/api/categories/types.ts";
 
-export const categoriesApi = createApi({
-    reducerPath: 'categoriesApi',
-    baseQuery: fetchBaseQuery({
-        baseUrl: API_BASE_URL,
+export const categoriesApi = baseApi.injectEndpoints({
+  endpoints: (builder) => ({
+    getCategories: builder.query<CategoriesResponse, void>({
+      query: () => "categories",
     }),
-    endpoints: (builder) => ({
-        getCategories: builder.query<CategoriesResponse, void>({
-            query: () => 'categories',
-        }),
-    }),
+  }),
 });
 
 export const { useGetCategoriesQuery } = categoriesApi;

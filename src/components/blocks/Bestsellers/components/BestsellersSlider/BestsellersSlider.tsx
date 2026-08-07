@@ -1,36 +1,24 @@
-import type {RefObject} from "react";
-//styles
-import styles from './BestsellersSlider.module.scss'
-//components
-import CardSlider from "@components/MainSliderCards/components/CardSlider/CardSlider.tsx";
+// styles
+import styles from "./BestsellersSlider.module.scss";
+// components
+import ProductCard from "@components/ProductCard/ProductCard";
+// types
+import type { BestsellersSliderProps } from "@components/blocks/Bestsellers/types/type.ts";
 
-interface Product {
-    id: number;
-    title: string;
-    image: string;
-    price: string;
-    sizes: string[];
-}
-
-interface BestsellersSliderInterface {
-    sliderRef: RefObject<HTMLDivElement | null>;
-    products: Product[];
-}
-
-const BestsellersSlider = ({ sliderRef, products }: BestsellersSliderInterface) => {
-    return (
-        <div className={styles.list} ref={sliderRef}>
-            {products.map((card) => (
-                <CardSlider
-                    key={card.id}
-                    image={card.image}
-                    title={card.title}
-                    sizes={card.sizes}
-                    price={card.price}
-                />
-            ))}
-        </div>
-    );
+const BestsellersSlider = ({ sliderRef, products }: BestsellersSliderProps) => {
+  return (
+    <div ref={sliderRef} className={styles.list}>
+      {products.map((product) => (
+        <ProductCard
+          key={product.id}
+          image={product.image}
+          title={product.title}
+          sizes={product.sizes}
+          price={product.price}
+        />
+      ))}
+    </div>
+  );
 };
 
 export default BestsellersSlider;

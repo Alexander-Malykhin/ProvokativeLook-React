@@ -1,20 +1,13 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-//constants
-import {API_BASE_URL} from '@store/constants.ts';
+import { baseApi } from "@store/api/baseApi";
 //types
-import type {AboutResponse} from "@store/api/about/types.ts";
+import type { AboutResponse } from "@store/api/about/types.ts";
 
-
-export const aboutApi = createApi({
-    reducerPath: 'aboutApi',
-    baseQuery: fetchBaseQuery({
-        baseUrl: API_BASE_URL,
+export const aboutApi = baseApi.injectEndpoints({
+  endpoints: (builder) => ({
+    getAbout: builder.query<AboutResponse, void>({
+      query: () => "about",
     }),
-    endpoints: (builder) => ({
-        getAbout: builder.query<AboutResponse, void>({
-            query: () => 'about',
-        }),
-    }),
+  }),
 });
 
 export const { useGetAboutQuery } = aboutApi;

@@ -1,4 +1,4 @@
-import styles from './ProductInformation.module.scss'
+import styles from "./ProductInformation.module.scss";
 
 import ProductBreadCrumbs from "@components/blocks/Product/components/ProductBreadCrumbs/ProductBreadCrumbs.tsx";
 import ProductHeader from "@components/blocks/Product/components/ProductHeader/ProductHeader.tsx";
@@ -11,28 +11,33 @@ import ProductsButtons from "@components/blocks/Product/components/ProductsButto
 import ProductDelivery from "@components/blocks/Product/components/ProductDelivery/ProductDelivery.tsx";
 import ProductDescription from "@components/blocks/Product/components/ProductDescription/ProductDescription.tsx";
 
+interface ProductInformationProps {
+  id: number;
+  title: string;
+  price: string;
+}
 
-const ProductInformation = () => {
-    return (
-        <div className={styles.information}>
-            <ProductBreadCrumbs/>
+const ProductInformation = ({ id, title, price }: ProductInformationProps) => {
+  return (
+    <div className={styles.information}>
+      <ProductBreadCrumbs />
 
-            <ProductHeader/>
+      <ProductHeader id={id} title={title} />
 
-            <ProductPrice/>
-            <ProductColors/>
+      <ProductPrice price={price} />
+      <ProductColors />
 
-            <ProductSizes/>
-            <ProductParams/>
+      <ProductSizes />
+      <ProductParams />
 
-            <ProductsComposition/>
+      <ProductsComposition />
 
-            <ProductsButtons/>
+      <ProductsButtons />
 
-            <ProductDescription/>
-            <ProductDelivery/>
-        </div>
-    );
+      <ProductDescription />
+      <ProductDelivery />
+    </div>
+  );
 };
 
 export default ProductInformation;

@@ -18,7 +18,7 @@
   }
 
   &__input:checked + &__box::after {
-    content: '';
+    content: "";
     position: absolute;
     left: 50%;
     top: 45%;

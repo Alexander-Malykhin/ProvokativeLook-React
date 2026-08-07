@@ -1,22 +1,29 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 interface ModalState {
-    isModalTableSizesOpen: boolean;
+  isModalTableSizesOpen: boolean;
 }
 
 const initialState: ModalState = {
-    isModalTableSizesOpen: false,
+  isModalTableSizesOpen: false,
 };
 
 const toggleModalTableSizesSlice = createSlice({
-    name: 'modal',
-    initialState,
-    reducers: {
-        toggleModalTableSizes: (state) => {
-            state.isModalTableSizesOpen = !state.isModalTableSizesOpen;
-        },
+  name: "modal",
+  initialState,
+  reducers: {
+    openTableSizes: (state) => {
+      state.isModalTableSizesOpen = true;
     },
+    closeTableSizes: (state) => {
+      state.isModalTableSizesOpen = false;
+    },
+    toggleModalTableSizes: (state) => {
+      state.isModalTableSizesOpen = !state.isModalTableSizesOpen;
+    },
+  },
 });
 
-export const { toggleModalTableSizes } = toggleModalTableSizesSlice.actions;
+export const { openTableSizes, closeTableSizes, toggleModalTableSizes } =
+  toggleModalTableSizesSlice.actions;
 export default toggleModalTableSizesSlice.reducer;

@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "@store/store";
+import { useAppDispatch, useAppSelector } from "@store/hooks";
 //styles
 import styles from "./NavigationMobile.module.scss";
 //layouts
@@ -13,41 +12,39 @@ import NavigationMobileMain from "./components/NavigationMobileMain/NavigationMo
 import NavigationMobileCatalog from "./components/NavigationMobileCatalog/NavigationMobileCatalog";
 
 const NavigationMobile = () => {
-    const [menu, setMenu] = useState<"main" | "catalog">("main");
+  const [menu, setMenu] = useState<"main" | "catalog">("main");
 
-    const { data: navigationMain = [] } = useGetNavigationQuery();
+  const { data: navigationMain = [] } = useGetNavigationQuery();
 
-    const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-    const active = useSelector(
-        (state: RootState) => state.toggleMenuNavigation.active
-    );
+  const active = useAppSelector((state) => state.toggleMenuNavigation.active);
 
-    const handleClose = () => {
-        setMenu("main");
-        dispatch(close());
-    };
+  const handleClose = () => {
+    setMenu("main");
+    dispatch(close());
+  };
 
-    if (!active) return null;
+  if (!active) return null;
 
-    return (
-        <MainLayoutContainer className={styles.navigation}>
-            {menu === "main" && (
-                <NavigationMobileMain
-                    items={navigationMain}
-                    onOpenCatalog={() => setMenu("catalog")}
-                    onClose={handleClose}
-                />
-            )}
+  return (
+    <MainLayoutContainer className={styles.navigation}>
+      {menu === "main" && (
+        <NavigationMobileMain
+          items={navigationMain}
+          onOpenCatalog={() => setMenu("catalog")}
+          onClose={handleClose}
+        />
+      )}
 
-            {menu === "catalog" && (
-                <NavigationMobileCatalog
-                    onBack={() => setMenu("main")}
-                    onClose={handleClose}
-                />
-            )}
-        </MainLayoutContainer>
-    );
+      {menu === "catalog" && (
+        <NavigationMobileCatalog
+          onBack={() => setMenu("main")}
+          onClose={handleClose}
+        />
+      )}
+    </MainLayoutContainer>
+  );
 };
 
 export default NavigationMobile;

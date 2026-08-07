@@ -1,4 +1,4 @@
-@use 'colors' as *;
+@use "colors" as *;
 
 @mixin color-modifiers($property: color) {
   &_black {

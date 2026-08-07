@@ -1,36 +1,24 @@
-import type {RefObject} from "react";
-//styles
-import styles from './NewsSlider.module.scss'
-//components
-import CardSlider from "@components/MainSliderCards/components/CardSlider/CardSlider.tsx";
+// styles
+import styles from "./NewsSlider.module.scss";
+// components
+import ProductCard from "@components/ProductCard/ProductCard";
+// types
+import type { NewsSliderProps } from "@components/blocks/News/components/types/types.ts";
 
-interface Product {
-    id: number;
-    title: string;
-    image: string;
-    price: string;
-    sizes: string[];
-}
-
-interface NewsSliderInterface {
-    sliderRef: RefObject<HTMLDivElement | null>;
-    products: Product[];
-}
-
-const NewsSlider = ({sliderRef, products}: NewsSliderInterface) => {
-    return (
-        <div className={styles.list} ref={sliderRef}>
-            {products.map((card) => (
-                <CardSlider
-                    key={card.id}
-                    image={card.image}
-                    title={card.title}
-                    sizes={card.sizes}
-                    price={card.price}
-                />
-            ))}
-        </div>
-    );
+const NewsSlider = ({ sliderRef, products }: NewsSliderProps) => {
+  return (
+    <div ref={sliderRef} className={styles.list}>
+      {products.map((product) => (
+        <ProductCard
+          key={product.id}
+          image={product.image}
+          title={product.title}
+          sizes={product.sizes}
+          price={product.price}
+        />
+      ))}
+    </div>
+  );
 };
 
 export default NewsSlider;

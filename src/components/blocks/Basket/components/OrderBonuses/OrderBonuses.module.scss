@@ -24,7 +24,7 @@
     @include font(14, $fw-light);
 
     &::after {
-      content: '';
+      content: "";
       width: rem(9);
       height: rem(9);
       border-right: rem(1) solid $black;
@@ -48,9 +48,10 @@
     transform: translateY(rem(-8));
     pointer-events: none;
 
-    transition: max-height 0.3s ease-in-out,
-    opacity 0.3s ease-in-out,
-    transform 0.3s ease-in-out;
+    transition:
+      max-height 0.3s ease-in-out,
+      opacity 0.3s ease-in-out,
+      transform 0.3s ease-in-out;
 
     &_active {
       max-height: rem(70);
@@ -97,7 +98,7 @@
       transition: background-color 0.2s;
 
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 50%;
         left: rem(28);

@@ -1,5 +1,5 @@
 //styles
-import styles from './CatalogProducts.module.scss'
+import styles from "./CatalogProducts.module.scss";
 //layouts
 import SectionLayout from "@layouts/SectionLayout/SectionLayout.tsx";
 import MainLayoutContainer from "@layouts/MainLayoutContainer/MainLayoutContainer.tsx";
@@ -9,19 +9,19 @@ import CategoryPagination from "@components/blocks/CatalogProducts/components/Ca
 import ListProducts from "@components/blocks/CatalogProducts/components/ListProducts/ListProducts.tsx";
 
 const CatalogCategoryPage = () => {
-    return (
-        <SectionLayout>
-            <MainLayoutContainer className={styles.category}>
-                <div className={styles.category__content}>
-                    <CategoryNavigation/>
-                    <ListProducts/>
-                </div>
-                <div className={styles.category__footer}>
-                    <CategoryPagination/>
-                </div>
-            </MainLayoutContainer>
-        </SectionLayout>
-    );
+  return (
+    <SectionLayout>
+      <MainLayoutContainer className={styles.category}>
+        <div className={styles.category__content}>
+          <CategoryNavigation />
+          <ListProducts />
+        </div>
+        <div className={styles.category__footer}>
+          <CategoryPagination />
+        </div>
+      </MainLayoutContainer>
+    </SectionLayout>
+  );
 };
 
-export default CatalogCategoryPage
+export default CatalogCategoryPage;

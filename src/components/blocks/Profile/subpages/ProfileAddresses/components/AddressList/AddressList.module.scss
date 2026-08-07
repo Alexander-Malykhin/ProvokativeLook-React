@@ -1,0 +1,38 @@
+.list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: rem(16);
+    padding: rem(16) 0;
+    border-bottom: rem(1) solid $border-light;
+
+    &:first-child {
+      border-top: rem(1) solid $border-light;
+    }
+  }
+
+  &__button {
+    width: rem(10);
+    height: rem(10);
+    padding: 0;
+    flex-shrink: 0;
+    border: rem(1) solid $black;
+    border-radius: 50%;
+    background-color: transparent;
+    cursor: pointer;
+
+    &_active {
+      background-color: $black;
+    }
+  }
+
+  &__description {
+    @include font(16, $fw-light);
+    min-width: 0;
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+}

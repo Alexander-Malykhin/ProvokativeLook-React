@@ -1,26 +1,26 @@
-import {createSlice} from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 interface toggleSearchState {
-    active: boolean;
+  active: boolean;
 }
 
 const initialState: toggleSearchState = {
-    active: false,
+  active: false,
 };
 
 export const toggleSearchSlice = createSlice({
-    name: "toggleSearch",
-    initialState,
-    reducers: {
-        add: (state) => {
-            state.active = true;
-        },
-        close: (state) => {
-            state.active = false;
-        },
+  name: "toggleSearch",
+  initialState,
+  reducers: {
+    add: (state) => {
+      state.active = true;
     },
+    close: (state) => {
+      state.active = false;
+    },
+  },
 });
 
-export const {add, close} = toggleSearchSlice.actions;
+export const { add, close } = toggleSearchSlice.actions;
 
 export default toggleSearchSlice.reducer;

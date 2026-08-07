@@ -8,17 +8,17 @@ import type { FooterBottomProps } from "./types";
 import styles from "./FooterBottom.module.scss";
 
 const FooterBottom = ({ requisites, design }: FooterBottomProps) => {
-    return (
-        <div className={styles.bottom}>
-            <div className={styles.bottom__legal}>
-                <Text>{convertAliasTitle(requisites.replace(/\r?\n/g, "#br#"))}</Text>
-            </div>
+  return (
+    <div className={styles.bottom}>
+      <div className={styles.bottom__legal}>
+        <Text>{convertAliasTitle(requisites.replace(/\r?\n/g, "#br#"))}</Text>
+      </div>
 
-            <div className={styles.bottom__design}>
-                <Text>Дизайн сайта: {design}</Text>
-            </div>
-        </div>
-    );
+      <div className={styles.bottom__design}>
+        <Text>Дизайн сайта: {design}</Text>
+      </div>
+    </div>
+  );
 };
 
 export default FooterBottom;

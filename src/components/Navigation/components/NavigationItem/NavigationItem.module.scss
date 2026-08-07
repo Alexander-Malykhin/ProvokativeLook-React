@@ -1,11 +1,8 @@
 .item {
   @include font(14, $fw-light);
+  white-space: nowrap;
 
-  &__color {
-    @include color-modifiers(color);
-  }
-
-  &:last-child {
+  &__sale {
     color: $red;
   }
 

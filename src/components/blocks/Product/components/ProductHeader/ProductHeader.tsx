@@ -1,17 +1,20 @@
-import styles from './ProductHeader.module.scss'
+import styles from "./ProductHeader.module.scss";
 
-const ProductHeader = () => {
-    return (
-        <div className={styles.header}>
-            <h1 className={styles.header__title}>
-                Кардиган
-            </h1>
+interface ProductHeaderProps {
+  id: number;
+  title: string;
+}
 
-            <span className={styles.header__articul}>
-                Арт. 00000000
-            </span>
-        </div>
-    );
+const ProductHeader = ({ id, title }: ProductHeaderProps) => {
+  return (
+    <div className={styles.header}>
+      <h1 className={styles.header__title}>{title}</h1>
+
+      <span className={styles.header__articul}>
+        Арт. {String(id).padStart(8, "0")}
+      </span>
+    </div>
+  );
 };
 
 export default ProductHeader;

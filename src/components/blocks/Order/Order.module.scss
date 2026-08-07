@@ -35,6 +35,19 @@
     gap: rem(18);
   }
 
+  &__error,
+  &__success {
+    @include font(12, $fw-light);
+  }
+
+  &__error {
+    color: $red;
+  }
+
+  &__success {
+    color: $green;
+  }
+
   @media (max-width: rem($tablet)) {
     grid-template-columns: 1fr;
   }

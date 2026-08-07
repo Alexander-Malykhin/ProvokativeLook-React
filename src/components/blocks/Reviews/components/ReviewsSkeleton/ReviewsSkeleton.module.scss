@@ -29,15 +29,15 @@
     border-radius: rem(6);
 
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       inset: 0;
       transform: translateX(-100%);
       background: linear-gradient(
-                      90deg,
-                      transparent,
-                      rgba($white, 0.55),
-                      transparent
+        90deg,
+        transparent,
+        rgba($white, 0.55),
+        transparent
       );
       animation: skeleton-loading 1.4s infinite;
     }

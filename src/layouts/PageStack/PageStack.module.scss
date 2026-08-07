@@ -1,0 +1,9 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: rem(128);
+
+  @media (max-width: rem($mobile)) {
+    gap: rem(56);
+  }
+}
