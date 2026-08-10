@@ -11,4 +11,5 @@ export interface MainButtonInterface {
   color?: Colors;
   mode?: ButtonMode;
   type?: ButtonType;
+  disabled?: boolean;
 }

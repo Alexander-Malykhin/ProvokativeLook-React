@@ -70,3 +70,10 @@
     }
   }
 }
+
+.sizes__item_disabled {
+  opacity: 0.32;
+  text-decoration: line-through;
+  cursor: not-allowed;
+  background: rgba($black, 0.03);
+}

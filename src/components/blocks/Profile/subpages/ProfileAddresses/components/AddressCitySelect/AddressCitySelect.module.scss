@@ -1,27 +1,27 @@
 .city {
   position: relative;
-  z-index: 70;
-
+  z-index: 90;
   width: fit-content;
 
   &__header {
     display: flex;
     align-items: center;
     gap: rem(10);
-
     padding: 0;
-
     border: 0;
-    background-color: transparent;
-
+    background: transparent;
     cursor: pointer;
   }
 
+  &__value,
+  &__input,
+  &__item,
+  &__suggestion,
+  &__hint,
+  &__back { @include font(12, $fw-light); }
+
   &__value {
-    @include font(12, $fw-light);
-
     color: $black;
-
     text-decoration: underline;
     text-underline-offset: rem(3);
   }
@@ -29,58 +29,90 @@
   &__arrow {
     width: rem(7);
     height: rem(7);
-
     border-right: rem(1) solid $black;
     border-bottom: rem(1) solid $black;
-
     transform: translateY(rem(-2)) rotate(45deg);
-
-    transition: transform 0.2s ease;
-
-    &_open {
-      transform: translateY(rem(2)) rotate(225deg);
-    }
+    transition: transform .2s ease;
+    &_open { transform: translateY(rem(2)) rotate(225deg); }
   }
 
-  &__list {
+  &__list,
+  &__customList {
     position: absolute;
     top: calc(100% + #{rem(10)});
     left: 0;
-    z-index: 80;
-
+    z-index: 100;
     display: flex;
     flex-direction: column;
-
-    width: rem(220);
-    max-height: rem(260);
-
+    width: rem(250);
+    max-height: rem(300);
     overflow-y: auto;
-
-    background-color: $white;
-
-    box-shadow: 0 rem(8) rem(24) rgba($black, 0.12);
+    background: $white;
+    box-shadow: 0 rem(10) rem(28) rgba($black, .14);
   }
 
-  &__item {
+  &__item,
+  &__suggestion {
     width: 100%;
-
     padding: rem(11) rem(12);
-
     border: 0;
-
-    background-color: transparent;
-
-    @include font(13, $fw-light);
-
+    border-bottom: rem(1) solid rgba($black, .06);
+    background: transparent;
     text-align: left;
-
     cursor: pointer;
+    transition: background-color .18s ease;
+    &:hover, &_active { background: $gray; }
+    &_other { color: rgba($black, .72); }
+    &_reset { color: rgba($black, .46); }
+  }
 
-    transition: background-color 0.2s ease;
+  &__suggestion {
+    span { display: block; }
+    small { display: block; margin-top: rem(3); @include font(10, $fw-extra-light); color: rgba($black, .45); }
+  }
 
-    &:hover,
-    &_active {
-      background-color: $gray;
+  &__customWrap { position: relative; width: rem(270); }
+  &__customInputWrap { position: relative; border-bottom: rem(1) solid rgba($black, .25); }
+  &__input {
+    width: 100%;
+    height: rem(34);
+    padding: 0 rem(30) 0 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    &::placeholder { color: rgba($black, .38); }
+  }
+
+  &__clear {
+    position: absolute;
+    top: 50%; right: 0;
+    width: rem(24); height: rem(24);
+    border: 0; background: transparent;
+    transform: translateY(-50%);
+    cursor: pointer;
+    &::before, &::after {
+      position: absolute; top: 50%; left: 50%;
+      width: rem(12); height: rem(1);
+      background: rgba($black, .6); content: "";
     }
+    &::before { transform: translate(-50%, -50%) rotate(45deg); }
+    &::after { transform: translate(-50%, -50%) rotate(-45deg); }
+  }
+
+  &__customList { top: rem(40); width: 100%; }
+  &__hint { padding: rem(12); color: rgba($black, .45); }
+  &__back {
+    margin-top: rem(8);
+    padding: 0;
+    border: 0;
+    border-bottom: rem(1) solid rgba($black, .4);
+    background: transparent;
+    color: rgba($black, .58);
+    cursor: pointer;
+  }
+
+  @media (max-width: rem($mobile)) {
+    width: 100%;
+    &__customWrap, &__list { width: 100%; }
   }
 }

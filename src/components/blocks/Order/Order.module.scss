@@ -112,3 +112,57 @@
     }
   }
 }
+
+.order {
+  &__subTitle {
+    @include font(16, $fw-medium);
+    padding: rem(14) rem(16) rem(8);
+  }
+
+  &__addresses,
+  &__deliveryMethods {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__addressChoice {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: rem(8);
+    @include font(15, $fw-light);
+  }
+
+  &__defaultBadge {
+    @include font(11, $fw-light);
+    padding: rem(3) rem(7);
+    border-radius: rem(20);
+    background: rgba($black, 0.06);
+  }
+
+  &__stockWarning {
+    padding: rem(16);
+    border: rem(1) solid rgba($red, 0.45);
+    border-radius: rem(10);
+    background: rgba($red, 0.04);
+    color: $red;
+    @include font(14, $fw-light);
+  }
+
+  &__loading,
+  &__empty {
+    padding: rem(80) 0;
+    @include font(18, $fw-light);
+  }
+
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: rem(18);
+
+    button {
+      text-decoration: underline;
+    }
+  }
+}

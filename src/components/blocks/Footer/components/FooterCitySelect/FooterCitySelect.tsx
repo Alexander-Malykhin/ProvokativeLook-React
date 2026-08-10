@@ -1,19 +1,18 @@
-import { useState } from "react";
-//layouts
 import MainLayoutContainer from "@layouts/MainLayoutContainer/MainLayoutContainer.tsx";
-//components
 import CitySelect from "@components/CitySelect/CitySelect.tsx";
-//styles
+import { useDeliveryCity, DEFAULT_DELIVERY_CITY } from "@/hooks/useDeliveryCity";
 import styles from "./FooterCitySelect.module.scss";
 
 const FooterCitySelect = () => {
-  const [city, setCity] = useState("Ростов-на-Дону");
+  const { city, setCity } = useDeliveryCity();
 
   return (
     <MainLayoutContainer>
       <CitySelect
         value={city}
         onChange={setCity}
+        defaultCity={DEFAULT_DELIVERY_CITY}
+        allowReset
         uppercase
         className={styles.select}
       />

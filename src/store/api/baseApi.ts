@@ -42,6 +42,15 @@ const scopedBaseQuery: BaseQueryFn<
 export const baseApi = createApi({
   reducerPath: "api",
   baseQuery: scopedBaseQuery,
-  tagTypes: ["User", "Addresses"],
+  tagTypes: [
+    "User",
+    "Addresses",
+    "Cart",
+    "Favorites",
+    "RecentlyViewed",
+    "Subscription",
+    "Notifications",
+    "Orders",
+  ],
   endpoints: () => ({}),
 });

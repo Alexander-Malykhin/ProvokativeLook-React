@@ -12,6 +12,7 @@ export interface ProfileAddress {
   region: string;
   province: string;
   country: string;
+  countryId: number;
   countryCode: string;
   postalCode: string;
   entrance: string;

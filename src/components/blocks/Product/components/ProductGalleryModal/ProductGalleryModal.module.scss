@@ -1,0 +1,220 @@
+.gallery {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+
+  display: grid;
+  place-items: center;
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+    padding: 0;
+
+    background: rgba($black, 0.48);
+    border: 0;
+  }
+
+  &__content {
+    position: relative;
+    z-index: 1;
+
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: rem(14);
+
+    width: min(rem(1160), calc(100vw - #{rem(48)}));
+    height: min(rem(820), calc(100vh - #{rem(48)}));
+    padding: rem(28) rem(34) rem(18);
+
+    overflow: hidden;
+    background: $white;
+  }
+
+  &__close {
+    position: absolute;
+    top: rem(20);
+    right: rem(20);
+    z-index: 6;
+
+    display: grid;
+    place-items: center;
+
+    width: rem(34);
+    height: rem(34);
+    padding: 0;
+
+    @include font(28, $fw-extra-light);
+    line-height: 1;
+
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+
+  &__stage {
+    position: relative;
+
+    display: grid;
+    grid-template-columns: rem(64) minmax(0, 1fr) rem(64);
+    align-items: center;
+
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  &__main {
+    grid-column: 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  &__mainImage {
+    display: block;
+
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+
+    object-fit: contain;
+    object-position: center;
+  }
+
+  &__arrow {
+    display: grid;
+    place-items: center;
+
+    width: rem(44);
+    height: rem(44);
+    padding: 0;
+
+    @include font(20, $fw-light);
+
+    color: rgba($black, 0.7);
+    background: rgba($gray, 0.2);
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+
+    &_left {
+      grid-column: 1;
+      justify-self: start;
+    }
+
+    &_right {
+      grid-column: 3;
+      justify-self: end;
+    }
+  }
+
+  &__thumbs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: rem(8);
+
+    min-width: 0;
+    min-height: rem(72);
+    padding: 0 rem(8);
+
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__thumb {
+    flex: 0 0 rem(64);
+
+    width: rem(64);
+    height: rem(82);
+    padding: rem(2);
+
+    background: transparent;
+    border: rem(1) solid transparent;
+    cursor: pointer;
+
+    &_active {
+      border-color: $black;
+    }
+  }
+
+  &__thumbImage {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  @media (max-width: rem($tablet)) {
+    place-items: stretch;
+
+    &__content {
+      width: 100%;
+      height: 100%;
+      padding: rem(54) rem(10) rem(10);
+      gap: rem(10);
+    }
+
+    &__close {
+      top: rem(10);
+      right: rem(10);
+    }
+
+    &__stage {
+      grid-template-columns: rem(38) minmax(0, 1fr) rem(38);
+    }
+
+    &__arrow {
+      width: rem(34);
+      height: rem(34);
+      background: rgba($white, 0.84);
+      box-shadow: 0 0 rem(8) rgba($black, 0.08);
+    }
+
+    &__thumbs {
+      justify-content: flex-start;
+      min-height: rem(58);
+      padding: 0;
+    }
+
+    &__thumb {
+      flex-basis: rem(52);
+      width: rem(52);
+      height: rem(66);
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+    &__content {
+      padding-right: rem(6);
+      padding-left: rem(6);
+    }
+
+    &__stage {
+      grid-template-columns: rem(32) minmax(0, 1fr) rem(32);
+    }
+
+    &__arrow {
+      width: rem(30);
+      height: rem(30);
+    }
+  }
+}

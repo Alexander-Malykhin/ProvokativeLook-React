@@ -1,34 +1,66 @@
-import { useState } from "react";
-//styles
 import styles from "./BasketItem.module.scss";
-//components
 import BasketActions from "@components/blocks/Basket/components/BasketItem/components/BasketActions/BasketActions.tsx";
 import BasketCounter from "@components/blocks/Basket/components/BasketCounter/BasketCounter.tsx";
-//UI
 import Image from "@UI/media/Image/Image";
 import InputCheck from "@components/blocks/Basket/UI/InputCheck/InputCheck.tsx";
-
-interface BasketProduct {
-  id: number;
-  image: string;
-  title: string;
-  article: string;
-  size: string;
-  color: string;
-  count: number;
-  price: string;
-}
+import type { CartItem } from "@store/api/cart/types";
+import { useAddFavoriteMutation, useGetFavoritesQuery, useRemoveFavoriteMutation } from "@store/api/favorites/favoritesApi";
 
 interface BasketItemProps {
-  item: BasketProduct;
+  item: CartItem;
   checked: boolean;
   onCheckedChange: (checked: boolean) => void;
+  onQuantityChange: (quantity: number) => void;
+  onDelete: () => void;
+  isUpdating?: boolean;
 }
 
-const BasketItem = ({ item, checked, onCheckedChange }: BasketItemProps) => {
-  const [count, setCount] = useState(item.count);
+const formatMoney = (value: number, currency: string) => {
+  const formatted = new Intl.NumberFormat("ru-RU", {
+    maximumFractionDigits: 0,
+  }).format(value);
 
-  const description = `Арт. ${item.article} / Размер: ${item.size} / Цвет: ${item.color}`;
+  return currency === "RUB" ? `${formatted} ₽` : `${formatted} ${currency}`;
+};
+
+const BasketItem = ({
+  item,
+  checked,
+  onCheckedChange,
+  onQuantityChange,
+  onDelete,
+  isUpdating = false,
+}: BasketItemProps) => {
+  const count = Math.max(1, Math.round(item.quantity));
+  const { data: favoritesData } = useGetFavoritesQuery();
+  const [addFavorite, { isLoading: isAddingFavorite }] = useAddFavoriteMutation();
+  const [removeFavorite, { isLoading: isRemovingFavorite }] = useRemoveFavoriteMutation();
+  const isFavorite = favoritesData?.items.some((favorite) => favorite.id === item.productId) ?? false;
+  const favoriteBusy = isAddingFavorite || isRemovingFavorite;
+
+  const handleFavorite = async () => {
+    if (favoriteBusy) return;
+    if (isFavorite) {
+      await removeFavorite({ productId: item.productId });
+    } else {
+      await addFavorite({ productId: item.productId });
+    }
+  };
+  const descriptionParts = [
+    `Арт. ${item.article}`,
+    item.size ? `Размер: ${item.size}` : null,
+    item.color ? `Цвет: ${item.color}` : null,
+  ].filter(Boolean);
+
+  const handleDecrease = () => {
+    if (isUpdating || count <= 1) return;
+    onQuantityChange(count - 1);
+  };
+
+  const handleIncrease = () => {
+    if (isUpdating || count >= item.availableQuantity) return;
+    onQuantityChange(count + 1);
+  };
 
   return (
     <article className={styles.item}>
@@ -39,36 +71,46 @@ const BasketItem = ({ item, checked, onCheckedChange }: BasketItemProps) => {
 
       <div className={styles.item__body}>
         <div className={styles.item__top}>
-          <Image
-            src={item.image}
-            alt="image-icon"
-            className={styles.item__image}
-          />
+          {item.image ? (
+            <Image
+              src={item.image}
+              alt={item.name}
+              className={styles.item__image}
+            />
+          ) : (
+            <div className={`${styles.item__image} ${styles.item__image_empty}`} />
+          )}
 
           <div className={styles.item__content}>
             <div className={styles.item__main}>
               <div className={styles.item__header}>
-                <h2 className={styles.item__header_title}>{item.title}</h2>
+                <h2 className={styles.item__header_title}>{item.name}</h2>
 
                 <div className={styles.item__header_buttons}>
-                  <BasketActions />
+                  <BasketActions onDelete={onDelete} onFavorite={handleFavorite} isFavorite={isFavorite} disabled={isUpdating || favoriteBusy} />
                 </div>
               </div>
 
               <div className={styles.item__body}>
-                <p className={styles.item__body_description}>{description}</p>
+                <p className={styles.item__body_description}>
+                  {descriptionParts.join(" / ")}
+                </p>
               </div>
 
+              {!item.isAvailable && (
+                <p className={styles.item__stockError}>
+                  {item.availabilityMessage ?? "Товар недоступен"}
+                </p>
+              )}
+
               <div className={styles.item__mobile_body}>
-                <p className={styles.item__mobile_body_description}>
-                  Арт. {item.article}
-                </p>
-                <p className={styles.item__mobile_body_description}>
-                  Размер: {item.size}
-                </p>
-                <p className={styles.item__mobile_body_description}>
-                  Цвет: {item.color}
-                </p>
+                <p className={styles.item__mobile_body_description}>Арт. {item.article}</p>
+                {item.size && (
+                  <p className={styles.item__mobile_body_description}>Размер: {item.size}</p>
+                )}
+                {item.color && (
+                  <p className={styles.item__mobile_body_description}>Цвет: {item.color}</p>
+                )}
               </div>
             </div>
 
@@ -76,12 +118,14 @@ const BasketItem = ({ item, checked, onCheckedChange }: BasketItemProps) => {
               <div className={styles.item__footer_counter}>
                 <BasketCounter
                   count={count}
-                  onDecrease={() => setCount((prev) => Math.max(1, prev - 1))}
-                  onIncrease={() => setCount((prev) => prev + 1)}
+                  onDecrease={handleDecrease}
+                  onIncrease={handleIncrease}
                 />
               </div>
 
-              <span className={styles.item__footer_price}>{item.price}</span>
+              <span className={styles.item__footer_price}>
+                {formatMoney(item.sum, item.currency)}
+              </span>
             </div>
           </div>
         </div>
@@ -89,11 +133,11 @@ const BasketItem = ({ item, checked, onCheckedChange }: BasketItemProps) => {
         <div className={styles.item__bottom}>
           <BasketCounter
             count={count}
-            onDecrease={() => setCount((prev) => Math.max(1, prev - 1))}
-            onIncrease={() => setCount((prev) => prev + 1)}
+            onDecrease={handleDecrease}
+            onIncrease={handleIncrease}
           />
 
-          <BasketActions />
+          <BasketActions onDelete={onDelete} onFavorite={handleFavorite} isFavorite={isFavorite} disabled={isUpdating || favoriteBusy} />
         </div>
       </div>
     </article>

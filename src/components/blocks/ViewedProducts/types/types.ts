@@ -6,3 +6,8 @@ export interface ViewedSliderProps {
   products: ProductListItem[];
   visibleProducts: ProductListItem[];
 }
+
+export interface ViewedColumnProps {
+  onPrev: () => void;
+  onNext: () => void;
+}

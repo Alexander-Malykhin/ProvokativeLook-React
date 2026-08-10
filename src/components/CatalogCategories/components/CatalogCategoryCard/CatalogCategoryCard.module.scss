@@ -21,6 +21,7 @@
 
   &__information_title {
     line-height: 1;
+    @include font(34, $fw-extra-light);
   }
 
   &__information_button {
@@ -213,6 +214,10 @@
       max-width: 70%;
     }
 
+    &__information_title {
+      @include font(24, $fw-extra-light);
+    }
+
     &_1 &__imageBox {
       width: rem(120);
     }
@@ -282,6 +287,78 @@
   }
 
   @media (max-width: rem($mobile)) {
+    &__information_title {
+      @include font(14, $fw-extra-light);
+    }
+
+    &_1 &__imageBox {
+      width: rem(82);
+    }
+
+    &_2 &__imageBox {
+      width: rem(130);
+      transform: translate(0, rem(60));
+    }
+
+    &_3 &__imageBox {
+      width: rem(86);
+      transform: translate(rem(-6), 0);
+    }
+
+    &_4 &__imageBox {
+      width: rem(155);
+      transform: translate(rem(48), rem(8));
+    }
+
+    &_5 &__imageBox {
+      width: rem(130);
+      transform: translate(rem(-5), rem(38));
+    }
+
+    &_6 &__imageBox {
+      width: rem(118);
+    }
+
+    &_7 &__imageBox {
+      width: rem(100);
+    }
+
+    &_8 &__imageBox {
+      width: rem(100);
+      transform: translate(rem(-14), rem(55));
+    }
+
+    &_9 &__imageBox {
+      width: rem(140);
+    }
+
+    &_10 &__imageBox {
+      width: rem(115);
+      transform: translate(0, rem(60));
+    }
+
+    &_11 &__imageBox {
+      width: rem(115);
+      transform: translate(rem(14), rem(30));
+    }
+
+    &_12 &__imageBox {
+      width: rem(86);
+      transform: translate(rem(-12), rem(-12));
+    }
+
+    &_13 &__imageBox {
+      width: rem(115);
+      transform: translate(0, rem(100));
+    }
+
+    &_14 &__imageBox {
+      width: rem(180);
+      transform: translate(rem(80), rem(60));
+    }
+  }
+
+  @media (max-width: rem($mobile-x)) {
     padding: rem(12) rem(8);
 
     &__information_title {

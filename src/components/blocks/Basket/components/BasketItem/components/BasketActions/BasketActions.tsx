@@ -1,23 +1,43 @@
-//styles
 import styles from "./BasketActions.module.scss";
-//images
 import DeleteImage from "@assets/basket/delete.svg";
 import FavoritesImage from "@assets/basket/favorites.svg";
-//UI
 import Image from "@UI/media/Image/Image";
 
-const BasketActions = () => {
-  return (
-    <div className={styles.actions}>
-      <button className={styles.actions__button}>
-        <Image src={FavoritesImage} alt="favorites-icon" />
-      </button>
+interface BasketActionsProps {
+  onDelete?: () => void;
+  onFavorite?: () => void;
+  isFavorite?: boolean;
+  disabled?: boolean;
+}
 
-      <button className={styles.actions__button}>
-        <Image src={DeleteImage} alt="delete-icon" />
-      </button>
-    </div>
-  );
-};
+const BasketActions = ({
+  onDelete,
+  onFavorite,
+  isFavorite = false,
+  disabled = false,
+}: BasketActionsProps) => (
+  <div className={styles.actions}>
+    <button
+      type="button"
+      className={`${styles.actions__button} ${isFavorite ? styles.actions__button_active : ""}`}
+      onClick={onFavorite}
+      disabled={disabled}
+      aria-label={isFavorite ? "Убрать из избранного" : "Добавить в избранное"}
+      title={isFavorite ? "Убрать из избранного" : "Добавить в избранное"}
+    >
+      <Image src={FavoritesImage} alt="" />
+    </button>
+
+    <button
+      type="button"
+      className={styles.actions__button}
+      onClick={onDelete}
+      disabled={disabled}
+      aria-label="Удалить товар"
+    >
+      <Image src={DeleteImage} alt="" />
+    </button>
+  </div>
+);
 
 export default BasketActions;

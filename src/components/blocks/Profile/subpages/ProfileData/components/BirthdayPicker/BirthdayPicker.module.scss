@@ -1,0 +1,287 @@
+.picker {
+  position: relative;
+  width: 100%;
+
+  &__control {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: rem(26);
+    padding: 0;
+    text-align: left;
+    background: transparent;
+    border: 0;
+    color: $black;
+    @include font(16, $fw-light);
+    cursor: pointer;
+  }
+
+  &__icon {
+    position: relative;
+    width: rem(18);
+    height: rem(18);
+    flex-shrink: 0;
+    border: rem(1) solid rgba($black, 0.35);
+    border-radius: rem(5);
+
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      background: rgba($black, 0.45);
+    }
+
+    &::before {
+      top: rem(5);
+      left: rem(3);
+      width: rem(10);
+      height: rem(1);
+    }
+
+    &::after {
+      top: rem(3);
+      left: rem(5);
+      width: rem(1);
+      height: rem(3);
+      box-shadow: rem(6) 0 0 rgba($black, 0.45);
+    }
+  }
+
+  &__calendar {
+    position: absolute;
+    top: calc(100% + #{rem(10)});
+    left: rem(-16);
+    z-index: 90;
+    width: min(rem(350), calc(100vw - #{rem(32)}));
+    padding: rem(18);
+    background: $white;
+    border: rem(1) solid rgba($black, 0.09);
+    border-radius: rem(16);
+    box-shadow: 0 rem(18) rem(52) rgba($black, 0.14);
+  }
+
+  &__header {
+    display: grid;
+    grid-template-columns: rem(34) minmax(0, 1fr) rem(34);
+    align-items: center;
+    gap: rem(9);
+    margin-bottom: rem(16);
+  }
+
+  &__selects {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) rem(92);
+    gap: rem(8);
+    min-width: 0;
+  }
+
+  &__selectWrap {
+    position: relative;
+    min-width: 0;
+  }
+
+  &__selectButton {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(12);
+    width: 100%;
+    height: rem(38);
+    padding: 0 rem(12);
+    border: rem(1) solid rgba($black, 0.1);
+    border-radius: rem(10);
+    background: $white;
+    color: $black;
+    @include font(13, $fw-light);
+    cursor: pointer;
+    transition: border-color .18s ease, box-shadow .18s ease;
+
+    &:hover,
+    &_open {
+      border-color: rgba($black, 0.28);
+      box-shadow: 0 rem(4) rem(16) rgba($black, 0.06);
+    }
+  }
+
+  &__selectChevron {
+    width: rem(7);
+    height: rem(7);
+    flex-shrink: 0;
+    border-right: rem(1) solid $black;
+    border-bottom: rem(1) solid $black;
+    transform: translateY(rem(-2)) rotate(45deg);
+    transition: transform .18s ease;
+  }
+
+  &__selectButton_open &__selectChevron {
+    transform: translateY(rem(2)) rotate(225deg);
+  }
+
+  &__selectMenu {
+    position: absolute;
+    top: calc(100% + #{rem(6)});
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    max-height: rem(230);
+    padding: rem(6);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    background: $white;
+    border: rem(1) solid rgba($black, 0.1);
+    border-radius: rem(12);
+    box-shadow: 0 rem(16) rem(40) rgba($black, 0.14);
+  }
+
+  &__selectOption {
+    flex-shrink: 0;
+    width: 100%;
+    padding: rem(9) rem(10);
+    border: 0;
+    border-radius: rem(8);
+    text-align: left;
+    color: $black;
+    background: transparent;
+    @include font(13, $fw-light);
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+      background: rgba($black, 0.045);
+    }
+
+    &_active {
+      color: $white;
+      background: $black;
+
+      &:hover:not(:disabled) {
+        background: $black;
+      }
+    }
+
+    &:disabled {
+      color: rgba($black, 0.22);
+      cursor: default;
+    }
+  }
+
+  &__arrow {
+    position: relative;
+    width: rem(34);
+    height: rem(34);
+    padding: 0;
+    border: rem(1) solid rgba($black, 0.08);
+    border-radius: 50%;
+    background: $white;
+    cursor: pointer;
+    transition: background-color .18s ease, border-color .18s ease;
+
+    &:hover {
+      background: rgba($black, 0.035);
+      border-color: rgba($black, 0.16);
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: rem(7);
+      height: rem(7);
+      border-left: rem(1) solid $black;
+      border-bottom: rem(1) solid $black;
+      transform: translate(-35%, -50%) rotate(45deg);
+    }
+
+    &_next::before {
+      transform: translate(-65%, -50%) rotate(225deg);
+    }
+  }
+
+  &__weekdays,
+  &__days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+
+  &__weekdays {
+    margin-bottom: rem(5);
+
+    span {
+      padding: rem(5) 0;
+      text-align: center;
+      color: rgba($black, 0.42);
+      @include font(11, $fw-light);
+    }
+  }
+
+  &__days {
+    gap: rem(4);
+  }
+
+  &__day {
+    aspect-ratio: 1;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: $black;
+    @include font(13, $fw-light);
+    cursor: pointer;
+    transition: background-color .16s ease, color .16s ease, transform .16s ease;
+
+    &:hover:not(:disabled) {
+      background: rgba($black, 0.055);
+      transform: scale(1.04);
+    }
+
+    &:disabled {
+      color: rgba($black, 0.18);
+      cursor: default;
+    }
+
+    &_active {
+      background: $black;
+      color: $white;
+    }
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: rem(12);
+    margin-top: rem(10);
+    border-top: rem(1) solid rgba($black, 0.08);
+
+    button {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      text-decoration: underline;
+      @include font(12, $fw-light);
+      cursor: pointer;
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+    &__calendar {
+      position: fixed;
+      left: rem(12);
+      right: rem(12);
+      bottom: rem(12);
+      top: auto;
+      width: auto;
+      padding: rem(18) rem(14);
+      border-radius: rem(18);
+      box-shadow: 0 rem(-8) rem(44) rgba($black, 0.18);
+    }
+
+    &__selectMenu {
+      max-height: rem(190);
+    }
+  }
+}

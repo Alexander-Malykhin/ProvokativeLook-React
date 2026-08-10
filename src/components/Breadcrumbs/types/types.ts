@@ -1,5 +1,6 @@
 export interface BreadcrumbsInterface {
   title?: string;
+  hideTitleOnMobile?: boolean;
 }
 
 export interface BreadcrumbItemInterface {

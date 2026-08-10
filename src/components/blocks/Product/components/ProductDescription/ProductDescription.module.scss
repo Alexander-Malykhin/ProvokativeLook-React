@@ -2,12 +2,15 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: rem(12);
+  gap: rem(8);
+
+  padding-top: rem(18);
 
   &__text {
     @include font(15, $fw-light);
+    line-height: 1.45;
 
-    max-height: rem(136);
+    max-height: rem(120);
     overflow: hidden;
 
     transition: max-height 0.35s ease;
@@ -19,16 +22,21 @@
 
   &__accent {
     @include font(15, $fw-light);
-    color: rgba($black, 0.6);
+    color: rgba($black, 0.55);
   }
 
   &__button {
     position: relative;
     display: inline-block;
     width: max-content;
+    padding: 0;
 
-    @include font(15, $fw-light);
+    @include font(14, $fw-light);
     color: $black;
+
+    background: transparent;
+    border: 0;
+    cursor: pointer;
 
     &::after {
       content: "";
@@ -42,6 +50,23 @@
   }
 
   @media (max-width: rem($mobile)) {
-    display: none;
+    padding-top: rem(14);
+
+    &__text,
+    &__accent {
+      @include font(12, $fw-light);
+    }
+
+    &__text {
+      max-height: rem(92);
+
+      &_open {
+        max-height: rem(800);
+      }
+    }
+
+    &__button {
+      @include font(12, $fw-light);
+    }
   }
 }

@@ -10,10 +10,11 @@ import OrderStepContainer from "../OrderStepContainer/OrderStepContainer";
 interface PaymentStepProps {
   register: UseFormRegister<OrderFormValues>;
   errors: FieldErrors<OrderFormValues>;
-  isPrepared: boolean;
+  isSubmitting: boolean;
+  errorMessage?: string;
 }
 
-const PaymentStep = ({ register, errors, isPrepared }: PaymentStepProps) => (
+const PaymentStep = ({ register, errors, isSubmitting, errorMessage }: PaymentStepProps) => (
   <OrderStepContainer title="3. Оплата" mode="radio">
     <OrderFieldRadio
       name="payment"
@@ -22,25 +23,34 @@ const PaymentStep = ({ register, errors, isPrepared }: PaymentStepProps) => (
     >
       Оплата при получении. Картой или наличными
     </OrderFieldRadio>
-    <OrderFieldRadio name="payment" value="card" register={register("payment")}>
+    <OrderFieldRadio
+      name="payment"
+      value="card"
+      register={register("payment", { required: true })}
+    >
       Оплата банковской картой
     </OrderFieldRadio>
 
     <div className={styles.order__footer}>
-      <MainButton type="submit">Оформить заказ</MainButton>
+      <MainButton type="submit" disabled={isSubmitting}>
+        {isSubmitting ? "Оформляем..." : "Оформить заказ"}
+      </MainButton>
+
       <OrderCheckBox
         register={register("privacy", {
           required: "Подтвердите согласие на обработку данных",
         })}
       />
+
       {errors.privacy && (
         <p className={styles.order__error} role="alert">
           {errors.privacy.message}
         </p>
       )}
-      {isPrepared && (
-        <p className={styles.order__success} role="status">
-          Данные проверены. Можно подключать API создания заказа.
+
+      {errorMessage && (
+        <p className={styles.order__error} role="alert">
+          {errorMessage}
         </p>
       )}
     </div>

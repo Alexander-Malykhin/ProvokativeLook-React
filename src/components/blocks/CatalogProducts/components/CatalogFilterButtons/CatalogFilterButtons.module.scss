@@ -1,0 +1,139 @@
+.filter {
+  display: flex;
+  align-items: center;
+  gap: rem(40);
+
+  &__list {
+    display: flex;
+    align-items: center;
+    gap: rem(40);
+  }
+
+  &__button {
+    display: flex;
+    align-items: center;
+    gap: rem(8);
+
+    @include font(14, $fw-light);
+
+    color: $black;
+
+    img {
+      width: rem(10);
+      height: auto;
+    }
+  }
+
+  &__mobile {
+    display: none;
+  }
+
+  &__sort {
+    position: relative;
+
+    margin-left: auto;
+  }
+
+  &__sortTrigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(12);
+
+    min-width: rem(190);
+    padding: rem(8) 0;
+
+    @include font(14, $fw-light);
+
+    color: $black;
+    text-align: left;
+
+    background: transparent;
+    border: 0;
+    border-bottom: rem(1) solid $black;
+
+    cursor: pointer;
+  }
+
+  &__sortArrow {
+    display: inline-flex;
+
+    transition: transform 0.2s ease;
+
+    img {
+      width: rem(10);
+      height: auto;
+    }
+
+    &_open {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__sortMenu {
+    position: absolute;
+    top: calc(100% + #{rem(6)});
+    right: 0;
+    z-index: 20;
+
+    display: flex;
+    flex-direction: column;
+
+    width: rem(220);
+    padding: rem(6);
+
+    background: $white;
+    border: rem(1) solid rgba($black, 0.12);
+    box-shadow: 0 rem(8) rem(24) rgba($black, 0.08);
+  }
+
+  &__sortOption {
+    padding: rem(10) rem(12);
+
+    @include font(13, $fw-light);
+
+    color: $black;
+    text-align: left;
+
+    background: transparent;
+    border: 0;
+
+    cursor: pointer;
+
+    &:hover,
+    &_active {
+      background: rgba($black, 0.06);
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+    justify-content: space-between;
+    gap: rem(12);
+
+    &__list {
+      display: none;
+    }
+
+    &__button {
+      @include font(10, $fw-light);
+    }
+
+    &__mobile {
+      display: flex;
+    }
+
+    &__sortTrigger {
+      min-width: rem(145);
+
+      @include font(10, $fw-light);
+    }
+
+    &__sortMenu {
+      width: rem(175);
+    }
+
+    &__sortOption {
+      @include font(10, $fw-light);
+    }
+  }
+}

@@ -10,6 +10,7 @@ const NewsSlider = ({ sliderRef, products }: NewsSliderProps) => {
     <div ref={sliderRef} className={styles.list}>
       {products.map((product) => (
         <ProductCard
+          id={product.id}
           key={product.id}
           image={product.image}
           title={product.title}

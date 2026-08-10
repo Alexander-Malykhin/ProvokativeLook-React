@@ -1,16 +1,15 @@
-//styles
 import styles from "./OrderSummary.module.scss";
-//components
 import OrderForm from "@components/blocks/Basket/components/OrderForm/OrderForm.tsx";
-import OrderBonuses from "@components/blocks/Basket/components/OrderBonuses/OrderBonuses.tsx";
+import type { Cart } from "@store/api/cart/types";
 
-const OrderSummary = () => {
-  return (
-    <div className={styles.order}>
-      <OrderForm />
-      <OrderBonuses />
-    </div>
-  );
-};
+interface OrderSummaryProps {
+  cart?: Cart;
+}
+
+const OrderSummary = ({ cart }: OrderSummaryProps) => (
+  <div className={styles.order}>
+    <OrderForm cart={cart} />
+  </div>
+);
 
 export default OrderSummary;

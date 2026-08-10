@@ -20,3 +20,34 @@
     border-bottom: rem(1) solid currentColor;
   }
 }
+
+.content {
+  &__skeleton {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__skeletonItem {
+    height: rem(160);
+    border-top: rem(1) solid rgba($black, 0.08);
+    background: linear-gradient(90deg, rgba($gray, 0.2), rgba($gray, 0.45), rgba($gray, 0.2));
+    background-size: 200% 100%;
+    animation: orderSkeleton 1.2s linear infinite;
+  }
+
+  &__error {
+    display: flex;
+    align-items: center;
+    gap: rem(14);
+    @include font(14, $fw-light);
+
+    button {
+      text-decoration: underline;
+    }
+  }
+}
+
+@keyframes orderSkeleton {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}

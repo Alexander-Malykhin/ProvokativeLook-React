@@ -1,50 +1,54 @@
-import { useState } from "react";
-// styles
+import { useParams } from "react-router-dom";
 import styles from "./ViewedProducts.module.scss";
-// layouts
 import SectionLayout from "@layouts/SectionLayout/SectionLayout";
 import MainLayoutContainer from "@layouts/MainLayoutContainer/MainLayoutContainer";
-// components
 import ViewedSlider from "./components/ViewedSlider/ViewedSlider";
-import CarouselHeader from "@components/Carousel/CarouselHeader";
-// UI
-import MainButton from "@UI/buttons/MainButton/MainButton";
-// api
-import { products } from "@api/static/products";
+import ViewedColumn from "./components/ViewedColumn/ViewedColumn";
 import { useCarousel } from "@hooks/useCarousel";
+import { useGetRecentlyViewedQuery } from "@store/api/recentlyViewed/recentlyViewedApi";
+import { catalogProductToListItem } from "@store/api/catalog/format";
 
 const ViewedProducts = () => {
-  const [visibleCount, setVisibleCount] = useState(4);
+  const { id } = useParams<{ id: string }>();
+  const currentProductId = Number(id);
+
+  const { data, isLoading, isFetching } = useGetRecentlyViewedQuery({
+    limit: 12,
+    excludeId:
+      Number.isInteger(currentProductId) && currentProductId > 0
+        ? currentProductId
+        : undefined,
+  });
+
+  const products = (data?.items ?? []).map(catalogProductToListItem);
   const carousel = useCarousel({ itemCount: products.length });
 
-  const visibleProducts = products.slice(0, visibleCount);
-  const hasMore = visibleCount < products.length;
+  if (isLoading) {
+    return (
+      <SectionLayout>
+        <MainLayoutContainer className={styles.view}>
+          <div className={styles.columnSkeleton} />
+          <div className={styles.listSkeleton}>
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div key={index} className={styles.cardSkeleton} />
+            ))}
+          </div>
+        </MainLayoutContainer>
+      </SectionLayout>
+    );
+  }
 
-  const handleShowMore = () => {
-    setVisibleCount((previousCount) => previousCount + 4);
-  };
+  if (products.length === 0) return null;
 
   return (
     <SectionLayout>
       <MainLayoutContainer className={styles.view}>
-        <CarouselHeader
-          title="Вы смотрели"
-          onPrevious={carousel.showPrevious}
-          onNext={carousel.showNext}
-          hideControlsAt="desktop"
-        />
+        <ViewedColumn onPrev={carousel.showPrevious} onNext={carousel.showNext} />
 
-        <ViewedSlider
-          sliderRef={carousel.sliderRef}
-          products={products}
-          visibleProducts={visibleProducts}
-        />
-
-        {hasMore && (
-          <MainButton className={styles.view__button} onClick={handleShowMore}>
-            Показать больше
-          </MainButton>
-        )}
+        <div className={styles.sliderWrap}>
+          {isFetching && <span className={styles.progress} aria-hidden="true" />}
+          <ViewedSlider sliderRef={carousel.sliderRef} products={products} visibleProducts={products} />
+        </div>
       </MainLayoutContainer>
     </SectionLayout>
   );

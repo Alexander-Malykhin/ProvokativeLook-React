@@ -78,4 +78,16 @@
       }
     }
   }
+  @media (max-width: rem($tablet)) {
+    &__table {
+      padding: rem(40);
+    }
+  }
+
+  
+  @media (max-width: rem($mobile)) {
+    &__table {
+      padding: rem(40) rem(10);
+    }
+  }
 }

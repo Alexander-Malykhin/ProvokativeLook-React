@@ -30,3 +30,23 @@
     grid-template-columns: 1fr;
   }
 }
+
+.item {
+  position: relative;
+  cursor: pointer;
+
+  &_unread {
+    background: rgba($gray, 0.35);
+  }
+
+  &__dot {
+    position: absolute;
+    top: 50%;
+    right: rem(12);
+    width: rem(7);
+    height: rem(7);
+    border-radius: 50%;
+    background: $black;
+    transform: translateY(-50%);
+  }
+}

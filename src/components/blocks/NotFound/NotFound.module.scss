@@ -35,4 +35,20 @@
   &__button {
     max-width: max-content;
   }
+  
+  @media (max-width: rem($mobile)) {
+    &__title {
+      @include font(96, $fw-extra-light);
+      color: rgba($black, 0.2);
+    }
+
+    &__subtitle {
+      @include font(20, $fw-light);
+    }
+
+    &__description {
+      text-align: center;
+      @include font(13, $fw-light);
+    }
+  }
 }

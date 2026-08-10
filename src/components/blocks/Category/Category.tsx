@@ -4,6 +4,8 @@ import CatalogCategories from "@components/CatalogCategories/CatalogCategories.t
 import { useGetCategoriesQuery } from "@store/api/categories/categoriesApi.ts";
 //data
 import { catalogOrder } from "@pages/CatalogPage/data.ts";
+//helpers
+import { getCatalogCategorySlug } from "@/helpers/catalog";
 
 const Category = () => {
   const { data, isLoading, isError } = useGetCategoriesQuery();
@@ -18,7 +20,7 @@ const Category = () => {
     .map((item) => ({
       id: item!.id,
       title: item!.catalog.title || item!.name,
-      path: item!.link,
+      path: `/catalog/${getCatalogCategorySlug(item!)}`,
       image: item!.catalog.image,
     }));
 

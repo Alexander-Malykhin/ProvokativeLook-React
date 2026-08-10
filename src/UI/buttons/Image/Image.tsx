@@ -13,7 +13,7 @@ const Image = ({ src, alt = '', className = '' }: ImageInterface) => {
 
     return (
         <img
-            src={imageSrc}
+            src={imageSrc ?? undefined}
             alt={alt}
             className={`${styles.image} ${className}`}
         />

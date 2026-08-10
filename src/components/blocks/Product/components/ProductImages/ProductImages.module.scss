@@ -2,7 +2,19 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: rem(24);
+  gap: rem(18);
+
+  &__mainButton,
+  &__itemButton {
+    display: block;
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+
+    background: transparent;
+    border: 0;
+    cursor: zoom-in;
+  }
 
   &__main {
     display: block;
@@ -14,8 +26,12 @@
 
   &__list {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: rem(24);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: rem(18);
+  }
+
+  &__itemButton_first {
+    display: none;
   }
 
   &__item {
@@ -30,18 +46,28 @@
     display: none;
   }
 
+  &__empty {
+    display: grid;
+    place-items: center;
+    min-height: rem(520);
+    background: rgba($gray, 0.25);
+    color: rgba($black, 0.55);
+  }
+
   @media (max-width: rem($tablet)) {
     gap: 0;
 
-    &__main {
+    &__mainButton {
       display: none;
     }
 
     &__list {
       display: flex;
+      gap: 0;
       overflow-x: auto;
+      overflow-y: hidden;
       scroll-snap-type: x mandatory;
-
+      scroll-behavior: smooth;
       scrollbar-width: none;
 
       &::-webkit-scrollbar {
@@ -49,10 +75,15 @@
       }
     }
 
-    &__item {
+    &__itemButton,
+    &__itemButton_first {
+      display: block;
       flex: 0 0 100%;
       scroll-snap-align: start;
+    }
 
+    &__item {
+      width: 100%;
       aspect-ratio: 1 / 1.25;
       height: auto;
       object-fit: cover;
@@ -62,56 +93,34 @@
     &__dots {
       position: absolute;
       left: 50%;
-      bottom: rem(24);
-      transform: translateX(-50%);
+      bottom: rem(18);
+      z-index: 4;
 
       display: flex;
       align-items: center;
-      gap: rem(12);
+      gap: rem(8);
+
+      transform: translateX(-50%);
     }
 
     &__dot {
       position: relative;
-
-      width: rem(18);
-      height: rem(18);
+      width: rem(10);
+      height: rem(10);
+      padding: 0;
+      border: 0;
       border-radius: 50%;
+      background-color: rgba($white, 0.62);
 
-      background-color: rgba($white, 0.6);
-
-      &_active {
-        background-color: rgba($white, 0.6);
-
-        &::after {
-          content: "";
-          position: absolute;
-          left: 50%;
-          top: 50%;
-
-          width: rem(8);
-          height: rem(8);
-          border-radius: 50%;
-
-          background-color: $white;
-          transform: translate(-50%, -50%);
-        }
-      }
-    }
-  }
-
-  @media (max-width: rem($mobile)) {
-    &__dot {
-      position: relative;
-
-      width: rem(8);
-      height: rem(8);
-
-      &_active {
-        &::after {
-          width: rem(4);
-          height: rem(4);
-          border-radius: 50%;
-        }
+      &_active::after {
+        content: "";
+        position: absolute;
+        inset: 50% auto auto 50%;
+        width: rem(4);
+        height: rem(4);
+        border-radius: 50%;
+        background-color: $white;
+        transform: translate(-50%, -50%);
       }
     }
   }

@@ -1,47 +1,65 @@
-import { useNavigate, useLocation } from "react-router-dom";
-//styles
+import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./OrderForm.module.scss";
-//UI
 import MainButton from "@UI/buttons/MainButton/MainButton.tsx";
 import FormRow from "@components/blocks/Basket/UI/FormRow/FormRow.tsx";
+import type { Cart } from "@store/api/cart/types";
 
-const OrderForm = () => {
+interface OrderFormProps {
+  cart?: Cart;
+}
+
+const formatMoney = (value: number, currency: string) => {
+  const formatted = new Intl.NumberFormat("ru-RU", {
+    maximumFractionDigits: 0,
+  }).format(value);
+
+  return currency === "RUB" ? `${formatted} ₽` : `${formatted} ${currency}`;
+};
+
+const OrderForm = ({ cart }: OrderFormProps) => {
   const navigate = useNavigate();
-
   const { pathname } = useLocation();
-
   const pathOrder = pathname.split("/")[1] === "order";
-
-  const handleClick = () => {
-    navigate("/order");
-  };
+  const quantity = Math.round(cart?.quantity ?? 0);
+  const total = cart?.total ?? 0;
+  const currency = cart?.currency ?? "RUB";
+  const hasUnavailableItems = cart?.items.some((item) => !item.isAvailable) ?? false;
 
   return (
-    <form className={styles.form}>
+    <div className={styles.form}>
       <div className={styles.form__header}>
         <FormRow
-          mode={"description"}
-          label={"Ваша корзина"}
-          value={"3 товара"}
+          mode="description"
+          label="Ваша корзина"
+          value={`${quantity} ${quantity === 1 ? "товар" : quantity >= 2 && quantity <= 4 ? "товара" : "товаров"}`}
         />
 
         <div className={styles.form__list}>
-          <FormRow mode={"price"} label={"Сумма:"} value={"51 100 ₽"} />
           <FormRow
-            mode={"description"}
-            label={"Бонусы к списанию:"}
-            value={"1000 ₽"}
+            mode="price"
+            label="Сумма:"
+            value={formatMoney(total, currency)}
           />
-          <FormRow mode={"description"} label={"Скидка:"} value={"8 525 ₽"} />
         </div>
       </div>
 
       {!pathOrder && (
-        <MainButton type={"button"} onClick={handleClick}>
-          Оформить заказ
-        </MainButton>
+        <>
+          <MainButton
+            type="button"
+            onClick={() => navigate("/order")}
+            disabled={hasUnavailableItems}
+          >
+            Оформить заказ
+          </MainButton>
+          {hasUnavailableItems && (
+            <p className={styles.form__stockError}>
+              Проверьте наличие товаров перед оформлением
+            </p>
+          )}
+        </>
       )}
-    </form>
+    </div>
   );
 };
 

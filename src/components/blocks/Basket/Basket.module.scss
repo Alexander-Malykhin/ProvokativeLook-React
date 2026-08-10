@@ -1,11 +1,144 @@
 .basket {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr minmax(rem(200), rem(322));
   align-items: flex-start;
   justify-content: space-between;
   gap: rem(24);
 
+  &__content {
+    position: relative;
+    min-width: 0;
+  }
+
+  &__error {
+    padding: rem(12) 0;
+    @include font(14, $fw-light);
+    color: $red;
+  }
+
+  &__refreshLine {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    width: 35%;
+    height: rem(2);
+    background: $black;
+    animation: basket-loading 0.8s ease-in-out infinite alternate;
+  }
+
+  &__skeletonHeader,
+  &__skeletonSummary,
+  &__skeletonImage,
+  &__skeletonText span {
+    background: linear-gradient(
+      90deg,
+      rgba($black, 0.04) 0%,
+      rgba($black, 0.08) 50%,
+      rgba($black, 0.04) 100%
+    );
+    background-size: 200% 100%;
+    animation: basket-skeleton 1.2s linear infinite;
+  }
+
+  &__skeletonHeader {
+    height: rem(40);
+    margin-bottom: rem(16);
+  }
+
+  &__skeletonItem {
+    display: grid;
+    grid-template-columns: rem(90) 1fr;
+    gap: rem(24);
+    padding: rem(16) 0;
+    border-bottom: rem(1) solid rgba($black, 0.08);
+  }
+
+  &__skeletonImage {
+    height: rem(120);
+  }
+
+  &__skeletonText {
+    display: flex;
+    flex-direction: column;
+    gap: rem(14);
+
+    span {
+      display: block;
+      width: 70%;
+      height: rem(18);
+
+      &:nth-child(2) {
+        width: 48%;
+      }
+
+      &:nth-child(3) {
+        width: 28%;
+      }
+    }
+  }
+
+  &__skeletonSummary {
+    height: rem(280);
+    border-radius: rem(10);
+  }
+
   @media (max-width: rem($tablet)) {
     grid-template-columns: 1fr;
+  }
+}
+
+.empty {
+  min-height: rem(220);
+
+  &__count {
+    margin-bottom: rem(28);
+    @include font(14, $fw-light);
+    color: rgba($black, 0.55);
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: rem(12);
+    @include font(14, $fw-light);
+
+    button {
+      padding: 0;
+      text-decoration: underline;
+      text-underline-offset: rem(3);
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+    min-height: rem(170);
+
+    &__row {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: rem(8);
+    }
+  }
+}
+
+@keyframes basket-skeleton {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes basket-loading {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(185%);
   }
 }

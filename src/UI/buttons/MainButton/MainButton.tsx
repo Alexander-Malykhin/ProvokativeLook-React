@@ -14,12 +14,14 @@ const MainButton = ({
   mode = "main",
   color = "white",
   type = "button",
+  disabled = false,
 }: MainButtonInterface) => {
   return (
     <button
       type={type}
       className={`${styles.button} ${styles[`button__${mode}`]} ${className}`}
       onClick={onClick}
+      disabled={disabled}
     >
       {icon && <Image src={icon} alt={alt} className={styles.button__icon} />}
 

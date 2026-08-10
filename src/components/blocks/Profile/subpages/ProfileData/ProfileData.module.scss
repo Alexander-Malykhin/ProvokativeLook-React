@@ -1,10 +1,16 @@
 .content {
   display: flex;
   flex-direction: column;
-  gap: rem(38);
-
-  max-width: rem(440);
+  gap: rem(28);
+  max-width: rem(560);
   width: 100%;
+
+  &__heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(20);
+  }
 
   &__title {
     @include font(20, $fw-light);
@@ -16,7 +22,140 @@
     gap: rem(8);
   }
 
+  &__field {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: rem(6);
+    min-height: rem(60);
+    padding: rem(8) rem(16);
+    border: rem(1) solid rgba($black, 0.1);
+    border-radius: rem(10);
+    background-color: $white;
+  }
+
+  &__label {
+    @include font(12, $fw-light);
+    color: rgba($black, 0.55);
+  }
+
+  &__value,
+  &__input {
+    @include font(16, $fw-light);
+    color: $black;
+  }
+
+  &__value {
+    margin: 0;
+  }
+
+  &__value_muted {
+    color: rgba($black, 0.5);
+  }
+
+  &__input {
+    width: 100%;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+  }
+
+  &__suggestions {
+    position: absolute;
+    top: calc(100% + #{rem(4)});
+    left: 0;
+    right: 0;
+    z-index: 70;
+    display: flex;
+    flex-direction: column;
+    max-height: rem(260);
+    overflow-y: auto;
+    background: $white;
+    border: rem(1) solid rgba($black, 0.1);
+    border-radius: rem(10);
+    box-shadow: 0 rem(12) rem(34) rgba($black, 0.12);
+  }
+
+  &__suggestion {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: rem(3);
+    padding: rem(10) rem(14);
+    text-align: left;
+    background: $white;
+    border: 0;
+    cursor: pointer;
+
+    span {
+      @include font(14, $fw-light);
+    }
+
+    small {
+      @include font(12, $fw-light);
+      color: rgba($black, 0.55);
+    }
+
+    &:hover {
+      background: rgba($black, 0.04);
+    }
+  }
+
+  &__edit,
+  &__save,
+  &__cancel {
+    padding: rem(10) rem(18);
+    border: rem(1) solid $black;
+    border-radius: rem(8);
+    @include font(14, $fw-light);
+    cursor: pointer;
+  }
+
+  &__edit,
+  &__save {
+    color: $white;
+    background: $black;
+  }
+
+  &__cancel {
+    color: $black;
+    background: $white;
+  }
+
+  &__actions {
+    display: flex;
+    gap: rem(8);
+  }
+
+  &__message,
   &__error {
     @include font(14, $fw-light);
+  }
+
+  &__skeleton {
+    height: rem(380);
+    border-radius: rem(12);
+    background: linear-gradient(90deg, rgba($black, 0.04), rgba($black, 0.08), rgba($black, 0.04));
+  }
+
+  @media (max-width: rem($mobile)) {
+    max-width: 100%;
+    gap: rem(20);
+
+    &__heading {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    &__actions {
+      width: 100%;
+    }
+
+    &__edit,
+    &__save,
+    &__cancel {
+      flex: 1;
+    }
   }
 }

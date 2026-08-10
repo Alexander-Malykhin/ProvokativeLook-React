@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { InputHTMLAttributes, ReactNode } from "react";
 
 export interface ProfilePageProps {
   title: string;
@@ -27,7 +27,7 @@ export type OrderStatus = "delivery" | "completed" | "return" | "cancelled";
 
 export interface OrderProductInterface {
   id: number;
-  image: string;
+  image: string | null;
 }
 
 export interface OrderInterface {
@@ -54,4 +54,14 @@ export interface ReturnItemInterface {
   total: number;
   productsCount: number;
   products: ReturnProductInterface[];
+}
+
+export interface ProfileFieldRadioInterface {
+  name: string;
+  value: string;
+  checked?: boolean;
+  onChange?: (value: string) => void;
+  register?: Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "name" | "value" | "checked" | "onChange">;
+  children: ReactNode;
+  mode?: "static" | "dynamic";
 }

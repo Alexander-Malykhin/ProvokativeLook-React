@@ -8,14 +8,14 @@
   &__label,
   &__trigger,
   &__input,
-  &__option {
+  &__option,
+  &__suggestion,
+  &__cancel,
+  &__hint {
     @include font(16, $fw-extra-light);
   }
 
-  &__label {
-    flex: 0 0 auto;
-    color: $black;
-  }
+  &__label { flex: 0 0 auto; color: $black; }
 
   &__trigger {
     display: inline-flex;
@@ -39,63 +39,57 @@
     width: rem(8);
     height: rem(8);
     margin-top: rem(-4);
-    border-right: rem(1) solid rgba($black, 0.65);
-    border-bottom: rem(1) solid rgba($black, 0.65);
+    border-right: rem(1) solid rgba($black, .65);
+    border-bottom: rem(1) solid rgba($black, .65);
     transform: rotate(45deg);
-    transition: transform 0.2s ease;
+    transition: transform .2s ease;
 
-    &_open {
-      margin-top: rem(4);
-      transform: rotate(225deg);
-    }
+    &_open { margin-top: rem(4); transform: rotate(225deg); }
   }
+
+  &__customWrap { position: relative; display: flex; flex-direction: column; width: rem(300); }
 
   &__custom {
     position: relative;
     display: flex;
     align-items: center;
-    width: rem(250);
-    border-bottom: rem(1) solid rgba($black, 0.28);
+    width: 100%;
+    border-bottom: rem(1) solid rgba($black, .28);
   }
 
   &__input {
     width: 100%;
-    height: rem(34);
+    height: rem(36);
     padding: 0 rem(34) 0 0;
     border: 0;
     outline: none;
     background: transparent;
     color: $black;
-
-    &::placeholder {
-      color: rgba($black, 0.38);
-    }
+    &::placeholder { color: rgba($black, .38); }
   }
 
-  &__confirm {
+  &__clear {
     position: absolute;
-    right: rem(2);
-    width: rem(20);
-    height: rem(20);
+    right: rem(4);
+    width: rem(24);
+    height: rem(24);
     padding: 0;
     border: 0;
     background: transparent;
     cursor: pointer;
-
-    &::before {
+    &::before, &::after {
       position: absolute;
-      top: rem(4);
-      left: rem(6);
-      width: rem(6);
-      height: rem(10);
-      border-right: rem(1) solid $black;
-      border-bottom: rem(1) solid $black;
+      top: 50%; left: 50%;
+      width: rem(13); height: rem(1);
+      background: rgba($black, .65);
       content: "";
-      transform: rotate(45deg);
     }
+    &::before { transform: translate(-50%, -50%) rotate(45deg); }
+    &::after { transform: translate(-50%, -50%) rotate(-45deg); }
   }
 
-  &__menu {
+  &__menu,
+  &__suggestions {
     position: absolute;
     top: calc(100% + #{rem(10)});
     left: 0;
@@ -103,55 +97,55 @@
     width: rem(310);
     max-width: calc(100vw - #{rem(32)});
     overflow: hidden;
-    border: rem(1) solid rgba($black, 0.12);
-    border-radius: rem(2);
+    border: rem(1) solid rgba($black, .1);
     background: $white;
-    box-shadow: 0 rem(14) rem(34) rgba($black, 0.14);
+    box-shadow: 0 rem(14) rem(34) rgba($black, .14);
   }
 
-  &__option {
+  &__suggestions { top: rem(42); width: 100%; max-height: rem(300); overflow-y: auto; }
+
+  &__option,
+  &__suggestion {
     display: block;
     width: 100%;
-    min-height: rem(50);
-    padding: rem(13) rem(16);
+    min-height: rem(48);
+    padding: rem(12) rem(16);
     border: 0;
-    border-bottom: rem(1) solid rgba($black, 0.07);
+    border-bottom: rem(1) solid rgba($black, .07);
     background: $white;
     color: $black;
     text-align: left;
     cursor: pointer;
-    transition: background-color 0.15s ease;
+    transition: background-color .15s ease;
 
-    &:last-child {
-      border-bottom: 0;
-    }
+    &:last-child { border-bottom: 0; }
+    &:hover, &:focus-visible, &_active { background: $light-white; outline: none; }
+    &_other { color: rgba($black, .72); }
+    &_reset { color: rgba($black, .48); }
+  }
 
-    &:hover,
-    &:focus-visible,
-    &_active {
-      background: $light-white;
-      outline: none;
-    }
+  &__suggestion {
+    span { display: block; }
+    small { display: block; margin-top: rem(3); @include font(12, $fw-extra-light); color: rgba($black, .48); }
+  }
 
-    &_other {
-      color: rgba($black, 0.68);
-    }
+  &__hint { padding: rem(14) rem(16); color: rgba($black, .48); }
+  &__cancel {
+    align-self: flex-start;
+    margin-top: rem(8);
+    padding: 0;
+    border: 0;
+    border-bottom: rem(1) solid rgba($black, .4);
+    background: transparent;
+    cursor: pointer;
+    color: rgba($black, .62);
   }
 
   @media (max-width: rem($mobile)) {
-    &__label,
-    &__trigger,
-    &__input,
-    &__option {
+    &__label, &__trigger, &__input, &__option, &__suggestion, &__cancel, &__hint {
       @include font(14, $fw-extra-light);
     }
-
-    &__menu {
-      width: rem(280);
-    }
-
-    &__custom {
-      width: rem(190);
-    }
+    &__menu { width: rem(280); }
+    &__customWrap { width: rem(230); }
   }
 }

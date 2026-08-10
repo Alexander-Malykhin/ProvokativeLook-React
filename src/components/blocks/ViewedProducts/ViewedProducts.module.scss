@@ -2,21 +2,82 @@
   display: grid;
   grid-template-columns: rem(210) minmax(0, 1fr);
   gap: rem(22);
-  height: auto;
+  width: 100%;
+  min-width: 0;
+}
 
-  &__button {
-    display: none;
-  }
+.sliderWrap {
+  position: relative;
+  min-width: 0;
+}
 
-  @media (max-width: rem($desktop)) {
+.progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  width: 34%;
+  height: rem(2);
+  background: $black;
+  animation: viewedProgress 1s ease-in-out infinite alternate;
+}
+
+.columnSkeleton,
+.cardSkeleton {
+  border-radius: rem(4);
+  background: linear-gradient(90deg, $gray 25%, $white 50%, $gray 75%);
+  background-size: 200% 100%;
+  animation: viewedSkeleton 1.4s linear infinite;
+}
+
+.columnSkeleton {
+  height: rem(120);
+}
+
+.listSkeleton {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: rem(20);
+}
+
+.cardSkeleton {
+  height: rem(360);
+}
+
+@keyframes viewedSkeleton {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+@keyframes viewedProgress {
+  from { transform: translateX(0); }
+  to { transform: translateX(190%); }
+}
+
+@media (max-width: rem($desktop)) {
+  .view {
     display: flex;
     flex-direction: column;
-    gap: rem(22);
+  }
+}
+
+@media (max-width: rem($tablet)) {
+  .listSkeleton {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: rem($mobile)) {
+  .view {
+    gap: rem(18);
   }
 
-  @media (max-width: rem($tablet)) {
-    &__button {
-      display: flex;
-    }
+  .listSkeleton {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: rem(10);
+  }
+
+  .cardSkeleton {
+    height: rem(280);
   }
 }

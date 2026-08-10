@@ -1,8 +1,14 @@
 import { useState } from "react";
 import styles from "./ProductDescription.module.scss";
 
-const ProductDescription = () => {
+interface ProductDescriptionProps {
+  text: string;
+}
+
+const ProductDescription = ({ text }: ProductDescriptionProps) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  if (!text.trim()) return null;
 
   return (
     <div className={styles.description}>
@@ -11,12 +17,7 @@ const ProductDescription = () => {
           isOpen ? styles.description__text_open : ""
         }`}
       >
-        <span className={styles.description__accent}>Описание</span>: Кардиган
-        имеет элегантный силуэт, который подчеркивает фигуру, а его длина
-        позволяет носить его как с джинсами, так и с платьями. Дизайнерские
-        элементы, такие как оригинальные пуговицы и аккуратные швы, придают
-        изделию уникальный шарм. Кардиган имеет элегантный силуэт, который
-        подчеркивает фигуру.
+        <span className={styles.description__accent}>Описание</span>: {text}
       </p>
 
       <button

@@ -4,3 +4,9 @@ export interface CatalogPromoItemProps {
   image: string | null;
   link: string;
 }
+
+export interface CatalogPromoDotsProps {
+  count: number;
+  activeIndex: number;
+  onDotClick: (index: number) => void;
+}

@@ -29,3 +29,48 @@
     max-width: 100%;
   }
 }
+
+.content {
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(20);
+  }
+
+  &__readAll {
+    @include font(13, $fw-light);
+    color: rgba($black, 0.55);
+    text-decoration: underline;
+    text-underline-offset: rem(3);
+  }
+
+  &__skeleton {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__skeletonItem {
+    height: rem(92);
+    border-top: rem(1) solid rgba($black, 0.08);
+    background: linear-gradient(90deg, rgba($gray, 0.25), rgba($gray, 0.5), rgba($gray, 0.25));
+    background-size: 200% 100%;
+    animation: notificationSkeleton 1.2s linear infinite;
+  }
+
+  &__error {
+    display: flex;
+    align-items: center;
+    gap: rem(14);
+    @include font(14, $fw-light);
+
+    button {
+      text-decoration: underline;
+    }
+  }
+}
+
+@keyframes notificationSkeleton {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}

@@ -30,6 +30,14 @@ export const router = createBrowserRouter(
           ),
         },
         {
+          // Поддержка старых web-ссылок вида /catalog/sets/catalog/accessories.
+          // CatalogProducts берёт slug из последнего сегмента URL.
+          path: "catalog/*",
+          lazy: page(
+            () => import("@pages/CatalogCategoryPage/CatalogCategoryPage"),
+          ),
+        },
+        {
           path: "contacts",
           lazy: page(() => import("@pages/ContactsPage/ContactsPage")),
         },

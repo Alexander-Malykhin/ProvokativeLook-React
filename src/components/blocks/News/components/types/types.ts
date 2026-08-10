@@ -5,3 +5,14 @@ export interface NewsSliderProps {
   sliderRef: RefObject<HTMLDivElement | null>;
   products: ProductListItem[];
 }
+
+export interface NewsColumnProps {
+  onPrev: () => void;
+  onNext: () => void;
+}
+
+export interface NewsDotsProps {
+  count: number;
+  activeIndex: number;
+  onDotClick: (index: number) => void;
+}

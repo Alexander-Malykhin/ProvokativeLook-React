@@ -141,3 +141,14 @@
     }
   }
 }
+
+.item__image_empty {
+  min-height: rem(120);
+  background: rgba($black, 0.04);
+}
+
+.item__stockError {
+  margin-top: rem(8);
+  color: $red;
+  @include font(12, $fw-light);
+}

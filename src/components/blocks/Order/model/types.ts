@@ -3,6 +3,7 @@ export interface OrderFormValues {
   lastName: string;
   email: string;
   phone: string;
+  addressId: string;
   delivery: "cdek" | "mail";
   payment: "cash" | "card";
   privacy: boolean;

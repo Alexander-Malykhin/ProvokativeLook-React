@@ -21,6 +21,7 @@ export interface CategoryItem {
   code: string;
   name: string;
   sort: number;
+  sectionIds: number[];
   link: string;
   banner: CategoryBanner;
   promo: CategoryPromo;

@@ -30,6 +30,7 @@ export const INFO_PAGES = [
 const BASE_TITLES: Record<string, string> = {
   about: "О нас",
   catalog: "Каталог",
+  all: "Все товары",
   contacts: "Контакты",
   basket: "Корзина",
   order: "Оформление заказа",

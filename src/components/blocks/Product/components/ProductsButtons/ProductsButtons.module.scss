@@ -3,3 +3,9 @@
   flex-direction: column;
   gap: rem(8);
 }
+
+.buttons__error {
+  margin: rem(-8) 0 0;
+  @include font(12, $fw-light);
+  color: $red;
+}

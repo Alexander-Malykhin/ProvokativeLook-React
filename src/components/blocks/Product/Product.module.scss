@@ -4,16 +4,23 @@
   gap: rem(24);
   align-items: start;
 
-  padding: rem(24) rem(10) 0 rem(10);
-  margin: 0 auto;
   max-width: rem(1360);
+  padding: rem(24) rem(10) 0;
+  margin: 0 auto;
 
   &__information {
     align-self: start;
+    min-width: 0;
 
     &_sticky {
       position: sticky;
-      top: rem(100);
+      top: rem(92);
+
+      /*
+       * Sticky ограничен высотой .product. Поэтому правая колонка
+       * следует за экраном и останавливается ровно у низа последней
+       * фотографии левой галереи.
+       */
     }
   }
 
@@ -28,5 +35,69 @@
         position: static;
       }
     }
+  }
+}
+
+.product_skeleton {
+  min-height: rem(720);
+}
+
+.product__skeletonGallery,
+.product__skeletonInfo span {
+  position: relative;
+  overflow: hidden;
+  background: rgba($gray, 0.28);
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba($white, 0.65),
+      transparent
+    );
+    animation: productSkeleton 1.25s infinite;
+  }
+}
+
+.product__skeletonGallery {
+  min-height: rem(680);
+}
+
+.product__skeletonInfo {
+  display: flex;
+  flex-direction: column;
+  gap: rem(24);
+
+  span {
+    display: block;
+    height: rem(34);
+
+    &:nth-child(1) {
+      width: 62%;
+    }
+
+    &:nth-child(2) {
+      width: 38%;
+    }
+
+    &:nth-child(3) {
+      width: 78%;
+      height: rem(80);
+    }
+
+    &:nth-child(4) {
+      width: 100%;
+      height: rem(52);
+    }
+  }
+}
+
+@keyframes productSkeleton {
+  to {
+    transform: translateX(100%);
   }
 }

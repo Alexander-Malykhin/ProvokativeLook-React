@@ -1,15 +1,14 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-//styles
 import styles from "./SubscribeNewsLetter.module.scss";
-//layouts
 import SectionLayout from "@layouts/SectionLayout/SectionLayout.tsx";
 import MainLayoutContainer from "@layouts/MainLayoutContainer/MainLayoutContainer.tsx";
-//UI
 import MainButton from "@UI/buttons/MainButton/MainButton.tsx";
 import MainInput from "@UI/inputs/MainInput/MainInput.tsx";
 import MainCheckbox from "@UI/inputs/MainCheckbox/MainCheckbox.tsx";
 import TextAccent from "@UI/typography/TextAccent/TextAccent.tsx";
+import { useSubscribeMutation } from "@store/api/subscription/subscriptionApi";
+import { getRequestErrorMessage } from "@store/api/getRequestErrorMessage";
 
 interface SubscribeFormValues {
   email: string;
@@ -18,7 +17,9 @@ interface SubscribeFormValues {
 }
 
 const SubscribeNewsLetter = () => {
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [message, setMessage] = useState("");
+  const [subscribe, subscribeState] = useSubscribeMutation();
+
   const {
     register,
     handleSubmit,
@@ -26,29 +27,32 @@ const SubscribeNewsLetter = () => {
     formState: { errors },
   } = useForm<SubscribeFormValues>({
     defaultValues: {
+      email: "",
       advertising: false,
       privacy: false,
     },
   });
 
-  const onSubmit = () => {
-    // The newsletter mutation can be connected here.
-    setIsSubmitted(true);
-    reset();
+  const onSubmit = async (values: SubscribeFormValues) => {
+    setMessage("");
+
+    try {
+      const response = await subscribe({ email: values.email }).unwrap();
+      setMessage(response.message || "Вы успешно подписались на рассылку");
+      reset();
+    } catch (error) {
+      setMessage(getRequestErrorMessage(error, "Не удалось оформить подписку"));
+    }
   };
 
   return (
     <SectionLayout className={styles.subscribe}>
       <MainLayoutContainer className={styles.subscribe__content}>
         <p className={styles.subscribe__text}>
-          Получайте информацию о новинках, акциях и специальных предложения
-          первой
+          Получайте информацию о новинках, акциях и специальных предложениях первой
         </p>
 
-        <form
-          className={styles.subscribe__form}
-          onSubmit={handleSubmit(onSubmit)}
-        >
+        <form className={styles.subscribe__form} onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.subscribe__form_row}>
             <MainInput
               type="email"
@@ -64,20 +68,21 @@ const SubscribeNewsLetter = () => {
             />
 
             <MainButton
-              type={"submit"}
+              type="submit"
+              disabled={subscribeState.isLoading}
               className={styles.subscribe__form_button}
             >
-              Подписаться
+              {subscribeState.isLoading ? "Подписываем..." : "Подписаться"}
             </MainButton>
           </div>
+
           <div className={styles.subscribe__form__column}>
             <MainCheckbox
               register={register("advertising", {
                 required: "Подтвердите получение предложений",
               })}
             >
-              Хочу получать рекламные предложения и узнавать о новинках, скидках
-              и бонусах
+              Хочу получать рекламные предложения и узнавать о новинках, скидках и бонусах
             </MainCheckbox>
 
             {errors.advertising && (
@@ -92,9 +97,8 @@ const SubscribeNewsLetter = () => {
               })}
             >
               Соглашаюсь на обработку моих{" "}
-              <TextAccent mode={"main"}>персональных данных</TextAccent> в
-              соответствии с{" "}
-              <TextAccent mode={"link"} path={"#"}>
+              <TextAccent mode="main">персональных данных</TextAccent> в соответствии с{" "}
+              <TextAccent mode="link" path="#">
                 политикой конфиденциальности
               </TextAccent>
             </MainCheckbox>
@@ -105,12 +109,9 @@ const SubscribeNewsLetter = () => {
               </span>
             )}
 
-            {isSubmitted && (
-              <span
-                className={styles.subscribe__form_checkbox_error}
-                role="status"
-              >
-                Форма готова к подключению API подписки
+            {message && (
+              <span className={styles.subscribe__form_checkbox_error} role="status">
+                {message}
               </span>
             )}
           </div>

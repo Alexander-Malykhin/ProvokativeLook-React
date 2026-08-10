@@ -25,4 +25,18 @@
       @include font(16, $fw-light);
     }
   }
+  
+  @media (max-width: rem($mobile)) {
+    gap: rem(16);
+
+    &__item {
+      @include font(14, $fw-light);
+    }
+
+    &__list {
+      &_item {
+        @include font(14, $fw-light);
+      }
+    }
+  }
 }

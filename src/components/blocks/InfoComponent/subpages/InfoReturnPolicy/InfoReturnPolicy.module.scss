@@ -22,12 +22,23 @@
       &::before {
         content: "— ";
       }
+
       @include font(16, $fw-light);
     }
 
     &_link {
       background: transparent;
       border-bottom: rem(1) solid currentColor;
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+    gap: rem(16);
+
+    &__list {
+      &_item {
+        @include font(14, $fw-light);
+      }
     }
   }
 }

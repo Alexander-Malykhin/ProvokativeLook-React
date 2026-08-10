@@ -8,6 +8,8 @@ import { MOBILE_BREAKPOINT } from "../model/constants";
 import type { ProfileAddress } from "../model/types";
 import { useAddressEditor } from "../hooks/useAddressEditor";
 import { useAddressMap } from "../hooks/useAddressMap";
+import { useGetUserQuery } from "@store/api/user/userApi";
+import { useDeliveryCity } from "@/hooks/useDeliveryCity";
 import AddressCitySelect from "./AddressCitySelect/AddressCitySelect.tsx";
 import AddressDetailsForm from "./AddressDetailsForm/AddressDetailsForm.tsx";
 import AddressMap from "./AddressMap";
@@ -22,10 +24,14 @@ interface AddressModalProps {
 
 const AddressModal = ({ open, onClose, onSave }: AddressModalProps) => {
   const isMobile = useMediaQuery(`(max-width: ${MOBILE_BREAKPOINT}px)`);
+  const { data: userData } = useGetUserQuery();
+  const { city: deliveryCity } = useDeliveryCity();
+  const defaultCity = userData?.user.city?.trim() || deliveryCity || "Ростов-на-Дону";
+  const defaultCountry = userData?.user.country?.trim() || "Россия";
   const searchInputRef = useRef<HTMLInputElement>(null);
   const desktopMapRef = useRef<HTMLDivElement>(null);
   const mobileMapRef = useRef<HTMLDivElement>(null);
-  const editor = useAddressEditor(isMobile);
+  const editor = useAddressEditor(isMobile, defaultCity, defaultCountry);
   const resetEditor = editor.reset;
 
   const activeMapRef = isMobile ? mobileMapRef : desktopMapRef;
@@ -131,6 +137,7 @@ const AddressModal = ({ open, onClose, onSave }: AddressModalProps) => {
             <div className={styles.modal__form}>
               <AddressCitySelect
                 value={editor.form.city}
+                defaultCity={defaultCity}
                 onChange={editor.selectCity}
               />
               {search()}
@@ -156,6 +163,7 @@ const AddressModal = ({ open, onClose, onSave }: AddressModalProps) => {
           <div className={styles.modal__mobileTop}>
             <AddressCitySelect
               value={editor.form.city}
+              defaultCity={defaultCity}
               onChange={editor.selectCity}
             />
             <button

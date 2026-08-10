@@ -9,3 +9,36 @@
     gap: rem(24);
   }
 }
+
+.favorites__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: rem(12);
+  min-height: rem(90);
+
+  p,
+  a {
+    @include font(14, $fw-light);
+  }
+
+  a {
+    text-decoration: underline;
+  }
+}
+
+.favorites__skeleton {
+  width: 100%;
+  height: rem(320);
+  background: linear-gradient(90deg, rgba($gray, .25), rgba($gray, .5), rgba($gray, .25));
+  background-size: 200% 100%;
+  animation: favoriteSkeleton 1.2s linear infinite;
+}
+
+@keyframes favoriteSkeleton {
+  to { background-position: -200% 0; }
+}
+
+@media (max-width: rem($tablet)) {
+  .favorites__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

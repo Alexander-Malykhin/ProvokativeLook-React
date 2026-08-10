@@ -15,9 +15,28 @@ import type {
   Suggestion,
 } from "../model/types";
 
-export const useAddressEditor = (isMobile: boolean) => {
+export const useAddressEditor = (
+  isMobile: boolean,
+  initialCity = INITIAL_ADDRESS_FORM.city,
+  initialCountry = INITIAL_ADDRESS_FORM.country,
+  initialCountryCode = INITIAL_ADDRESS_FORM.countryCode,
+) => {
   const requestIdRef = useRef(0);
-  const [form, setForm] = useState<AddressFormState>(INITIAL_ADDRESS_FORM);
+  const createInitialForm = useCallback(
+    (): AddressFormState => ({
+      ...INITIAL_ADDRESS_FORM,
+      city: initialCity.trim() || INITIAL_ADDRESS_FORM.city,
+      country: initialCountry.trim() || INITIAL_ADDRESS_FORM.country,
+      countryCode: initialCountryCode.trim() || INITIAL_ADDRESS_FORM.countryCode,
+    }),
+    [initialCity, initialCountry, initialCountryCode],
+  );
+  const [form, setForm] = useState<AddressFormState>(() => ({
+    ...INITIAL_ADDRESS_FORM,
+    city: initialCity.trim() || INITIAL_ADDRESS_FORM.city,
+    country: initialCountry.trim() || INITIAL_ADDRESS_FORM.country,
+    countryCode: initialCountryCode.trim() || INITIAL_ADDRESS_FORM.countryCode,
+  }));
   const [selectedAddress, setSelectedAddress] = useState<ParsedAddress | null>(
     null,
   );
@@ -43,14 +62,14 @@ export const useAddressEditor = (isMobile: boolean) => {
 
   const reset = useCallback(() => {
     requestIdRef.current += 1;
-    setForm(INITIAL_ADDRESS_FORM);
+    setForm(createInitialForm());
     setSelectedAddress(null);
     setQuery("");
     setSuggestions([]);
     setIsAddressListOpen(false);
     setMobileStep("map");
     setError("");
-  }, []);
+  }, [createInitialForm]);
 
   const applyAddress = useCallback(
     (address: ParsedAddress) => {
@@ -163,15 +182,17 @@ export const useAddressEditor = (isMobile: boolean) => {
     return () => window.clearTimeout(timer);
   }, [form.city, getSuggestions, query, selectedAddress]);
 
-  const selectCity = useCallback((city: string) => {
+  const selectCity = useCallback((city: string, resolved?: ParsedAddress) => {
     requestIdRef.current += 1;
     setForm((previous) => ({
       ...previous,
       city,
+      country: resolved?.country || previous.country,
+      countryCode: resolved?.countryCode || previous.countryCode,
+      region: resolved?.region || "",
+      province: resolved?.province || "",
       formattedAddress: "",
       address1: "",
-      region: "",
-      province: "",
       postalCode: "",
       latitude: 0,
       longitude: 0,
@@ -257,6 +278,7 @@ export const useAddressEditor = (isMobile: boolean) => {
       region: form.region,
       province: form.province,
       country: form.country,
+      countryId: 0,
       countryCode: form.countryCode,
       postalCode: form.postalCode,
       entrance: form.entrance.trim(),

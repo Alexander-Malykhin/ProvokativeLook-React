@@ -18,6 +18,7 @@
     grid-template-areas:
       "label orderId date"
       "information information information"
+      "delivery delivery delivery"
       "button button button";
 
     align-items: center;
@@ -120,6 +121,13 @@
     &_cancelled {
       background-color: $orange;
     }
+  }
+
+  &__delivery {
+    grid-area: delivery;
+
+    @include font(13, $fw-light);
+    color: rgba($black, 0.6);
   }
 
   &__button {
@@ -298,6 +306,7 @@
         "label label label"
         "orderId . date"
         "information information information"
+        "delivery delivery delivery"
         "button button button";
 
       column-gap: rem(8);
@@ -409,4 +418,16 @@
       gap: rem(3);
     }
   }
+}
+.card__list_placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: rem(8);
+  text-align: center;
+  background: $gray;
+  color: rgba($black, 0.45);
+  @include font(11, $fw-light);
 }

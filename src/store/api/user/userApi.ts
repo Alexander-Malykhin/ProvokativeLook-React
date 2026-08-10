@@ -10,6 +10,7 @@ import type {
   RegisterRequest,
   RegisterResponse,
   UserResponse,
+  UpdateUserRequest,
 } from "@store/api/user/types.ts";
 
 export const userApi = baseApi.injectEndpoints({
@@ -17,6 +18,28 @@ export const userApi = baseApi.injectEndpoints({
     getUser: builder.query<UserResponse, void>({
       query: () => ({ url: "user", scope: "site" }),
       providesTags: ["User"],
+    }),
+
+    updateUser: builder.mutation<UserResponse, UpdateUserRequest>({
+      query: (body) => ({
+        url: "user/update",
+        scope: "site",
+        method: "POST",
+        body,
+      }),
+      async onQueryStarted(_body, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(
+            userApi.util.updateQueryData("getUser", undefined, (draft) => {
+              Object.assign(draft, data);
+            }),
+          );
+        } catch {
+          // Ошибка уже будет обработана вызывающим компонентом.
+        }
+      },
+      invalidatesTags: ["User", "Addresses"],
     }),
 
     login: builder.mutation<LoginResponse, LoginRequest>({
@@ -64,6 +87,7 @@ export const userApi = baseApi.injectEndpoints({
 
 export const {
   useGetUserQuery,
+  useUpdateUserMutation,
   useLoginMutation,
   useRegisterMutation,
   useConfirmRegisterMutation,

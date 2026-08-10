@@ -31,3 +31,9 @@
     }
   }
 }
+
+@media (max-width: rem($mobile)) {
+  .navigation__title_hiddenMobile {
+    display: none;
+  }
+}

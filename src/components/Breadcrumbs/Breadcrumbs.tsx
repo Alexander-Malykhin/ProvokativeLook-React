@@ -15,7 +15,7 @@ import type {
 } from "@components/Breadcrumbs/types/types.ts";
 import { BREADCRUMB_TITLES } from "./data";
 
-const Breadcrumbs = ({ title }: BreadcrumbsInterface) => {
+const Breadcrumbs = ({ title, hideTitleOnMobile = false }: BreadcrumbsInterface) => {
   const { pathname } = useLocation();
 
   const parts = pathname.split("/").filter(Boolean);
@@ -33,7 +33,7 @@ const Breadcrumbs = ({ title }: BreadcrumbsInterface) => {
     })
     .filter((crumb) => !crumb.hidden);
 
-  const currentPageTitle = crumbs.at(-1)?.title ?? "Главная";
+  const currentPageTitle = title ?? crumbs.at(-1)?.title ?? "Главная";
 
   return (
     <SectionLayout>
@@ -57,7 +57,7 @@ const Breadcrumbs = ({ title }: BreadcrumbsInterface) => {
 
                 {isLast ? (
                   <span className={styles.navigation__item} aria-current="page">
-                    {crumb.title}
+                    {isLast && title ? title : crumb.title}
                   </span>
                 ) : (
                   <Link to={crumb.path} className={styles.navigation__item}>
@@ -69,7 +69,11 @@ const Breadcrumbs = ({ title }: BreadcrumbsInterface) => {
           })}
         </nav>
 
-        <h1 className={styles.navigation__title}>
+        <h1
+          className={`${styles.navigation__title} ${
+            hideTitleOnMobile ? styles.navigation__title_hiddenMobile : ""
+          }`}
+        >
           {title ?? currentPageTitle}
         </h1>
       </MainLayoutContainer>

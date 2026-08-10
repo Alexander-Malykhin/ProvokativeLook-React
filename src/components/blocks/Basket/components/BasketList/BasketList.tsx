@@ -1,26 +1,24 @@
-//styles
 import styles from "./BasketList.module.scss";
-//components
 import BasketItem from "@components/blocks/Basket/components/BasketItem/BasketItem.tsx";
-
-interface BasketProduct {
-  id: number;
-  image: string;
-  title: string;
-  article: string;
-  size: string;
-  color: string;
-  count: number;
-  price: string;
-}
+import type { CartItem } from "@store/api/cart/types";
 
 interface BasketListProps {
-  items: BasketProduct[];
+  items: CartItem[];
   selectedIds: number[];
   onSelectItem: (id: number, checked: boolean) => void;
+  onQuantityChange: (id: number, quantity: number) => void;
+  onDelete: (id: number) => void;
+  updatingId?: number | null;
 }
 
-const BasketList = ({ items, selectedIds, onSelectItem }: BasketListProps) => {
+const BasketList = ({
+  items,
+  selectedIds,
+  onSelectItem,
+  onQuantityChange,
+  onDelete,
+  updatingId = null,
+}: BasketListProps) => {
   return (
     <div className={styles.list}>
       {items.map((item) => (
@@ -29,6 +27,9 @@ const BasketList = ({ items, selectedIds, onSelectItem }: BasketListProps) => {
           item={item}
           checked={selectedIds.includes(item.id)}
           onCheckedChange={(checked) => onSelectItem(item.id, checked)}
+          onQuantityChange={(quantity) => onQuantityChange(item.id, quantity)}
+          onDelete={() => onDelete(item.id)}
+          isUpdating={updatingId === item.id}
         />
       ))}
     </div>

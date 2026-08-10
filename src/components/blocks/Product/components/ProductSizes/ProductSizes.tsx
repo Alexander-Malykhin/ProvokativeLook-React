@@ -1,32 +1,45 @@
-import { useState } from "react";
 import { useAppDispatch } from "@store/hooks";
 
 import styles from "./ProductSizes.module.scss";
 import { openTableSizes } from "@store/slices/toggleModalTableSizesSlice.ts";
 
-const sizes = [44, 46, 48];
+interface ProductSizesProps {
+  sizes: string[];
+  selectedSize: string | null;
+  disabledSizes?: string[];
+  onChange: (size: string) => void;
+}
 
-const ProductSizes = () => {
+const ProductSizes = ({
+  sizes,
+  selectedSize,
+  disabledSizes = [],
+  onChange,
+}: ProductSizesProps) => {
   const dispatch = useAppDispatch();
-  const [activeSize, setActiveSize] = useState(sizes[0]);
 
   return (
     <div className={styles.sizes}>
       <h2 className={styles.sizes__title}>размер</h2>
 
       <div className={styles.sizes__list}>
-        {sizes.map((size) => (
-          <button
-            key={size}
-            type="button"
-            onClick={() => setActiveSize(size)}
-            className={`${styles.sizes__item} ${
-              activeSize === size ? styles.sizes__item_active : ""
-            }`}
-          >
-            {size}
-          </button>
-        ))}
+        {sizes.map((size) => {
+          const disabled = disabledSizes.includes(size);
+          return (
+            <button
+              key={size}
+              type="button"
+              disabled={disabled}
+              title={disabled ? `Размер ${size} сейчас отсутствует` : `Размер ${size}`}
+              onClick={() => onChange(size)}
+              className={`${styles.sizes__item} ${
+                selectedSize === size ? styles.sizes__item_active : ""
+              } ${disabled ? styles.sizes__item_disabled : ""}`}
+            >
+              {size}
+            </button>
+          );
+        })}
       </div>
 
       <button
