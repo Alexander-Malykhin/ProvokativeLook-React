@@ -40,6 +40,7 @@ export interface YandexMapInstance {
   };
   geoObjects: {
     add: (object: YandexPlacemark) => void;
+    remove: (object: YandexPlacemark) => void;
   };
   setCenter: (
     coordinates: Coordinates,

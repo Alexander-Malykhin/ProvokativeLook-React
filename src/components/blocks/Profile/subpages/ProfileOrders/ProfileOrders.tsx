@@ -24,7 +24,7 @@ const ProfileOrders = ({ title }: ProfilePageProps) => {
   },[id,navigate,orders,paidOrder,paymentSuccess]);
 
   return <div className={styles.content}>
-    <h2 className={styles.content__title}>Мои заказы</h2>
+    <h2 className={styles.content__title}>{title}</h2>
     {isLoading ? <div className={styles.content__skeleton} aria-label="Загрузка заказов">{Array.from({length:3}).map((_,i)=><div key={i} className={styles.content__skeletonItem}/>)}</div>
     : isError ? <div className={styles.content__error}><span>Не удалось загрузить заказы.</span><button type="button" onClick={()=>void refetch()}>Повторить</button></div>
     : id && !selected ? <div className={styles.content__error}><span>Заказ не найден.</span><button type="button" onClick={()=>navigate('/profile/orders')}>К заказам</button></div>

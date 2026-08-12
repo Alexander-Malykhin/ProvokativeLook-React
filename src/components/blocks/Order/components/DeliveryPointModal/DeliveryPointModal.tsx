@@ -117,7 +117,7 @@ const DeliveryPointModal = ({
         );
         mapRef.current = map;
 
-        const rawPoints = await loadPickupPoints(provider, center);
+        const rawPoints = await loadPickupPoints(provider, center, city);
         const normalized = rawPoints
           .map((point) => ({
             ...point,
