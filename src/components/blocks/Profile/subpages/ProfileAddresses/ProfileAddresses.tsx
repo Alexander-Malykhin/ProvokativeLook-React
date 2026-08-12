@@ -95,6 +95,7 @@ const ProfileAddresses = ({ title }: ProfilePageProps) => {
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSave={handleAddAddress}
+        isSaving={addState.isLoading}
       />
     </section>
   );

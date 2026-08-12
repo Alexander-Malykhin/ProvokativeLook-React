@@ -6,11 +6,27 @@ export interface OrderProductDto {
   name: string;
   image: string | null;
   quantity: number;
+  size?: string | null;
+  color?: string | null;
+  price?: number | null;
+  oldPrice?: number | null;
+  lineTotal?: number | null;
 }
 
 export interface OrderMethodDto {
   code: string;
   name: string;
+  addressId?: number | null;
+  pickupCode?: string | null;
+  pickupName?: string | null;
+  formattedAddress?: string | null;
+  city?: string | null;
+  country?: string | null;
+  countryId?: number | null;
+  countryCode?: string | null;
+  postalCode?: string | null;
+  trackingNumber?: string | null;
+  trackingUrl?: string | null;
 }
 
 export interface OrderStageDto {
@@ -32,6 +48,13 @@ export interface OrderDto {
   stage: OrderStageDto;
   total: number;
   currency: string;
+  productsTotal?: number;
+  discountTotal?: number;
+  deliveryPrice?: number;
+  paid?: number;
+  isPaid: boolean;
+  paymentState?: "paid" | "pending" | "unpaid";
+  canPay: boolean;
   delivery?: OrderMethodDto | null;
   payment?: OrderMethodDto | null;
   productsCount: number;
@@ -58,7 +81,6 @@ export interface CreateOrderRequest {
     phone: string;
   };
   addressId: number;
-  delivery: "cdek" | "mail";
   payment: "cash" | "card";
   privacy: boolean;
 }
@@ -74,10 +96,30 @@ export interface CreateOrderResponse {
     delivery: {
       code: string;
       name: string;
+      pointCode?: string;
+      pointName?: string;
+      address?: string;
     };
     payment: {
       code: string;
       name: string;
+      required: boolean;
+      invoiceId?: number | null;
+      amount?: number;
+      gateway?: "robokassa" | "modulbank" | string | null;
+      url?: string | null;
     };
+  };
+}
+
+export interface CreateOrderPaymentResponse {
+  success: boolean;
+  payment: {
+    required: boolean;
+    invoiceId?: number | null;
+    amount?: number;
+    gateway?: string | null;
+    url?: string | null;
+    paid?: boolean;
   };
 }

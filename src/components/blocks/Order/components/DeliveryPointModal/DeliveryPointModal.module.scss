@@ -1,0 +1,157 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: rem(24);
+  background: rgba($black, 0.45);
+}
+
+.modal {
+  width: min(rem(1100), 100%);
+  max-height: calc(100vh - rem(48));
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  background: $white;
+  border-radius: rem(14);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: rem(20);
+  padding: rem(20) rem(24);
+  border-bottom: rem(1) solid $border-light;
+
+  &__title {
+    @include font(20, $fw-medium);
+  }
+
+  &__close {
+    width: rem(36);
+    height: rem(36);
+    @include font(24, $fw-light);
+  }
+}
+
+.content {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(rem(330), rem(390)) minmax(0, 1fr);
+}
+
+.sidebar {
+  min-height: 0;
+  overflow-y: auto;
+  padding: rem(18);
+  border-right: rem(1) solid $border-light;
+}
+
+.description,
+.status {
+  @include font(13, $fw-light);
+  color: rgba($black, 0.55);
+  margin-bottom: rem(14);
+}
+
+.error {
+  @include font(13, $fw-light);
+  color: $red;
+  margin-bottom: rem(14);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: rem(8);
+}
+
+.point {
+  width: 100%;
+  text-align: left;
+  padding: rem(14);
+  border: rem(1) solid $border-light;
+  border-radius: rem(10);
+
+  &_active {
+    border-color: $black;
+  }
+
+  &__name {
+    display: block;
+    @include font(14, $fw-medium);
+    margin-bottom: rem(5);
+  }
+
+  &__address,
+  &__distance {
+    display: block;
+    @include font(12, $fw-light);
+    color: rgba($black, 0.6);
+  }
+
+  &__distance {
+    margin-top: rem(5);
+  }
+}
+
+.save {
+  width: 100%;
+  margin-top: rem(16);
+  padding: rem(12) rem(16);
+  border-radius: rem(10);
+  background: $black;
+  color: $white;
+  @include font(14, $fw-light);
+
+  &:disabled {
+    opacity: 0.45;
+  }
+}
+
+.map {
+  min-height: rem(580);
+
+  &__container {
+    width: 100%;
+    height: 100%;
+    min-height: rem(580);
+  }
+}
+
+@media (max-width: rem($mobile)) {
+  .overlay {
+    padding: 0;
+  }
+
+  .modal {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    border-radius: 0;
+  }
+
+  .content {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(rem(320), 46vh) minmax(0, 1fr);
+  }
+
+  .map {
+    grid-row: 1;
+    min-height: rem(320);
+
+    &__container {
+      min-height: rem(320);
+    }
+  }
+
+  .sidebar {
+    grid-row: 2;
+    border-right: 0;
+    border-top: rem(1) solid $border-light;
+  }
+}

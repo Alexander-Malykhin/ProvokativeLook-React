@@ -10,7 +10,7 @@ import type { NavigationMobileCatalogInterface } from "./types";
 import { navigationCategoryCatalog } from "@api/static/navigationCategoryCatalog";
 
 const catalogItems = [
-  { text: "СМОТРЕТЬ ВСЁ", path: "/catalog" },
+  { text: "СМОТРЕТЬ ВСЁ", path: "/catalog/all" },
   ...navigationCategoryCatalog.map((item) => ({
     text: item.title.replaceAll("#br#", ""),
     path: item.path,

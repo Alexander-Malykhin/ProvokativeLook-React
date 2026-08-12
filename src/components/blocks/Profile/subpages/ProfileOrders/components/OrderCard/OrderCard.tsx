@@ -5,6 +5,7 @@ import styles from "./OrderCard.module.scss";
 
 // types
 import type { OrderDto } from "@store/api/orders/types";
+import { usePayOrderMutation } from "@store/api/orders/ordersApi";
 
 // components
 import Image from "@UI/media/Image/Image";
@@ -27,6 +28,21 @@ const formatMoney = (value: number, currency: string): string => {
 
 const OrderCard = ({ order }: OrderCardProps) => {
   const navigate = useNavigate();
+  const [payOrder, { isLoading: isPaying }] = usePayOrderMutation();
+
+  const handlePay = async () => {
+    if (!order.orderId || isPaying) return;
+    const response = await payOrder({ orderId: order.orderId }).unwrap();
+    if (response.payment.paid) {
+      navigate(`/profile/orders/${order.id}`);
+      return;
+    }
+    if (response.payment.url) {
+      sessionStorage.setItem("provokativelook.payment.url", response.payment.url);
+      sessionStorage.setItem("provokativelook.payment.order", String(order.orderId));
+      navigate("/payment/redirect");
+    }
+  };
 
   return (
     <article className={styles.card}>
@@ -57,18 +73,34 @@ const OrderCard = ({ order }: OrderCardProps) => {
         </div>
 
         {order.delivery?.name && (
-          <span className={styles.card__delivery}>
-            Доставка: {order.delivery.name}
-          </span>
+          <div className={styles.card__delivery}>
+            <span>Доставка: {order.delivery.name}</span>
+
+            {order.delivery.trackingNumber && (
+              <div className={styles.card__tracking}>
+                <span>Трек-номер: {order.delivery.trackingNumber}</span>
+
+              </div>
+            )}
+          </div>
         )}
 
-        <button
-          type="button"
-          className={styles.card__button}
-          onClick={() => navigate(`/order/${order.id}`)}
-        >
-          Подробнее о заказе
-        </button>
+        <div className={styles.card__actions}>
+          <button
+            type="button"
+            className={styles.card__button}
+            onClick={() => navigate(`/profile/orders/${order.id}`)}
+          >
+            Подробнее о заказе
+          </button>
+          {order.paymentState === "pending" ? (
+            <span className={styles.card__paymentPending}>Подтверждаем оплату…</span>
+          ) : order.canPay ? (
+            <button type="button" className={styles.card__payButton} onClick={() => void handlePay()} disabled={isPaying}>
+              {isPaying ? "Переходим к оплате..." : "Оплатить счёт"}
+            </button>
+          ) : null}
+        </div>
       </div>
 
       <div className={styles.card__list}>

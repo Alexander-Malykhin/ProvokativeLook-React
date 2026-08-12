@@ -24,9 +24,4 @@ export const navigationMain = [
         text: 'Контакты',
         path: '/contacts',
     },
-    {
-        id: 6,
-        text: 'Распродажа',
-        path: '/catalog/rasprodazha',
-    },
 ]

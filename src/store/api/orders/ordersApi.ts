@@ -2,6 +2,7 @@ import { baseApi } from "@store/api/baseApi";
 import type {
   CreateOrderRequest,
   CreateOrderResponse,
+  CreateOrderPaymentResponse,
   OrdersResponse,
 } from "./types";
 
@@ -31,7 +32,17 @@ export const ordersApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Orders", "Cart", "Notifications"],
     }),
+
+    payOrder: builder.mutation<CreateOrderPaymentResponse, { orderId: number }>({
+      query: (body) => ({
+        url: "orders/pay",
+        scope: "site",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Orders"],
+    }),
   }),
 });
 
-export const { useGetOrdersQuery, useCreateOrderMutation } = ordersApi;
+export const { useGetOrdersQuery, useCreateOrderMutation, usePayOrderMutation } = ordersApi;

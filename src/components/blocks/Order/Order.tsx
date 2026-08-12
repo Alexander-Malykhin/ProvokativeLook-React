@@ -13,6 +13,7 @@ import type { OrderFormValues } from "./model/types";
 import { useGetCartQuery } from "@store/api/cart/cartApi";
 import { useGetUserQuery } from "@store/api/user/userApi";
 import { useGetAddressesQuery } from "@store/api/address/addressApi";
+import type { ProfileAddress } from "@components/blocks/Profile/subpages/ProfileAddresses/model/types";
 import { useCreateOrderMutation } from "@store/api/orders/ordersApi";
 import { getRequestErrorMessage } from "@store/api/getRequestErrorMessage";
 
@@ -21,19 +22,28 @@ const Order = () => {
   const { data: cartData, isLoading: isCartLoading } = useGetCartQuery();
   const { data: userData, isLoading: isUserLoading } = useGetUserQuery();
   const { data: addressesData, isLoading: isAddressesLoading } = useGetAddressesQuery();
+  const [recentlySavedAddress, setRecentlySavedAddress] = useState<ProfileAddress | null>(null);
   const [createOrder, { isLoading: isCreating }] = useCreateOrderMutation();
   const [errorMessage, setErrorMessage] = useState("");
   const initializedRef = useRef(false);
 
   const cart = cartData?.cart;
   const addresses = useMemo(() => addressesData?.addresses ?? [], [addressesData?.addresses]);
+  const effectiveAddresses = useMemo(() => {
+    if (!recentlySavedAddress) return addresses;
+
+    return [
+      recentlySavedAddress,
+      ...addresses.filter((item) => Number(item.id) !== Number(recentlySavedAddress.id)),
+    ];
+  }, [addresses, recentlySavedAddress]);
   const hasUnavailableItems = cart?.items.some((item) => !item.isAvailable) ?? false;
 
   const {
     register,
     handleSubmit,
     reset,
-    watch,
+    setValue,
     formState: { errors },
   } = useForm<OrderFormValues>({
     defaultValues: {
@@ -42,8 +52,7 @@ const Order = () => {
       email: "",
       phone: "",
       addressId: "",
-      delivery: "cdek",
-      payment: "cash",
+      payment: "card",
       privacy: false,
     },
   });
@@ -51,21 +60,22 @@ const Order = () => {
   useEffect(() => {
     if (initializedRef.current || !userData?.user || !addressesData) return;
 
-    const defaultAddress = addresses.find((item) => item.isDefault) ?? addresses[0];
+    const deliveryAddresses = addresses.filter(
+      (item) => item.deliveryProvider === "cdek" || item.deliveryProvider === "mail",
+    );
+    const defaultAddress =
+      deliveryAddresses.find((item) => item.isDefault) ?? deliveryAddresses[0];
     reset({
       firstName: userData.user.firstName ?? "",
       lastName: userData.user.lastName ?? "",
       email: userData.user.email ?? "",
       phone: userData.user.phone ?? "",
       addressId: defaultAddress ? String(defaultAddress.id) : "",
-      delivery: "cdek",
-      payment: "cash",
+      payment: "card",
       privacy: false,
     });
     initializedRef.current = true;
   }, [addresses, addressesData, reset, userData?.user]);
-
-  const selectedAddressId = watch("addressId");
 
   const onSubmit = handleSubmit(async (values) => {
     setErrorMessage("");
@@ -85,6 +95,17 @@ const Order = () => {
       return;
     }
 
+    const deliveryPoint = effectiveAddresses.find(
+      (address) => String(address.id) === values.addressId,
+    );
+    if (
+      !deliveryPoint ||
+      (deliveryPoint.deliveryProvider !== "cdek" && deliveryPoint.deliveryProvider !== "mail")
+    ) {
+      setErrorMessage("Выбранный адрес не является пунктом СДЭК или Почты России");
+      return;
+    }
+
     try {
       const response = await createOrder({
         recipient: {
@@ -94,10 +115,16 @@ const Order = () => {
           phone: values.phone,
         },
         addressId: Number(values.addressId),
-        delivery: values.delivery,
         payment: values.payment,
         privacy: values.privacy,
       }).unwrap();
+
+      if (response.order.payment.required && response.order.payment.url) {
+        sessionStorage.setItem("provokativelook.payment.url", response.order.payment.url);
+        sessionStorage.setItem("provokativelook.payment.order", String(response.order.orderId));
+        navigate("/payment/redirect");
+        return;
+      }
 
       navigate(`/profile/orders?created=${response.order.orderId}`);
     } catch (error) {
@@ -121,7 +148,7 @@ const Order = () => {
         <MainLayoutContainer>
           <div className={styles.order__empty}>
             <h2>Корзина пуста</h2>
-            <button type="button" onClick={() => navigate("/catalog/all")}>Перейти в каталог</button>
+            <button type="button" onClick={() => navigate("/catalog")}>Перейти в каталог</button>
           </div>
         </MainLayoutContainer>
       </SectionLayout>
@@ -142,8 +169,12 @@ const Order = () => {
             <RecipientStep register={register} errors={errors} />
             <DeliveryStep
               register={register}
-              addresses={addresses}
-              selectedAddressId={selectedAddressId}
+              setValue={setValue}
+              addresses={effectiveAddresses}
+              onAddressSaved={setRecentlySavedAddress}
+              city={userData?.user?.city ?? effectiveAddresses[0]?.city ?? "Ростов-на-Дону"}
+              country={userData?.user?.country ?? effectiveAddresses[0]?.country ?? "Россия"}
+              countryCode={userData?.user?.countryCode ?? effectiveAddresses[0]?.countryCode ?? "RU"}
             />
             <PaymentStep
               register={register}

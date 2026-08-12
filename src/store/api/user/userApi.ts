@@ -11,6 +11,9 @@ import type {
   RegisterResponse,
   UserResponse,
   UpdateUserRequest,
+  PasswordResetRequest,
+  PasswordResetConfirmRequest,
+  PasswordResetResponse,
 } from "@store/api/user/types.ts";
 
 export const userApi = baseApi.injectEndpoints({
@@ -82,6 +85,14 @@ export const userApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["User"],
     }),
+
+    requestPasswordReset: builder.mutation<PasswordResetResponse, PasswordResetRequest>({
+      query: (body) => ({ url: "auth/password/request", scope: "site", method: "POST", body }),
+    }),
+
+    confirmPasswordReset: builder.mutation<PasswordResetResponse, PasswordResetConfirmRequest>({
+      query: (body) => ({ url: "auth/password/confirm", scope: "site", method: "POST", body }),
+    }),
   }),
 });
 
@@ -92,4 +103,6 @@ export const {
   useRegisterMutation,
   useConfirmRegisterMutation,
   useLogoutMutation,
+  useRequestPasswordResetMutation,
+  useConfirmPasswordResetMutation,
 } = userApi;

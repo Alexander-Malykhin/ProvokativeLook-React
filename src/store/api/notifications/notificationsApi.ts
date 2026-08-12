@@ -61,6 +61,25 @@ export const notificationsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Notifications"],
     }),
+
+    deleteNotification: builder.mutation<NotificationActionResponse, number>({
+      query: (notificationId) => ({
+        url: "notifications/delete",
+        scope: "site",
+        method: "POST",
+        body: { notificationId },
+      }),
+      invalidatesTags: ["Notifications"],
+    }),
+
+    deleteAllNotifications: builder.mutation<NotificationActionResponse, void>({
+      query: () => ({
+        url: "notifications/delete-all",
+        scope: "site",
+        method: "POST",
+      }),
+      invalidatesTags: ["Notifications"],
+    }),
   }),
 });
 
@@ -69,4 +88,6 @@ export const {
   useGetUnreadNotificationsCountQuery,
   useMarkNotificationAsReadMutation,
   useMarkAllNotificationsAsReadMutation,
+  useDeleteNotificationMutation,
+  useDeleteAllNotificationsMutation,
 } = notificationsApi;

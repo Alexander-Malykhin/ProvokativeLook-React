@@ -1,433 +1,186 @@
 .card {
   display: grid;
-  grid-template-columns: minmax(0, rem(380)) minmax(0, 1fr);
-  gap: rem(24);
-
-  padding: rem(16) 0;
-
+  grid-template-columns: minmax(0, rem(470)) minmax(0, 1fr);
+  gap: rem(34);
+  padding: rem(22) 0;
   border-bottom: rem(1) solid $border-light;
 
-  &:first-child {
-    border-top: rem(1) solid $border-light;
-  }
+  &:first-child { border-top: rem(1) solid $border-light; }
 
   &__content {
     display: grid;
-
-    grid-template-columns: max-content max-content max-content;
+    grid-template-columns: minmax(0, 1fr) max-content;
     grid-template-areas:
-      "label orderId date"
-      "information information information"
-      "delivery delivery delivery"
-      "button button button";
-
+      "label label"
+      "orderId date"
+      "information information"
+      "delivery delivery"
+      "actions actions";
     align-items: center;
-    justify-content: space-between;
-
-    row-gap: rem(25);
-
+    column-gap: rem(18);
+    row-gap: rem(16);
     width: 100%;
     min-width: 0;
   }
 
+  &__label {
+    grid-area: label;
+    justify-self: start;
+    max-width: 100%;
+    padding: rem(8) rem(16);
+    border-radius: rem(100);
+    @include font(12, $fw-light);
+    line-height: 1.25;
+    color: $white;
+    white-space: normal;
+    overflow-wrap: anywhere;
+
+    &_completed { background-color: $green; }
+    &_delivery { background-color: $violet; }
+    &_return { background-color: $black; }
+    &_cancelled { background-color: $orange; }
+  }
+
   &__orderId {
     grid-area: orderId;
-
-    width: max-content;
-
-    @include font(16, $fw-light);
-
+    min-width: 0;
+    @include font(17, $fw-light);
     color: $black;
-
-    white-space: nowrap;
   }
 
   &__date {
     grid-area: date;
-
-    width: max-content;
-
+    justify-self: end;
     @include font(12, $fw-light);
-
-    color: rgba($black, 0.6);
-
+    color: rgba($black, 0.55);
     white-space: nowrap;
   }
 
   &__information {
     grid-area: information;
-
     display: grid;
     grid-template-columns: max-content max-content 1fr;
     align-items: center;
-
-    column-gap: rem(20);
-
+    column-gap: rem(18);
     width: 100%;
 
-    &_text {
-      @include font(14, $fw-light);
-
-      color: $black;
-    }
-
-    &_sum {
-      justify-self: start;
-
-      margin: 0;
-
-      @include font(20, $fw-light);
-
-      color: $black;
-    }
-
-    &_counter {
-      justify-self: end;
-
-      @include font(14, $fw-light);
-
-      color: $black;
-
-      white-space: nowrap;
-    }
-  }
-
-  &__label {
-    grid-area: label;
-
-    width: max-content;
-    height: max-content;
-
-    padding: rem(8) rem(16);
-
-    border-radius: rem(100);
-
-    @include font(12, $fw-light);
-
-    color: $white;
-
-    &_completed {
-      background-color: $green;
-    }
-
-    &_delivery {
-      background-color: $violet;
-    }
-
-    &_return {
-      background-color: $black;
-    }
-
-    &_cancelled {
-      background-color: $orange;
-    }
+    &_text { @include font(14, $fw-light); color: $black; }
+    &_sum { margin: 0; @include font(22, $fw-light); color: $black; }
+    &_counter { justify-self: end; @include font(14, $fw-light); color: $black; white-space: nowrap; }
   }
 
   &__delivery {
     grid-area: delivery;
+    display: flex;
+    flex-direction: column;
+    gap: rem(7);
+    min-width: 0;
+    @include font(14, $fw-light);
+    color: rgba($black, 0.72);
+  }
 
-    @include font(13, $fw-light);
-    color: rgba($black, 0.6);
+  &__tracking {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: rem(8) rem(16);
+    color: $black;
+    overflow-wrap: anywhere;
   }
 
   &__button {
-    grid-area: button;
-
+    grid-area: actions;
     justify-self: flex-start;
-
+    padding-top: rem(2);
     @include font(14, $fw-light);
-
     color: rgba($black, 0.5);
-
     text-decoration: underline;
-    text-underline-offset: rem(1);
+    text-underline-offset: rem(2);
+  }
+
+  &__actions {
+    grid-area: actions;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: rem(12);
+  }
+
+  &__payButton {
+    padding: rem(10) rem(18);
+    border: rem(1) solid $black;
+    border-radius: rem(8);
+    @include font(13, $fw-light);
+    color: $white;
+    background: $black;
+    &:disabled { opacity: .55; cursor: default; }
   }
 
   &__list {
     display: flex;
+    align-items: flex-start;
     justify-content: flex-start;
-
     gap: rem(10);
-
     width: 100%;
     min-width: 0;
-
     overflow-x: auto;
     overflow-y: hidden;
-
-    overscroll-behavior-x: contain;
-    -webkit-overflow-scrolling: touch;
-
     scrollbar-width: none;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
+    &::-webkit-scrollbar { display: none; }
 
     &_item,
-    &_end {
-      flex: 0 0 rem(90);
-
-      width: rem(90);
-      height: rem(120);
-    }
-
-    &_item {
-      overflow: hidden;
-    }
-
-    &_image {
-      display: block;
-
-      width: 100%;
-      height: 100%;
-
-      object-fit: cover;
-    }
-
-    &_end {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      background-color: $gray;
-
-      @include font(20, $fw-light);
-    }
+    &_end { flex: 0 0 rem(100); width: rem(100); height: rem(134); }
+    &_item { overflow: hidden; }
+    &_image { display:block; width:100%; height:100%; object-fit:cover; }
+    &_end { display:flex;align-items:center;justify-content:center;background:$gray;@include font(18,$fw-light); }
   }
 
   @media (max-width: rem($desktop-x)) {
-    grid-template-columns: minmax(0, rem(340)) minmax(0, 1fr);
-    gap: rem(18);
-
-    &__content {
-      row-gap: rem(20);
-    }
-
-    &__information {
-      column-gap: rem(14);
-
-      &_text,
-      &_counter {
-        @include font(13, $fw-light);
-      }
-
-      &_sum {
-        @include font(18, $fw-light);
-      }
-    }
-
-    &__list {
-      gap: rem(8);
-
-      &_item,
-      &_end {
-        flex-basis: rem(90);
-
-        width: rem(90);
-        height: rem(120);
-      }
-    }
+    grid-template-columns: minmax(0, rem(420)) minmax(0, 1fr);
+    gap: rem(24);
   }
 
   @media (max-width: rem($tablet)) {
-    grid-template-columns: minmax(0, rem(300)) minmax(0, 1fr);
-    gap: rem(14);
-
-    &__content {
-      grid-template-columns: max-content 1fr max-content;
-
-      column-gap: rem(10);
-      row-gap: rem(18);
-    }
-
-    &__orderId {
-      @include font(14, $fw-light);
-    }
-
-    &__date {
-      @include font(11, $fw-light);
-    }
-
-    &__information {
-      grid-template-columns: max-content max-content 1fr;
-
-      column-gap: rem(10);
-
-      &_text,
-      &_counter {
-        @include font(12, $fw-light);
-      }
-
-      &_sum {
-        @include font(17, $fw-light);
-      }
-    }
-
-    &__label {
-      padding: rem(6) rem(12);
-
-      @include font(10, $fw-light);
-    }
-
-    &__button {
-      @include font(12, $fw-light);
-    }
-
-    &__list {
-      gap: rem(6);
-
-      &_item,
-      &_end {
-        flex-basis: rem(90);
-
-        width: rem(90);
-        height: rem(120);
-      }
-
-      &_end {
-        @include font(18, $fw-light);
-      }
-    }
+    grid-template-columns: minmax(0, rem(360)) minmax(0, 1fr);
+    gap: rem(18);
+    &__information_sum { @include font(19, $fw-light); }
   }
 
   @media (max-width: rem($mobile)) {
     display: flex;
     flex-direction: column;
-
-    gap: rem(12);
-
-    padding: rem(10) 0;
+    gap: rem(16);
+    padding: rem(16) 0;
 
     &__content {
-      grid-template-columns: max-content 1fr max-content;
-
+      grid-template-columns: minmax(0, 1fr) max-content;
       grid-template-areas:
-        "label label label"
-        "orderId . date"
-        "information information information"
-        "delivery delivery delivery"
-        "button button button";
-
-      column-gap: rem(8);
+        "label label"
+        "orderId date"
+        "information information"
+        "delivery delivery"
+        "actions actions";
       row-gap: rem(12);
-
-      width: 100%;
     }
 
-    &__label {
-      padding: rem(5) rem(13);
-
-      @include font(12, $fw-light);
-    }
-
-    &__orderId {
-      justify-self: start;
-
-      @include font(14, $fw-light);
-    }
-
-    &__date {
-      justify-self: end;
-
-      @include font(12, $fw-light);
-    }
-
-    &__information {
-      grid-template-columns: max-content max-content 1fr;
-
-      column-gap: rem(8);
-
-      &_text {
-        justify-self: start;
-
-        @include font(12, $fw-light);
-      }
-
-      &_sum {
-        justify-self: start;
-
-        @include font(14, $fw-light);
-      }
-
-      &_counter {
-        justify-self: end;
-
-        @include font(12, $fw-light);
-      }
-    }
-
-    &__list {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-
-      gap: rem(4);
-
-      width: 100%;
-
-      overflow: visible;
-
-      &_item,
-      &_end {
-        width: 100%;
-        height: auto;
-
-        aspect-ratio: 3 / 4;
-      }
-
-      &_end {
-        @include font(12, $fw-light);
-      }
-    }
-
-    &__button {
-      @include font(11, $fw-light);
-    }
-  }
-
-  @media (max-width: rem($mobile-x)) {
-    &__content {
-      row-gap: rem(10);
-    }
-
-    &__orderId {
-      @include font(14, $fw-light);
-    }
-
-    &__date {
-      @include font(12, $fw-light);
-    }
-
-    &__information {
-      column-gap: rem(6);
-
-      &_text, &_counter {
-        @include font(12, $fw-light);
-      }
-
-      &_sum {
-        @include font(16, $fw-light);
-      }
-    }
-
-    &__button {
-      @include font(14, $fw-light);
-    }
-
-    &__list {
-      gap: rem(3);
-    }
+    &__information { column-gap: rem(8); }
+    &__information_text, &__information_counter { @include font(12, $fw-light); }
+    &__information_sum { @include font(16, $fw-light); }
+    &__list { display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:rem(4);overflow:visible; }
+    &__list_item, &__list_end { width:100%;height:auto;aspect-ratio:3/4; }
   }
 }
+
 .card__list_placeholder {
-  display: flex;
+  display:flex;align-items:center;justify-content:center;width:100%;height:100%;padding:rem(8);
+  text-align:center;background:$gray;color:rgba($black,.45);@include font(11,$fw-light);
+}
+
+.card__paymentPending {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  padding: rem(8);
-  text-align: center;
-  background: $gray;
-  color: rgba($black, 0.45);
-  @include font(11, $fw-light);
+  min-height: rem(40);
+  padding: 0 rem(16);
+  font-size: rem(14);
+  color: $gray;
 }

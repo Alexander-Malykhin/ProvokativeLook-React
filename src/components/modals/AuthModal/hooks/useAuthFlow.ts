@@ -11,6 +11,8 @@ import {
   useConfirmRegisterMutation,
   useLoginMutation,
   useRegisterMutation,
+  useRequestPasswordResetMutation,
+  useConfirmPasswordResetMutation,
 } from "@store/api/user/userApi";
 import { getRequestErrorMessage } from "@store/api/getRequestErrorMessage";
 import {
@@ -36,13 +38,16 @@ export const useAuthFlow = () => {
     useState<ConfirmFormState>(INITIAL_CONFIRM_FORM);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [resetForm, setResetForm] = useState({ email: "", code: "", password: "", confirmPassword: "" });
 
   const [login, loginState] = useLoginMutation();
   const [register, registerState] = useRegisterMutation();
   const [confirmRegister, confirmState] = useConfirmRegisterMutation();
+  const [requestPasswordReset, resetRequestState] = useRequestPasswordResetMutation();
+  const [confirmPasswordReset, resetConfirmState] = useConfirmPasswordResetMutation();
 
   const isLoading =
-    loginState.isLoading || registerState.isLoading || confirmState.isLoading;
+    loginState.isLoading || registerState.isLoading || confirmState.isLoading || resetRequestState.isLoading || resetConfirmState.isLoading;
 
   const close = useCallback(() => {
     if (!isLoading) {
@@ -77,6 +82,59 @@ export const useAuthFlow = () => {
     setConfirmForm({
       code: event.target.value.replace(/\D/g, "").slice(0, 6),
     });
+  };
+
+  const handleResetEmailChange = (value: string) => {
+    setResetForm((previous) => ({ ...previous, email: value }));
+  };
+
+  const handleResetChange = (field: "code" | "password" | "confirmPassword", value: string) => {
+    setResetForm((previous) => ({ ...previous, [field]: value }));
+  };
+
+  const submitResetRequest = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setErrorMessage("");
+    setSuccessMessage("");
+    try {
+      const response = await requestPasswordReset({ email: resetForm.email.trim() }).unwrap();
+      if (!response.success) {
+        setErrorMessage(response.message ?? "Не удалось отправить код");
+        return;
+      }
+      setSuccessMessage(response.message ?? "Код отправлен на почту");
+      dispatch(setAuthModalMode("resetConfirm"));
+    } catch (error) {
+      setErrorMessage(getRequestErrorMessage(error));
+    }
+  };
+
+  const submitResetConfirm = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setErrorMessage("");
+    setSuccessMessage("");
+    if (resetForm.password !== resetForm.confirmPassword) {
+      setErrorMessage("Пароли не совпадают");
+      return;
+    }
+    try {
+      const response = await confirmPasswordReset({
+        email: resetForm.email.trim(),
+        code: resetForm.code,
+        password: resetForm.password,
+        confirmPassword: resetForm.confirmPassword,
+      }).unwrap();
+      if (!response.success) {
+        setErrorMessage(response.message ?? "Не удалось изменить пароль");
+        return;
+      }
+      setLoginForm({ email: resetForm.email.trim(), password: "" });
+      setResetForm({ email: "", code: "", password: "", confirmPassword: "" });
+      dispatch(setAuthModalMode("login"));
+      setSuccessMessage(response.message ?? "Пароль изменён. Теперь войдите");
+    } catch (error) {
+      setErrorMessage(getRequestErrorMessage(error));
+    }
   };
 
   const submitLogin = async (event: FormEvent<HTMLFormElement>) => {
@@ -183,17 +241,23 @@ export const useAuthFlow = () => {
     loginForm,
     registerForm,
     confirmForm,
+    resetForm,
     errorMessage,
     successMessage,
     isLoading,
     isLoginLoading: loginState.isLoading,
     isRegisterLoading: registerState.isLoading,
     isConfirmLoading: confirmState.isLoading,
+    isResetLoading: resetRequestState.isLoading || resetConfirmState.isLoading,
     close,
     changeMode,
     handleLoginChange,
     handleRegisterChange,
     handleConfirmChange,
+    handleResetEmailChange,
+    handleResetChange,
+    submitResetRequest,
+    submitResetConfirm,
     submitLogin,
     submitRegister,
     submitConfirm,

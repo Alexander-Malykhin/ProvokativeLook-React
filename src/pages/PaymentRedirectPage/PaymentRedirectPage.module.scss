@@ -1,0 +1,31 @@
+.payment {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: $white;
+  min-height: calc(100vh - #{rem(120)});
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: rem(14);
+  padding: rem(40) rem(20);
+  text-align: center;
+  color: $black;
+
+  &__brand { @include font(24, $fw-bold); letter-spacing: rem(3); margin-bottom: rem(22); }
+  h1 { margin: 0; @include font(30, $fw-light); }
+  p { margin: 0; @include font(15, $fw-light); color: rgba($black,.6); }
+  small { @include font(12, $fw-light); color: rgba($black,.45); }
+
+  &__loader {
+    width: rem(42);
+    height: rem(42);
+    border: rem(1) solid rgba($black,.18);
+    border-top-color: $black;
+    border-radius: 50%;
+    animation: pl-payment-spin .75s linear infinite;
+  }
+}
+
+@keyframes pl-payment-spin { to { transform: rotate(360deg); } }

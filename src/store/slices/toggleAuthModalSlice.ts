@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-export type AuthModalMode = "login" | "register" | "confirm";
+export type AuthModalMode = "login" | "register" | "confirm" | "resetRequest" | "resetConfirm";
 
 interface ToggleAuthModalState {
   active: boolean;

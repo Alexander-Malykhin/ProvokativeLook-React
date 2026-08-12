@@ -71,3 +71,7 @@ export interface LogoutResponse {
   success: boolean;
   message?: string;
 }
+
+export interface PasswordResetRequest { email: string; }
+export interface PasswordResetConfirmRequest { email: string; code: string; password: string; confirmPassword: string; }
+export interface PasswordResetResponse { success: boolean; message?: string; }

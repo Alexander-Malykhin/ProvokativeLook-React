@@ -166,3 +166,20 @@
     }
   }
 }
+
+.order {
+  &__pickupService {
+    @include font(15, $fw-medium);
+  }
+
+  &__pickupCode {
+    @include font(12, $fw-light);
+    color: rgba($black, 0.45);
+  }
+
+  &__emptyDeliveryPoint {
+    padding: rem(14) rem(16);
+    @include font(14, $fw-light);
+    color: rgba($black, 0.5);
+  }
+}

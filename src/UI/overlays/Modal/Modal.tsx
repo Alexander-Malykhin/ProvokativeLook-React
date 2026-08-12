@@ -1,4 +1,5 @@
 import { useEffect, useRef, type MouseEvent, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 
 interface ModalProps {
   open: boolean;
@@ -104,7 +105,7 @@ const Modal = ({
     }
   };
 
-  return (
+  return createPortal(
     <div className={overlayClassName} onMouseDown={handleBackdropMouseDown}>
       <div
         ref={contentRef}
@@ -112,10 +113,12 @@ const Modal = ({
         role="dialog"
         aria-modal="true"
         aria-labelledby={ariaLabelledBy}
+        onMouseDown={(event) => event.stopPropagation()}
       >
         {children}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 };
 

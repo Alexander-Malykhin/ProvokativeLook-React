@@ -29,6 +29,7 @@ export interface LoginFormProps extends AuthMessageProps {
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   onSwitch: () => void;
+  onForgotPassword: () => void;
 }
 
 export interface RegisterFormProps extends AuthMessageProps {

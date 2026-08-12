@@ -1,6 +1,7 @@
 import styles from "../AuthModal.module.scss";
 import type { LoginFormProps } from "../model/types";
 import AuthMessages from "./AuthMessages";
+import PasswordInput from "./PasswordInput";
 
 const LoginForm = ({
   form,
@@ -10,6 +11,7 @@ const LoginForm = ({
   onChange,
   onSubmit,
   onSwitch,
+  onForgotPassword,
 }: LoginFormProps) => (
   <form className={styles.form} onSubmit={onSubmit}>
     <div className={styles.form__header}>
@@ -35,21 +37,19 @@ const LoginForm = ({
           required
         />
       </label>
-      <label className={styles.field}>
-        <span className={styles.field__label}>Пароль</span>
-        <input
-          type="password"
-          name="password"
-          value={form.password}
-          onChange={onChange}
-          placeholder="Введите пароль"
-          autoComplete="current-password"
-          className={styles.field__input}
-          required
-        />
-      </label>
+      <PasswordInput
+        name="password"
+        value={form.password}
+        label="Пароль"
+        placeholder="Введите пароль"
+        autoComplete="current-password"
+        onChange={onChange}
+      />
     </div>
 
+    <button type="button" className={styles.form__switch} onClick={onForgotPassword} disabled={isLoading}>
+      Забыли пароль?
+    </button>
     <AuthMessages errorMessage={errorMessage} successMessage={successMessage} />
     <button type="submit" className={styles.form__submit} disabled={isLoading}>
       {isLoading ? "Входим..." : "Войти"}

@@ -1,7 +1,6 @@
 import styles from './CatalogList.module.scss';
 
 import ProductCard from '@components/ProductCard/ProductCard.tsx';
-import fallbackImage from '@assets/products/product-1.png';
 import type { CatalogProductItem } from '@store/api/catalog/types';
 
 type CatalogListProps = {
@@ -74,7 +73,7 @@ const CatalogList = ({
             key={product.id}
             id={product.id}
             title={product.name}
-            image={product.image || fallbackImage}
+            image={product.image ?? ""}
             price={formatPrice(product.price, product.currency)}
             sizes={product.sizes}
           />

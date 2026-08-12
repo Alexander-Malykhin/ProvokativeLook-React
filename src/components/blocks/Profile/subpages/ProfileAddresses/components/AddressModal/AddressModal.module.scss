@@ -6,44 +6,36 @@
   align-items: center;
   justify-content: center;
   padding: rem(24);
-  overflow-y: auto;
   background-color: $overlay;
 
   &__window {
-    display: flex;
-    flex-direction: column;
-    gap: rem(24);
-    width: min(rem(810), 100%);
+    width: min(rem(850), calc(100vw - #{rem(48)}));
     max-height: calc(100vh - #{rem(48)});
-    padding: rem(48);
-    overflow-y: auto;
-    background-color: $white;
+    padding: rem(42) rem(48) rem(46);
+    overflow: hidden;
+    background: $white;
     box-shadow: $shadow-modal;
   }
 
-  &__header,
-  &__mobileTop,
-  &__mobileFormHeader {
+  &__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: rem(16);
+    margin-bottom: rem(24);
   }
 
-  &__title,
-  &__mobileTitle {
-    @include font(20, $fw-light);
+  &__title {
     margin: 0;
+    @include font(24, $fw-light);
   }
 
   &__close {
     position: relative;
-    width: rem(24);
-    height: rem(24);
+    width: rem(28);
+    height: rem(28);
     padding: 0;
-    flex-shrink: 0;
     border: 0;
-    background-color: transparent;
+    background: transparent;
     cursor: pointer;
 
     &::before,
@@ -54,224 +46,181 @@
       left: 50%;
       width: rem(20);
       height: rem(1);
-      background-color: $black;
+      background: $black;
     }
-
-    &::before {
-      transform: translate(-50%, -50%) rotate(45deg);
-    }
-
-    &::after {
-      transform: translate(-50%, -50%) rotate(-45deg);
-    }
+    &::before { transform: translate(-50%, -50%) rotate(45deg); }
+    &::after { transform: translate(-50%, -50%) rotate(-45deg); }
   }
 
   &__desktopContent {
     display: grid;
-    grid-template-columns: minmax(0, rem(348)) minmax(0, rem(348));
-    gap: rem(20);
+    grid-template-columns: minmax(0, 1fr) minmax(0, rem(350));
+    gap: rem(26);
+    min-height: rem(410);
   }
 
-  &__form,
-  &__mobileForm {
+  &__form {
     display: flex;
     flex-direction: column;
-    gap: rem(16);
     min-width: 0;
+    min-height: 0;
   }
 
-  &__error {
-    @include font(12, $fw-light);
-    margin: 0;
-    padding: rem(9) rem(10);
-    color: rgba($black, 0.5);
-  }
-
-  &__save,
-  &__continue {
-    @include font(15, $fw-light);
+  &__save {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
-    min-height: rem(44);
+    min-height: rem(46);
+    margin-top: rem(16);
     padding: rem(12) rem(18);
     border: rem(1) solid $black;
     border-radius: rem(9);
-    background-color: $black;
+    background: $black;
     color: $white;
+    @include font(15, $fw-light);
     cursor: pointer;
 
     &:disabled {
       border-color: transparent;
-      background-color: rgba($black, 0.4);
+      background: rgba($black, .35);
       cursor: default;
     }
   }
+}
 
-  &__back,
-  &__searchBack {
-    position: relative;
-    border: 0;
-    background-color: transparent;
-    cursor: pointer;
-  }
+.pickupServices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: rem(8);
+  margin: rem(18) 0 rem(14);
+}
 
-  &__back {
-    width: rem(18);
-    height: rem(24);
+.pickupService {
+  display: flex;
+  align-items: center;
+  gap: rem(9);
+  min-height: rem(44);
+  padding: rem(10) rem(13);
+  border: rem(1) solid $border-light;
+  border-radius: rem(9);
+  cursor: pointer;
+  @include font(14, $fw-light);
 
-    &::before {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: rem(4);
-      width: rem(9);
-      height: rem(9);
-      border-left: rem(1) solid $black;
-      border-bottom: rem(1) solid $black;
-      transform: translateY(-50%) rotate(45deg);
-    }
-  }
+  input { width: rem(13); height: rem(13); margin: 0; }
 
-  &__selectedAddress {
-    display: flex;
-    align-items: flex-start;
-    gap: rem(10);
-    padding-bottom: rem(13);
-    border-bottom: rem(1) solid rgba($black, 0.08);
-  }
+  &_active { border-color: $black; }
+}
 
-  &__selectedAddressIcon {
-    width: rem(18);
-    height: rem(18);
-    flex-shrink: 0;
-    border: rem(1) solid $black;
-  }
+.pickupList {
+  flex: 1;
+  min-height: 0;
+  max-height: rem(270);
+  overflow-y: auto;
+  padding-right: rem(5);
+  border-top: rem(1) solid $border-light;
+  border-bottom: rem(1) solid $border-light;
+}
 
-  &__selectedAddressText {
-    @include font(14, $fw-light);
-    margin: 0;
-  }
+.pickupStatus {
+  margin: 0;
+  padding: rem(18) rem(4);
+  color: rgba($black, .5);
+  @include font(13, $fw-light);
+}
 
-  &__mobileTop,
-  &__mobileMapPage,
-  &__mobileSearch,
-  &__mobileForm {
-    display: none;
-  }
+.pickupErrorBox {
+  padding: rem(16) rem(4);
+}
 
-  @media (max-width: rem($tablet)) {
-    &__window {
-      width: min(rem(760), 100%);
-      padding: rem(36);
-    }
-  }
+.pickupError {
+  margin: 0 0 rem(10);
+  color: $red;
+  @include font(12, $fw-light);
+}
 
-  @media (max-width: rem($mobile)) {
+.pickupRetry {
+  padding: 0;
+  border: 0;
+  border-bottom: rem(1) solid currentColor;
+  background: transparent;
+  @include font(12, $fw-light);
+  cursor: pointer;
+}
+
+.pickupPointRow {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  gap: rem(4);
+  padding: rem(13) rem(10);
+  border: 0;
+  border-bottom: rem(1) solid rgba($black, .07);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+
+  strong { @include font(14, $fw-medium); }
+  span { @include font(12, $fw-light); color: rgba($black, .72); }
+  small { @include font(10, $fw-light); color: rgba($black, .42); }
+
+  &:hover { background: rgba($gray, .45); }
+  &_active { background: $gray; }
+}
+
+.pickupMapWrap {
+  position: relative;
+  min-height: rem(410);
+  overflow: hidden;
+  background: $gray;
+}
+
+.pickupMap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.pickupMapStatus {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: rem(20);
+  background: $gray;
+  color: rgba($black, .45);
+  text-align: center;
+  @include font(12, $fw-light);
+  pointer-events: none;
+}
+
+@media (max-width: rem($mobile)) {
+  .modal {
     padding: 0;
-    background-color: $white;
+    align-items: stretch;
 
     &__window {
       width: 100%;
-      height: 100dvh;
       max-height: none;
-      padding: 0;
-      gap: 0;
-      overflow: hidden;
+      height: 100dvh;
+      padding: rem(22) rem(16);
+      overflow-y: auto;
     }
 
-    &__header,
+    &__header { margin-bottom: rem(18); }
+    &__title { @include font(20, $fw-light); }
+
     &__desktopContent {
-      display: none;
-    }
-
-    &__mobileTop {
-      position: relative;
-      z-index: 100;
-      display: flex;
-      min-height: rem(62);
-      padding: rem(16) rem(10);
-      border-bottom: rem(1) solid rgba($black, 0.08);
-      background-color: $white;
-    }
-
-    &__mobileMapPage {
-      display: grid;
-      grid-template-rows: minmax(0, 1fr) auto;
-      height: calc(100dvh - #{rem(62)});
-    }
-
-
-    &__mobileFooter {
       display: flex;
       flex-direction: column;
-      gap: rem(8);
-      padding: 0 rem(8) rem(8);
-      background-color: $white;
-    }
-
-    &__mobileSearch {
-      display: flex;
-      flex-direction: column;
-      height: calc(100dvh - #{rem(62)});
-      overflow: hidden;
-    }
-
-    &__searchBack {
-      width: 100%;
-      height: rem(45);
-      border-bottom: rem(1) solid rgba($black, 0.08);
-
-      &::before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: rem(8);
-        height: rem(8);
-        border-right: rem(1) solid $black;
-        border-bottom: rem(1) solid $black;
-        transform: translate(-50%, -65%) rotate(45deg);
-      }
-    }
-
-    &__mobileSearchInput {
-      padding: 0 rem(8);
-    }
-
-    &__mobileSuggestions {
-      flex: 1;
-      overflow-y: auto;
-      border-top: rem(1) solid rgba($black, 0.08);
-    }
-
-    &__mobileForm {
-      display: flex;
-      height: calc(100dvh - #{rem(62)});
-      padding: rem(8);
-      overflow-y: auto;
-    }
-
-    &__mobileTitle {
-      @include font(17, $fw-light);
-    }
-
-    &__mobileForm &__save {
-      margin-top: auto;
+      min-height: 0;
     }
   }
 
-  @media (max-width: rem($mobile-x)) {
-    &__mobileTop {
-      min-height: rem(58);
-      padding: rem(15) rem(8);
-    }
-
-    &__mobileMapPage,
-    &__mobileSearch,
-    &__mobileForm {
-      height: calc(100dvh - #{rem(58)});
-    }
-  }
+  .pickupList { max-height: rem(260); }
+  .pickupMapWrap { min-height: rem(300); }
 }

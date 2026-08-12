@@ -25,6 +25,7 @@ const SearchModal = () => {
   const [query, setQuery] = useState("");
   const debouncedQuery = useDebouncedValue(query.trim(), 300);
   const canSearch = debouncedQuery.length >= 2;
+  const canSubmit = query.trim().length >= 2;
 
   const { data: categoriesData } = useGetCategoriesQuery(undefined, { skip: !active });
   const { data: searchData, isFetching: isSearching } = useSearchCatalogQuery(
@@ -52,9 +53,14 @@ const SearchModal = () => {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!canSearch) return;
 
-    if (productCards.length === 1) {
+    const value = query.trim();
+    if (value.length < 2) return;
+
+    // Если к моменту нажатия уже пришёл единственный точный результат —
+    // открываем его. Во всех остальных случаях оставляем окно открытым и
+    // показываем результаты поиска прямо в нём.
+    if (canSearch && productCards.length === 1) {
       const id = productCards[0].id;
       close();
       navigate(`/product/${id}`);
@@ -105,7 +111,7 @@ const SearchModal = () => {
           </label>
 
           <div className={styles.search__buttons}>
-            <button type="submit" className={styles.button__search} disabled={!canSearch}>Найти</button>
+            <button type="submit" className={styles.button__search} disabled={!canSubmit}>Найти</button>
             <button type="button" className={styles.button__close} onClick={close}>Закрыть</button>
           </div>
         </div>

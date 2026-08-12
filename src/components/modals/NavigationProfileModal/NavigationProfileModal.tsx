@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "@store/hooks";
+import { baseApi } from "@store/api/baseApi";
 
 import { close } from "@store/slices/toggleMenuProfileSlice.ts";
 
@@ -20,6 +22,7 @@ import styles from "./NavigationProfileModal.module.scss";
 
 const NavigationProfileModal = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -70,7 +73,9 @@ const NavigationProfileModal = () => {
   const handleLogout = async () => {
     try {
       await logout().unwrap();
+      dispatch(baseApi.util.resetApiState());
       dispatch(close());
+      navigate("/", { replace: true });
     } catch {
       // Ошибку выхода при необходимости можно вывести уведомлением
     }

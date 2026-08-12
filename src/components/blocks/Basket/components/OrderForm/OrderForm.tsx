@@ -1,4 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAppDispatch } from "@store/hooks";
+import { useGetUserQuery } from "@store/api/user/userApi";
+import { openAuthModal } from "@store/slices/toggleAuthModalSlice";
 import styles from "./OrderForm.module.scss";
 import MainButton from "@UI/buttons/MainButton/MainButton.tsx";
 import FormRow from "@components/blocks/Basket/UI/FormRow/FormRow.tsx";
@@ -18,12 +21,23 @@ const formatMoney = (value: number, currency: string) => {
 
 const OrderForm = ({ cart }: OrderFormProps) => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { data: userData, isFetching: isUserFetching } = useGetUserQuery();
+  const isAuthenticated = Boolean(userData?.success && userData.user);
   const { pathname } = useLocation();
   const pathOrder = pathname.split("/")[1] === "order";
   const quantity = Math.round(cart?.quantity ?? 0);
   const total = cart?.total ?? 0;
   const currency = cart?.currency ?? "RUB";
   const hasUnavailableItems = cart?.items.some((item) => !item.isAvailable) ?? false;
+
+  const handleCheckout = () => {
+    if (!isAuthenticated) {
+      dispatch(openAuthModal("login"));
+      return;
+    }
+    navigate("/order");
+  };
 
   return (
     <div className={styles.form}>
@@ -47,8 +61,8 @@ const OrderForm = ({ cart }: OrderFormProps) => {
         <>
           <MainButton
             type="button"
-            onClick={() => navigate("/order")}
-            disabled={hasUnavailableItems}
+            onClick={handleCheckout}
+            disabled={hasUnavailableItems || isUserFetching}
           >
             Оформить заказ
           </MainButton>

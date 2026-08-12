@@ -4,7 +4,6 @@ export interface OrderFormValues {
   email: string;
   phone: string;
   addressId: string;
-  delivery: "cdek" | "mail";
   payment: "cash" | "card";
   privacy: boolean;
 }

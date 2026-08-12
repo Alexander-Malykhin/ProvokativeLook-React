@@ -4,10 +4,34 @@ interface YandexMapEvent {
   get: (name: string) => unknown;
 }
 
+interface YandexEventManager {
+  add: (eventName: string, callback: (event?: YandexMapEvent) => void) => void;
+}
+
+export interface YandexGeoObject {
+  geometry?: {
+    getCoordinates?: () => Coordinates;
+  };
+  properties?: {
+    get?: (name: string) => unknown;
+  };
+  events?: YandexEventManager;
+}
+
 export interface YandexPlacemark {
   geometry: {
     setCoordinates: (coordinates: Coordinates) => void;
   };
+  events?: YandexEventManager;
+}
+
+export interface YandexGeoObjectCollection {
+  toArray?: () => YandexGeoObject[];
+  getBounds?: () => unknown;
+}
+
+export interface YandexSearchResult {
+  geoObjects?: YandexGeoObjectCollection;
 }
 
 export interface YandexMapInstance {
@@ -22,6 +46,7 @@ export interface YandexMapInstance {
     zoom?: number,
     options?: Record<string, unknown>,
   ) => void;
+  setBounds?: (bounds: unknown, options?: Record<string, unknown>) => void;
   destroy: () => void;
 }
 
@@ -41,6 +66,10 @@ export interface YandexApi {
     properties?: Record<string, unknown>,
     options?: Record<string, unknown>,
   ) => YandexPlacemark;
+  search?: (
+    query: string,
+    options?: Record<string, unknown>,
+  ) => Promise<YandexSearchResult>;
 }
 
 declare global {

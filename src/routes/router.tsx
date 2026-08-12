@@ -58,6 +58,14 @@ export const router = createBrowserRouter(
           lazy: page(() => import("@pages/FavoritesPage/FavoritesPage")),
         },
         {
+          path: "payment/redirect",
+          lazy: page(() => import("@pages/PaymentRedirectPage/PaymentRedirectPage")),
+        },
+        {
+          path: "payment/success",
+          lazy: page(() => import("@pages/PaymentSuccessPage/PaymentSuccessPage")),
+        },
+        {
           path: "info/:url",
           lazy: page(() => import("@pages/InfoPage/InfoPage")),
         },

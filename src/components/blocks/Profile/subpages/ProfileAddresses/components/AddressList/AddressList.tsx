@@ -8,6 +8,9 @@ interface AddressListProps {
   disabled?: boolean;
 }
 
+const getProviderName = (address: ProfileAddress) =>
+  address.deliveryProvider === "mail" ? "Почта России" : "СДЭК";
+
 const AddressList = ({ addresses, onSetDefault, onDelete, disabled = false }: AddressListProps) => (
   <div className={styles.list}>
     {addresses.map((address) => (
@@ -22,16 +25,20 @@ const AddressList = ({ addresses, onSetDefault, onDelete, disabled = false }: Ad
         />
 
         <div className={styles.list__content}>
-          <p className={styles.list__description}>
-            {address.postalCode ? `${address.postalCode}, ` : ""}
-            {address.formattedAddress}
-            {address.address2 ? `, ${address.address2}` : ""}
-          </p>
-
-          <div className={styles.list__meta}>
-            {address.isDefault && <span>Основной адрес</span>}
-            {address.country && <span>{address.country}</span>}
+          <div className={styles.list__topline}>
+            <strong>{getProviderName(address)}</strong>
+            {address.pickupName && <span>{address.pickupName}</span>}
+            {address.isDefault && <small>Основной</small>}
           </div>
+          <p className={styles.list__description}>
+            {address.formattedAddress || address.address1}
+          </p>
+          {(address.postalCode || address.pickupCode) && (
+            <div className={styles.list__meta}>
+              {address.postalCode && <span>Индекс {address.postalCode}</span>}
+              {address.pickupCode && <span>Код пункта {address.pickupCode}</span>}
+            </div>
+          )}
         </div>
 
         <button

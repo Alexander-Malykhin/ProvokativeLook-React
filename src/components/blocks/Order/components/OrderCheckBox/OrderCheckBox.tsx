@@ -1,6 +1,5 @@
 import type { ChangeEvent } from "react";
 import type { UseFormRegisterReturn } from "react-hook-form";
-import { Link } from "react-router-dom";
 
 import styles from "./OrderCheckBox.module.scss";
 
@@ -12,6 +11,7 @@ interface OrderCheckBoxProps {
 
 const OrderCheckBox = ({ checked, onChange, register }: OrderCheckBoxProps) => {
   const { onChange: registerOnChange, ...registerProps } = register ?? {};
+  const isControlled = typeof checked === "boolean";
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     void registerOnChange?.(event);
@@ -20,23 +20,22 @@ const OrderCheckBox = ({ checked, onChange, register }: OrderCheckBoxProps) => {
 
   return (
     <label className={styles.checkbox}>
-      <input
-        {...registerProps}
-        type="checkbox"
-        checked={checked}
-        onChange={handleChange}
-        className={styles.checkbox__input}
-      />
-      <span className={styles.checkbox__box} />
+      <span className={styles.checkbox__control}>
+        <input
+          {...registerProps}
+          type="checkbox"
+          {...(isControlled ? { checked } : {})}
+          onChange={handleChange}
+          className={styles.checkbox__input}
+        />
+        <span className={styles.checkbox__box} aria-hidden="true" />
+      </span>
+
       <span className={styles.checkbox__content}>
         Соглашаюсь на обработку моих{" "}
-        <Link to="#" className={styles.checkbox__link}>
-          персональных данных
-        </Link>{" "}
+        <span className={styles.checkbox__link}>персональных данных</span>{" "}
         в соответствии с{" "}
-        <Link to="#" className={styles.checkbox__link}>
-          политикой конфиденциальности
-        </Link>
+        <span className={styles.checkbox__link}>политикой конфиденциальности</span>
       </span>
     </label>
   );

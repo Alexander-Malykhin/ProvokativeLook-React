@@ -1,11 +1,24 @@
 .item {
   display: grid;
-  grid-template-columns: minmax(0, rem(120)) 1fr;
+  grid-template-columns: rem(24) minmax(0, rem(120)) 1fr;
   align-items: center;
   gap: rem(24);
   padding: rem(24) rem(16);
   border-top: rem(1) solid rgba($black, 0.1);
   border-bottom: rem(1) solid rgba($black, 0.1);
+
+  &__select {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    input {
+      width: rem(16);
+      height: rem(16);
+      accent-color: $black;
+    }
+  }
 
   &__date {
     @include font(16, $fw-light);

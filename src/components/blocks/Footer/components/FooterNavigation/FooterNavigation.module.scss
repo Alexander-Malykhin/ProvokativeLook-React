@@ -40,6 +40,15 @@
       @include font(12, $fw-extra-light);
       color: $black;
       text-decoration: none;
+
+      &_button {
+        width: fit-content;
+        padding: 0;
+        background: none;
+        border: none;
+        text-align: left;
+        cursor: pointer;
+      }
     }
   }
 

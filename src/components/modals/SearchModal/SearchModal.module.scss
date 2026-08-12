@@ -1,25 +1,29 @@
 .search {
   position: fixed;
   inset: 0;
-  z-index: 9999;
-  overflow-y: auto;
-  padding: rem(58) rem(48);
-  background-color: rgba($black, 0.45);
+  z-index: 30000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0;
+  background-color: rgba($black, 0.46);
+  pointer-events: auto;
 
   &__content {
     position: relative;
     z-index: 2;
-    width: min(rem(1420), 100%);
-    max-height: calc(100vh - #{rem(116)});
-    margin: 0 auto;
+    width: 100vw;
+    max-width: none;
+    max-height: min(rem(690), 100vh);
     overflow-y: auto;
     background-color: $white;
-    box-shadow: 0 rem(18) rem(60) rgba($black, 0.12);
+    box-shadow: 0 rem(24) rem(70) rgba($black, 0.22);
+    pointer-events: auto;
+    isolation: isolate;
   }
 
-  &__mobileTitle {
-    display: none;
-  }
+  &__mobileTitle { display: none; }
 
   &__top {
     position: sticky;
@@ -30,55 +34,48 @@
   }
 
   &__header {
+    position: relative;
+    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: rem(30);
-    padding: rem(22) rem(40);
+    padding: rem(20) rem(34);
   }
 
-  &__buttons {
-    display: flex;
-    align-items: center;
-    gap: rem(10);
-    flex-shrink: 0;
-  }
+  &__buttons { position:relative;z-index:3;display:flex;align-items:center;gap:rem(10);flex-shrink:0;pointer-events:auto; }
 
   &__bottom {
-    display: flex;
-    flex-direction: column;
+    position: relative;
+    z-index: 1;
+    display:flex;
+    flex-direction:column;
     min-height: rem(390);
-    background: $white;
+    background:$white;
   }
 
   &__category {
-    display: flex;
-    align-items: center;
-    gap: rem(10);
-    padding: rem(18) rem(40);
-    overflow-x: auto;
-    scrollbar-width: none;
-
-    &::-webkit-scrollbar { display: none; }
-
+    display:flex;align-items:center;gap:rem(10);padding:rem(16) rem(34);overflow-x:auto;scrollbar-width:none;
+    &::-webkit-scrollbar { display:none; }
     &_item {
-      flex-shrink: 0;
-      padding: rem(9) rem(15);
-      @include font(12, $fw-light);
-      color: $black;
-      background-color: $gray;
-      border-radius: rem(100);
-      transition: background-color .2s ease;
-
-      &:hover { background-color: rgba($black, .1); }
+      flex-shrink:0;padding:rem(8) rem(14);@include font(12,$fw-light);color:$black;background-color:$gray;border-radius:rem(100);
+      position: relative;
+      z-index: 2;
+      pointer-events: auto;
+      cursor: pointer;
+      transition:background-color .2s ease;
+      &:hover { background-color:rgba($black,.1); }
     }
   }
 }
 
 .field {
+  position: relative;
+  z-index: 3;
   display: flex;
   align-items: center;
   gap: rem(10);
+  pointer-events: auto;
   width: 100%;
   min-width: 0;
 
@@ -89,7 +86,10 @@
   }
 
   &__input {
+    position: relative;
+    z-index: 4;
     width: 100%;
+    pointer-events: auto;
     min-width: 0;
     padding: rem(8) 0;
     @include font(15, $fw-light);
@@ -103,7 +103,11 @@
   }
 
   &__clear {
+    position: relative;
+    z-index: 5;
     flex-shrink: 0;
+    pointer-events: auto;
+    cursor: pointer;
     width: rem(30);
     height: rem(30);
     @include font(22, $fw-extra-light);
@@ -113,6 +117,10 @@
 
 .button__search,
 .button__close {
+  position: relative;
+  z-index: 5;
+  pointer-events: auto;
+  cursor: pointer;
   padding: rem(10) rem(22);
   @include font(14, $fw-light);
   border-radius: rem(5);
@@ -136,7 +144,7 @@
   grid-template-columns: minmax(rem(230), rem(330)) minmax(0, 1fr);
   align-items: flex-start;
   gap: rem(42);
-  padding: 0 rem(40) rem(40);
+  padding: 0 rem(34) rem(34);
 }
 
 .aside {
@@ -163,14 +171,21 @@
     gap: rem(12);
 
     &_item {
+      position: relative;
+      z-index: 2;
       width: fit-content;
+      pointer-events: auto;
+      cursor: pointer;
       @include font(14, $fw-light);
       color: $black;
       text-align: left;
     }
 
     &_category {
+      position: relative;
+      z-index: 2;
       display: flex;
+      pointer-events: auto;
       align-items: center;
       gap: rem(14);
       width: fit-content;
@@ -182,7 +197,10 @@
   }
 
   &__all {
+    position: relative;
+    z-index: 2;
     width: fit-content;
+    pointer-events: auto;
     padding-bottom: rem(4);
     @include font(13, $fw-light);
     color: $black;
@@ -225,14 +243,6 @@
 }
 
 @media (max-width: rem($tablet)) {
-  .search {
-    padding: rem(24);
-
-    &__content {
-      max-height: calc(100vh - #{rem(48)});
-    }
-  }
-
   .popular {
     grid-template-columns: rem(220) minmax(0, 1fr);
     gap: rem(24);
@@ -246,6 +256,7 @@
 
 @media (max-width: rem($mobile)) {
   .search {
+    display: block;
     padding: 0;
     background: $white;
 

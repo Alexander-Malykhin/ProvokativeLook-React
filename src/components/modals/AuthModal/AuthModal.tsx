@@ -4,6 +4,8 @@ import AuthTabs from "./components/AuthTabs";
 import ConfirmEmailForm from "./components/ConfirmEmailForm";
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
+import ResetPasswordRequestForm from "./components/ResetPasswordRequestForm";
+import ResetPasswordConfirmForm from "./components/ResetPasswordConfirmForm";
 import { useAuthFlow } from "./hooks/useAuthFlow";
 
 const AuthModal = () => {
@@ -29,7 +31,7 @@ const AuthModal = () => {
         <span />
       </button>
 
-      {auth.mode !== "confirm" && (
+      {(auth.mode === "login" || auth.mode === "register") && (
         <AuthTabs
           mode={auth.mode}
           disabled={auth.isLoading}
@@ -46,6 +48,7 @@ const AuthModal = () => {
           onChange={auth.handleLoginChange}
           onSubmit={(event) => void auth.submitLogin(event)}
           onSwitch={() => auth.changeMode("register")}
+          onForgotPassword={() => auth.changeMode("resetRequest")}
         />
       )}
 
@@ -57,6 +60,33 @@ const AuthModal = () => {
           onChange={auth.handleRegisterChange}
           onSubmit={(event) => void auth.submitRegister(event)}
           onSwitch={() => auth.changeMode("login")}
+        />
+      )}
+
+      {auth.mode === "resetRequest" && (
+        <ResetPasswordRequestForm
+          email={auth.resetForm.email}
+          isLoading={auth.isResetLoading}
+          errorMessage={auth.errorMessage}
+          successMessage={auth.successMessage}
+          onEmailChange={auth.handleResetEmailChange}
+          onSubmit={(event) => void auth.submitResetRequest(event)}
+          onBack={() => auth.changeMode("login")}
+        />
+      )}
+
+      {auth.mode === "resetConfirm" && (
+        <ResetPasswordConfirmForm
+          email={auth.resetForm.email}
+          code={auth.resetForm.code}
+          password={auth.resetForm.password}
+          confirmPassword={auth.resetForm.confirmPassword}
+          isLoading={auth.isResetLoading}
+          errorMessage={auth.errorMessage}
+          successMessage={auth.successMessage}
+          onChange={auth.handleResetChange}
+          onSubmit={(event) => void auth.submitResetConfirm(event)}
+          onBack={() => auth.changeMode("login")}
         />
       )}
 

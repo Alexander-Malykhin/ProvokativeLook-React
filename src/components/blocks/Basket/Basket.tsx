@@ -157,7 +157,7 @@ const Basket = () => {
           <div className={styles.empty__count}>0 товаров</div>
           <div className={styles.empty__row}>
             <span>В корзине ничего нет</span>
-            <button type="button" onClick={() => navigate("/catalog/all")}>Перейти в каталог</button>
+            <button type="button" onClick={() => navigate("/catalog")}>Перейти в каталог</button>
           </div>
         </MainLayoutContainer>
       </SectionLayout>

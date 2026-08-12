@@ -18,13 +18,6 @@ const PaymentStep = ({ register, errors, isSubmitting, errorMessage }: PaymentSt
   <OrderStepContainer title="3. Оплата" mode="radio">
     <OrderFieldRadio
       name="payment"
-      value="cash"
-      register={register("payment", { required: true })}
-    >
-      Оплата при получении. Картой или наличными
-    </OrderFieldRadio>
-    <OrderFieldRadio
-      name="payment"
       value="card"
       register={register("payment", { required: true })}
     >

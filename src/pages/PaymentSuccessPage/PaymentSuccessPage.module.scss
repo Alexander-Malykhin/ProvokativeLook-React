@@ -1,0 +1,16 @@
+.success {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: $white;
+  min-height: calc(100vh - #{rem(120)});
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:rem(12);
+  text-align:center;
+  &__mark { width:rem(52);height:rem(52);border:rem(1) solid $black;border-radius:50%;display:grid;place-items:center;@include font(24,$fw-light); }
+  h1 { margin:0; @include font(30,$fw-light); }
+  p { margin:0; @include font(15,$fw-light); color:rgba($black,.55); }
+}

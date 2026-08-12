@@ -19,6 +19,9 @@ export interface ProfileAddress {
   floor: string;
   apartment: string;
   comment: string;
+  deliveryProvider?: "cdek" | "mail" | "";
+  pickupCode?: string;
+  pickupName?: string;
   isDefault: boolean;
   latitude: number;
   longitude: number;

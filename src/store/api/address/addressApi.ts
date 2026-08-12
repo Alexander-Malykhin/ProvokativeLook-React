@@ -19,6 +19,27 @@ interface GeocodeAddressRequest {
   results?: number;
 }
 
+
+export interface PickupPoint {
+  id: string;
+  code: string;
+  externalId?: string;
+  name: string;
+  address: string;
+  postalCode: string;
+  uri: string;
+  distance?: number | null;
+  source?: string;
+}
+
+interface PickupPointsResponse {
+  success: boolean;
+  city: string;
+  provider: "cdek" | "mail";
+  center: { latitude: number; longitude: number };
+  points: PickupPoint[];
+}
+
 interface AddressesResponse {
   success: boolean;
   addresses: ProfileAddress[];
@@ -47,6 +68,14 @@ export const addressApi = baseApi.injectEndpoints({
         responseHandler: "text",
       }),
       transformResponse: parseGeocoderResponse,
+    }),
+
+    getPickupPoints: builder.query<PickupPointsResponse, { city: string; provider: "cdek" | "mail"; country?: string; countryCode?: string }>({
+      query: ({ city, provider, country = "", countryCode = "" }) => ({
+        url: "address/pickup-points",
+        scope: "site",
+        params: { city, provider, country, countryCode },
+      }),
     }),
 
     getAddresses: builder.query<AddressesResponse, void>({
@@ -98,6 +127,7 @@ export const addressApi = baseApi.injectEndpoints({
 
 export const {
   useLazyGeocodeAddressQuery,
+  useLazyGetPickupPointsQuery,
   useLazyGetAddressSuggestionsQuery,
   useGetAddressesQuery,
   useAddAddressMutation,

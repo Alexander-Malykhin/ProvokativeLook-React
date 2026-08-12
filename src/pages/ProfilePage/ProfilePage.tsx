@@ -1,3 +1,4 @@
+import AuthRequired from "@components/auth/AuthRequired";
 // layouts
 import PageStack from "@layouts/PageStack/PageStack";
 //blocks
@@ -8,13 +9,15 @@ import Breadcrumbs from "@components/Breadcrumbs/Breadcrumbs.tsx";
 
 const ProfilePage = () => {
   return (
-    <>
+    <AuthRequired>
+      <>
       <Breadcrumbs />
       <PageStack>
         <Profile />
         <Bestsellers />
       </PageStack>
-    </>
+      </>
+    </AuthRequired>
   );
 };
 

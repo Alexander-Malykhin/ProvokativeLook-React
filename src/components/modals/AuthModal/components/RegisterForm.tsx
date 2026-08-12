@@ -1,6 +1,7 @@
 import styles from "../AuthModal.module.scss";
 import type { RegisterFormProps } from "../model/types";
 import AuthMessages from "./AuthMessages";
+import PasswordInput from "./PasswordInput";
 
 const fields = [
   {
@@ -67,7 +68,17 @@ const RegisterForm = ({
 
     <div className={styles.form__fields}>
       {fields.map((field, index) => {
-        const input = (
+        const input = field.type === "password" ? (
+          <PasswordInput
+            key={field.name}
+            name={field.name}
+            value={form[field.name]}
+            label={field.label}
+            placeholder={field.placeholder}
+            autoComplete={field.autoComplete}
+            onChange={onChange}
+          />
+        ) : (
           <label key={field.name} className={styles.field}>
             <span className={styles.field__label}>{field.label}</span>
             <input

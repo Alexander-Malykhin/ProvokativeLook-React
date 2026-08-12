@@ -1,45 +1,95 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-// styles
 import styles from "./ProfileNotifications.module.scss";
-
-// types
 import type { ProfilePageProps } from "@components/blocks/Profile/types/types.ts";
-
-// api
 import {
+  useDeleteAllNotificationsMutation,
+  useDeleteNotificationMutation,
   useGetNotificationsQuery,
   useMarkAllNotificationsAsReadMutation,
   useMarkNotificationAsReadMutation,
 } from "@store/api/notifications/notificationsApi";
-
-// components
 import NotNotification from "./components/NotNotification/NotNotification";
 import NotificationItem from "./components/NotificationItem/NotificationItem";
+import {
+  rememberBrowserNotificationBaseline,
+  requestBrowserNotificationPermission,
+} from "@hooks/realtime/useRealtimeUpdates";
 
 const ProfileNotifications = ({ title }: ProfilePageProps) => {
   const [limit, setLimit] = useState(10);
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [pushPermission, setPushPermission] = useState<NotificationPermission | "unsupported">("default");
 
-  const {
-    data,
-    isLoading,
-    isFetching,
-    isError,
-    refetch,
-  } = useGetNotificationsQuery({ limit, offset: 0 });
+  useEffect(() => {
+    if (typeof window === "undefined" || !("Notification" in window)) {
+      setPushPermission("unsupported");
+      return;
+    }
+    setPushPermission(Notification.permission);
+  }, []);
+
+  const { data, isLoading, isFetching, isError, refetch } =
+    useGetNotificationsQuery({ limit, offset: 0 });
 
   const [markAsRead] = useMarkNotificationAsReadMutation();
-  const [markAllAsRead, { isLoading: isMarkingAll }] =
-    useMarkAllNotificationsAsReadMutation();
+  const [markAllAsRead, { isLoading: isMarkingAll }] = useMarkAllNotificationsAsReadMutation();
+  const [deleteNotification] = useDeleteNotificationMutation();
+  const [deleteAllNotifications, { isLoading: isDeletingAll }] = useDeleteAllNotificationsMutation();
 
   const notifications = data?.data.items ?? [];
   const pagination = data?.data.pagination;
   const unreadCount = data?.data.unreadCount ?? 0;
+  const latestNotificationId = notifications.reduce((max, item) => Math.max(max, item.id), 0);
+
+  const visibleIds = useMemo(() => notifications.map((item) => item.id), [notifications]);
+  const allVisibleSelected = visibleIds.length > 0 && visibleIds.every((id) => selectedIds.includes(id));
+
+  useEffect(() => {
+    setSelectedIds((current) => current.filter((id) => visibleIds.includes(id)));
+  }, [visibleIds]);
+
+  const enablePush = async () => {
+    const result = await requestBrowserNotificationPermission();
+    setPushPermission(result);
+
+    // После первого включения не показываем все старые уведомления как новые.
+    if (result === "granted" && latestNotificationId > 0) {
+      rememberBrowserNotificationBaseline(latestNotificationId);
+    }
+  };
 
   const handleNotificationClick = (id: number, isRead: boolean) => {
-    if (!isRead) {
-      void markAsRead(id);
-    }
+    if (!isRead) void markAsRead(id);
+  };
+
+  const toggleSelected = (id: number, checked: boolean) => {
+    setSelectedIds((current) =>
+      checked ? Array.from(new Set([...current, id])) : current.filter((item) => item !== id),
+    );
+  };
+
+  const toggleAllVisible = () => {
+    setSelectedIds((current) => {
+      if (allVisibleSelected) return current.filter((id) => !visibleIds.includes(id));
+      return Array.from(new Set([...current, ...visibleIds]));
+    });
+  };
+
+  const deleteSelected = async () => {
+    if (selectedIds.length === 0) return;
+    if (!window.confirm(`Удалить выбранные уведомления (${selectedIds.length})?`)) return;
+
+    await Promise.all(selectedIds.map((id) => deleteNotification(id).unwrap()));
+    setSelectedIds([]);
+  };
+
+  const deleteAll = async () => {
+    if (notifications.length === 0) return;
+    if (!window.confirm("Удалить все уведомления? Это действие нельзя отменить.")) return;
+
+    await deleteAllNotifications().unwrap();
+    setSelectedIds([]);
   };
 
   return (
@@ -47,17 +97,49 @@ const ProfileNotifications = ({ title }: ProfilePageProps) => {
       <div className={styles.content__header}>
         <h2 className={styles.content__title}>{title}</h2>
 
-        {unreadCount > 0 && (
-          <button
-            type="button"
-            className={styles.content__readAll}
-            onClick={() => void markAllAsRead()}
-            disabled={isMarkingAll}
-          >
-            Прочитать все
-          </button>
-        )}
+        <div className={styles.content__actions}>
+          {pushPermission !== "granted" && pushPermission !== "unsupported" && (
+            <button type="button" className={styles.content__push} onClick={() => void enablePush()}>
+              Включить уведомления
+            </button>
+          )}
+
+          {pushPermission === "granted" && (
+            <span className={styles.content__pushEnabled}>Уведомления включены</span>
+          )}
+
+          {unreadCount > 0 && (
+            <button
+              type="button"
+              className={styles.content__readAll}
+              onClick={() => void markAllAsRead()}
+              disabled={isMarkingAll}
+            >
+              Прочитать все
+            </button>
+          )}
+        </div>
       </div>
+
+      {notifications.length > 0 && !isLoading && (
+        <div className={styles.content__manage}>
+          <label className={styles.content__selectAll}>
+            <input type="checkbox" checked={allVisibleSelected} onChange={toggleAllVisible} />
+            <span>Выбрать все на странице</span>
+          </label>
+
+          <div className={styles.content__deleteActions}>
+            {selectedIds.length > 0 && (
+              <button type="button" onClick={() => void deleteSelected()}>
+                Удалить выбранные ({selectedIds.length})
+              </button>
+            )}
+            <button type="button" onClick={() => void deleteAll()} disabled={isDeletingAll}>
+              {isDeletingAll ? "Удаляем..." : "Удалить все"}
+            </button>
+          </div>
+        </div>
+      )}
 
       {isLoading ? (
         <div className={styles.content__skeleton} aria-label="Загрузка уведомлений">
@@ -68,9 +150,7 @@ const ProfileNotifications = ({ title }: ProfilePageProps) => {
       ) : isError ? (
         <div className={styles.content__error}>
           <span>Не удалось загрузить уведомления.</span>
-          <button type="button" onClick={() => void refetch()}>
-            Повторить
-          </button>
+          <button type="button" onClick={() => void refetch()}>Повторить</button>
         </div>
       ) : notifications.length > 0 ? (
         <>
@@ -79,6 +159,8 @@ const ProfileNotifications = ({ title }: ProfilePageProps) => {
               <NotificationItem
                 key={item.id}
                 item={item}
+                selected={selectedIds.includes(item.id)}
+                onSelect={(checked) => toggleSelected(item.id, checked)}
                 onClick={() => handleNotificationClick(item.id, item.isRead)}
               />
             ))}

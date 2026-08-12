@@ -74,3 +74,77 @@
   from { background-position: 200% 0; }
   to { background-position: -200% 0; }
 }
+
+.content {
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: rem(14);
+    flex-wrap: wrap;
+  }
+
+  &__push {
+    @include font(13, $fw-light);
+    padding: rem(9) rem(14);
+    border: rem(1) solid $black;
+    border-radius: rem(8);
+  }
+
+  &__pushEnabled {
+    @include font(12, $fw-light);
+    color: rgba($black, 0.55);
+  }
+}
+
+
+.content {
+  &__manage {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(16);
+    padding: rem(12) 0;
+    border-top: rem(1) solid rgba($black, 0.08);
+    border-bottom: rem(1) solid rgba($black, 0.08);
+  }
+
+  &__selectAll {
+    display: inline-flex;
+    align-items: center;
+    gap: rem(9);
+    @include font(13, $fw-light);
+    cursor: pointer;
+
+    input {
+      width: rem(16);
+      height: rem(16);
+      accent-color: $black;
+    }
+  }
+
+  &__deleteActions {
+    display: flex;
+    align-items: center;
+    gap: rem(16);
+
+    button {
+      @include font(13, $fw-light);
+      text-decoration: underline;
+      text-underline-offset: rem(3);
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+    &__header,
+    &__manage {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    &__actions,
+    &__deleteActions {
+      justify-content: flex-start;
+    }
+  }
+}
