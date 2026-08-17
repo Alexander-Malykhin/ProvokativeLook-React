@@ -17,8 +17,24 @@ type RealtimeSnapshot = {
 
 const LAST_BROWSER_NOTIFICATION_KEY = "provokativelook:lastBrowserNotificationId";
 
+const isLocalDevelopmentHost = () => {
+  if (typeof window === "undefined") return false;
+
+  return (
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+  );
+};
+
 const canUseBrowserNotifications = () =>
-  typeof window !== "undefined" && "Notification" in window;
+  typeof window !== "undefined" &&
+  "Notification" in window &&
+  (window.isSecureContext || isLocalDevelopmentHost());
+
+export type BrowserNotificationPermissionResult =
+  | NotificationPermission
+  | "unsupported"
+  | "insecure";
 
 const getLastShownNotificationId = (): number => {
   if (typeof window === "undefined") return 0;
@@ -60,10 +76,22 @@ const showBrowserNotification = (payload: RealtimeNotification) => {
   };
 };
 
-export const requestBrowserNotificationPermission = async (): Promise<NotificationPermission | "unsupported"> => {
-  if (!canUseBrowserNotifications()) return "unsupported";
-  return Notification.requestPermission();
-};
+export const requestBrowserNotificationPermission =
+  async (): Promise<BrowserNotificationPermissionResult> => {
+    if (typeof window === "undefined" || !("Notification" in window)) {
+      return "unsupported";
+    }
+
+    if (!window.isSecureContext && !isLocalDevelopmentHost()) {
+      return "insecure";
+    }
+
+    try {
+      return await Notification.requestPermission();
+    } catch {
+      return "unsupported";
+    }
+  };
 
 export const useRealtimeUpdates = () => {
   const dispatch = useDispatch();

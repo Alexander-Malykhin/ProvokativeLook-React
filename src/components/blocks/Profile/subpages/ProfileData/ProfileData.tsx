@@ -12,9 +12,6 @@ import {
 import type { Suggestion } from "@components/blocks/Profile/subpages/ProfileAddresses/model/types";
 import { getRequestErrorMessage } from "@store/api/getRequestErrorMessage";
 import BirthdayPicker from "./components/BirthdayPicker/BirthdayPicker";
-import ContactAddressEditor from "./components/ContactAddressEditor/ContactAddressEditor";
-import Modal from "@UI/overlays/Modal/Modal";
-import type { ProfileAddress } from "@components/blocks/Profile/subpages/ProfileAddresses/model/types";
 import { useLazySearchCountriesQuery } from "@store/api/countries/countriesApi";
 
 interface ProfileFormState {
@@ -26,7 +23,6 @@ interface ProfileFormState {
   city: string;
   country: string;
   countryId: number | null;
-  address: ProfileAddress | null;
 }
 
 const EMPTY_FORM: ProfileFormState = {
@@ -38,7 +34,6 @@ const EMPTY_FORM: ProfileFormState = {
   city: "",
   country: "",
   countryId: null,
-  address: null,
 };
 
 const displayBirthday = (value: string): string => {
@@ -59,8 +54,6 @@ const ProfileData = ({ title }: ProfilePageProps) => {
   const [citySuggestions, setCitySuggestions] = useState<Suggestion[]>([]);
   const [cityOpen, setCityOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
-  const [addressDraft, setAddressDraft] = useState<ProfileAddress | null>(null);
 
   const user = data?.user;
 
@@ -73,10 +66,9 @@ const ProfileData = ({ title }: ProfilePageProps) => {
       birthday: user.birthday ?? "",
       email: user.email ?? "",
       phone: user.phone ?? "",
-      city: user.city ?? user.address?.city ?? "",
-      country: user.country ?? user.address?.country ?? "",
-      countryId: user.countryId ?? user.address?.countryId ?? null,
-      address: user.address ?? null,
+      city: user.city ?? "",
+      country: user.country ?? "",
+      countryId: user.countryId ?? null,
     };
   }, [
     user?.id,
@@ -88,12 +80,6 @@ const ProfileData = ({ title }: ProfilePageProps) => {
     user?.city,
     user?.country,
     user?.countryId,
-    user?.address?.city,
-    user?.address?.country,
-    user?.address?.countryId,
-    user?.address?.formattedAddress,
-    user?.address?.latitude,
-    user?.address?.longitude,
   ]);
 
   useEffect(() => {
@@ -225,7 +211,6 @@ const ProfileData = ({ title }: ProfilePageProps) => {
         city: form.city.trim(),
         country: form.country.trim(),
         countryId: form.countryId,
-        address: form.address,
       }).unwrap();
 
       // Успешное сохранение не показываем отдельным уведомлением: данные
@@ -369,66 +354,10 @@ const ProfileData = ({ title }: ProfilePageProps) => {
           </p>
         </div>
 
-        <div className={`${styles.content__field} ${styles.content__field_address}`}>
-          <span className={styles.content__label}>Фактический адрес</span>
-          <p className={styles.content__value}>{form.address?.formattedAddress || form.address?.address1 || "Не указан"}</p>
-          {form.address?.postalCode && <p className={styles.content__addressMeta}>Индекс: {form.address.postalCode}</p>}
-          {isEditing && (
-            <button
-              type="button"
-              className={styles.content__addressButton}
-              onClick={() => {
-                setAddressDraft(form.address);
-                setIsAddressModalOpen(true);
-              }}
-            >
-              Выбрать адрес на карте
-            </button>
-          )}
-        </div>
       </div>
 
       {message && <p className={styles.content__message}>{message}</p>}
 
-      <Modal
-        open={isAddressModalOpen}
-        onClose={() => setIsAddressModalOpen(false)}
-        overlayClassName={styles.addressModal}
-        contentClassName={styles.addressModal__content}
-        ariaLabelledBy="profile-address-modal-title"
-      >
-        <div className={styles.addressModal__header}>
-          <h3 id="profile-address-modal-title">Фактический адрес</h3>
-          <button type="button" onClick={() => setIsAddressModalOpen(false)} aria-label="Закрыть">×</button>
-        </div>
-        <ContactAddressEditor
-          city={form.city || "Ростов-на-Дону"}
-          value={addressDraft}
-          onChange={setAddressDraft}
-        />
-        <div className={styles.addressModal__actions}>
-          <button type="button" className={styles.content__cancel} onClick={() => setIsAddressModalOpen(false)}>Отмена</button>
-          <button
-            type="button"
-            className={styles.content__save}
-            disabled={!addressDraft}
-            onClick={() => {
-              if (!addressDraft) return;
-              setForm((previous) => ({
-                ...previous,
-                address: addressDraft,
-                city: addressDraft.city || previous.city,
-                country: addressDraft.country || previous.country,
-                countryId: addressDraft.country && addressDraft.country !== previous.country ? null : previous.countryId,
-              }));
-              setMessage("");
-              setIsAddressModalOpen(false);
-            }}
-          >
-            Выбрать адрес
-          </button>
-        </div>
-      </Modal>
     </div>
   );
 };

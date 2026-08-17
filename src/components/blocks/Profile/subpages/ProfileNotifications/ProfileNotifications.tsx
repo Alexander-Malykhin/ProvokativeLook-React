@@ -14,18 +14,30 @@ import NotificationItem from "./components/NotificationItem/NotificationItem";
 import {
   rememberBrowserNotificationBaseline,
   requestBrowserNotificationPermission,
+  type BrowserNotificationPermissionResult,
 } from "@hooks/realtime/useRealtimeUpdates";
 
 const ProfileNotifications = ({ title }: ProfilePageProps) => {
   const [limit, setLimit] = useState(10);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
-  const [pushPermission, setPushPermission] = useState<NotificationPermission | "unsupported">("default");
+  const [pushPermission, setPushPermission] =
+    useState<BrowserNotificationPermissionResult>("default");
 
   useEffect(() => {
     if (typeof window === "undefined" || !("Notification" in window)) {
       setPushPermission("unsupported");
       return;
     }
+
+    const isLocalhost =
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1";
+
+    if (!window.isSecureContext && !isLocalhost) {
+      setPushPermission("insecure");
+      return;
+    }
+
     setPushPermission(Notification.permission);
   }, []);
 
@@ -98,7 +110,7 @@ const ProfileNotifications = ({ title }: ProfilePageProps) => {
         <h2 className={styles.content__title}>{title}</h2>
 
         <div className={styles.content__actions}>
-          {pushPermission !== "granted" && pushPermission !== "unsupported" && (
+          {pushPermission === "default" && (
             <button type="button" className={styles.content__push} onClick={() => void enablePush()}>
               Включить уведомления
             </button>
@@ -106,6 +118,24 @@ const ProfileNotifications = ({ title }: ProfilePageProps) => {
 
           {pushPermission === "granted" && (
             <span className={styles.content__pushEnabled}>Уведомления включены</span>
+          )}
+
+          {pushPermission === "denied" && (
+            <span className={styles.content__pushEnabled}>
+              Уведомления запрещены в настройках браузера
+            </span>
+          )}
+
+          {pushPermission === "insecure" && (
+            <span className={styles.content__pushEnabled}>
+              Для уведомлений откройте сайт по HTTPS
+            </span>
+          )}
+
+          {pushPermission === "unsupported" && (
+            <span className={styles.content__pushEnabled}>
+              Браузер не поддерживает уведомления
+            </span>
           )}
 
           {unreadCount > 0 && (

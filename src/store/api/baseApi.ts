@@ -32,7 +32,7 @@ const scopedBaseQuery: BaseQueryFn<
       ...request,
       url: `${baseUrl}${route}`,
       credentials:
-        request.credentials ?? (scope === "site" ? "include" : "same-origin"),
+        request.credentials ?? "include",
     },
     api,
     extraOptions,

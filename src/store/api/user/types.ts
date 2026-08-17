@@ -1,5 +1,3 @@
-import type { ProfileAddress } from "@components/blocks/Profile/subpages/ProfileAddresses/model/types";
-
 export interface UserInterface {
   id: number;
   firstName: string;
@@ -11,7 +9,6 @@ export interface UserInterface {
   country: string | null;
   countryId: number | null;
   countryCode: string | null;
-  address: ProfileAddress | null;
 }
 
 export interface UserResponse {
@@ -29,7 +26,6 @@ export interface UpdateUserRequest {
   city?: string;
   country?: string;
   countryId?: number | null;
-  address?: Partial<ProfileAddress> | null;
 }
 
 export interface LoginRequest {

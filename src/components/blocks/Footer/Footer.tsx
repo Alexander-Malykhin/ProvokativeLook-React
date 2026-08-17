@@ -29,7 +29,6 @@ const Footer = () => {
   const email = getInfo("email").replace("Электронная почта:", "").trim();
   const address = getInfo("address");
   const requisites = getInfo("requisites");
-  const design = getInfo("design").replace("Дизайн сайта:", "").trim();
 
   return (
     <footer className={styles.footer}>
@@ -52,7 +51,7 @@ const Footer = () => {
 
           <FooterSocials items={data.footerSocials} />
 
-          <FooterBottom requisites={requisites} design={design} />
+          <FooterBottom requisites={requisites} />
         </MainLayoutContainer>
       </div>
 
