@@ -1,5 +1,6 @@
 import type { ChangeEvent } from "react";
 import type { UseFormRegisterReturn } from "react-hook-form";
+import { Link } from "react-router-dom";
 
 import styles from "./OrderCheckBox.module.scss";
 
@@ -33,9 +34,21 @@ const OrderCheckBox = ({ checked, onChange, register }: OrderCheckBoxProps) => {
 
       <span className={styles.checkbox__content}>
         Соглашаюсь на обработку моих{" "}
-        <span className={styles.checkbox__link}>персональных данных</span>{" "}
+        <Link
+          to="/personal-data-consent"
+          className={styles.checkbox__link}
+          onClick={(event) => event.stopPropagation()}
+        >
+          персональных данных
+        </Link>{" "}
         в соответствии с{" "}
-        <span className={styles.checkbox__link}>политикой конфиденциальности</span>
+        <Link
+          to="/privacy-policy"
+          className={styles.checkbox__link}
+          onClick={(event) => event.stopPropagation()}
+        >
+          политикой конфиденциальности
+        </Link>
       </span>
     </label>
   );

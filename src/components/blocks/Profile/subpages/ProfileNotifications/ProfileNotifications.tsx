@@ -49,7 +49,7 @@ const ProfileNotifications = ({ title }: ProfilePageProps) => {
   const [deleteNotification] = useDeleteNotificationMutation();
   const [deleteAllNotifications, { isLoading: isDeletingAll }] = useDeleteAllNotificationsMutation();
 
-  const notifications = data?.data.items ?? [];
+  const notifications = useMemo(() => data?.data.items ?? [], [data?.data.items]);
   const pagination = data?.data.pagination;
   const unreadCount = data?.data.unreadCount ?? 0;
   const latestNotificationId = notifications.reduce((max, item) => Math.max(max, item.id), 0);
@@ -58,7 +58,17 @@ const ProfileNotifications = ({ title }: ProfilePageProps) => {
   const allVisibleSelected = visibleIds.length > 0 && visibleIds.every((id) => selectedIds.includes(id));
 
   useEffect(() => {
-    setSelectedIds((current) => current.filter((id) => visibleIds.includes(id)));
+    setSelectedIds((current) => {
+      const next = current.filter((id) => visibleIds.includes(id));
+
+      // Не обновляем state, если набор выбранных уведомлений не изменился.
+      // Иначе новый массив на каждом проходе эффекта может вызвать цикл ререндеров.
+      if (next.length === current.length && next.every((id, index) => id === current[index])) {
+        return current;
+      }
+
+      return next;
+    });
   }, [visibleIds]);
 
   const enablePush = async () => {

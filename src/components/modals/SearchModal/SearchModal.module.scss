@@ -16,6 +16,7 @@
     width: 100vw;
     max-width: none;
     max-height: min(rem(690), 100vh);
+    max-height: min(rem(690), 100dvh);
     overflow-y: auto;
     background-color: $white;
     box-shadow: 0 rem(24) rem(70) rgba($black, 0.22);

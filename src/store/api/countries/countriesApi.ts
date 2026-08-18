@@ -17,7 +17,6 @@ export const countriesApi = baseApi.injectEndpoints({
     searchCountries: builder.query<CountriesResponse, { query?: string; limit?: number }>({
       query: ({ query = "", limit = 20 }) => ({
         url: "countries/search",
-        scope: "site",
         params: { q: query, limit },
       }),
     }),

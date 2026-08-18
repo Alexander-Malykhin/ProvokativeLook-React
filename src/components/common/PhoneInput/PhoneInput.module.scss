@@ -1,0 +1,171 @@
+.phone {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  gap: rem(10);
+
+  width: 100%;
+
+  &__country {
+    position: relative;
+    flex: 0 0 auto;
+  }
+
+  &__countryButton {
+    display: flex;
+    align-items: center;
+    gap: rem(6);
+
+    min-width: rem(78);
+    padding: 0;
+
+    @include font(14, $fw-light);
+
+    color: $black;
+
+    background: transparent;
+    border: 0;
+
+    cursor: pointer;
+
+    &:disabled {
+      cursor: default;
+      opacity: 0.55;
+    }
+  }
+
+  &__countryCode {
+    white-space: nowrap;
+  }
+
+  &__arrow {
+    width: rem(8);
+    height: rem(8);
+
+    margin-top: rem(-4);
+
+    border-right: rem(1) solid $black;
+    border-bottom: rem(1) solid $black;
+
+    transform: rotate(45deg);
+    transition: transform 0.2s ease, margin 0.2s ease;
+
+    &_open {
+      margin-top: rem(4);
+      transform: rotate(225deg);
+    }
+  }
+
+  &__dropdown {
+    position: fixed;
+    z-index: 10000;
+
+    padding: rem(10);
+
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+
+    background: $white;
+    border: rem(1) solid rgba($black, 0.1);
+    border-radius: rem(16);
+    box-shadow: 0 rem(14) rem(40) rgba($black, 0.18);
+
+    scrollbar-width: thin;
+
+    &_up {
+      box-shadow: 0 rem(-12) rem(40) rgba($black, 0.16);
+    }
+  }
+
+  &__option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(14);
+
+    width: 100%;
+    padding: rem(11) rem(12);
+
+    @include font(14, $fw-light);
+
+    color: $black;
+    text-align: left;
+
+    background: transparent;
+    border: 0;
+    border-radius: rem(10);
+
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover,
+    &_active {
+      background-color: $gray;
+    }
+  }
+
+  &__optionName {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__optionDial {
+    flex: 0 0 auto;
+    color: rgba($black, 0.55);
+  }
+
+  &__input {
+    min-width: 0;
+    flex: 1 1 auto;
+
+    -webkit-appearance: none;
+    appearance: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .phone {
+    gap: rem(8);
+
+    &__countryButton {
+      min-width: rem(72);
+      @include font(13, $fw-light);
+    }
+
+    &__option {
+      min-height: rem(44);
+      padding: rem(10);
+      @include font(13, $fw-light);
+    }
+
+    &__input {
+      @include font(16, $fw-light);
+    }
+  }
+}
+
+@media (max-width: 546px) {
+  .phone {
+    gap: rem(6);
+
+    &__countryButton {
+      min-width: rem(66);
+      gap: rem(4);
+      @include font(12, $fw-light);
+    }
+
+    &__arrow {
+      width: rem(7);
+      height: rem(7);
+    }
+
+    &__option {
+      min-height: rem(40);
+      padding: rem(8) rem(9);
+      @include font(13, $fw-light);
+    }
+  }
+}

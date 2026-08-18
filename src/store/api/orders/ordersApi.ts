@@ -17,7 +17,6 @@ export const ordersApi = baseApi.injectEndpoints({
 
         return {
           url: `orders&${search.toString()}`,
-          scope: "site",
         };
       },
       providesTags: ["Orders"],
@@ -26,7 +25,6 @@ export const ordersApi = baseApi.injectEndpoints({
     createOrder: builder.mutation<CreateOrderResponse, CreateOrderRequest>({
       query: (body) => ({
         url: "orders/create",
-        scope: "site",
         method: "POST",
         body,
       }),
@@ -36,7 +34,6 @@ export const ordersApi = baseApi.injectEndpoints({
     payOrder: builder.mutation<CreateOrderPaymentResponse, { orderId: number }>({
       query: (body) => ({
         url: "orders/pay",
-        scope: "site",
         method: "POST",
         body,
       }),

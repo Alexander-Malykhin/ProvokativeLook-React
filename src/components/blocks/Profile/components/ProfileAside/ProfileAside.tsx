@@ -13,6 +13,8 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@store/hooks";
 import { baseApi } from "@store/api/baseApi";
 import { useLogoutMutation } from "@store/api/user/userApi";
+import Image from "@UI/media/Image/Image";
+import LogoutImage from "@assets/user/log-out.svg";
 
 const ProfileAside = ({ navigation }: ProfileAsideInterface) => {
   const location = useLocation();
@@ -72,7 +74,13 @@ const ProfileAside = ({ navigation }: ProfileAsideInterface) => {
           onClick={() => void handleLogout()}
           disabled={isLoggingOut}
         >
-          {isLoggingOut ? "Выходим..." : "Выйти"}
+          <span>{isLoggingOut ? "Выходим..." : "Выйти"}</span>
+          <Image
+            src={LogoutImage}
+            alt=""
+            className={styles.aside__logoutIcon}
+            aria-hidden="true"
+          />
         </button>
       </div>
 
@@ -112,7 +120,13 @@ const ProfileAside = ({ navigation }: ProfileAsideInterface) => {
               onClick={() => void handleLogout()}
               disabled={isLoggingOut}
             >
-              {isLoggingOut ? "Выходим..." : "Выйти"}
+              <span>{isLoggingOut ? "Выходим..." : "Выйти"}</span>
+              <Image
+                src={LogoutImage}
+                alt=""
+                className={styles.aside__logoutIcon}
+                aria-hidden="true"
+              />
             </button>
           </div>
         </div>

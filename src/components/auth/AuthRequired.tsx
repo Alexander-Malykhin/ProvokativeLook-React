@@ -7,16 +7,16 @@ import { useGetUserQuery } from "@store/api/user/userApi";
 const AuthRequired = ({ children }: PropsWithChildren) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { data, isLoading, isFetching } = useGetUserQuery();
+  const { data, isLoading } = useGetUserQuery();
   const authenticated = Boolean(data?.success && data.user);
 
   useEffect(() => {
-    if (isLoading || isFetching || authenticated) return;
+    if (isLoading || authenticated) return;
     navigate("/", { replace: true });
     dispatch(openAuthModal("login"));
-  }, [authenticated, dispatch, isFetching, isLoading, navigate]);
+  }, [authenticated, dispatch, isLoading, navigate]);
 
-  if (isLoading || isFetching || !authenticated) return null;
+  if (isLoading || !authenticated) return null;
   return <>{children}</>;
 };
 

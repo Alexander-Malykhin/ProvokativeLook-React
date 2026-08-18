@@ -49,7 +49,7 @@ const Modal = ({
 
     const focusable =
       contentRef.current?.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
-    focusable?.focus();
+    focusable?.focus({ preventScroll: true });
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape" && !closeDisabled) {
@@ -75,10 +75,10 @@ const Modal = ({
 
       if (event.shiftKey && document.activeElement === first) {
         event.preventDefault();
-        last.focus();
+        last.focus({ preventScroll: true });
       } else if (!event.shiftKey && document.activeElement === last) {
         event.preventDefault();
-        first.focus();
+        first.focus({ preventScroll: true });
       }
     };
 
@@ -87,7 +87,7 @@ const Modal = ({
     return () => {
       document.body.style.overflow = previousOverflow;
       document.removeEventListener("keydown", handleKeyDown);
-      previouslyFocused?.focus();
+      previouslyFocused?.focus({ preventScroll: true });
     };
   }, [closeDisabled, open]);
 

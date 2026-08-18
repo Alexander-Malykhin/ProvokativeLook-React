@@ -97,8 +97,8 @@ const SubscribeNewsLetter = () => {
               })}
             >
               Соглашаюсь на обработку моих{" "}
-              <TextAccent mode="main">персональных данных</TextAccent> в соответствии с{" "}
-              <TextAccent mode="link" path="#">
+              <TextAccent mode="link" path={'/personal-data-consent'}>персональных данных</TextAccent> в соответствии с{" "}
+              <TextAccent mode="link" path={'/privacy-policy'}>
                 политикой конфиденциальности
               </TextAccent>
             </MainCheckbox>

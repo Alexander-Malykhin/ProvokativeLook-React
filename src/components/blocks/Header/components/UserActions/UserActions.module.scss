@@ -7,6 +7,14 @@
 
   &__item {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__button {
+    position: relative;
+    overflow: visible;
   }
 
   &__image {
@@ -14,14 +22,51 @@
     height: rem(22);
   }
 
+  &__counter {
+    position: absolute;
+    top: rem(-7);
+    right: rem(-9);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: rem(17);
+    height: rem(17);
+    padding: 0 rem(4);
+
+    @include font(10, $fw-regular);
+
+    line-height: 1;
+    color: $white;
+
+    background-color: $black;
+    border-radius: rem(20);
+
+    pointer-events: none;
+  }
+
   @media (max-width: rem($desktop-x)) {
     flex: 0 1 rem(120);
   }
 
   @media (max-width: rem($mobile)) {
+    gap: rem(8);
+
     &__image {
       width: rem(24);
       height: rem(24);
+    }
+
+    &__counter {
+      top: rem(-6);
+      right: rem(-8);
+
+      min-width: rem(16);
+      height: rem(16);
+      padding: 0 rem(3);
+
+      @include font(9, $fw-regular);
     }
   }
 }

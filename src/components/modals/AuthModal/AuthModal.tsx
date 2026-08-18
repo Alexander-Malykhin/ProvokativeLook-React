@@ -18,14 +18,13 @@ const AuthModal = () => {
       overlayClassName={styles.overlay}
       contentClassName={styles.modal}
       ariaLabelledBy="auth-modal-title"
-      closeDisabled={auth.isLoading}
+      closeDisabled={false}
     >
       <button
         type="button"
         className={styles.modal__close}
         onClick={auth.close}
         aria-label="Закрыть"
-        disabled={auth.isLoading}
       >
         <span />
         <span />
@@ -34,7 +33,7 @@ const AuthModal = () => {
       {(auth.mode === "login" || auth.mode === "register") && (
         <AuthTabs
           mode={auth.mode}
-          disabled={auth.isLoading}
+          disabled={auth.isLoginLoading || auth.isRegisterLoading}
           onChange={auth.changeMode}
         />
       )}
@@ -45,6 +44,7 @@ const AuthModal = () => {
           isLoading={auth.isLoginLoading}
           errorMessage={auth.errorMessage}
           successMessage={auth.successMessage}
+          fieldErrors={auth.loginFieldErrors}
           onChange={auth.handleLoginChange}
           onSubmit={(event) => void auth.submitLogin(event)}
           onSwitch={() => auth.changeMode("register")}
@@ -57,6 +57,7 @@ const AuthModal = () => {
           form={auth.registerForm}
           isLoading={auth.isRegisterLoading}
           errorMessage={auth.errorMessage}
+          fieldErrors={auth.registerFieldErrors}
           onChange={auth.handleRegisterChange}
           onSubmit={(event) => void auth.submitRegister(event)}
           onSwitch={() => auth.changeMode("login")}

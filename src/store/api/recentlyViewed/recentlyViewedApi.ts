@@ -6,7 +6,6 @@ export const recentlyViewedApi = baseApi.injectEndpoints({
     getRecentlyViewed: builder.query<RecentlyViewedResponse, GetRecentlyViewedRequest | void>({
       query: (args) => ({
         url: 'recently-viewed',
-        scope: 'site',
         params: {
           limit: args?.limit ?? 10,
           excludeId: args?.excludeId,
@@ -15,11 +14,11 @@ export const recentlyViewedApi = baseApi.injectEndpoints({
       providesTags: ['RecentlyViewed'],
     }),
     addRecentlyViewed: builder.mutation<{ success: boolean }, { productId: number }>({
-      query: (body) => ({ url: 'recently-viewed/add', scope: 'site', method: 'POST', body }),
+      query: (body) => ({ url: 'recently-viewed/add', method: 'POST', body }),
       invalidatesTags: ['RecentlyViewed'],
     }),
     clearRecentlyViewed: builder.mutation<{ success: boolean }, void>({
-      query: () => ({ url: 'recently-viewed/clear', scope: 'site', method: 'POST' }),
+      query: () => ({ url: 'recently-viewed/clear', method: 'POST' }),
       invalidatesTags: ['RecentlyViewed'],
     }),
   }),

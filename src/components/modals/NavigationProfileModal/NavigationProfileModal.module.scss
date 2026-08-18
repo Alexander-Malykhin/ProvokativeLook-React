@@ -48,6 +48,11 @@
   }
 
   &__button {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: rem(10);
+
     @include font(12, $fw-light);
 
     width: 100%;
@@ -76,6 +81,14 @@
       cursor: default;
       opacity: 0.5;
     }
+  }
+
+
+  &__button_icon {
+    flex-shrink: 0;
+
+    width: rem(24);
+    height: rem(24);
   }
 
   &__guest {

@@ -39,6 +39,8 @@
   &__button {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
+    gap: rem(10);
 
     width: 100%;
 
@@ -179,6 +181,8 @@
   &__dropdown_logout {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
+    gap: rem(10);
 
     width: 100%;
 
@@ -187,6 +191,14 @@
     @include font(16, $fw-light);
 
     text-align: left;
+  }
+
+
+  &__logoutIcon {
+    flex-shrink: 0;
+
+    width: rem(26);
+    height: rem(26);
   }
 
   @media (max-width: rem($mobile)) {

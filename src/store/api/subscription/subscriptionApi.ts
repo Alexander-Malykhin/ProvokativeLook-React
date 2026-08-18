@@ -18,7 +18,6 @@ export const subscriptionApi = baseApi.injectEndpoints({
     subscribe: builder.mutation<SubscriptionResponse, SubscriptionRequest>({
       query: (body) => ({
         url: "subscription/subscribe",
-        scope: "site",
         method: "POST",
         body,
       }),
@@ -28,7 +27,6 @@ export const subscriptionApi = baseApi.injectEndpoints({
     unsubscribe: builder.mutation<SubscriptionResponse, SubscriptionRequest>({
       query: (body) => ({
         url: "subscription/unsubscribe",
-        scope: "site",
         method: "POST",
         body,
       }),
@@ -38,7 +36,6 @@ export const subscriptionApi = baseApi.injectEndpoints({
     getSubscriptionStatus: builder.query<SubscriptionResponse, string | void>({
       query: (email) => ({
         url: "subscription/status",
-        scope: "site",
         params: email ? { email } : undefined,
       }),
       providesTags: ["Subscription"],

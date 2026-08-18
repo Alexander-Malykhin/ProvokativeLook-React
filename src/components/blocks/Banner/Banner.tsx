@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 //styles
 import styles from "./Banner.module.scss";
 //layouts
@@ -15,6 +15,7 @@ import { useGetHomeQuery } from "@store/api/home/homeApi.ts";
 
 const Banner = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { data, isLoading, isError } = useGetHomeQuery();
 
   if (isLoading) return <BannerSkeleton />;
@@ -39,7 +40,21 @@ const Banner = () => {
             <MainButton
               mode="text"
               color="black"
-              onClick={() => navigate("/#new-collection")}
+              onClick={() => {
+                const scroll = () =>
+                  document.getElementById("new-collection")?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  });
+
+                if (location.pathname !== "/") {
+                  navigate("/#new-collection");
+                  window.setTimeout(scroll, 80);
+                } else {
+                  navigate("/#new-collection", { replace: location.hash === "#new-collection" });
+                  requestAnimationFrame(() => requestAnimationFrame(scroll));
+                }
+              }}
             >
               Новая коллекция
             </MainButton>

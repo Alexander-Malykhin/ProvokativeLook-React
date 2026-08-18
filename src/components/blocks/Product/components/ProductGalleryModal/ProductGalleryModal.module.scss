@@ -28,6 +28,7 @@
 
     width: min(rem(1160), calc(100vw - #{rem(48)}));
     height: min(rem(820), calc(100vh - #{rem(48)}));
+    height: min(rem(820), calc(100dvh - #{rem(48)}));
     padding: rem(28) rem(34) rem(18);
 
     overflow: hidden;

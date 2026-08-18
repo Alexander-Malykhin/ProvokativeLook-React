@@ -12,38 +12,34 @@ const normalizeTitle = (value: string) =>
     .trim()
     .toLocaleLowerCase("ru-RU");
 
-const hiddenFooterLinks = new Set([
-  "распродажа",
-  "публичная оферта",
-  "пользовательское соглашение",
-  "политика конфиденциальности",
-  "оферта",
-  "конфиденциальность",
-]);
-
-const buyerAllowedLinks = new Set([
-  "доставка",
-  "доставка и оплата",
-  "возврат",
-  "условия возврата",
-  "таблица размеров",
-]);
-
 const resolveFooterLink = (title: string, link: string) => {
   const normalized = normalizeTitle(title);
 
-  if (normalized === "возврат" || normalized === "условия возврата") {
-    return "/info/return-policy";
-  }
-
-  if (normalized === "доставка" || normalized === "доставка и оплата") {
-    return "/info/delivery-payment";
-  }
+  const knownRoutes: Record<string, string> = {
+    "о нас": "/about",
+    "контакты": "/contacts",
+    "доставка": "/info/delivery-payment",
+    "доставка и оплата": "/info/delivery-payment",
+    "возврат": "/info/return-policy",
+    "условия возврата": "/info/return-policy",
+    "публичная оферта": "/public-offer",
+    "оферта": "/public-offer",
+    "пользовательское соглашение": "/terms-of-use",
+    "политика конфиденциальности": "/privacy-policy",
+    "конфиденциальность": "/privacy-policy",
+    "согласие на обработку персональных данных": "/personal-data-consent",
+  };
 
   const cleanLink = link.replace(/^-/, "").trim();
-  if (!cleanLink) return "/";
 
-  return cleanLink.startsWith("/") ? cleanLink : `/${cleanLink}`;
+  // Если в инфоблоке задан настоящий путь, используем именно его.
+  if (cleanLink) {
+    if (/^https?:\/\//i.test(cleanLink)) return cleanLink;
+    return cleanLink.startsWith("/") ? cleanLink : `/${cleanLink}`;
+  }
+
+  // Для старых записей вида #link#- восстанавливаем известный маршрут по названию.
+  return knownRoutes[normalized] ?? "/";
 };
 
 const FooterNavigation = ({
@@ -58,17 +54,9 @@ const FooterNavigation = ({
       {items.map((item) => {
         const title = item.navigationTitle;
         const isOpen = opened === title;
-        const sectionTitle = normalizeTitle(title);
-        const isBuyerSection = sectionTitle.startsWith("покупател");
-
-        const navigationList = item.navigationList.filter((link) => {
-          const linkTitle = normalizeTitle(link.title);
-
-          if (hiddenFooterLinks.has(linkTitle)) return false;
-          if (isBuyerSection) return buyerAllowedLinks.has(linkTitle);
-
-          return true;
-        });
+        // Показываем все ссылки, которые пришли из инфоблока.
+        // Никаких скрытых списков/white-list на фронте больше нет.
+        const navigationList = item.navigationList;
 
         return (
           <div
@@ -101,10 +89,24 @@ const FooterNavigation = ({
                   );
                 }
 
+                const resolvedLink = resolveFooterLink(link.title, link.link);
+
+                if (/^https?:\/\//i.test(resolvedLink)) {
+                  return (
+                    <a
+                      key={link.title}
+                      href={resolvedLink}
+                      className={styles.nav__item_link}
+                    >
+                      {link.title.replace(/^-/, "")}
+                    </a>
+                  );
+                }
+
                 return (
                   <Link
                     key={link.title}
-                    to={resolveFooterLink(link.title, link.link)}
+                    to={resolvedLink}
                     className={styles.nav__item_link}
                   >
                     {link.title.replace(/^-/, "")}

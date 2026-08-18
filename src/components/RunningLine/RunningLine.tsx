@@ -21,7 +21,7 @@ const RunningLine = ({
   if (isLoading) return null;
 
   const runningText =
-    text || data?.delivery_line?.text || "Доставка по России 300 ₽";
+    text || data?.running_line?.text || "";
 
   return (
     <div className={`${styles.line} ${className}`}>

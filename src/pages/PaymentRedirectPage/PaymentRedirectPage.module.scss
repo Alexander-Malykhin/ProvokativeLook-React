@@ -4,6 +4,7 @@
   z-index: 10000;
   background: $white;
   min-height: calc(100vh - #{rem(120)});
+  min-height: calc(100dvh - #{rem(120)});
   display: flex;
   flex-direction: column;
   align-items: center;

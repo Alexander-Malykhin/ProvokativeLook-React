@@ -11,6 +11,7 @@
   &__window {
     width: min(rem(850), calc(100vw - #{rem(48)}));
     max-height: calc(100vh - #{rem(48)});
+    max-height: calc(100dvh - #{rem(48)});
     padding: rem(42) rem(48) rem(46);
     overflow: hidden;
     background: $white;

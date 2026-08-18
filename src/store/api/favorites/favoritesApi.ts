@@ -4,19 +4,19 @@ import type { FavoriteMutationRequest, FavoritesResponse } from './types';
 export const favoritesApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getFavorites: builder.query<FavoritesResponse, void>({
-      query: () => ({ url: 'favorites', scope: 'site' }),
+      query: () => ({ url: 'favorites' }),
       providesTags: ['Favorites'],
     }),
     addFavorite: builder.mutation<FavoritesResponse, FavoriteMutationRequest>({
-      query: (body) => ({ url: 'favorites/add', scope: 'site', method: 'POST', body }),
+      query: (body) => ({ url: 'favorites/add', method: 'POST', body }),
       invalidatesTags: ['Favorites'],
     }),
     removeFavorite: builder.mutation<FavoritesResponse, FavoriteMutationRequest>({
-      query: (body) => ({ url: 'favorites/remove', scope: 'site', method: 'POST', body }),
+      query: (body) => ({ url: 'favorites/remove', method: 'POST', body }),
       invalidatesTags: ['Favorites'],
     }),
     clearFavorites: builder.mutation<FavoritesResponse, void>({
-      query: () => ({ url: 'favorites/clear', scope: 'site', method: 'POST' }),
+      query: () => ({ url: 'favorites/clear', method: 'POST' }),
       invalidatesTags: ['Favorites'],
     }),
   }),

@@ -13,6 +13,8 @@ import type { Suggestion } from "@components/blocks/Profile/subpages/ProfileAddr
 import { getRequestErrorMessage } from "@store/api/getRequestErrorMessage";
 import BirthdayPicker from "./components/BirthdayPicker/BirthdayPicker";
 import { useLazySearchCountriesQuery } from "@store/api/countries/countriesApi";
+import PhoneInput from "@components/common/PhoneInput/PhoneInput";
+import { detectCountry, formatPhone, isValidPhone, normalizePhone } from "@components/common/PhoneInput/phone";
 
 interface ProfileFormState {
   firstName: string;
@@ -201,13 +203,18 @@ const ProfileData = ({ title }: ProfilePageProps) => {
       return;
     }
 
+    if (!isValidPhone(form.phone)) {
+      setMessage("Введите корректный номер телефона");
+      return;
+    }
+
     try {
       await updateUser({
         firstName: form.firstName.trim(),
         lastName: form.lastName.trim(),
         birthday: form.birthday.trim(),
         email: form.email.trim(),
-        phone: form.phone.trim(),
+        phone: normalizePhone(form.phone, detectCountry(form.phone)),
         city: form.city.trim(),
         country: form.country.trim(),
         countryId: form.countryId,
@@ -306,9 +313,15 @@ const ProfileData = ({ title }: ProfilePageProps) => {
         <label className={styles.content__field}>
           <span className={styles.content__label}>Телефон*</span>
           {isEditing ? (
-            <input type="tel" className={styles.content__input} value={form.phone} onChange={(event) => changeField("phone", event.target.value)} />
+            <PhoneInput
+              value={form.phone}
+              onChange={(value) => changeField("phone", value)}
+              className={styles.content__input}
+              selectClassName={styles.content__phoneCountry}
+              required
+            />
           ) : (
-            <p className={styles.content__value}>{form.phone || "Не указано"}</p>
+            <p className={styles.content__value}>{form.phone ? formatPhone(form.phone) : "Не указано"}</p>
           )}
         </label>
 

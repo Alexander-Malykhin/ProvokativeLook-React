@@ -6,15 +6,37 @@ import { dataUserActions } from "./data.ts";
 // store
 import { add } from "@store/slices/toggleSearchSlice";
 import { toggle } from "@store/slices/toggleMenuProfileSlice";
+import { useGetCartQuery } from "@store/api/cart/cartApi";
+import { useGetFavoritesQuery } from "@store/api/favorites/favoritesApi";
+import { useGetUserQuery } from "@store/api/user/userApi";
 // styles
 import styles from "./UserActions.module.scss";
 // UI
 import ActionButton from "@UI/buttons/ActionButton/ActionButton";
 import Image from "@UI/media/Image/Image";
 
+const formatCounter = (value: number) => (value > 99 ? "99+" : String(value));
+
 const UserActions = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const { data: userData } = useGetUserQuery();
+  const isAuthenticated = Boolean(userData?.success && userData.user);
+
+  const { data: favoritesData } = useGetFavoritesQuery(undefined, {
+    skip: !isAuthenticated,
+  });
+  const { data: cartData } = useGetCartQuery(undefined, {
+    skip: !isAuthenticated,
+  });
+
+  const favoritesCount = isAuthenticated
+    ? Math.max(0, Number(favoritesData?.count ?? 0))
+    : 0;
+  const cartCount = isAuthenticated
+    ? Math.max(0, Math.round(Number(cartData?.cart?.quantity ?? 0)))
+    : 0;
 
   const handleClick = (
     event: MouseEvent<HTMLButtonElement>,
@@ -45,9 +67,19 @@ const UserActions = () => {
     <div className={styles.actions}>
       {dataUserActions.map((item) => {
         const isProfile = "action" in item && item.action === "profile";
+        const counter =
+          "path" in item && item.path === "/favorites"
+            ? favoritesCount
+            : "path" in item && item.path === "/basket"
+              ? cartCount
+              : 0;
 
         return (
-          <div key={item.id} data-profile-button={isProfile ? true : undefined}>
+          <div
+            key={item.id}
+            className={styles.actions__item}
+            data-profile-button={isProfile ? true : undefined}
+          >
             <ActionButton
               onClick={(event) => handleClick(event, item)}
               className={styles.actions__button}
@@ -57,6 +89,15 @@ const UserActions = () => {
                 alt="action-icon"
                 className={styles.actions__image}
               />
+
+              {counter > 0 && (
+                <span
+                  className={styles.actions__counter}
+                  aria-label={`Количество товаров: ${counter}`}
+                >
+                  {formatCounter(counter)}
+                </span>
+              )}
             </ActionButton>
           </div>
         );

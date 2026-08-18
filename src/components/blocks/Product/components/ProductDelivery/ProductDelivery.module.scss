@@ -162,6 +162,7 @@
 
       width: min(rem(360), calc(100vw - #{rem(40)}));
       max-height: min(rem(320), calc(100vh - #{rem(80)}));
+      max-height: min(rem(320), calc(100dvh - #{rem(80)}));
       padding: rem(18);
       overflow-y: auto;
 
@@ -212,6 +213,7 @@
 
       width: auto;
       max-height: min(rem(280), calc(100vh - #{rem(60)}));
+      max-height: min(rem(280), calc(100dvh - #{rem(60)}));
       padding: rem(16);
 
       transform: none;

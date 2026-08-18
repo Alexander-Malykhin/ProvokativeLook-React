@@ -1,4 +1,3 @@
-import AuthRequired from "@components/auth/AuthRequired";
 // layouts
 import PageStack from "@layouts/PageStack/PageStack";
 //blocks
@@ -9,15 +8,13 @@ import Order from "@components/blocks/Order/Order.tsx";
 
 const OrderPage = () => {
   return (
-    <AuthRequired>
-      <>
+    <>
       <Breadcrumbs />
       <PageStack>
         <Order />
         <SubscribeNewsLetter />
       </PageStack>
-      </>
-    </AuthRequired>
+    </>
   );
 };
 

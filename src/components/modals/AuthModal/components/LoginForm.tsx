@@ -8,12 +8,13 @@ const LoginForm = ({
   isLoading,
   errorMessage,
   successMessage,
+  fieldErrors,
   onChange,
   onSubmit,
   onSwitch,
   onForgotPassword,
 }: LoginFormProps) => (
-  <form className={styles.form} onSubmit={onSubmit}>
+  <form className={styles.form} onSubmit={onSubmit} noValidate>
     <div className={styles.form__header}>
       <h2 id="auth-modal-title" className={styles.form__title}>
         Вход в кабинет
@@ -24,7 +25,7 @@ const LoginForm = ({
     </div>
 
     <div className={styles.form__fields}>
-      <label className={styles.field}>
+      <label className={`${styles.field} ${fieldErrors.email ? styles.field_error : ""}`}>
         <span className={styles.field__label}>Электронная почта</span>
         <input
           type="email"
@@ -34,8 +35,12 @@ const LoginForm = ({
           placeholder="mail@example.ru"
           autoComplete="email"
           className={styles.field__input}
-          required
+          aria-invalid={Boolean(fieldErrors.email)}
+          aria-describedby={fieldErrors.email ? "login-email-error" : undefined}
         />
+        {fieldErrors.email && (
+          <span id="login-email-error" className={styles.field__error}>{fieldErrors.email}</span>
+        )}
       </label>
       <PasswordInput
         name="password"
@@ -44,6 +49,7 @@ const LoginForm = ({
         placeholder="Введите пароль"
         autoComplete="current-password"
         onChange={onChange}
+        error={fieldErrors.password}
       />
     </div>
 

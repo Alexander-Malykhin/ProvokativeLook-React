@@ -29,7 +29,6 @@ export const notificationsApi = baseApi.injectEndpoints({
 
         return {
           url: `notifications&${search.toString()}`,
-          scope: "site",
         };
       },
       providesTags: ["Notifications"],
@@ -38,7 +37,6 @@ export const notificationsApi = baseApi.injectEndpoints({
     getUnreadNotificationsCount: builder.query<NotificationActionResponse, void>({
       query: () => ({
         url: "notifications/unread-count",
-        scope: "site",
       }),
       providesTags: ["Notifications"],
     }),
@@ -46,7 +44,6 @@ export const notificationsApi = baseApi.injectEndpoints({
     markNotificationAsRead: builder.mutation<NotificationActionResponse, number>({
       query: (notificationId) => ({
         url: "notifications/read",
-        scope: "site",
         method: "POST",
         body: { notificationId },
       }),
@@ -56,7 +53,6 @@ export const notificationsApi = baseApi.injectEndpoints({
     markAllNotificationsAsRead: builder.mutation<NotificationActionResponse, void>({
       query: () => ({
         url: "notifications/read-all",
-        scope: "site",
         method: "POST",
       }),
       invalidatesTags: ["Notifications"],
@@ -65,7 +61,6 @@ export const notificationsApi = baseApi.injectEndpoints({
     deleteNotification: builder.mutation<NotificationActionResponse, number>({
       query: (notificationId) => ({
         url: "notifications/delete",
-        scope: "site",
         method: "POST",
         body: { notificationId },
       }),
@@ -75,7 +70,6 @@ export const notificationsApi = baseApi.injectEndpoints({
     deleteAllNotifications: builder.mutation<NotificationActionResponse, void>({
       query: () => ({
         url: "notifications/delete-all",
-        scope: "site",
         method: "POST",
       }),
       invalidatesTags: ["Notifications"],

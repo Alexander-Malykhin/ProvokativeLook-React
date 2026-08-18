@@ -1,6 +1,7 @@
 import styles from "./BasketActions.module.scss";
 import DeleteImage from "@assets/basket/delete.svg";
 import FavoritesImage from "@assets/basket/favorites.svg";
+import FavoritesPullImage from "@assets/basket/favorites-pull.svg";
 import Image from "@UI/media/Image/Image";
 
 interface BasketActionsProps {
@@ -25,7 +26,7 @@ const BasketActions = ({
       aria-label={isFavorite ? "Убрать из избранного" : "Добавить в избранное"}
       title={isFavorite ? "Убрать из избранного" : "Добавить в избранное"}
     >
-      <Image src={FavoritesImage} alt="" />
+      <Image src={isFavorite ? FavoritesPullImage : FavoritesImage} alt="" />
     </button>
 
     <button

@@ -8,6 +8,8 @@ interface PasswordInputProps {
   placeholder: string;
   autoComplete: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  error?: string;
+  dataField?: string;
 }
 
 const EyeIcon = ({ visible }: { visible: boolean }) => (
@@ -18,10 +20,10 @@ const EyeIcon = ({ visible }: { visible: boolean }) => (
   </svg>
 );
 
-const PasswordInput = ({ name, value, label, placeholder, autoComplete, onChange }: PasswordInputProps) => {
+const PasswordInput = ({ name, value, label, placeholder, autoComplete, onChange, error, dataField }: PasswordInputProps) => {
   const [visible, setVisible] = useState(false);
   return (
-    <label className={styles.field}>
+    <label className={`${styles.field} ${error ? styles.field_error : ""}`}>
       <span className={styles.field__label}>{label}</span>
       <div className={styles.field__passwordWrap}>
         <input
@@ -32,7 +34,10 @@ const PasswordInput = ({ name, value, label, placeholder, autoComplete, onChange
           placeholder={placeholder}
           autoComplete={autoComplete}
           className={styles.field__input}
-          required
+          data-register-field={dataField}
+          aria-invalid={Boolean(error)}
+          aria-describedby={error ? `${name}-error` : undefined}
+          required={!dataField}
         />
         <button
           type="button"
@@ -43,6 +48,7 @@ const PasswordInput = ({ name, value, label, placeholder, autoComplete, onChange
           <EyeIcon visible={visible} />
         </button>
       </div>
+      {error && <span id={`${name}-error`} className={styles.field__error}>{error}</span>}
     </label>
   );
 };

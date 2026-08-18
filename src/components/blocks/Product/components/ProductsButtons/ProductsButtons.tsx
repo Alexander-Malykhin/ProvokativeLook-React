@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 import styles from "./ProductsButtons.module.scss";
 import MainButton from "@UI/buttons/MainButton/MainButton.tsx";
-import FavoritesImage from "@assets/header/favorite.svg";
+import FavoritesImage from "@assets/basket/favorites.svg";
+import FavoritesPullImage from "@assets/basket/favorites-pull.svg";
 import { useAddCartItemMutation } from "@store/api/cart/cartApi";
 import {
   useAddFavoriteMutation,
@@ -84,7 +85,7 @@ const ProductsButtons = ({
       <MainButton
         alt="favorites-icon"
         type="button"
-        icon={FavoritesImage}
+        icon={isFavorite ? FavoritesPullImage : FavoritesImage}
         mode="secondary"
         color="black"
         onClick={handleFavorite}

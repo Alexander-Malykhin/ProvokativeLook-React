@@ -11,7 +11,6 @@ export const cartApi = baseApi.injectEndpoints({
     getCart: builder.query<CartResponse, void>({
       query: () => ({
         url: "cart",
-        scope: "site",
       }),
       providesTags: ["Cart"],
     }),
@@ -19,7 +18,6 @@ export const cartApi = baseApi.injectEndpoints({
     addCartItem: builder.mutation<CartResponse, AddCartItemRequest>({
       query: ({ productId, quantity = 1 }) => ({
         url: "cart/add",
-        scope: "site",
         method: "POST",
         body: { productId, quantity },
       }),
@@ -29,7 +27,6 @@ export const cartApi = baseApi.injectEndpoints({
     updateCartItem: builder.mutation<CartResponse, UpdateCartItemRequest>({
       query: ({ id, quantity }) => ({
         url: "cart/update",
-        scope: "site",
         method: "POST",
         body: { id, quantity },
       }),
@@ -39,7 +36,6 @@ export const cartApi = baseApi.injectEndpoints({
     removeCartItem: builder.mutation<CartResponse, RemoveCartItemRequest>({
       query: ({ id }) => ({
         url: "cart/remove",
-        scope: "site",
         method: "POST",
         body: { id },
       }),
@@ -49,7 +45,6 @@ export const cartApi = baseApi.injectEndpoints({
     clearCart: builder.mutation<CartResponse, void>({
       query: () => ({
         url: "cart/clear",
-        scope: "site",
         method: "POST",
       }),
       invalidatesTags: ["Cart"],

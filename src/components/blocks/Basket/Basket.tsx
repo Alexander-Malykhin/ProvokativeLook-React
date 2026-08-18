@@ -134,7 +134,7 @@ const Basket = () => {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || (isFetching && (!cart || items.length === 0))) {
     return <BasketSkeleton />;
   }
 

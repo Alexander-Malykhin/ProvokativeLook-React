@@ -16,6 +16,8 @@ import { navigationProfile } from "@api/static/navigationProfile.ts";
 
 // components
 import NavigationProfileItem from "@components/modals/NavigationProfileModal/components/NavigationProfileItem.tsx";
+import Image from "@UI/media/Image/Image";
+import LogoutImage from "@assets/user/log-out.svg";
 
 // styles
 import styles from "./NavigationProfileModal.module.scss";
@@ -28,7 +30,7 @@ const NavigationProfileModal = () => {
 
   const active = useAppSelector((state) => state.toggleMenuProfile.active);
 
-  const { data, isFetching } = useGetUserQuery();
+  const { data, isLoading } = useGetUserQuery();
 
   const [logout, { isLoading: isLogoutLoading }] = useLogoutMutation();
 
@@ -87,7 +89,7 @@ const NavigationProfileModal = () => {
 
   return (
     <div ref={modalRef} className={styles.modal}>
-      {isFetching ? (
+      {isLoading && !data ? (
         <div className={styles.modal__loading}>Загрузка...</div>
       ) : isAuthenticated ? (
         <>
@@ -115,7 +117,13 @@ const NavigationProfileModal = () => {
             onClick={handleLogout}
             disabled={isLogoutLoading}
           >
-            {isLogoutLoading ? "Выходим..." : "Выйти"}
+            <span>{isLogoutLoading ? "Выходим..." : "Выйти из аккаунта"}</span>
+            <Image
+              src={LogoutImage}
+              alt=""
+              className={styles.modal__button_icon}
+              aria-hidden="true"
+            />
           </button>
         </>
       ) : (

@@ -7,6 +7,56 @@
 @use "settings/mixins" as *;
 @use "settings/containers" as *;
 
+html {
+  width: 100%;
+  min-width: rem(320);
+  min-height: 100%;
+
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  width: 100%;
+  min-width: rem(320);
+  min-height: 100%;
+
+  overflow-x: clip;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  width: 100%;
+  min-height: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  min-width: 0;
+  border-radius: 0;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  touch-action: manipulation;
+}
+
+@supports not (overflow: clip) {
+  body {
+    overflow-x: hidden;
+  }
+}
+
+
 * {
   font-family: $ff-unbounded;
   color: $black;
@@ -22,4 +72,15 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+// iOS/WebKit: controls below 16px trigger automatic viewport zoom on focus.
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: rem($mobile)) {
+    input,
+    textarea,
+    select {
+      font-size: 16px;
+    }
+  }
 }

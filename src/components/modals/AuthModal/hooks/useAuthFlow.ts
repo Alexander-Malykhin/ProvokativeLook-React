@@ -15,15 +15,23 @@ import {
   useConfirmPasswordResetMutation,
 } from "@store/api/user/userApi";
 import { getRequestErrorMessage } from "@store/api/getRequestErrorMessage";
+import { cartApi } from "@store/api/cart/cartApi";
+import { favoritesApi } from "@store/api/favorites/favoritesApi";
+import { userApi } from "@store/api/user/userApi";
 import {
   INITIAL_CONFIRM_FORM,
   INITIAL_LOGIN_FORM,
   INITIAL_REGISTER_FORM,
 } from "../model/constants";
+import { isValidPhone, normalizePhone, detectCountry } from "@components/common/PhoneInput/phone";
 import type {
   ConfirmFormState,
   LoginFormState,
+  LoginFieldErrors,
+  LoginFieldName,
   RegisterFormState,
+  RegisterFieldErrors,
+  RegisterFieldName,
 } from "../model/types";
 
 export const useAuthFlow = () => {
@@ -37,6 +45,8 @@ export const useAuthFlow = () => {
   const [confirmForm, setConfirmForm] =
     useState<ConfirmFormState>(INITIAL_CONFIRM_FORM);
   const [errorMessage, setErrorMessage] = useState("");
+  const [loginFieldErrors, setLoginFieldErrors] = useState<LoginFieldErrors>({});
+  const [registerFieldErrors, setRegisterFieldErrors] = useState<RegisterFieldErrors>({});
   const [successMessage, setSuccessMessage] = useState("");
   const [resetForm, setResetForm] = useState({ email: "", code: "", password: "", confirmPassword: "" });
 
@@ -49,19 +59,97 @@ export const useAuthFlow = () => {
   const isLoading =
     loginState.isLoading || registerState.isLoading || confirmState.isLoading || resetRequestState.isLoading || resetConfirmState.isLoading;
 
-  const close = useCallback(() => {
-    if (!isLoading) {
-      setErrorMessage("");
-      setSuccessMessage("");
-      dispatch(closeAuthModal());
+  const validateLogin = useCallback((form: LoginFormState): LoginFieldErrors => {
+    const errors: LoginFieldErrors = {};
+    const email = form.email.trim();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+    if (!email) errors.email = "Введите электронную почту";
+    else if (!emailPattern.test(email)) errors.email = "Введите корректный email";
+
+    if (!form.password) errors.password = "Введите пароль";
+
+    return errors;
+  }, []);
+
+  const focusLoginField = useCallback((field: LoginFieldName) => {
+    requestAnimationFrame(() => {
+      const element = document.querySelector<HTMLInputElement>(`[name="${field}"]`);
+      element?.focus({ preventScroll: true });
+    });
+  }, []);
+
+  const validateRegister = useCallback((form: RegisterFormState): RegisterFieldErrors => {
+    const errors: RegisterFieldErrors = {};
+    const namePattern = /^[A-Za-zА-Яа-яЁё\s-]+$/u;
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+    const firstName = form.firstName.trim();
+    const lastName = form.lastName.trim();
+    const email = form.email.trim();
+
+    if (!firstName) errors.firstName = "Введите имя";
+    else if (firstName.length < 2) errors.firstName = "Минимум 2 символа";
+    else if (!namePattern.test(firstName)) errors.firstName = "Только буквы, пробел и дефис";
+
+    if (!lastName) errors.lastName = "Введите фамилию";
+    else if (lastName.length < 2) errors.lastName = "Минимум 2 символа";
+    else if (!namePattern.test(lastName)) errors.lastName = "Только буквы, пробел и дефис";
+
+    if (!email) errors.email = "Введите электронную почту";
+    else if (!emailPattern.test(email)) errors.email = "Введите корректный email";
+
+    if (!form.password) errors.password = "Введите пароль";
+    else if (form.password.length < 8) errors.password = "Минимум 8 символов";
+    else if (!/[A-ZА-ЯЁ]/.test(form.password)) errors.password = "Добавьте заглавную букву";
+    else if (!/\d/.test(form.password)) errors.password = "Добавьте цифру";
+    else if (!/[^A-Za-zА-Яа-яЁё0-9]/.test(form.password)) errors.password = "Добавьте специальный символ";
+
+    if (!form.confirmPassword) errors.confirmPassword = "Повторите пароль";
+    else if (form.confirmPassword !== form.password) errors.confirmPassword = "Пароли не совпадают";
+
+    if (!form.phone) errors.phone = "Введите номер телефона";
+    else if (!isValidPhone(form.phone)) errors.phone = "Введите корректный номер телефона";
+
+    return errors;
+  }, []);
+
+  const focusRegisterField = useCallback((field: RegisterFieldName) => {
+    requestAnimationFrame(() => {
+      const element = document.querySelector<HTMLInputElement>(`[data-register-field="${field}"]`);
+      element?.focus({ preventScroll: true });
+    });
+  }, []);
+
+  const syncClientState = useCallback(async () => {
+    const requests = [
+      dispatch(userApi.endpoints.getUser.initiate(undefined, { forceRefetch: true })),
+      dispatch(cartApi.endpoints.getCart.initiate(undefined, { forceRefetch: true })),
+      dispatch(favoritesApi.endpoints.getFavorites.initiate(undefined, { forceRefetch: true })),
+    ];
+
+    try {
+      await Promise.allSettled(requests.map((request) => request.unwrap()));
+    } finally {
+      requests.forEach((request) => request.unsubscribe());
     }
-  }, [dispatch, isLoading]);
+  }, [dispatch]);
+
+  const close = useCallback(() => {
+    setErrorMessage("");
+    setSuccessMessage("");
+    setLoginFieldErrors({});
+    setRegisterFieldErrors({});
+    dispatch(closeAuthModal());
+  }, [dispatch]);
 
   const changeMode = useCallback(
     (nextMode: AuthModalMode) => {
       if (!isLoading) {
         setErrorMessage("");
         setSuccessMessage("");
+        setLoginFieldErrors({});
+        setRegisterFieldErrors({});
         dispatch(setAuthModalMode(nextMode));
       }
     },
@@ -70,12 +158,57 @@ export const useAuthFlow = () => {
 
   const handleLoginChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setLoginForm((previous) => ({ ...previous, [name]: value }));
+    const field = name as LoginFieldName;
+
+    setLoginForm((previous) => {
+      const nextForm = { ...previous, [name]: value };
+
+      setLoginFieldErrors((previousErrors) => {
+        if (!previousErrors[field]) return previousErrors;
+
+        const nextErrors = { ...previousErrors };
+        const currentError = validateLogin(nextForm)[field];
+        if (currentError) nextErrors[field] = currentError;
+        else delete nextErrors[field];
+        return nextErrors;
+      });
+
+      return nextForm;
+    });
+
+    setErrorMessage("");
   };
 
   const handleRegisterChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setRegisterForm((previous) => ({ ...previous, [name]: value }));
+    const field = name as RegisterFieldName;
+
+    setRegisterForm((previous) => {
+      const nextForm = { ...previous, [name]: value };
+
+      setRegisterFieldErrors((previousErrors) => {
+        if (!previousErrors[field]) return previousErrors;
+
+        const nextErrors = { ...previousErrors };
+        const currentError = validateRegister(nextForm)[field];
+
+        if (currentError) nextErrors[field] = currentError;
+        else delete nextErrors[field];
+
+        // Password edits can also make the repeated password valid/invalid.
+        if (field === "password" && previousErrors.confirmPassword) {
+          const confirmError = validateRegister(nextForm).confirmPassword;
+          if (confirmError) nextErrors.confirmPassword = confirmError;
+          else delete nextErrors.confirmPassword;
+        }
+
+        return nextErrors;
+      });
+
+      return nextForm;
+    });
+
+    setErrorMessage("");
   };
 
   const handleConfirmChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -142,6 +275,15 @@ export const useAuthFlow = () => {
     setErrorMessage("");
     setSuccessMessage("");
 
+    const fieldErrors = validateLogin(loginForm);
+    setLoginFieldErrors(fieldErrors);
+
+    const firstInvalid = Object.keys(fieldErrors)[0] as LoginFieldName | undefined;
+    if (firstInvalid) {
+      focusLoginField(firstInvalid);
+      return;
+    }
+
     try {
       const response = await login({
         email: loginForm.email.trim(),
@@ -154,6 +296,8 @@ export const useAuthFlow = () => {
         );
         return;
       }
+
+      await syncClientState();
 
       dispatch(closeProfileMenu());
       dispatch(closeAuthModal());
@@ -168,8 +312,12 @@ export const useAuthFlow = () => {
     setErrorMessage("");
     setSuccessMessage("");
 
-    if (registerForm.password !== registerForm.confirmPassword) {
-      setErrorMessage("Пароли не совпадают");
+    const fieldErrors = validateRegister(registerForm);
+    setRegisterFieldErrors(fieldErrors);
+
+    const firstInvalid = Object.keys(fieldErrors)[0] as RegisterFieldName | undefined;
+    if (firstInvalid) {
+      focusRegisterField(firstInvalid);
       return;
     }
 
@@ -177,7 +325,7 @@ export const useAuthFlow = () => {
       const response = await register({
         firstName: registerForm.firstName.trim(),
         lastName: registerForm.lastName.trim(),
-        phone: registerForm.phone.trim(),
+        phone: normalizePhone(registerForm.phone, detectCountry(registerForm.phone)),
         email: registerForm.email.trim(),
         password: registerForm.password,
         confirmPassword: registerForm.confirmPassword,
@@ -188,6 +336,7 @@ export const useAuthFlow = () => {
         return;
       }
 
+      setRegisterFieldErrors({});
       setConfirmForm(INITIAL_CONFIRM_FORM);
       dispatch(setAuthModalMode("confirm"));
       setSuccessMessage(
@@ -220,6 +369,8 @@ export const useAuthFlow = () => {
       }).unwrap();
 
       if (loginResponse.success) {
+        await syncClientState();
+
         dispatch(closeProfileMenu());
         dispatch(closeAuthModal());
         setRegisterForm(INITIAL_REGISTER_FORM);
@@ -244,6 +395,8 @@ export const useAuthFlow = () => {
     resetForm,
     errorMessage,
     successMessage,
+    loginFieldErrors,
+    registerFieldErrors,
     isLoading,
     isLoginLoading: loginState.isLoading,
     isRegisterLoading: registerState.isLoading,

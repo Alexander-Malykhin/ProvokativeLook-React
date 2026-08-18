@@ -51,7 +51,6 @@ export const addressApi = baseApi.injectEndpoints({
     getAddressSuggestions: builder.query<Suggestion[], SuggestAddressRequest>({
       query: ({ city = "", query }) => ({
         url: "address/suggest",
-        scope: "site",
         params: {
           text: [city.trim(), query.trim()].filter(Boolean).join(", "),
         },
@@ -63,7 +62,6 @@ export const addressApi = baseApi.injectEndpoints({
     geocodeAddress: builder.query<ParsedAddress[], GeocodeAddressRequest>({
       query: ({ geocode, results = 1 }) => ({
         url: "address/geocode",
-        scope: "site",
         params: { geocode, results },
         responseHandler: "text",
       }),
@@ -73,20 +71,18 @@ export const addressApi = baseApi.injectEndpoints({
     getPickupPoints: builder.query<PickupPointsResponse, { city: string; provider: "cdek" | "mail"; country?: string; countryCode?: string }>({
       query: ({ city, provider, country = "", countryCode = "" }) => ({
         url: "address/pickup-points",
-        scope: "site",
         params: { city, provider, country, countryCode },
       }),
     }),
 
     getAddresses: builder.query<AddressesResponse, void>({
-      query: () => ({ url: "addresses", scope: "site" }),
+      query: () => ({ url: "addresses" }),
       providesTags: ["Addresses"],
     }),
 
     addAddress: builder.mutation<AddressesResponse, ProfileAddress>({
       query: (body) => ({
         url: "addresses/add",
-        scope: "site",
         method: "POST",
         body,
       }),
@@ -96,7 +92,6 @@ export const addressApi = baseApi.injectEndpoints({
     updateAddress: builder.mutation<AddressesResponse, ProfileAddress>({
       query: (body) => ({
         url: "addresses/update",
-        scope: "site",
         method: "POST",
         body,
       }),
@@ -106,7 +101,6 @@ export const addressApi = baseApi.injectEndpoints({
     setDefaultAddress: builder.mutation<AddressesResponse, { id: number }>({
       query: (body) => ({
         url: "addresses/default",
-        scope: "site",
         method: "POST",
         body,
       }),
@@ -116,7 +110,6 @@ export const addressApi = baseApi.injectEndpoints({
     deleteAddress: builder.mutation<AddressesResponse, { id: number }>({
       query: (body) => ({
         url: "addresses/delete",
-        scope: "site",
         method: "POST",
         body,
       }),

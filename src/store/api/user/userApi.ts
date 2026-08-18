@@ -19,14 +19,13 @@ import type {
 export const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getUser: builder.query<UserResponse, void>({
-      query: () => ({ url: "user", scope: "site" }),
+      query: () => ({ url: "user" }),
       providesTags: ["User"],
     }),
 
     updateUser: builder.mutation<UserResponse, UpdateUserRequest>({
       query: (body) => ({
         url: "user/update",
-        scope: "site",
         method: "POST",
         body,
       }),
@@ -48,17 +47,15 @@ export const userApi = baseApi.injectEndpoints({
     login: builder.mutation<LoginResponse, LoginRequest>({
       query: (body) => ({
         url: "auth/login",
-        scope: "site",
         method: "POST",
         body,
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ["User", "Cart", "Favorites", "Addresses", "Orders"],
     }),
 
     register: builder.mutation<RegisterResponse, RegisterRequest>({
       query: (body) => ({
         url: "auth/register",
-        scope: "site",
         method: "POST",
         body,
       }),
@@ -70,28 +67,26 @@ export const userApi = baseApi.injectEndpoints({
     >({
       query: (body) => ({
         url: "auth/register/confirm",
-        scope: "site",
         method: "POST",
         body,
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ["User", "Cart", "Favorites", "Addresses", "Orders"],
     }),
 
     logout: builder.mutation<LogoutResponse, void>({
       query: () => ({
         url: "auth/logout",
-        scope: "site",
         method: "POST",
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ["User", "Cart", "Favorites", "Addresses", "Orders"],
     }),
 
     requestPasswordReset: builder.mutation<PasswordResetResponse, PasswordResetRequest>({
-      query: (body) => ({ url: "auth/password/request", scope: "site", method: "POST", body }),
+      query: (body) => ({ url: "auth/password/request", method: "POST", body }),
     }),
 
     confirmPasswordReset: builder.mutation<PasswordResetResponse, PasswordResetConfirmRequest>({
-      query: (body) => ({ url: "auth/password/confirm", scope: "site", method: "POST", body }),
+      query: (body) => ({ url: "auth/password/confirm", method: "POST", body }),
     }),
   }),
 });

@@ -25,7 +25,6 @@ export const catalogApi = baseApi.injectEndpoints({
         offset = 0,
       }) => ({
         url: 'catalog/products',
-        scope: 'site',
         params: {
           sectionIds: sectionIds.length ? sectionIds.join(',') : undefined,
           sizes: sizes.length ? sizes.join(',') : undefined,
@@ -42,7 +41,6 @@ export const catalogApi = baseApi.injectEndpoints({
     searchCatalog: builder.query<CatalogSearchResponse, CatalogSearchRequest>({
       query: ({ q, limit = 20 }) => ({
         url: 'catalog/search',
-        scope: 'site',
         params: { q, limit },
       }),
       keepUnusedDataFor: 30,
@@ -53,7 +51,6 @@ export const catalogApi = baseApi.injectEndpoints({
     >({
       query: ({ id }) => ({
         url: 'catalog/product',
-        scope: 'site',
         params: { id },
       }),
       keepUnusedDataFor: 60,
