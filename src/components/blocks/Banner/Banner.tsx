@@ -12,15 +12,25 @@ import BannerTitle from "@UI/titles/BannerTitle/BannerTitle.tsx";
 import MainButton from "@/UI/buttons/MainButton/MainButton";
 //api
 import { useGetHomeQuery } from "@store/api/home/homeApi.ts";
+import { useGetCategoriesQuery } from "@store/api/categories/categoriesApi";
 
 const Banner = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { data, isLoading, isError } = useGetHomeQuery();
+  const {
+    data: categoriesData,
+    isLoading: isCategoriesLoading,
+    isError: isCategoriesError,
+  } = useGetCategoriesQuery();
 
-  if (isLoading) return <BannerSkeleton />;
+  if (isLoading || isCategoriesLoading) return <BannerSkeleton />;
 
-  if (isError || !data) return null;
+  if (isError || isCategoriesError || !data || !categoriesData) return null;
+
+  const bannerCategories = categoriesData.items
+    .filter((category) => category.banner.show)
+    .sort((a, b) => a.sort - b.sort);
 
   return (
     <SectionLayout className={styles.banner}>
@@ -64,7 +74,7 @@ const Banner = () => {
         {data.bannerImageRight && <Image src={data.bannerImageRight} />}
       </div>
 
-      <BannerCategory items={data.categoryList} />
+      <BannerCategory items={bannerCategories} />
     </SectionLayout>
   );
 };

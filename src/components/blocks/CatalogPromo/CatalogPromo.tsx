@@ -1,20 +1,27 @@
 import styles from "./CatalogPromo.module.scss";
 import SectionLayout from "@layouts/SectionLayout/SectionLayout";
-import { useGetHomeQuery } from "@store/api/home/homeApi";
+import { useGetCategoriesQuery } from "@store/api/categories/categoriesApi";
 import { useCarousel } from "@hooks/useCarousel";
 import CarouselDots from "@components/Carousel/CarouselDots";
 import CatalogPromoItem from "./components/CatalogPromoItem/CatalogPromoItem";
 import { CATALOG_PROMO_ORDER } from "./data";
 
 const CatalogPromo = () => {
-  const { data } = useGetHomeQuery();
-  const promoCategories = [...(data?.categories ?? [])]
-    .filter((category) => category.properties.CATEGORY_SHOW_PROMO === "Да")
-    .sort(
-      (a, b) =>
-        CATALOG_PROMO_ORDER.indexOf(a.properties.CATEGORY_NAME_PROMO) -
-        CATALOG_PROMO_ORDER.indexOf(b.properties.CATEGORY_NAME_PROMO),
-    );
+  const { data } = useGetCategoriesQuery();
+
+  const promoCategories = [...(data?.items ?? [])]
+    .filter((category) => category.catalog.show)
+    .sort((a, b) => {
+      const aIndex = CATALOG_PROMO_ORDER.indexOf(a.catalog.title);
+      const bIndex = CATALOG_PROMO_ORDER.indexOf(b.catalog.title);
+
+      if (aIndex === -1 && bIndex === -1) return a.sort - b.sort;
+      if (aIndex === -1) return 1;
+      if (bIndex === -1) return -1;
+
+      return aIndex - bIndex;
+    });
+
   const carousel = useCarousel({
     itemCount: promoCategories.length,
     mode: "progress",
@@ -31,9 +38,9 @@ const CatalogPromo = () => {
           <CatalogPromoItem
             key={category.id}
             index={index + 1}
-            title={category.properties.CATEGORY_NAME_PROMO}
-            image={category.properties.CATEGORY_IMAGE_PROMO}
-            link={category.properties.CATEGORY_LINK}
+            title={category.catalog.title}
+            image={category.catalog.image}
+            link={category.link}
           />
         ))}
       </div>

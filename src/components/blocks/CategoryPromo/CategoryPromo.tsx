@@ -7,18 +7,18 @@ import MainLayoutContainer from "@layouts/MainLayoutContainer/MainLayoutContaine
 import CategoryPromoSkeleton from "@components/blocks/CategoryPromo/components/CategoryPromoSkeleton/CategoryPromoSkeleton";
 import CategoryPromoItem from "@components/blocks/CategoryPromo/components/CategoryPromoItem/CategoryPromoItem";
 // api
-import { useGetHomeQuery } from "@store/api/home/homeApi";
+import { useGetCategoriesQuery } from "@store/api/categories/categoriesApi";
 
 const CategoryPromo = () => {
-  const { data, isLoading, isError } = useGetHomeQuery();
+  const { data, isLoading, isError } = useGetCategoriesQuery();
 
   if (isLoading) return <CategoryPromoSkeleton />;
 
   if (isError || !data) return null;
 
-  const promoItems = data.promoCategory
-    .filter((item) => item.properties.CATEGORY_SHOW_PROMO === "Да")
-    .reverse();
+  const promoItems = data.items
+    .filter((item) => item.promo.show)
+    .sort((a, b) => a.sort - b.sort);
 
   if (promoItems.length === 0) {
     return null;
