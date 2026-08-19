@@ -15,6 +15,14 @@ const money = (value: number, currency: string) => {
 const OrderDetails = ({ order }: OrderDetailsProps) => {
   const navigate = useNavigate();
   const [payOrder, { isLoading: isPaying }] = usePayOrderMutation();
+  const isReservedOrder = /резерв/iu.test(`${order.stage?.name ?? ""} ${order.statusText ?? ""}`);
+  const paymentName = order.payment?.name || (isReservedOrder ? "Оплата при получении" : "");
+  const returnedOrder = typeof window !== "undefined" ? sessionStorage.getItem("provokativelook.payment.returnedOrder") : null;
+  const pendingUntil = typeof window !== "undefined" ? Number(sessionStorage.getItem("provokativelook.payment.pendingUntil") ?? 0) : 0;
+  const justReturnedFromPayment = !order.isPaid && pendingUntil > Date.now() && Boolean(returnedOrder)
+    && (String(order.orderId ?? "") === returnedOrder || String(order.number) === returnedOrder);
+  const paymentPending = order.paymentState === "pending" || justReturnedFromPayment;
+  const canPay = !order.isPaid && !paymentPending && order.canPay;
   const handlePay = async () => {
     if (!order.orderId || isPaying) return;
     const response = await payOrder({ orderId: order.orderId }).unwrap();
@@ -33,7 +41,7 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
         <span className={`${styles.details__status} ${styles[`details__status_${order.status}`]}`}>{order.statusText}</span>
         <span className={styles.details__date}>{order.date ? `от ${order.date}` : ""}</span>
       </div>
-      {order.paymentState === "pending" && !order.isPaid ? (
+      {paymentPending && !order.isPaid ? (
         <div className={`${styles.details__paymentNotice} ${styles.details__paymentNotice_pending}`}>
           <div>
             <strong>Подтверждаем оплату</strong>
@@ -41,10 +49,10 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
           </div>
           <span className={styles.details__paymentLoader} aria-hidden="true" />
         </div>
-      ) : order.canPay ? (
+      ) : canPay ? (
         <div className={styles.details__paymentNotice}>
           <div><strong>Заказ не оплачен</strong><span>Счёт можно оплатить в любое время.</span></div>
-          <button type="button" onClick={() => void handlePay()} disabled={isPaying}>{isPaying ? "Переходим..." : "Оплатить счёт"}</button>
+          <button type="button" onClick={() => void handlePay()} disabled={isPaying}>{isPaying ? "Переходим..." : "Оплатить заказ"}</button>
         </div>
       ) : null}
       <div className={styles.details__sectionTitle}>Состав заказа / {order.productsCount} товара</div>
@@ -71,7 +79,7 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
         {typeof order.deliveryPrice === "number" && order.deliveryPrice > 0 && <div><span>Доставка:</span><strong>{money(order.deliveryPrice, order.currency)}</strong></div>}
         <div className={styles.details__summaryTotal}><span>{order.paid && order.paid > 0 ? "Оплачено:" : "Итого:"}</span><strong>{money(order.paid && order.paid > 0 ? order.paid : order.total, order.currency)}</strong></div>
       </div>
-      {order.delivery?.name && <div className={styles.details__delivery}><div><span>Доставка</span><strong>{order.delivery.name}</strong></div>{order.delivery.formattedAddress && <p>{order.delivery.formattedAddress}</p>}{order.delivery.trackingNumber && <p>Трек-номер: {order.delivery.trackingNumber}</p>}</div>}
+      {(paymentName || order.delivery?.name) && <div className={styles.details__delivery}>{paymentName && <div><span>Способ оплаты</span><strong>{paymentName}</strong></div>}{order.delivery?.name && <div><span>Доставка</span><strong>{order.delivery.name}</strong></div>}{order.delivery?.formattedAddress && <p>{order.delivery.formattedAddress}</p>}{order.delivery?.trackingNumber && <p>Трек-номер: {order.delivery.trackingNumber}</p>}</div>}
     </div>
   );
 };

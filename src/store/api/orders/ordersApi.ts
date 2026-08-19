@@ -28,7 +28,7 @@ export const ordersApi = baseApi.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Orders", "Cart", "Notifications"],
+      invalidatesTags: ["Orders", "Notifications"],
     }),
 
     payOrder: builder.mutation<CreateOrderPaymentResponse, { orderId: number }>({

@@ -1,27 +1,20 @@
 import { useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import styles from "./PaymentSuccessPage.module.scss";
+import { useNavigate } from "react-router-dom";
 
 const PaymentSuccessPage = () => {
   const navigate = useNavigate();
-  const [params] = useSearchParams();
-  const order = params.get("order") || sessionStorage.getItem("provokativelook.payment.order") || "";
 
   useEffect(() => {
+    const returnedOrder = sessionStorage.getItem("provokativelook.payment.order") ?? "";
     sessionStorage.removeItem("provokativelook.payment.url");
-    const timeout = window.setTimeout(() => {
-      navigate(`/profile/orders${order ? `?paid=${encodeURIComponent(order)}` : ""}`, { replace: true });
-    }, 1400);
-    return () => window.clearTimeout(timeout);
-  }, [navigate, order]);
+    if (returnedOrder) {
+      sessionStorage.setItem("provokativelook.payment.returnedOrder", returnedOrder);
+      sessionStorage.setItem("provokativelook.payment.pendingUntil", String(Date.now() + 60_000));
+    }
+    navigate("/profile/orders", { replace: true });
+  }, [navigate]);
 
-  return (
-    <main className={styles.success}>
-      <div className={styles.success__mark}>✓</div>
-      <h1>Оплата принята</h1>
-      <p>Возвращаем вас к заказам.</p>
-    </main>
-  );
+  return null;
 };
 
 export default PaymentSuccessPage;

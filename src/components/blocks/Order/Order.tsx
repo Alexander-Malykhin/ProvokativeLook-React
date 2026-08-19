@@ -15,10 +15,13 @@ import { useGetUserQuery } from "@store/api/user/userApi";
 import { useGetAddressesQuery } from "@store/api/address/addressApi";
 import type { ProfileAddress } from "@components/blocks/Profile/subpages/ProfileAddresses/model/types";
 import { useCreateOrderMutation } from "@store/api/orders/ordersApi";
+import { baseApi } from "@store/api/baseApi";
+import { useAppDispatch } from "@store/hooks";
 import { getRequestErrorMessage } from "@store/api/getRequestErrorMessage";
 
 const Order = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { data: cartData, isLoading: isCartLoading } = useGetCartQuery();
   const { data: userData, isLoading: isUserLoading } = useGetUserQuery();
   const { data: addressesData, isLoading: isAddressesLoading } = useGetAddressesQuery();
@@ -52,7 +55,7 @@ const Order = () => {
       email: "",
       phone: "",
       addressId: "",
-      payment: "card",
+      payment: "cash",
       privacy: false,
     },
   });
@@ -71,7 +74,7 @@ const Order = () => {
       email: userData.user.email ?? "",
       phone: userData.user.phone ?? "",
       addressId: defaultAddress ? String(defaultAddress.id) : "",
-      payment: "card",
+      payment: "cash",
       privacy: false,
     });
     initializedRef.current = true;
@@ -123,10 +126,16 @@ const Order = () => {
         sessionStorage.setItem("provokativelook.payment.url", response.order.payment.url);
         sessionStorage.setItem("provokativelook.payment.order", String(response.order.orderId));
         navigate("/payment/redirect");
+        window.setTimeout(() => {
+          dispatch(baseApi.util.invalidateTags(["Cart"]));
+        }, 0);
         return;
       }
 
-      navigate(`/profile/orders?created=${response.order.orderId}`);
+      navigate("/profile/orders", { replace: true });
+      window.setTimeout(() => {
+        dispatch(baseApi.util.invalidateTags(["Cart"]));
+      }, 0);
     } catch (error) {
       setErrorMessage(getRequestErrorMessage(error, "Не удалось оформить заказ"));
     }

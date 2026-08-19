@@ -13,9 +13,29 @@ const ProfileOrders = ({ title }: ProfilePageProps) => {
   const [searchParams] = useSearchParams();
   const paidOrder = searchParams.get("paid");
   const paymentSuccess = searchParams.get("payment") === "success";
-  const { data, isLoading, isError, refetch } = useGetOrdersQuery({ limit:50, offset:0 }, { refetchOnMountOrArgChange:true });
+  const returnedOrder = typeof window !== "undefined" ? sessionStorage.getItem("provokativelook.payment.returnedOrder") : null;
+  const pendingUntil = typeof window !== "undefined" ? Number(sessionStorage.getItem("provokativelook.payment.pendingUntil") ?? 0) : 0;
+  const shouldPollPayment = Boolean(returnedOrder) && pendingUntil > Date.now();
+  const { data, isLoading, isError, refetch } = useGetOrdersQuery(
+    { limit:50, offset:0 },
+    { refetchOnMountOrArgChange:true, pollingInterval: shouldPollPayment ? 2000 : 0 },
+  );
   const orders = data?.data.items ?? [];
   const selected = useMemo(() => id ? orders.find((order) => String(order.id) === id) : undefined, [id,orders]);
+
+  useEffect(() => {
+    if (!returnedOrder) return;
+    const found = orders.find((order) => String(order.orderId ?? "") === returnedOrder || String(order.number) === returnedOrder);
+    if (found?.isPaid || found?.paymentState === "pending" || Date.now() >= pendingUntil) {
+      if (found?.isPaid) {
+        sessionStorage.removeItem("provokativelook.payment.order");
+      }
+      if (found?.isPaid || Date.now() >= pendingUntil) {
+        sessionStorage.removeItem("provokativelook.payment.returnedOrder");
+        sessionStorage.removeItem("provokativelook.payment.pendingUntil");
+      }
+    }
+  }, [orders, pendingUntil, returnedOrder]);
 
   useEffect(() => {
     if (!paidOrder || id) return;

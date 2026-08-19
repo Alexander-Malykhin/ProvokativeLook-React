@@ -25,15 +25,13 @@ const RootLayout = () => {
     const params = new URLSearchParams(location.search);
     if (params.get("payment") !== "success") return;
 
-    const order = params.get("order") ?? "";
-    const deal = params.get("deal") ?? "";
+    const returnedOrder = params.get("order") ?? sessionStorage.getItem("provokativelook.payment.order") ?? "";
     sessionStorage.removeItem("provokativelook.payment.url");
-    sessionStorage.removeItem("provokativelook.payment.order");
-    if (deal) {
-      navigate(`/profile/orders/${encodeURIComponent(deal)}?payment=success`, { replace: true });
-    } else {
-      navigate(`/profile/orders?payment=success${order ? `&paid=${encodeURIComponent(order)}` : ""}`, { replace: true });
+    if (returnedOrder) {
+      sessionStorage.setItem("provokativelook.payment.returnedOrder", returnedOrder);
+      sessionStorage.setItem("provokativelook.payment.pendingUntil", String(Date.now() + 60_000));
     }
+    navigate("/profile/orders", { replace: true });
   }, [location.search, navigate]);
 
   return (

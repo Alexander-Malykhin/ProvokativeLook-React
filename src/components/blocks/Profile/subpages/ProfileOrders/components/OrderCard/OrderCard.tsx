@@ -30,6 +30,15 @@ const OrderCard = ({ order }: OrderCardProps) => {
   const navigate = useNavigate();
   const [payOrder, { isLoading: isPaying }] = usePayOrderMutation();
 
+  const isReservedOrder = /резерв/iu.test(`${order.stage?.name ?? ""} ${order.statusText ?? ""}`);
+  const paymentName = order.payment?.name || (isReservedOrder ? "Оплата при получении" : "");
+  const returnedOrder = typeof window !== "undefined" ? sessionStorage.getItem("provokativelook.payment.returnedOrder") : null;
+  const pendingUntil = typeof window !== "undefined" ? Number(sessionStorage.getItem("provokativelook.payment.pendingUntil") ?? 0) : 0;
+  const justReturnedFromPayment = !order.isPaid && pendingUntil > Date.now() && Boolean(returnedOrder)
+    && (String(order.orderId ?? "") === returnedOrder || String(order.number) === returnedOrder);
+  const paymentPending = order.paymentState === "pending" || justReturnedFromPayment;
+  const canPay = !order.isPaid && !paymentPending && order.canPay;
+
   const handlePay = async () => {
     if (!order.orderId || isPaying) return;
     const response = await payOrder({ orderId: order.orderId }).unwrap();
@@ -72,11 +81,12 @@ const OrderCard = ({ order }: OrderCardProps) => {
           </span>
         </div>
 
-        {order.delivery?.name && (
+        {(paymentName || order.delivery?.name) && (
           <div className={styles.card__delivery}>
-            <span>Доставка: {order.delivery.name}</span>
+            {paymentName && <span>Способ оплаты: {paymentName}</span>}
+            {order.delivery?.name && <span>Доставка: {order.delivery.name}</span>}
 
-            {order.delivery.trackingNumber && (
+            {order.delivery?.trackingNumber && (
               <div className={styles.card__tracking}>
                 <span>Трек-номер: {order.delivery.trackingNumber}</span>
 
@@ -93,11 +103,11 @@ const OrderCard = ({ order }: OrderCardProps) => {
           >
             Подробнее о заказе
           </button>
-          {order.paymentState === "pending" ? (
+          {paymentPending && !order.isPaid ? (
             <span className={styles.card__paymentPending}>Подтверждаем оплату…</span>
-          ) : order.canPay ? (
+          ) : canPay ? (
             <button type="button" className={styles.card__payButton} onClick={() => void handlePay()} disabled={isPaying}>
-              {isPaying ? "Переходим к оплате..." : "Оплатить счёт"}
+              {isPaying ? "Переходим к оплате..." : "Оплатить заказ"}
             </button>
           ) : null}
         </div>

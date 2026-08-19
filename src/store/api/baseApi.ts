@@ -24,6 +24,31 @@ const siteBaseQuery: BaseQueryFn<
       url: `${SITE_API_BASE_URL}${route}`,
       credentials: request.credentials ?? "include",
       cache: "no-store",
+      responseHandler: request.responseHandler ?? (async (response) => {
+        const text = await response.text();
+        if (!text.trim()) return null;
+
+        try {
+          return JSON.parse(text);
+        } catch {
+          // Bitrix иногда дописывает перед JSON служебный HTML вроде
+          // <div class="intranet-login-error-block">Access denied</div>.
+          // Заказ при этом уже успешно создан. Берём фактический JSON-хвост,
+          // чтобы пользователь не видел красный HTML на долю секунды.
+          const markers = ["{\"success\"", "{\"error\""];
+          let jsonStart = -1;
+          for (const marker of markers) {
+            const index = text.lastIndexOf(marker);
+            if (index > jsonStart) jsonStart = index;
+          }
+
+          if (jsonStart >= 0) {
+            return JSON.parse(text.slice(jsonStart));
+          }
+
+          throw new Error(text);
+        }
+      }),
     },
     api,
     extraOptions,
