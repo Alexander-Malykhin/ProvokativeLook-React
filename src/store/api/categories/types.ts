@@ -16,6 +16,10 @@ export interface CategoryCatalog {
   image: string | null;
 }
 
+export interface CategoryCatalogPage {
+  show: boolean;
+}
+
 export interface CategoryItem {
   id: number;
   code: string;
@@ -26,6 +30,7 @@ export interface CategoryItem {
   banner: CategoryBanner;
   promo: CategoryPromo;
   catalog: CategoryCatalog;
+  catalogPage: CategoryCatalogPage;
 }
 
 export interface CategoriesResponse {

@@ -20,10 +20,7 @@ import { useGetCatalogProductsQuery } from '@store/api/catalog/catalogApi';
 import { useGetCategoriesQuery } from '@store/api/categories/categoriesApi';
 import { getRequestErrorMessage } from '@store/api/getRequestErrorMessage';
 import type { CatalogFilters, CatalogSort } from '@store/api/catalog/types';
-import { getCatalogCategory, CATALOG_CATEGORIES } from './catalogConfig';
 import { getCatalogCategorySlug, normalizeCatalogTitle } from '@/helpers/catalog';
-import type { CategoryItem } from '@store/api/categories/types';
-import { catalogOrder } from '@pages/CatalogPage/data';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 
 const PAGE_SIZE = 12;
@@ -49,10 +46,6 @@ const ALL_NAVIGATION_ITEM: CatalogNavigationItem = {
   title: 'СМОТРЕТЬ ВСЁ',
   sectionIds: [],
 };
-
-const FALLBACK_NAVIGATION: CatalogNavigationItem[] = CATALOG_CATEGORIES.map(
-  ({ slug, title, sectionIds }) => ({ slug, title, sectionIds }),
-);
 
 const dedupeNavigationItems = (
   items: CatalogNavigationItem[],
@@ -84,13 +77,10 @@ const CatalogProducts = () => {
   const { data: categoriesData } = useGetCategoriesQuery();
 
   const navigationItems = useMemo<CatalogNavigationItem[]>(() => {
-    if (!categoriesData?.items?.length) {
-      return dedupeNavigationItems(FALLBACK_NAVIGATION);
-    }
-
-    const apiItems = catalogOrder
-      .map((id) => categoriesData.items.find((item) => item.id === id))
-      .filter((item): item is CategoryItem => item !== undefined)
+    const apiItems = (categoriesData?.items ?? [])
+      .filter((item) => item.catalogPage.show)
+      .filter((item) => item.sectionIds.length > 0)
+      .sort((a, b) => a.sort - b.sort || a.id - b.id)
       .map((item) => ({
         slug: getCatalogCategorySlug(item),
         title: normalizeCatalogTitle(item.name).toLocaleUpperCase('ru-RU'),
@@ -101,9 +91,10 @@ const CatalogProducts = () => {
   }, [categoriesData]);
 
   const category = useMemo(() => {
-    const fromApi = navigationItems.find((item) => item.slug === resolvedSlug);
-
-    return fromApi ?? getCatalogCategory(resolvedSlug);
+    return (
+      navigationItems.find((item) => item.slug === resolvedSlug) ??
+      ALL_NAVIGATION_ITEM
+    );
   }, [navigationItems, resolvedSlug]);
 
   const [page, setPage] = useState(1);

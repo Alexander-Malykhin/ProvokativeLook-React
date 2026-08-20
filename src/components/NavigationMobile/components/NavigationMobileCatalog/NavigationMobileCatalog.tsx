@@ -7,20 +7,29 @@ import arrowRightImage from "@assets/arrows/arrow-shevron-right.svg";
 import Image from "@UI/media/Image/Image";
 //types
 import type { NavigationMobileCatalogInterface } from "./types";
-import { navigationCategoryCatalog } from "@api/static/navigationCategoryCatalog";
-
-const catalogItems = [
-  { text: "СМОТРЕТЬ ВСЁ", path: "/catalog/all" },
-  ...navigationCategoryCatalog.map((item) => ({
-    text: item.title.replaceAll("#br#", ""),
-    path: item.path,
-  })),
-];
+//store
+import { useGetCategoriesQuery } from "@store/api/categories/categoriesApi";
+//helpers
+import { getCatalogCategorySlug, normalizeCatalogTitle } from "@/helpers/catalog";
 
 const NavigationMobileCatalog = ({
   onBack,
   onClose,
 }: NavigationMobileCatalogInterface) => {
+  const { data } = useGetCategoriesQuery();
+
+  const catalogItems = [
+    { text: "СМОТРЕТЬ ВСЁ", path: "/catalog/all" },
+    ...(data?.items ?? [])
+      .filter((item) => item.catalogPage.show)
+      .filter((item) => item.sectionIds.length > 0)
+      .sort((a, b) => a.sort - b.sort || a.id - b.id)
+      .map((item) => ({
+        text: normalizeCatalogTitle(item.name),
+        path: `/catalog/${getCatalogCategorySlug(item)}`,
+      })),
+  ];
+
   return (
     <nav className={styles.catalog}>
       <button type="button" className={styles.catalog__back} onClick={onBack}>
