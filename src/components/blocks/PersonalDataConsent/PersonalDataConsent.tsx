@@ -1,11 +1,7 @@
-// styles
-import styles from './PersonalDataConsent.module.scss'
-// layouts
+import styles from './PersonalDataConsent.module.scss';
 import SectionLayout from "@layouts/SectionLayout/SectionLayout.tsx";
-
 const PersonalDataConsent = () => {
-    return (
-        <SectionLayout>
+    return (<SectionLayout>
             <article className={styles.consent}>
                 <h1 className={styles.consent__title}>
                     Согласие на обработку персональных данных
@@ -328,8 +324,7 @@ const PersonalDataConsent = () => {
                     Дата последнего обновления: 18 августа 2026 года.
                 </p>
             </article>
-        </SectionLayout>
-    );
+        </SectionLayout>);
 };
-
 export default PersonalDataConsent;
+

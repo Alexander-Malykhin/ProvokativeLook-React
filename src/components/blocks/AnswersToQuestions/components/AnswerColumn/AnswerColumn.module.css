@@ -1,9 +1,9 @@
-/* Error: 2 arguments required, but only 1 was passed.
- *   ,
- * 5 |   padding-top: rem(6);
- *   |                ^^^^^^
- *   '
- *   AnswerColumn.module.scss 5:16  root stylesheet */
+
+
+
+
+
+
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",

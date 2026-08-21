@@ -9,7 +9,9 @@
     "build:watch": "vite build --watch",
     "typecheck": "tsc -b",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:server": "node src/tests/serverRequests.run.mjs",
+    "test:server:write": "node src/tests/serverRequests.run.mjs --write"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.12.0",

@@ -14,5 +14,6 @@
 
   @media (max-width: rem($mobile)) {
     gap: rem(12);
+    padding-right: 0;
   }
 }

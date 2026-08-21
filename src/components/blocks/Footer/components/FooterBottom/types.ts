@@ -1,3 +1,4 @@
 export interface FooterBottomProps {
-  requisites: string;
+    requisites: string;
 }
+

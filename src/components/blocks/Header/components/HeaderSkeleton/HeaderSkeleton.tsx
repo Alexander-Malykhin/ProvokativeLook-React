@@ -1,10 +1,7 @@
 import styles from "./HeaderSkeleton.module.scss";
-
 import MainLayoutContainer from "@layouts/MainLayoutContainer/MainLayoutContainer";
-
 const HeaderSkeleton = () => {
-  return (
-    <header className={styles.skeleton}>
+    return (<header className={styles.skeleton}>
       <MainLayoutContainer>
         <div className={styles.skeleton__content}>
           <div className={styles.skeleton__left}>
@@ -28,8 +25,7 @@ const HeaderSkeleton = () => {
           </div>
         </div>
       </MainLayoutContainer>
-    </header>
-  );
+    </header>);
 };
-
 export default HeaderSkeleton;
+

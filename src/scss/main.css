@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap");
-/* Reset and base styles  */
+
 * {
   padding: 0;
   margin: 0;
@@ -12,7 +12,7 @@
   box-sizing: border-box;
 }
 
-/* Links */
+
 a, a:link, a:visited {
   text-decoration: none;
 }
@@ -21,7 +21,7 @@ a:hover {
   text-decoration: none;
 }
 
-/* Common */
+
 aside, nav, footer, header, section, main {
   display: block;
 }
@@ -52,7 +52,7 @@ address {
   font-style: normal;
 }
 
-/* Form */
+
 input, textarea, button, select {
   font-family: inherit;
   font-size: inherit;
@@ -98,4 +98,4 @@ input[type=file] {
   color: #222222;
 }
 
-/*# sourceMappingURL=main.css.map */
+

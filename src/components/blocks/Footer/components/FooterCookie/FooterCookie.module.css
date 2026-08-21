@@ -1,9 +1,9 @@
-/* Error: 2 arguments required, but only 1 was passed.
- *   ,
- * 7 |   padding: rem(10) rem(40);
- *   |            ^^^^^^^
- *   '
- *   FooterCookie.module.scss 7:12  root stylesheet */
+
+
+
+
+
+
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",

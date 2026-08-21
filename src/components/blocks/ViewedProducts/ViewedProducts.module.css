@@ -1,9 +1,9 @@
-/* Error: 2 arguments required, but only 1 was passed.
- *   ,
- * 3 |   grid-template-columns: rem(210) minmax(0, 1fr);
- *   |                          ^^^^^^^^
- *   '
- *   ViewedProducts.module.scss 3:26  root stylesheet */
+
+
+
+
+
+
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",

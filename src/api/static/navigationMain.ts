@@ -24,4 +24,5 @@ export const navigationMain = [
         text: 'Контакты',
         path: '/contacts',
     },
-]
+];
+

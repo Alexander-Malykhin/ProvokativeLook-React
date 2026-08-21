@@ -1,6 +1,7 @@
 export interface CardSliderInterface {
-    image: string,
-    title: string,
+    image: string;
+    title: string;
     sizes: string[];
-    price: string
+    price: string;
 }
+

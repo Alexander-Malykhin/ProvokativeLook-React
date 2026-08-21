@@ -1,9 +1,6 @@
-//styles
 import styles from "./InfoReturnPolicy.module.scss";
-
 const InfoReturnPolicy = () => {
-  return (
-    <div className={styles.content}>
+    return (<div className={styles.content}>
       <div className={styles.content__column}>
         <p className={styles.content__item}>
           Возврат и обмен в online магазине осуществляется в течении 7-ми дней
@@ -63,8 +60,7 @@ const InfoReturnPolicy = () => {
           </b>
         </p>
       </div>
-    </div>
-  );
+    </div>);
 };
-
 export default InfoReturnPolicy;
+

@@ -397,7 +397,7 @@
       @include font(10, $fw-light);
     }
 
-    // iOS Safari zooms the page when focusing controls below 16px.
+    
     &__input {
       @include font(16, $fw-light);
     }
@@ -453,7 +453,7 @@
   }
 }
 
-// Mobile auth: compact layout for real phones (iOS / Android).
+
 @media (max-width: rem(546)) {
   .overlay {
     align-items: center;
@@ -550,7 +550,7 @@
       line-height: 1.1;
     }
 
-    // Keep 16px on iOS: prevents Safari's automatic zoom on focus.
+    
     &__input {
       @include font(16, $fw-light);
       line-height: 1.2;
@@ -570,7 +570,7 @@
   }
 }
 
-// Very narrow phones: preserve usable field widths, only then stack names.
+
 @media (max-width: rem(329)) {
   .modal {
     width: calc(100% - #{rem(4)});
@@ -583,7 +583,7 @@
   }
 }
 
-// Short screens / landscape: prioritize fitting the form without huge vertical gaps.
+
 @media (max-width: rem(546)) and (max-height: rem(720)) {
   .modal {
     padding-top: rem(12);
@@ -614,7 +614,7 @@
 }
 
 
-// Custom registration validation
+
 .field_error {
   border-color: $red;
 

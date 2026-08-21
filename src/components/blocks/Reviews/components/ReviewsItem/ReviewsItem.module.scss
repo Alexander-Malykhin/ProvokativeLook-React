@@ -31,10 +31,11 @@
   }
 
   @media (max-width: rem($mobile)) {
-    flex: 1 0 clamp(rem(254), calc(100vw - rem(40)), rem(420));
+    flex: 0 0 100%;
+    width: 100%;
     min-height: auto;
-    padding: rem(24);
-    gap: rem(18);
+    padding: rem(20);
+    gap: rem(16);
 
     &__head {
       align-items: flex-start;

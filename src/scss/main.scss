@@ -1,6 +1,6 @@
 @use "base/reset.scss";
 
-//settings
+
 @use "settings/fonts" as *;
 @use "settings/colors" as *;
 @use "settings/functions" as *;
@@ -74,7 +74,7 @@ textarea {
   border: 0;
 }
 
-// iOS/WebKit: controls below 16px trigger automatic viewport zoom on focus.
+
 @supports (-webkit-touch-callout: none) {
   @media (max-width: rem($mobile)) {
     input,

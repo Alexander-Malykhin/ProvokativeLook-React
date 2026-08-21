@@ -1,15 +1,11 @@
-// styles
 import styles from "./AnswerItem.module.scss";
-// types
 import type { AnswerItemProps } from "@components/blocks/AnswersToQuestions/types/types";
-
 const AnswerItem = ({ title, text, isActive, onClick }: AnswerItemProps) => {
-  return (
-    <article className={`${styles.item} ${isActive ? styles.item_active : ""}`}>
+    return (<article className={`${styles.item} ${isActive ? styles.item_active : ""}`}>
       <button type="button" className={styles.item_head} onClick={onClick}>
         <span>{title}</span>
 
-        <span className={styles.item_icon} />
+        <span className={styles.item_icon}/>
       </button>
 
       <div className={styles.item_body}>
@@ -17,8 +13,7 @@ const AnswerItem = ({ title, text, isActive, onClick }: AnswerItemProps) => {
           <p>{text}</p>
         </div>
       </div>
-    </article>
-  );
+    </article>);
 };
-
 export default AnswerItem;
+

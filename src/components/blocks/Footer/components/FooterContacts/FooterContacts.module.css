@@ -1,9 +1,9 @@
-/* Error: 2 arguments required, but only 1 was passed.
- *   ,
- * 6 |   gap: rem(24);
- *   |        ^^^^^^^
- *   '
- *   FooterContacts.module.scss 6:8  root stylesheet */
+
+
+
+
+
+
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",

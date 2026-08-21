@@ -1,6 +1,5 @@
 import PromoLeftImage from "@assets/promo/promo-left.png";
 import PromoRightImage from "@assets/promo/promo-right.png";
-
 export const navigationHomePromo = [
     {
         id: 1,
@@ -15,3 +14,4 @@ export const navigationHomePromo = [
         path: '/catalog/accessories',
     },
 ];
+

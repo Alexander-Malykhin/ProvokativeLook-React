@@ -27,5 +27,11 @@
   @media (max-width: rem($mobile)) {
     grid-auto-columns: calc((100% - #{rem(8)}) / 2.05);
     gap: rem(8);
+
+    &_single {
+      grid-auto-columns: min(rem(160), 54%);
+      justify-content: center;
+      overflow-x: hidden;
+    }
   }
 }

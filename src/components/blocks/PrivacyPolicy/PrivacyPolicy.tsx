@@ -1,12 +1,7 @@
-// styles
-import styles from './PrivacyPolicy.module.scss'
-
-// layouts
+import styles from './PrivacyPolicy.module.scss';
 import SectionLayout from "@layouts/SectionLayout/SectionLayout.tsx";
-
 const PrivacyPolicy = () => {
-    return (
-        <SectionLayout>
+    return (<SectionLayout>
             <article className={styles.privacy}>
                 <h1 className={styles.privacy__title}>
                     Политика конфиденциальности
@@ -632,8 +627,7 @@ const PrivacyPolicy = () => {
                     Дата последнего обновления: 18 августа 2026 года.
                 </p>
             </article>
-        </SectionLayout>
-    );
+        </SectionLayout>);
 };
-
 export default PrivacyPolicy;
+

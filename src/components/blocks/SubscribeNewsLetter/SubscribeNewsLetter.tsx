@@ -9,44 +9,33 @@ import MainCheckbox from "@UI/inputs/MainCheckbox/MainCheckbox.tsx";
 import TextAccent from "@UI/typography/TextAccent/TextAccent.tsx";
 import { useSubscribeMutation } from "@store/api/subscription/subscriptionApi";
 import { getRequestErrorMessage } from "@store/api/getRequestErrorMessage";
-
 interface SubscribeFormValues {
-  email: string;
-  advertising: boolean;
-  privacy: boolean;
+    email: string;
+    advertising: boolean;
+    privacy: boolean;
 }
-
 const SubscribeNewsLetter = () => {
-  const [message, setMessage] = useState("");
-  const [subscribe, subscribeState] = useSubscribeMutation();
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<SubscribeFormValues>({
-    defaultValues: {
-      email: "",
-      advertising: false,
-      privacy: false,
-    },
-  });
-
-  const onSubmit = async (values: SubscribeFormValues) => {
-    setMessage("");
-
-    try {
-      const response = await subscribe({ email: values.email }).unwrap();
-      setMessage(response.message || "Вы успешно подписались на рассылку");
-      reset();
-    } catch (error) {
-      setMessage(getRequestErrorMessage(error, "Не удалось оформить подписку"));
-    }
-  };
-
-  return (
-    <SectionLayout className={styles.subscribe}>
+    const [message, setMessage] = useState("");
+    const [subscribe, subscribeState] = useSubscribeMutation();
+    const { register, handleSubmit, reset, formState: { errors }, } = useForm<SubscribeFormValues>({
+        defaultValues: {
+            email: "",
+            advertising: false,
+            privacy: false,
+        },
+    });
+    const onSubmit = async (values: SubscribeFormValues) => {
+        setMessage("");
+        try {
+            const response = await subscribe({ email: values.email }).unwrap();
+            setMessage(response.message || "Вы успешно подписались на рассылку");
+            reset();
+        }
+        catch (error) {
+            setMessage(getRequestErrorMessage(error, "Не удалось оформить подписку"));
+        }
+    };
+    return (<SectionLayout className={styles.subscribe}>
       <MainLayoutContainer className={styles.subscribe__content}>
         <p className={styles.subscribe__text}>
           Получайте информацию о новинках, акциях и специальных предложениях первой
@@ -54,48 +43,33 @@ const SubscribeNewsLetter = () => {
 
         <form className={styles.subscribe__form} onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.subscribe__form_row}>
-            <MainInput
-              type="email"
-              placeholder="Email"
-              register={register("email", {
-                required: "Введите E-mail",
-                pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: "Введите корректный E-mail",
-                },
-              })}
-              error={errors.email?.message}
-            />
+            <MainInput type="email" placeholder="Email" register={register("email", {
+            required: "Введите E-mail",
+            pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "Введите корректный E-mail",
+            },
+        })} error={errors.email?.message}/>
 
-            <MainButton
-              type="submit"
-              disabled={subscribeState.isLoading}
-              className={styles.subscribe__form_button}
-            >
+            <MainButton type="submit" disabled={subscribeState.isLoading} className={styles.subscribe__form_button}>
               {subscribeState.isLoading ? "Подписываем..." : "Подписаться"}
             </MainButton>
           </div>
 
           <div className={styles.subscribe__form__column}>
-            <MainCheckbox
-              register={register("advertising", {
-                required: "Подтвердите получение предложений",
-              })}
-            >
+            <MainCheckbox register={register("advertising", {
+            required: "Подтвердите получение предложений",
+        })}>
               Хочу получать рекламные предложения и узнавать о новинках, скидках и бонусах
             </MainCheckbox>
 
-            {errors.advertising && (
-              <span className={styles.subscribe__form_checkbox_error}>
+            {errors.advertising && (<span className={styles.subscribe__form_checkbox_error}>
                 Поставьте галочку, чтобы получать предложения
-              </span>
-            )}
+              </span>)}
 
-            <MainCheckbox
-              register={register("privacy", {
-                required: "Подтвердите согласие на обработку данных",
-              })}
-            >
+            <MainCheckbox register={register("privacy", {
+            required: "Подтвердите согласие на обработку данных",
+        })}>
               Соглашаюсь на обработку моих{" "}
               <TextAccent mode="link" path={'/personal-data-consent'}>персональных данных</TextAccent> в соответствии с{" "}
               <TextAccent mode="link" path={'/privacy-policy'}>
@@ -103,22 +77,17 @@ const SubscribeNewsLetter = () => {
               </TextAccent>
             </MainCheckbox>
 
-            {errors.privacy && (
-              <span className={styles.subscribe__form_checkbox_error}>
+            {errors.privacy && (<span className={styles.subscribe__form_checkbox_error}>
                 {errors.privacy.message}
-              </span>
-            )}
+              </span>)}
 
-            {message && (
-              <span className={styles.subscribe__form_checkbox_error} role="status">
+            {message && (<span className={styles.subscribe__form_checkbox_error} role="status">
                 {message}
-              </span>
-            )}
+              </span>)}
           </div>
         </form>
       </MainLayoutContainer>
-    </SectionLayout>
-  );
+    </SectionLayout>);
 };
-
 export default SubscribeNewsLetter;
+

@@ -1,9 +1,9 @@
-/* Error: 2 arguments required, but only 1 was passed.
- *   ,
- * 3 |   grid-template-columns: rem(322) minmax(rem(0), rem(1014));
- *   |                          ^^^^^^^^
- *   '
- *   InfoComponent.module.scss 3:26  root stylesheet */
+
+
+
+
+
+
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",

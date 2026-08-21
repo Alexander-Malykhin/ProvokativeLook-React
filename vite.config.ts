@@ -11,18 +11,18 @@ export default defineConfig({
 
     resolve: {
         alias: {
-            '@': path.resolve(__dirname, './src'),
-            '@routes': path.resolve(__dirname, './src/routes'),
-            '@scss': path.resolve(__dirname, './src/scss'),
-            '@pages': path.resolve(__dirname, './src/pages'),
-            '@components': path.resolve(__dirname, './src/components'),
-            '@layouts': path.resolve(__dirname, './src/layouts'),
-            '@store': path.resolve(__dirname, './src/store'),
-            '@UI': path.resolve(__dirname, './src/UI'),
-            '@assets': path.resolve(__dirname, './src/assets'),
-            '@hooks': path.resolve(__dirname, './src/hooks'),
-            '@helpers': path.resolve(__dirname, './src/helpers'),
-            '@api': path.resolve(__dirname, './src/api'),
+            '@': path.resolve(import.meta.dirname, './src'),
+            '@routes': path.resolve(import.meta.dirname, './src/routes'),
+            '@scss': path.resolve(import.meta.dirname, './src/scss'),
+            '@pages': path.resolve(import.meta.dirname, './src/pages'),
+            '@components': path.resolve(import.meta.dirname, './src/components'),
+            '@layouts': path.resolve(import.meta.dirname, './src/layouts'),
+            '@store': path.resolve(import.meta.dirname, './src/store'),
+            '@UI': path.resolve(import.meta.dirname, './src/UI'),
+            '@assets': path.resolve(import.meta.dirname, './src/assets'),
+            '@hooks': path.resolve(import.meta.dirname, './src/hooks'),
+            '@helpers': path.resolve(import.meta.dirname, './src/helpers'),
+            '@api': path.resolve(import.meta.dirname, './src/api'),
         },
     },
 
@@ -46,9 +46,9 @@ export default defineConfig({
 
         rollupOptions: {
             output: {
-                entryFileNames: 'assets/app.js',
-                chunkFileNames: 'assets/[name].js',
-                assetFileNames: 'assets/[name][extname]',
+                entryFileNames: 'assets/[name]-[hash].js',
+                chunkFileNames: 'assets/[name]-[hash].js',
+                assetFileNames: 'assets/[name]-[hash][extname]',
             },
         },
     },

@@ -1,5 +1,4 @@
-import type {RefObject} from "react";
-
+import type { RefObject } from "react";
 export interface Product {
     id: number;
     title: string;
@@ -7,10 +6,10 @@ export interface Product {
     price: string;
     sizes: string[];
 }
-
 export interface ProductsSliderListProps {
     sliderRef: RefObject<HTMLDivElement | null>;
     products: Product[];
     variant?: 'default' | 'five';
     mode?: 'slider' | 'grid';
 }
+

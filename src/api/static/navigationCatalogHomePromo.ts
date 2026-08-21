@@ -1,7 +1,6 @@
 import CardLeftImage from "@assets/category/list-trimmed/card-1.png";
 import CardMiddleImage from "@assets/category/list-trimmed/card-2.png";
 import CardRightImage from "@assets/category/list-trimmed/card-3.png";
-
 export const navigationCatalogHomePromo = [
     {
         id: 1,
@@ -25,3 +24,4 @@ export const navigationCatalogHomePromo = [
         position: 'right',
     },
 ] as const;
+

@@ -1,9 +1,9 @@
-/* Error: Undefined mixin.
- *   ,
- * 6 |     @include font(16, $fw-regular);
- *   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- *   '
- *   NavigationMobileCatalog.module.scss 6:5  root stylesheet */
+
+
+
+
+
+
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",

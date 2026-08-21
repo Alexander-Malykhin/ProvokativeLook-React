@@ -1,11 +1,7 @@
-// styles
-import styles from './TermsOfUse.module.scss'
-// layouts
+import styles from './TermsOfUse.module.scss';
 import SectionLayout from "@layouts/SectionLayout/SectionLayout.tsx";
-
 const TermsOfUse = () => {
-    return (
-        <SectionLayout>
+    return (<SectionLayout>
             <article className={styles.terms}>
                 <h1 className={styles.terms__title}>
                     Пользовательское соглашение
@@ -382,8 +378,7 @@ const TermsOfUse = () => {
                     Дата последнего обновления: 18 августа 2026 года.
                 </p>
             </article>
-        </SectionLayout>
-    );
+        </SectionLayout>);
 };
-
 export default TermsOfUse;
+

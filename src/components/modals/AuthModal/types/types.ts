@@ -1,13 +1,8 @@
-export type AuthFormMode =
-    | 'login'
-    | 'register'
-    | 'confirm';
-
+export type AuthFormMode = 'login' | 'register' | 'confirm';
 export interface LoginFormInterface {
     email: string;
     password: string;
 }
-
 export interface RegisterFormInterface {
     firstName: string;
     lastName: string;
@@ -16,7 +11,7 @@ export interface RegisterFormInterface {
     password: string;
     confirmPassword: string;
 }
-
 export interface ConfirmFormInterface {
     code: string;
 }
+

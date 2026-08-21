@@ -1,18 +1,11 @@
-import {useNavigate} from "react-router";
-//styles
+import { useNavigate } from "react-router";
 import styles from "./NotFound.module.scss";
-//layouts
 import SectionLayout from "@layouts/SectionLayout/SectionLayout.tsx";
 import MainLayoutContainer from "@layouts/MainLayoutContainer/MainLayoutContainer.tsx";
-//UI
 import MainButton from "@UI/buttons/MainButton/MainButton.tsx";
-
 const NotFound = () => {
-
-  const navigate = useNavigate();
-
-  return (
-    <SectionLayout>
+    const navigate = useNavigate();
+    return (<SectionLayout>
       <MainLayoutContainer className={styles.page}>
         <div className={styles.page__content}>
           <h1 className={styles.page__title}>404</h1>
@@ -24,15 +17,11 @@ const NotFound = () => {
           </p>
         </div>
 
-        <MainButton
-            className={styles.page__button}
-            onClick={() => navigate("/catalog")
-        }>
+        <MainButton className={styles.page__button} onClick={() => navigate("/catalog")}>
           Вернуться в каталог
         </MainButton>
       </MainLayoutContainer>
-    </SectionLayout>
-  );
+    </SectionLayout>);
 };
-
 export default NotFound;
+

@@ -1,6 +1,4 @@
-// layouts
 import PageStack from "@layouts/PageStack/PageStack";
-//blocks
 import Banner from "@components/blocks/Banner/Banner.tsx";
 import CategoryPromo from "@components/blocks/CategoryPromo/CategoryPromo.tsx";
 import News from "@components/blocks/News/News.tsx";
@@ -8,13 +6,10 @@ import CatalogPromo from "@components/blocks/CatalogPromo/CatalogPromo.tsx";
 import Reviews from "@components/blocks/Reviews/Reviews.tsx";
 import AnswersToQuestions from "@components/blocks/AnswersToQuestions/AnswersToQuestions.tsx";
 import SubscribeNewsLetter from "@components/blocks/SubscribeNewsLetter/SubscribeNewsLetter.tsx";
-//components
 import Bestsellers from "@components/blocks/Bestsellers/Bestsellers.tsx";
 import ViewedProducts from "@components/blocks/ViewedProducts/ViewedProducts.tsx";
-
 const HomePage = () => {
-  return (
-    <>
+    return (<>
       <PageStack>
         <Banner />
         <Bestsellers />
@@ -26,8 +21,7 @@ const HomePage = () => {
         <AnswersToQuestions />
         <SubscribeNewsLetter />
       </PageStack>
-    </>
-  );
+    </>);
 };
-
 export default HomePage;
+

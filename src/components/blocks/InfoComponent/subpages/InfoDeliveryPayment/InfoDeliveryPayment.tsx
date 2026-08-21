@@ -1,9 +1,6 @@
-//styles
 import styles from "./InfoDeliveryPayment.module.scss";
-
 const InfoDeliveryPayment = () => {
-  return (
-    <div className={styles.content}>
+    return (<div className={styles.content}>
       <div className={styles.content__column}>
         <p className={styles.content__item}>
           Посылки мы отправляем с помощью Почты России, транспортной компании
@@ -55,8 +52,7 @@ const InfoDeliveryPayment = () => {
           </li>
         </ul>
       </div>
-    </div>
-  );
+    </div>);
 };
-
 export default InfoDeliveryPayment;
+

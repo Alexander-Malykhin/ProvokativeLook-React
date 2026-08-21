@@ -2,13 +2,10 @@ import Image from "@UI/media/Image/Image";
 import { Link } from "react-router-dom";
 import styles from "./ReturnCard.module.scss";
 import type { ReturnItemInterface } from "@components/blocks/Profile/types/types.ts";
-
 interface ReturnCardProps {
-  item: ReturnItemInterface;
+    item: ReturnItemInterface;
 }
-
-const ReturnCard = ({ item }: ReturnCardProps) => (
-  <article className={styles.card}>
+const ReturnCard = ({ item }: ReturnCardProps) => (<article className={styles.card}>
     <div className={styles.card__information}>
       <div className={styles.card__row}>
         <span className={styles.card__status}>{item.status}</span>
@@ -33,16 +30,8 @@ const ReturnCard = ({ item }: ReturnCardProps) => (
     </div>
 
     <div className={styles.card__products}>
-      {item.products.map((product) => (
-        <Image
-          key={product.id}
-          src={product.image}
-          alt={`Товар возврата № ${item.orderNumber}`}
-          className={styles.card__image}
-        />
-      ))}
+      {item.products.map((product) => (<Image key={product.id} src={product.image} alt={`Товар возврата № ${item.orderNumber}`} className={styles.card__image}/>))}
     </div>
-  </article>
-);
-
+  </article>);
 export default ReturnCard;
+

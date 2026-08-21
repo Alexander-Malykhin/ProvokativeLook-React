@@ -59,14 +59,15 @@
     }
 
     &__counter {
-      top: rem(-6);
-      right: rem(-8);
+      top: rem(-7);
+      right: rem(-7);
 
-      min-width: rem(16);
-      height: rem(16);
+      min-width: rem(17);
+      height: rem(17);
       padding: 0 rem(3);
 
       @include font(9, $fw-regular);
+      border: rem(1) solid $white;
     }
   }
 }

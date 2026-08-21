@@ -1,11 +1,8 @@
-import styles from './NotNotification.module.scss'
-
+import styles from './NotNotification.module.scss';
 const NotNotification = () => {
-    return (
-        <div className={styles.notNotification}>
+    return (<div className={styles.notNotification}>
             <p className={styles.notNotification__text}>Нет уведомлений</p>
-        </div>
-    );
+        </div>);
 };
-
 export default NotNotification;
+

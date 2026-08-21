@@ -1,9 +1,9 @@
-/* Error: Undefined variable.
- *    ,
- * 10 |   background-color: rgba($black, 0.5);
- *    |                          ^^^^^^
- *    '
- *   TableSizes.module.scss 10:26  root stylesheet */
+
+
+
+
+
+
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",

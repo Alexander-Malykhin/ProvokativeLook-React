@@ -1,16 +1,11 @@
-// layouts
 import PageStack from "@layouts/PageStack/PageStack";
-//blocks
 import Reviews from "@components/blocks/Reviews/Reviews.tsx";
 import AnswersToQuestions from "@components/blocks/AnswersToQuestions/AnswersToQuestions.tsx";
 import SubscribeNewsLetter from "@components/blocks/SubscribeNewsLetter/SubscribeNewsLetter.tsx";
 import Category from "@components/blocks/Category/Category.tsx";
-//components
 import Breadcrumbs from "@components/Breadcrumbs/Breadcrumbs.tsx";
-
 const CatalogPage = () => {
-  return (
-    <>
+    return (<>
       <Breadcrumbs />
       <PageStack>
         <Category />
@@ -18,8 +13,7 @@ const CatalogPage = () => {
         <AnswersToQuestions />
         <SubscribeNewsLetter />
       </PageStack>
-    </>
-  );
+    </>);
 };
-
 export default CatalogPage;
+

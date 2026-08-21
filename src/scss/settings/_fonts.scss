@@ -4,7 +4,7 @@
 
 $ff-unbounded: "Unbounded", sans-serif;
 
-// font weights
+
 $fw-extra-light: 200;
 $fw-light: 300;
 $fw-regular: 400;
@@ -13,7 +13,7 @@ $fw-semi-bold: 600;
 $fw-bold: 700;
 $fw-extra-bold: 800;
 
-// universal font mixin
+
 @mixin font(
   $size,
   $weight: $fw-regular,

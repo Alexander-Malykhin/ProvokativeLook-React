@@ -1,9 +1,9 @@
-/* Error: 2 arguments required, but only 1 was passed.
- *   ,
- * 5 |     gap: rem(128);
- *   |          ^^^^^^^^
- *   '
- *   NotFoundPage.module.scss 5:10  root stylesheet */
+
+
+
+
+
+
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",

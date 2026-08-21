@@ -3,3 +3,4 @@ export interface ImageInterface {
     alt?: string;
     className?: string;
 }
+

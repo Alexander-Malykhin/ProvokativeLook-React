@@ -1,6 +1,7 @@
 export interface AboutFormattedTextInterface {
-  text?: string;
-  className?: string;
-  paragraphClassName?: string;
-  accentClassName?: string;
+    text?: string;
+    className?: string;
+    paragraphClassName?: string;
+    accentClassName?: string;
 }
+

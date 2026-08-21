@@ -1,9 +1,9 @@
-/* Error: 2 arguments required, but only 1 was passed.
- *   ,
- * 4 |   flex: 1 0 rem(322);
- *   |             ^^^^^^^^
- *   '
- *   CardSlider.module.scss 4:13  root stylesheet */
+
+
+
+
+
+
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",

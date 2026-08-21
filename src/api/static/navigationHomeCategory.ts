@@ -5,7 +5,6 @@ import accessoriesImage from "@assets/category/banner/accessories.png";
 import shoesImage from "@assets/category/banner/shoes.png";
 import costumesImage from "@assets/category/banner/costumes.png";
 import deliveryImage from "@assets/category/banner/delivery.png";
-
 export const navigationHomeCategory = [
     {
         id: 1,
@@ -50,3 +49,4 @@ export const navigationHomeCategory = [
         path: '/info/delivery-payment',
     },
 ];
+

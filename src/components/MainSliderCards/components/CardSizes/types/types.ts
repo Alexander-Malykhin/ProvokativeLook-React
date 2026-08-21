@@ -1,3 +1,4 @@
 export interface CardSizesInterface {
-    sizes: string[]
+    sizes: string[];
 }
+

@@ -13,6 +13,10 @@
       @include font(24, $fw-light);
     }
 
+    &__break {
+      display: none;
+    }
+
     &__buttons {
       display: none;
     }

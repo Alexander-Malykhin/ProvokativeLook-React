@@ -1,11 +1,7 @@
-// styles
-import styles from './PublicOffer.module.scss'
-// layouts
+import styles from './PublicOffer.module.scss';
 import SectionLayout from "@layouts/SectionLayout/SectionLayout.tsx";
-
 const PublicOffer = () => {
-    return (
-        <SectionLayout>
+    return (<SectionLayout>
             <article className={styles.offer}>
                 <h1 className={styles.offer__title}>
                     Публичная оферта
@@ -445,8 +441,7 @@ const PublicOffer = () => {
                     Дата последнего обновления: 18 августа 2026 года.
                 </p>
             </article>
-        </SectionLayout>
-    );
+        </SectionLayout>);
 };
-
 export default PublicOffer;
+

@@ -1,9 +1,9 @@
-/* Error: Undefined variable.
- *   ,
- * 2 |   max-width: rem($desktop + 20);
- *   |                  ^^^^^^^^
- *   '
- *   MainLayoutContainer.module.scss 2:18  root stylesheet */
+
+
+
+
+
+
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",

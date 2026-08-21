@@ -1,9 +1,9 @@
-/* Error: 2 arguments required, but only 1 was passed.
- *   ,
- * 2 |   flex: 0 0 rem(670);
- *   |             ^^^^^^^^
- *   '
- *   ReviewsItem.module.scss 2:13  root stylesheet */
+
+
+
+
+
+
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",

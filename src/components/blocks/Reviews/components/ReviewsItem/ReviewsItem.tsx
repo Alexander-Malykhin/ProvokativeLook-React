@@ -1,11 +1,7 @@
-// styles
 import styles from "./ReviewsItem.module.scss";
-// types
 import type { ReviewsItemProps } from "@components/blocks/Reviews/types/types";
-
 const ReviewsItem = ({ name, date, text }: ReviewsItemProps) => {
-  return (
-    <article className={styles.item}>
+    return (<article className={styles.item}>
       <div className={styles.item__head}>
         <span className={styles.item__name}>{name}</span>
 
@@ -13,8 +9,7 @@ const ReviewsItem = ({ name, date, text }: ReviewsItemProps) => {
       </div>
 
       <p className={styles.item__text}>{text}</p>
-    </article>
-  );
+    </article>);
 };
-
 export default ReviewsItem;
+

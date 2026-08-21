@@ -1,34 +1,22 @@
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
-
 import MainButton from "@UI/buttons/MainButton/MainButton";
 import styles from "../../Order.module.scss";
 import type { OrderFormValues } from "../../model/types";
 import OrderCheckBox from "../OrderCheckBox/OrderCheckBox";
 import OrderFieldRadio from "../OrderFieldRadio/OrderFieldRadio";
 import OrderStepContainer from "../OrderStepContainer/OrderStepContainer";
-
 interface PaymentStepProps {
-  register: UseFormRegister<OrderFormValues>;
-  errors: FieldErrors<OrderFormValues>;
-  isSubmitting: boolean;
-  errorMessage?: string;
+    register: UseFormRegister<OrderFormValues>;
+    errors: FieldErrors<OrderFormValues>;
+    isSubmitting: boolean;
+    errorMessage?: string;
 }
-
-const PaymentStep = ({ register, errors, isSubmitting, errorMessage }: PaymentStepProps) => (
-  <OrderStepContainer title="3. Оплата" mode="radio">
-    <OrderFieldRadio
-      name="payment"
-      value="cash"
-      register={register("payment", { required: true })}
-    >
+const PaymentStep = ({ register, errors, isSubmitting, errorMessage }: PaymentStepProps) => (<OrderStepContainer title="3. Оплата" mode="radio">
+    <OrderFieldRadio name="payment" value="cash" register={register("payment", { required: true })}>
       Оплата при получении. Картой или наличными
     </OrderFieldRadio>
 
-    <OrderFieldRadio
-      name="payment"
-      value="card"
-      register={register("payment", { required: true })}
-    >
+    <OrderFieldRadio name="payment" value="card" register={register("payment", { required: true })}>
       Оплата банковской картой
     </OrderFieldRadio>
 
@@ -37,25 +25,18 @@ const PaymentStep = ({ register, errors, isSubmitting, errorMessage }: PaymentSt
         {isSubmitting ? "Оформляем..." : "Оформить заказ"}
       </MainButton>
 
-      <OrderCheckBox
-        register={register("privacy", {
-          required: "Подтвердите согласие на обработку данных",
-        })}
-      />
+      <OrderCheckBox register={register("privacy", {
+        required: "Подтвердите согласие на обработку данных",
+    })}/>
 
-      {errors.privacy && (
-        <p className={styles.order__error} role="alert">
+      {errors.privacy && (<p className={styles.order__error} role="alert">
           {errors.privacy.message}
-        </p>
-      )}
+        </p>)}
 
-      {errorMessage && (
-        <p className={styles.order__error} role="alert">
+      {errorMessage && (<p className={styles.order__error} role="alert">
           {errorMessage}
-        </p>
-      )}
+        </p>)}
     </div>
-  </OrderStepContainer>
-);
-
+  </OrderStepContainer>);
 export default PaymentStep;
+
