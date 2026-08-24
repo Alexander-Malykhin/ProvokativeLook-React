@@ -1,0 +1,32 @@
+.select {
+  display: flex;
+  align-items: center;
+  gap: rem(4);
+  min-width: 0;
+
+  &__label {
+    @include font(16, $fw-extra-light);
+    flex: 0 0 auto;
+    color: $black;
+  }
+
+  &__field {
+    @include font(16, $fw-extra-light);
+    min-width: 0;
+    padding: 0 rem(18) 0 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: $black;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: rem(3);
+  }
+
+  @media (max-width: rem($mobile)) {
+    &__label,
+    &__field {
+      @include font(14, $fw-extra-light);
+    }
+  }
+}

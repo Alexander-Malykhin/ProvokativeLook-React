@@ -283,11 +283,22 @@
     }
 
     &__mobileBack {
-      width: rem(26);
+      position: relative;
+      width: rem(22);
       height: rem(26);
       padding: 0;
-      @include font(24, $fw-extra-light);
-      color: $black;
+      flex-shrink: 0;
+
+      span {
+        position: absolute;
+        left: rem(4);
+        top: 50%;
+        width: rem(9);
+        height: rem(9);
+        border-left: rem(1.5) solid $black;
+        border-bottom: rem(1.5) solid $black;
+        transform: translateY(-50%) rotate(45deg);
+      }
     }
 
     &__top {
@@ -302,7 +313,7 @@
     }
 
     &__buttons {
-      gap: rem(6);
+      display: none;
     }
 
     &__category {

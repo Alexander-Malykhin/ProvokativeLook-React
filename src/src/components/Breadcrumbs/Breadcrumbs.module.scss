@@ -1,0 +1,39 @@
+.navigation {
+  display: flex;
+  flex-direction: column;
+  gap: rem(40);
+  padding: rem(40) rem(10);
+
+  &__item {
+    @include font(12, $fw-extra-light);
+    color: $black;
+  }
+
+  &__list {
+    display: flex;
+    align-items: center;
+    gap: rem(12);
+  }
+
+  &__title {
+    @include font(26, $fw-light);
+  }
+
+  @media (max-width: rem($mobile)) {
+    padding: rem(24) rem(10);
+
+    &__item {
+      @include font(8, $fw-extra-light);
+    }
+
+    &__title {
+      @include font(24, $fw-light);
+    }
+  }
+}
+
+@media (max-width: rem($mobile)) {
+  .navigation__title_hiddenMobile {
+    display: none;
+  }
+}

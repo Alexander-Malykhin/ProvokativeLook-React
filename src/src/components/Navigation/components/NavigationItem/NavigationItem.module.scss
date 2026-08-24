@@ -1,0 +1,12 @@
+.item {
+  @include font(14, $fw-light);
+  white-space: nowrap;
+
+  &__sale {
+    color: $red;
+  }
+
+  @media (max-width: rem($desktop-x)) {
+    @include font(12, $fw-light);
+  }
+}

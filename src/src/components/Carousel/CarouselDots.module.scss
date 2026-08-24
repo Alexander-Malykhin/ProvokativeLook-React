@@ -1,0 +1,32 @@
+.dots {
+  display: none;
+
+  &__item {
+    height: rem(2);
+    padding: 0;
+    flex: 1;
+    border: 0;
+    background-color: $gray;
+    cursor: pointer;
+
+    &_active {
+      background-color: $black;
+    }
+  }
+
+  &_mobile {
+    @media (max-width: rem($mobile)) {
+      display: flex;
+      gap: rem(10);
+      width: 100%;
+    }
+  }
+
+  &_compact {
+    @media (max-width: rem(420)) {
+      display: flex;
+      gap: rem(10);
+      width: 100%;
+    }
+  }
+}

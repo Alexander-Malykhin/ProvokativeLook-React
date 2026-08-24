@@ -1,0 +1,43 @@
+.searchResults {
+  padding-top: rem(32);
+  padding-bottom: rem(64);
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: rem(30);
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: rem(10);
+
+    h1 {
+      margin: 0;
+      @include font(28, $fw-light);
+    }
+
+    p {
+      margin: 0;
+      @include font(15, $fw-light);
+      color: rgba($black, 0.65);
+    }
+  }
+
+  &__empty {
+    @include font(15, $fw-light);
+    color: rgba($black, 0.65);
+  }
+}
+
+@media (max-width: 768px) {
+  .searchResults {
+    padding-top: rem(20);
+    padding-bottom: rem(40);
+
+    &__content { gap: rem(22); }
+
+    &__header h1 { @include font(22, $fw-light); }
+  }
+}

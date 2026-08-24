@@ -1,0 +1,45 @@
+.reviews {
+  display: grid;
+  grid-template-columns: rem(210) minmax(0, 1fr);
+  gap: rem(22);
+  height: auto;
+
+  padding-left: max(rem(10), calc((100vw - rem($desktop)) / 2 + rem(10)));
+  padding-right: max(rem(10), calc((100vw - rem($desktop)) / 2 + rem(10)));
+
+  &__column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: rem(24);
+  }
+
+  &__content {
+    min-width: 0;
+  }
+
+  &__create {
+    padding: 0;
+    border: 0;
+    border-bottom: rem(1) solid $black;
+    background: transparent;
+    color: $black;
+    @include font(14, $fw-regular);
+    cursor: pointer;
+  }
+
+  @media (max-width: rem($mobile)) {
+    display: flex;
+    flex-direction: column;
+    gap: rem(18);
+
+    &__column {
+      gap: rem(12);
+    }
+
+    &__content {
+      width: 100%;
+    }
+  }
+}

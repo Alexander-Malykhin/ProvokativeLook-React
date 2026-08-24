@@ -1,0 +1,87 @@
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: rem(20);
+  background: rgba($black, 0.28);
+
+  &__content {
+    position: relative;
+    width: min(rem(560), 100%);
+    padding: rem(36);
+    background: $white;
+  }
+
+  &__close {
+    position: absolute;
+    top: rem(14);
+    right: rem(18);
+    border: 0;
+    background: transparent;
+    @include font(30, $fw-extra-light);
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  &__title {
+    margin: 0 0 rem(26);
+    @include font(26, $fw-light);
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: rem(16);
+  }
+
+  &__textarea {
+    width: 100%;
+    min-height: rem(180);
+    padding: rem(16);
+    resize: vertical;
+    border: rem(1) solid rgba($black, 0.2);
+    background: $white;
+    color: $black;
+    @include font(14, $fw-extra-light);
+    line-height: 1.45;
+    outline: none;
+
+    &:focus {
+      border-color: $black;
+    }
+  }
+
+  &__message {
+    margin: 0;
+    @include font(12, $fw-regular);
+  }
+
+  &__submit {
+    align-self: flex-start;
+    min-width: rem(180);
+    padding: rem(13) rem(22);
+    border: rem(1) solid $black;
+    background: $black;
+    color: $white;
+    @include font(14, $fw-regular);
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.55;
+      cursor: default;
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+    align-items: flex-end;
+    padding: 0;
+
+    &__content {
+      width: 100%;
+      padding: rem(28) rem(20) rem(24);
+    }
+  }
+}

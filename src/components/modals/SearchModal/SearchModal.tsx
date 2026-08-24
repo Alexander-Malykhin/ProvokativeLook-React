@@ -8,28 +8,57 @@ import ProductCard from "@components/ProductCard/ProductCard";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import { close as closeSearch } from "@store/slices/toggleSearchSlice";
 import { useDebouncedValue } from "@hooks/useDebouncedValue";
-import { useGetCatalogProductsQuery, useSearchCatalogQuery, } from "@store/api/catalog/catalogApi";
+import { useGetCatalogProductsQuery, useSearchCatalogQuery } from "@store/api/catalog/catalogApi";
 import { useGetCategoriesQuery } from "@store/api/categories/categoriesApi";
 import { catalogProductToListItem } from "@store/api/catalog/format";
+import { getCatalogCategorySlug } from "@/helpers/catalog";
 import styles from "./SearchModal.module.scss";
 import { POPULAR_SEARCHES, SEARCH_SUGGESTIONS } from "./data";
+
+const formatCategoryTitle = (value: string): string => value
+    .replace(/#br#/gi, " ")
+    .replace(/<br\s*\/?>/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
 const SearchModal = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const active = useAppSelector((state) => state.toggleSearch.active);
     const [query, setQuery] = useState("");
-    const debouncedQuery = useDebouncedValue(query.trim(), 300);
-    const canSearch = debouncedQuery.length >= 2;
+    const [submittedQuery, setSubmittedQuery] = useState("");
+    const normalizedQuery = query.trim();
+    const debouncedQuery = useDebouncedValue(normalizedQuery, 300);
+    const searchQuery = submittedQuery === normalizedQuery && submittedQuery.length >= 2
+        ? submittedQuery
+        : debouncedQuery;
+    const canSearch = searchQuery.length >= 2;
     const canSubmit = query.trim().length >= 2;
     const { data: categoriesData } = useGetCategoriesQuery(undefined, { skip: !active });
-    const { data: searchData, isFetching: isSearching } = useSearchCatalogQuery({ q: debouncedQuery, limit: 12 }, { skip: !active || !canSearch });
+    const { data: searchData, isFetching: isSearching } = useSearchCatalogQuery({ q: searchQuery, limit: 12 }, { skip: !active || !canSearch });
     const { data: popularData, isFetching: isLoadingPopular } = useGetCatalogProductsQuery({ limit: 4, offset: 0, sort: "popular" }, { skip: !active || canSearch });
-    const products = (canSearch ? searchData?.products : popularData?.products) ?? [];
+    const products = canSearch
+        ? searchData?.products ?? []
+        : popularData?.products ?? [];
     const productCards = useMemo(() => products.map(catalogProductToListItem), [products]);
     const searchSections = canSearch ? searchData?.sections ?? [] : [];
     const fallbackCategories = useMemo(() => (categoriesData?.items ?? []).filter((item) => item.catalog?.show !== false).slice(0, 5), [categoriesData?.items]);
+    const searchCategoryLinks = useMemo(() => searchSections.map((section) => {
+        const category = (categoriesData?.items ?? []).find((item) => item.sectionIds.includes(section.id));
+
+        return {
+            ...section,
+            name: formatCategoryTitle(category?.catalog?.title || category?.name || section.name),
+            path: category
+                ? `/catalog/${getCatalogCategorySlug(category)}`
+                : section.code
+                    ? `/catalog/${section.code}`
+                    : "/catalog",
+        };
+    }), [categoriesData?.items, searchSections]);
     const close = () => {
         setQuery("");
+        setSubmittedQuery("");
         dispatch(closeSearch());
     };
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -37,18 +66,19 @@ const SearchModal = () => {
         const value = query.trim();
         if (value.length < 2)
             return;
-        if (canSearch && productCards.length === 1) {
-            const id = productCards[0].id;
-            close();
-            navigate(`/product/${id}`);
-        }
+        setSubmittedQuery(value);
+        close();
+        navigate(`/search?q=${encodeURIComponent(value)}`);
     };
-    const applyQuery = (value: string) => setQuery(value);
+    const applyQuery = (value: string) => {
+        setSubmittedQuery("");
+        setQuery(value);
+    };
     const isBusy = isSearching || isLoadingPopular;
     return (<Modal open={active} onClose={close} overlayClassName={styles.search} contentClassName={styles.search__content} ariaLabelledBy="search-modal-title">
       <div className={styles.search__mobileTitle}>
         <button type="button" className={styles.search__mobileBack} onClick={close} aria-label="Закрыть поиск">
-          ←
+          <span aria-hidden="true"/>
         </button>
         <span>Поиск</span>
       </div>
@@ -58,8 +88,8 @@ const SearchModal = () => {
           <label className={styles.field}>
             <span id="search-modal-title" className="visually-hidden">Поиск по каталогу</span>
             <Image src={SearchImage} alt="" className={styles.field__image}/>
-            <input type="search" value={query} className={styles.field__input} placeholder="Поиск по каталогу" autoFocus onChange={(event) => setQuery(event.target.value)}/>
-            {query && (<button type="button" className={styles.field__clear} onClick={() => setQuery("")} aria-label="Очистить поиск">
+            <input type="search" value={query} className={styles.field__input} placeholder="Поиск по каталогу" autoFocus onChange={(event) => { setSubmittedQuery(""); setQuery(event.target.value); }}/>
+            {query && (<button type="button" className={styles.field__clear} onClick={() => { setSubmittedQuery(""); setQuery(""); }} aria-label="Очистить поиск">
                 ×
               </button>)}
           </label>
@@ -92,19 +122,19 @@ const SearchModal = () => {
             <div className={styles.aside__content}>
               <h2 className={styles.aside__content_title}>Категории</h2>
               <div className={styles.aside__list}>
-                {searchSections.length > 0
-            ? searchSections.map((section) => (<Link key={section.id} to={section.code ? `/catalog/${section.code}` : "/catalog"} className={styles.aside__list_category} onClick={close}>
+                {searchCategoryLinks.length > 0
+            ? searchCategoryLinks.map((section) => (<Link key={`${section.id}-${section.path}`} to={section.path} className={styles.aside__list_category} onClick={close}>
                         <Image src={CategoryImage} alt=""/>
                         {section.name}
                       </Link>))
-            : fallbackCategories.map((category) => (<Link key={category.id} to={category.link || `/catalog/${category.code}`} className={styles.aside__list_category} onClick={close}>
+            : fallbackCategories.map((category) => (<Link key={category.id} to={`/catalog/${getCatalogCategorySlug(category)}`} className={styles.aside__list_category} onClick={close}>
                         <Image src={CategoryImage} alt=""/>
-                        {category.name}
+                        {formatCategoryTitle(category.catalog?.title || category.name)}
                       </Link>))}
               </div>
             </div>
 
-            {canSearch && (<Link to="/catalog" className={styles.aside__all} onClick={close}>
+            {canSearch && (<Link to={`/search?q=${encodeURIComponent(normalizedQuery)}`} className={styles.aside__all} onClick={close}>
                 Все результаты поиска →
               </Link>)}
           </aside>
@@ -112,7 +142,7 @@ const SearchModal = () => {
           <div className={styles.grid}>
             <h2 className={styles.aside__content_title}>
               {canSearch
-            ? `Результаты${searchData ? ` (${searchData.products.length})` : ""}`
+            ? `Результаты${searchData ? ` (${productCards.length})` : ""}`
             : "Популярные товары"}
             </h2>
 
@@ -122,7 +152,7 @@ const SearchModal = () => {
                 if ((event.target as HTMLElement).closest("a"))
                     close();
             }}>
-                {productCards.map((card) => <ProductCard key={card.id} {...card}/>)}
+                {productCards.map((card, index) => <ProductCard key={`${card.id}-${index}`} {...card}/>)}
               </div>) : canSearch ? (<div className={styles.grid__empty}>По вашему запросу товары не найдены</div>) : null}
           </div>
         </div>

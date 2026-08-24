@@ -1,0 +1,9 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: rem(12);
+
+  @media (max-width: rem($mobile)) {
+    gap: rem(8);
+  }
+}

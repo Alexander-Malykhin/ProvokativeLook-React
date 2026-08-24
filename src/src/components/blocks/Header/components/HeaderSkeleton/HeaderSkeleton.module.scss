@@ -1,0 +1,83 @@
+.skeleton {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  background-color: $white;
+  box-shadow: 0 rem(2) rem(4) rgba($black, 0.1);
+
+  padding: rem(18) rem(40);
+
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(15);
+  }
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: rem(12);
+  }
+
+  &__burger {
+    width: rem(22);
+    height: rem(16);
+    border-radius: rem(4);
+    background: $gray;
+  }
+
+  &__logo {
+    width: rem(120);
+    height: rem(28);
+    border-radius: rem(4);
+    background: $gray;
+  }
+
+  &__navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(24);
+    flex: 0 1 clamp(rem(520), 45vw, rem(845));
+
+    div {
+      width: rem(90);
+      height: rem(14);
+      border-radius: rem(4);
+      background: $gray;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: rem(12);
+
+    div {
+      width: rem(22);
+      height: rem(22);
+      border-radius: 50%;
+      background: $gray;
+    }
+  }
+
+  @media (max-width: rem($desktop-x)) {
+    &__navigation {
+      flex-basis: clamp(rem(420), 42vw, rem(600));
+
+      div {
+        width: rem(70);
+      }
+    }
+  }
+
+  @media (max-width: rem($tablet)) {
+    padding: rem(12) rem(10);
+
+    &__navigation {
+      display: none;
+    }
+  }
+}

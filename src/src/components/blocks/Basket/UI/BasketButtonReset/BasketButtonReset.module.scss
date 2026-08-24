@@ -1,0 +1,5 @@
+.button {
+  margin-top: rem(8);
+  @include font(14, $fw-light);
+  color: rgba($black, 0.6);
+}

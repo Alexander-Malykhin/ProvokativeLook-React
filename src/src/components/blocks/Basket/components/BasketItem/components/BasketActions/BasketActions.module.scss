@@ -1,0 +1,10 @@
+.actions {
+  display: flex;
+  align-items: center;
+  gap: rem(16);
+
+  &__button {
+    width: rem(24);
+    height: rem(24);
+  }
+}

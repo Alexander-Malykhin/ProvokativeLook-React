@@ -1,0 +1,434 @@
+.card {
+  position: relative;
+  height: 100%;
+  padding: rem(40) rem(24);
+  overflow: hidden;
+
+  background: linear-gradient(180deg, #e4e4ec 0%, #f6f6fa 58%, #d8d8dc 100%);
+
+  &::after {
+    display: none;
+  }
+
+  &__information {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: rem(22);
+  }
+
+  &__information_title {
+    line-height: 1;
+    @include font(34, $fw-extra-light);
+  }
+
+  &__information_button {
+    @include font(16, $fw-extra-light);
+    padding: rem(8);
+
+    border: rem(1) solid $gray;
+    border-radius: rem(10);
+  }
+
+  &__imageBox {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+
+    pointer-events: none;
+  }
+
+  &__image {
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    object-fit: contain;
+    object-position: right bottom;
+  }
+
+  &_1 &__imageBox {
+    width: rem(250);
+    transform: translate(rem(40), 0);
+  }
+
+  &_2 &__imageBox {
+    width: rem(400);
+    transform: translate(rem(40), rem(220));
+  }
+
+  &_3 &__imageBox {
+    width: rem(250);
+    transform: translate(rem(40), rem(0));
+  }
+
+  &_4 &__imageBox {
+    width: rem(500);
+    transform: translate(rem(130), rem(-20));
+  }
+
+  &_5 &__imageBox {
+    width: rem(320);
+    height: 100%;
+    transform: translate(rem(0), rem(0));
+  }
+
+  &_6 &__imageBox {
+    width: rem(340);
+    height: 100%;
+    transform: translate(rem(30), rem(0));
+  }
+
+  &_7 &__imageBox {
+    width: rem(300);
+    transform: translate(rem(30), rem(-30));
+  }
+
+  &_8 &__imageBox {
+    width: rem(300);
+    height: 100%;
+    transform: translate(rem(-30), rem(200));
+  }
+
+  &_9 &__imageBox {
+    width: rem(400);
+    height: 100%;
+    transform: translate(rem(0), rem(-40));
+  }
+
+  &_10 &__imageBox {
+    width: rem(350);
+    height: 100%;
+    transform: translate(rem(35), rem(220));
+  }
+
+  &_11 &__imageBox {
+    width: rem(350);
+    height: 100%;
+    transform: translate(rem(50), rem(100));
+  }
+
+  &_12 &__imageBox {
+    width: rem(280);
+    height: 100%;
+    transform: translate(rem(0), rem(-10));
+  }
+
+  &_13 &__imageBox {
+    width: rem(350);
+    height: 100%;
+    transform: translate(rem(10), rem(300));
+  }
+
+  &_14 &__imageBox {
+    width: rem(550);
+    height: 100%;
+    transform: translate(rem(250), rem(200));
+  }
+
+  @media (max-width: rem($desktop-x)) {
+    padding: rem(28) rem(18);
+
+    &_1 &__imageBox {
+      width: rem(180);
+      transform: translate(rem(10), rem(0));
+    }
+
+    &_2 &__imageBox {
+      width: rem(180);
+      transform: translate(rem(-20), rem(-20));
+    }
+
+    &_3 &__imageBox {
+      width: rem(180);
+      transform: translate(rem(0), 0);
+    }
+
+    &_4 &__imageBox {
+      width: 100%;
+      transform: translate(rem(80), rem(-10));
+    }
+
+    &_5 &__imageBox {
+      width: rem(230);
+      transform: translate(rem(-20), rem(0));
+    }
+
+    &_6 &__imageBox {
+      width: rem(250);
+    }
+
+    &_7 &__imageBox {
+      width: rem(200);
+      transform: translate(rem(-20), rem(0));
+    }
+
+    &_8 &__imageBox {
+      width: rem(200);
+      transform: translate(rem(-20), rem(160));
+    }
+
+    &_9 &__imageBox {
+      width: rem(260);
+    }
+
+    &_10 &__imageBox {
+      width: rem(250);
+      transform: translate(0, rem(150));
+    }
+
+    &_11 &__imageBox {
+      width: rem(250);
+      transform: translate(rem(35), rem(70));
+    }
+
+    &_12 &__imageBox {
+      width: rem(180);
+      transform: translate(rem(-20), rem(-35));
+    }
+
+    &_13 &__imageBox {
+      width: rem(240);
+      transform: translate(rem(5), rem(200));
+    }
+
+    &_14 &__imageBox {
+      width: rem(400);
+      transform: translate(rem(190), rem(140));
+    }
+  }
+
+  @media (max-width: rem($tablet)) {
+    padding: rem(10);
+
+    &__information {
+      gap: 0;
+      max-width: 70%;
+    }
+
+    &__information_title {
+      @include font(24, $fw-extra-light);
+    }
+
+    &_1 &__imageBox {
+      width: rem(120);
+    }
+
+    &_2 &__imageBox {
+      width: rem(190);
+      transform: translate(0, rem(85));
+    }
+
+    &_3 &__imageBox {
+      width: rem(125);
+      transform: translate(rem(-10), 0);
+    }
+
+    &_4 &__imageBox {
+      width: rem(220);
+      transform: translate(rem(70), rem(10));
+    }
+
+    &_5 &__imageBox {
+      width: rem(190);
+      transform: translate(rem(-8), rem(55));
+    }
+
+    &_6 &__imageBox {
+      width: rem(170);
+      transform: translate(rem(10), rem(0));
+    }
+
+    &_7 &__imageBox {
+      width: rem(145);
+    }
+
+    &_8 &__imageBox {
+      width: rem(145);
+      transform: translate(rem(-22), rem(80));
+    }
+
+    &_9 &__imageBox {
+      width: rem(200);
+    }
+
+    &_10 &__imageBox {
+      width: rem(160);
+      transform: translate(0, rem(85));
+    }
+
+    &_11 &__imageBox {
+      width: rem(165);
+      transform: translate(rem(20), rem(45));
+    }
+
+    &_12 &__imageBox {
+      width: rem(125);
+      transform: translate(rem(-20), rem(-20));
+    }
+
+    &_13 &__imageBox {
+      width: rem(150);
+      transform: translate(0, rem(115));
+    }
+
+    &_14 &__imageBox {
+      width: rem(250);
+      transform: translate(rem(115), rem(85));
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+    &__information_title {
+      @include font(14, $fw-extra-light);
+    }
+
+    &_1 &__imageBox {
+      width: rem(82);
+    }
+
+    &_2 &__imageBox {
+      width: rem(130);
+      transform: translate(0, rem(60));
+    }
+
+    &_3 &__imageBox {
+      width: rem(86);
+      transform: translate(rem(-6), 0);
+    }
+
+    &_4 &__imageBox {
+      width: rem(155);
+      transform: translate(rem(48), rem(8));
+    }
+
+    &_5 &__imageBox {
+      width: rem(130);
+      transform: translate(rem(-5), rem(38));
+    }
+
+    &_6 &__imageBox {
+      width: rem(118);
+    }
+
+    &_7 &__imageBox {
+      width: rem(100);
+    }
+
+    &_8 &__imageBox {
+      width: rem(100);
+      transform: translate(rem(-14), rem(55));
+    }
+
+    &_9 &__imageBox {
+      width: rem(140);
+    }
+
+    &_10 &__imageBox {
+      width: rem(115);
+      transform: translate(0, rem(60));
+    }
+
+    &_11 &__imageBox {
+      width: rem(115);
+      transform: translate(rem(14), rem(30));
+    }
+
+    &_12 &__imageBox {
+      width: rem(86);
+      transform: translate(rem(-12), rem(-12));
+    }
+
+    &_13 &__imageBox {
+      width: rem(115);
+      transform: translate(0, rem(100));
+    }
+
+    &_14 &__imageBox {
+      width: rem(180);
+      transform: translate(rem(80), rem(60));
+    }
+  }
+
+  @media (max-width: rem($mobile-x)) {
+    padding: rem(12) rem(8);
+
+    &__information_title {
+      @include font(12, $fw-extra-light);
+    }
+
+    &_1 &__imageBox {
+      width: rem(82);
+    }
+
+    &_2 &__imageBox {
+      width: rem(130);
+      transform: translate(0, rem(60));
+    }
+
+    &_3 &__imageBox {
+      width: rem(86);
+      transform: translate(rem(-6), 0);
+    }
+
+    &_4 &__imageBox {
+      width: rem(155);
+      transform: translate(rem(48), rem(8));
+    }
+
+    &_5 &__imageBox {
+      width: rem(130);
+      transform: translate(rem(-5), rem(38));
+    }
+
+    &_6 &__imageBox {
+      width: rem(118);
+    }
+
+    &_7 &__imageBox {
+      width: rem(100);
+    }
+
+    &_8 &__imageBox {
+      width: rem(100);
+      transform: translate(rem(-14), rem(55));
+    }
+
+    &_9 &__imageBox {
+      width: rem(140);
+    }
+
+    &_10 &__imageBox {
+      width: rem(115);
+      transform: translate(0, rem(60));
+    }
+
+    &_11 &__imageBox {
+      width: rem(115);
+      transform: translate(rem(14), rem(30));
+    }
+
+    &_12 &__imageBox {
+      width: rem(86);
+      transform: translate(rem(-12), rem(-12));
+    }
+
+    &_13 &__imageBox {
+      width: rem(115);
+      transform: translate(0, rem(100));
+    }
+
+    &_14 &__imageBox {
+      width: rem(180);
+      transform: translate(rem(80), rem(60));
+    }
+  }
+}

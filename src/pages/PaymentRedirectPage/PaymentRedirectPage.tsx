@@ -12,6 +12,11 @@ const PaymentRedirectPage = () => {
         }
         const interval = window.setInterval(() => setSeconds((value) => Math.max(0, value - 1)), 1000);
         const timeout = window.setTimeout(() => {
+            // Заказ уже создан. Перед уходом на платёжный шлюз заменяем
+            // /payment/redirect в истории на список заказов. Поэтому при
+            // нажатии браузерной кнопки «Назад» пользователь вернётся
+            // в /profile/orders, а не в корзину/оформление заказа.
+            window.history.replaceState(window.history.state, "", "/profile/orders");
             window.location.assign(paymentUrl);
         }, 1200);
         return () => {

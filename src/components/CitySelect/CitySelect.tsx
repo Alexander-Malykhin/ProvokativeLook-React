@@ -145,7 +145,7 @@ const CitySelect = ({ value, onChange, onResolved, label = "Доставка в"
       {isCustomMode ? (<div className={styles.city__customWrap}>
           <div className={styles.city__custom}>
             <input ref={inputRef} className={styles.city__input} value={draftCity} onChange={(event) => setDraftCity(event.target.value)} onKeyDown={handleCustomKeyDown} placeholder="Начните вводить город" autoComplete="off"/>
-            {draftCity && (<button type="button" className={styles.city__clear} onClick={() => setDraftCity("")} aria-label="Очистить"/>)}
+            <button type="button" className={styles.city__clear} onClick={cancelCustomMode} aria-label="Вернуться к выбору города"/>
           </div>
 
           {isSuggestionOpen && (<div className={styles.city__suggestions}>
@@ -157,9 +157,6 @@ const CitySelect = ({ value, onChange, onResolved, label = "Доставка в"
                 </button>))}
             </div>)}
 
-          <button type="button" className={styles.city__cancel} onClick={cancelCustomMode}>
-            Назад к списку
-          </button>
         </div>) : (<button type="button" className={styles.city__trigger} onClick={() => setIsOpen((previous) => !previous)} aria-expanded={isOpen}>
           <span>{visibleValue}</span>
           <span className={`${styles.city__arrow} ${isOpen ? styles.city__arrow_open : ""}`}/>

@@ -1,0 +1,185 @@
+.order {
+  display: grid;
+  grid-template-columns: minmax(rem(0), rem(1014)) minmax(rem(200), rem(322));
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: rem(24);
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: rem(64);
+  }
+
+  &__title {
+    @include font(16, $fw-medium);
+  }
+
+  &__address {
+    @include font(16, $fw-light);
+  }
+
+  &__description {
+    @include font(14, $fw-light);
+    color: rgba($black, 0.4);
+  }
+
+  &__information {
+    margin-top: rem(38);
+  }
+
+  &__footer {
+    margin-top: rem(38);
+    display: flex;
+    flex-direction: column;
+    gap: rem(18);
+  }
+
+  &__error,
+  &__success {
+    @include font(12, $fw-light);
+  }
+
+  &__error {
+    color: $red;
+  }
+
+  &__success {
+    color: $green;
+  }
+
+  @media (max-width: rem($tablet)) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.price {
+  margin-top: rem(40);
+  display: flex;
+  align-items: center;
+  gap: rem(50);
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: rem(7);
+
+    &_title {
+      @include font(20, $fw-light);
+    }
+
+    &_text {
+      @include font(14, $fw-light);
+    }
+  }
+}
+
+.button {
+  @include font(16, $fw-light);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: rem(12);
+
+  width: 100%;
+  padding: rem(12);
+  border: rem(1) solid $black;
+  border-radius: rem(10);
+
+  &__icon {
+    width: rem(14);
+    height: rem(14);
+    position: relative;
+    flex: 0 0 rem(14);
+
+    &_line {
+      position: absolute;
+      top: 50%;
+      left: 0;
+
+      width: 100%;
+      height: rem(1);
+      background-color: $black;
+
+      &:first-child {
+        transform: translateY(-50%);
+      }
+
+      &:last-child {
+        transform: translateY(-50%) rotate(90deg);
+      }
+    }
+  }
+}
+
+.order {
+  &__subTitle {
+    @include font(16, $fw-medium);
+    padding: rem(14) rem(16) rem(8);
+  }
+
+  &__addresses,
+  &__deliveryMethods {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__addressChoice {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: rem(8);
+    @include font(15, $fw-light);
+  }
+
+  &__defaultBadge {
+    @include font(11, $fw-light);
+    padding: rem(3) rem(7);
+    border-radius: rem(20);
+    background: rgba($black, 0.06);
+  }
+
+  &__stockWarning {
+    padding: rem(16);
+    border: rem(1) solid rgba($red, 0.45);
+    border-radius: rem(10);
+    background: rgba($red, 0.04);
+    color: $red;
+    @include font(14, $fw-light);
+  }
+
+  &__loading,
+  &__empty {
+    padding: rem(80) 0;
+    @include font(18, $fw-light);
+  }
+
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: rem(18);
+
+    button {
+      text-decoration: underline;
+    }
+  }
+}
+
+.order {
+  &__pickupService {
+    @include font(15, $fw-medium);
+  }
+
+  &__pickupCode {
+    @include font(12, $fw-light);
+    color: rgba($black, 0.45);
+  }
+
+  &__emptyDeliveryPoint {
+    padding: rem(14) rem(16);
+    @include font(14, $fw-light);
+    color: rgba($black, 0.5);
+  }
+}

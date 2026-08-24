@@ -1,0 +1,40 @@
+.radio {
+  display: flex;
+  align-items: center;
+  gap: rem(16);
+  padding: rem(16);
+  border-top: rem(1) solid rgba($black, 0.1);
+  border-bottom: rem(1) solid rgba($black, 0.1);
+  cursor: pointer;
+
+  &__input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &__dot {
+    width: rem(10);
+    height: rem(10);
+    border-radius: 50%;
+    border: rem(1) solid $black;
+    flex: 0 0 rem(10);
+  }
+
+  &__input:checked + &__dot {
+    background-color: $black;
+  }
+
+  &__content {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: rem(16);
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  &__text {
+    @include font(16, $fw-light);
+  }
+}

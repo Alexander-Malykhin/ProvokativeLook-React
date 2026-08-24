@@ -1,0 +1,65 @@
+.item {
+  display: grid;
+  grid-template-columns: rem(24) minmax(0, rem(120)) 1fr;
+  align-items: center;
+  gap: rem(24);
+  padding: rem(24) rem(16);
+  border-top: rem(1) solid rgba($black, 0.1);
+  border-bottom: rem(1) solid rgba($black, 0.1);
+
+  &__select {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    input {
+      width: rem(16);
+      height: rem(16);
+      accent-color: $black;
+    }
+  }
+
+  &__date {
+    @include font(16, $fw-light);
+  }
+
+  &__information {
+    display: flex;
+    flex-direction: column;
+    gap: rem(6);
+  }
+
+  &__title {
+    @include font(16, $fw-light);
+  }
+
+  &__description {
+    @include font(14, $fw-light);
+    color: rgba($black, 0.5);
+  }
+  
+  @media (max-width: rem($mobile)) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.item {
+  position: relative;
+  cursor: pointer;
+
+  &_unread {
+    background: rgba($gray, 0.35);
+  }
+
+  &__dot {
+    position: absolute;
+    top: 50%;
+    right: rem(12);
+    width: rem(7);
+    height: rem(7);
+    border-radius: 50%;
+    background: $black;
+    transform: translateY(-50%);
+  }
+}

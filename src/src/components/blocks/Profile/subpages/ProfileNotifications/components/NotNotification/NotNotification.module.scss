@@ -1,0 +1,19 @@
+.notNotification {
+  display: flex;
+  flex-direction: column;
+  gap: rem(24);
+  padding: rem(16) 0;
+  border-top: rem(1) solid $border-light;
+  border-bottom: rem(1) solid $border-light;
+
+  &__text {
+    @include font(16, $fw-light);
+    color: $black;
+  }
+
+  @media (max-width: rem($mobile)) {
+    &__text {
+      @include font(14, $fw-light);
+    }
+  }
+}

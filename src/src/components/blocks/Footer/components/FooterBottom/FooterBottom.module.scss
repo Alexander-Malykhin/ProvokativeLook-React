@@ -1,0 +1,33 @@
+.bottom {
+  grid-area: bottom;
+
+  display: flex;
+  align-items: flex-end;
+  gap: rem(24);
+
+  &__legal {
+    display: flex;
+    flex: 0 0 rem(440);
+  }
+
+  &__design {
+    max-width: max-content;
+  }
+
+  @media (max-width: rem($desktop-x)) {
+    gap: rem(20);
+
+    &__legal {
+      flex: 0 1 auto;
+    }
+  }
+
+  @media (max-width: rem($tablet)) {
+    flex-direction: column;
+    align-items: flex-start;
+
+    &__legal {
+      flex: 1 1 auto;
+    }
+  }
+}

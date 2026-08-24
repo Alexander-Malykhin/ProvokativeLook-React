@@ -1,0 +1,83 @@
+.title {
+  margin: 0;
+
+  &_sm {
+    @include font(16, $fw-extra-light);
+
+    @media (max-width: rem($mobile)) {
+      @include font(14, $fw-extra-light);
+    }
+  }
+
+  &_md {
+    @include font(20, $fw-extra-light);
+
+    @media (max-width: rem($mobile)) {
+      @include font(18, $fw-extra-light);
+    }
+  }
+
+  &_lg {
+    @include font(26, $fw-extra-light);
+
+    @media (max-width: rem($mobile)) {
+      @include font(24, $fw-extra-light);
+    }
+  }
+
+  &_xl {
+    @include font(36, $fw-extra-light);
+
+    @media (max-width: rem($desktop-x)) {
+      @include font(28, $fw-extra-light);
+    }
+
+    @media (max-width: rem($tablet)) {
+      @include font(24, $fw-extra-light);
+    }
+
+    @media (max-width: rem($mobile)) {
+      @include font(20, $fw-extra-light);
+    }
+  }
+
+  &_xxl {
+    @include font(42, $fw-extra-light);
+
+    @media (max-width: rem($desktop-x)) {
+      @include font(36, $fw-extra-light);
+    }
+
+    @media (max-width: rem($mobile)) {
+      @include font(28, $fw-extra-light);
+    }
+  }
+
+  &_extraLight {
+    font-weight: $fw-extra-light;
+  }
+
+  &_light {
+    font-weight: $fw-light;
+  }
+
+  &_regular {
+    font-weight: $fw-regular;
+  }
+
+  &_medium {
+    font-weight: $fw-medium;
+  }
+
+  &_black {
+    color: $black;
+  }
+
+  &_white {
+    color: $white;
+  }
+
+  &_gray {
+    color: $gray;
+  }
+}

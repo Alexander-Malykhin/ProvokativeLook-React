@@ -1,0 +1,43 @@
+.column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: rem(6);
+
+  &__title {
+    @include font(26, $fw-light);
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+    gap: rem(12);
+  }
+
+  &__arrow {
+    width: rem(56);
+    height: rem(56);
+    border-radius: 50%;
+    background-color: $white;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &_image {
+      width: rem(30);
+      height: rem(13);
+    }
+  }
+
+  @media (max-width: rem($desktop)) {
+    &__title {
+      @include font(24, $fw-light);
+    }
+
+    &__buttons {
+      display: none;
+    }
+  }
+}

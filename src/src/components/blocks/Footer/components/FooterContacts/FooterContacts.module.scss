@@ -1,0 +1,18 @@
+.contacts {
+  grid-area: contacts;
+
+  display: flex;
+  flex-direction: column;
+  gap: rem(24);
+
+  &__phone {
+    @include font(16, $fw-extra-light);
+    color: $black;
+  }
+
+  &__description {
+    display: flex;
+    flex-direction: column;
+    gap: rem(12);
+  }
+}

@@ -1,0 +1,9 @@
+.information {
+  display: flex;
+  flex-direction: column;
+  gap: rem(40);
+
+  @media (max-width: rem($mobile)) {
+    gap: rem(24);
+  }
+}

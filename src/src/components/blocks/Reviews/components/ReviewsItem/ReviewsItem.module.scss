@@ -1,0 +1,59 @@
+.item {
+  flex: 0 0 rem(670);
+  min-height: rem(265);
+  padding: rem(40);
+  display: flex;
+  flex-direction: column;
+  gap: rem(24);
+  background-color: $light-white;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: rem(16);
+  }
+
+  &__name {
+    @include font(14, $fw-regular);
+    color: $black;
+  }
+
+  &__date {
+    @include font(14, $fw-extra-light);
+    color: rgba($black, 0.35);
+  }
+
+  &__text {
+    @include font(14, $fw-extra-light);
+    line-height: 1.4;
+    color: $black;
+    max-width: rem(580);
+  }
+
+  @media (max-width: rem($mobile)) {
+    flex: 0 0 100%;
+    width: 100%;
+    min-height: auto;
+    padding: rem(20);
+    gap: rem(16);
+
+    &__head {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: rem(8);
+    }
+
+    &__name {
+      @include font(12, $fw-regular);
+    }
+
+    &__date {
+      @include font(12, $fw-extra-light);
+    }
+
+    &__text {
+      @include font(12, $fw-extra-light);
+      max-width: none;
+    }
+  }
+}

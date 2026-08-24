@@ -1,0 +1,78 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: rem(30);
+
+  width: 100%;
+
+  &__title {
+    @include font(20, $fw-light);
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: rem(8);
+  }
+}
+
+.item {
+  padding: rem(16) 0;
+  border-bottom: rem(1) solid rgba($black, 0.1);
+  border-top: rem(1) solid rgba($black, 0.1);
+
+  display: grid;
+  grid-template-columns: minmax(rem(0), rem(682)) 1fr;
+
+  &__information {
+    display: flex;
+    flex-direction: column;
+    gap: rem(26);
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: rem(16);
+  }
+
+  &__status {
+    @include font(12, $fw-light);
+    padding: rem(8) rem(16);
+    border-radius: rem(100);
+    background-color: $green;
+    color: $white;
+  }
+
+  &__title {
+    @include font(16, $fw-light);
+    padding: rem(8) 0;
+  }
+
+  &__description {
+    @include font(14, $fw-light);
+    color: rgba($black, 0.6);
+  }
+
+  &__more {
+    @include font(14, $fw-light);
+    background: transparent;
+    border-bottom: rem(1) solid currentColor;
+    max-width: max-content;
+  }
+
+  &__slider {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(rem(72), rem(90)));
+    gap: rem(8);
+    justify-content: end;
+    align-items: start;
+
+    &_image {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      height: auto;
+      object-fit: cover;
+    }
+  }
+}

@@ -1,0 +1,15 @@
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: rem(5);
+
+  &__description {
+    @include font(14, $fw-light);
+    color: rgba($black, 0.6);
+  }
+
+  &__price {
+    @include font(20, $fw-light);
+  }
+}
