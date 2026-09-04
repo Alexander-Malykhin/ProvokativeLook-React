@@ -46,11 +46,10 @@ const CatalogList = ({ products, isLoading, isFetching = false, errorMessage, }:
     }
     return (<div className={styles.listWrap} aria-busy={isFetching}>
       <div className={styles.list}>
-        {products.map((product) => (<ProductCard key={product.id} id={product.id} title={product.name} image={product.image ?? ""} price={formatPrice(product.price, product.currency)} sizes={product.sizes}/>))}
+        {products.map((product) => (<ProductCard key={product.id} id={product.id} slug={product.slug} sectionSlug={product.sectionSlug} sectionName={product.sectionName} title={product.name} image={product.image ?? ""} price={formatPrice(product.price, product.currency)} sizes={product.sizes} variant="catalog"/>))}
       </div>
 
       {isFetching && <div className={styles.listWrap__loadingBar}/>}
     </div>);
 };
 export default CatalogList;
-

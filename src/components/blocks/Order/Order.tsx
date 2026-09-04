@@ -17,6 +17,7 @@ import { useCreateOrderMutation } from "@store/api/orders/ordersApi";
 import { baseApi } from "@store/api/baseApi";
 import { useAppDispatch } from "@store/hooks";
 import { getRequestErrorMessage } from "@store/api/getRequestErrorMessage";
+import { detectCountry, formatPhone, normalizePhone } from "@components/common/PhoneInput/phone";
 const Order = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -52,14 +53,12 @@ const Order = () => {
     useEffect(() => {
         if (initializedRef.current || !userData?.user || !addressesData)
             return;
-        const deliveryAddresses = addresses.filter((item) => item.deliveryProvider === "cdek" || item.deliveryProvider === "mail");
-        const defaultAddress = deliveryAddresses.find((item) => item.isDefault) ?? deliveryAddresses[0];
         reset({
             firstName: userData.user.firstName ?? "",
             lastName: userData.user.lastName ?? "",
             email: userData.user.email ?? "",
-            phone: userData.user.phone ?? "",
-            addressId: defaultAddress ? String(defaultAddress.id) : "",
+            phone: userData.user.phone ? formatPhone(userData.user.phone) : "",
+            addressId: "",
             payment: "cash",
             privacy: false,
         });
@@ -91,7 +90,7 @@ const Order = () => {
                     firstName: values.firstName,
                     lastName: values.lastName,
                     email: values.email,
-                    phone: values.phone,
+                    phone: normalizePhone(values.phone, detectCountry(values.phone)),
                 },
                 addressId: Number(values.addressId),
                 payment: values.payment,
@@ -150,4 +149,3 @@ const Order = () => {
     </SectionLayout>);
 };
 export default Order;
-

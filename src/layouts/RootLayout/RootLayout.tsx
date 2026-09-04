@@ -12,6 +12,11 @@ const RootLayout = () => {
     const location = useLocation();
     const navigate = useNavigate();
     useEffect(() => {
+        if (location.pathname === "/" || location.pathname.endsWith("/"))
+            return;
+        navigate({ pathname: `${location.pathname}/`, search: location.search, hash: location.hash }, { replace: true });
+    }, [location.hash, location.pathname, location.search, navigate]);
+    useEffect(() => {
         const params = new URLSearchParams(location.search);
         if (params.get("payment") !== "success")
             return;
@@ -36,4 +41,3 @@ const RootLayout = () => {
     </>);
 };
 export default RootLayout;
-

@@ -17,7 +17,7 @@ const About = () => {
         <div className={styles.about__row}>
           <AboutFormatedText text={data.text} className={styles.about__column} paragraphClassName={`${styles.about__text} ${styles.about__text_container}`} accentClassName={styles.about__accent}/>
 
-          {data.image && (<Image src={data.image} alt={data.title} className={styles.about__image}/>)}
+          {data.image && (<Image src={data.image} alt="О нас" className={styles.about__image}/>)}
         </div>
 
         <div className={styles.about__list}>
@@ -31,4 +31,3 @@ const About = () => {
     </SectionLayout>);
 };
 export default About;
-

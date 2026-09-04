@@ -3,16 +3,14 @@ import SectionLayout from "@layouts/SectionLayout/SectionLayout";
 import MainLayoutContainer from "@layouts/MainLayoutContainer/MainLayoutContainer";
 import CategoryPromoSkeleton from "@components/blocks/CategoryPromo/components/CategoryPromoSkeleton/CategoryPromoSkeleton";
 import CategoryPromoItem from "@components/blocks/CategoryPromo/components/CategoryPromoItem/CategoryPromoItem";
-import { useGetCategoriesQuery } from "@store/api/categories/categoriesApi";
+import { useGetBannersQuery } from "@store/api/banners/bannersApi";
 const CategoryPromo = () => {
-    const { data, isLoading, isError } = useGetCategoriesQuery();
+    const { data, isLoading, isError } = useGetBannersQuery('banners1x2');
     if (isLoading)
         return <CategoryPromoSkeleton />;
     if (isError || !data)
         return null;
-    const promoItems = (data.items ?? [])
-        .filter((item) => item.promo.show)
-        .sort((a, b) => a.sort - b.sort);
+    const promoItems = [...(data.items ?? [])].sort((a, b) => a.sort - b.sort);
     if (promoItems.length === 0) {
         return null;
     }
@@ -23,4 +21,3 @@ const CategoryPromo = () => {
     </SectionLayout>);
 };
 export default CategoryPromo;
-

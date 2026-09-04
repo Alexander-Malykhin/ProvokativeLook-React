@@ -53,7 +53,9 @@ const Reviews = () => {
         </div>
         {reviews.length > 0 && (<div className={styles.reviews__content}>
             <ReviewsSlider sliderRef={carousel.sliderRef} reviews={reviews}/>
-            <CarouselDots count={reviews.length} activeIndex={carousel.activeIndex} onChange={carousel.scrollToIndex} itemLabel="отзыву"/>
+            <div className={styles.reviews__dots}>
+              <CarouselDots count={reviews.length} activeIndex={carousel.activeIndex} onChange={carousel.scrollToIndex} itemLabel="отзыву"/>
+            </div>
           </div>)}
       </SectionLayout>
       <ReviewModal open={isReviewModalOpen} onClose={() => setIsReviewModalOpen(false)}/>

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Image from "@UI/media/Image/Image";
 import type { OrderDto } from "@store/api/orders/types";
 import { usePayOrderMutation } from "@store/api/orders/ordersApi";
@@ -24,9 +24,10 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
     const justReturnedFromPayment = !order.isPaid && pendingUntil > Date.now() && Boolean(returnedOrder)
         && (String(order.orderId ?? "") === returnedOrder || String(order.number) === returnedOrder);
     const paymentPending = order.paymentState === "pending" || justReturnedFromPayment;
-    const canPay = !order.isPaid && !paymentPending && order.canPay;
+    const isCancelled = order.status === "cancelled" || /отмен/iu.test(`${order.stage?.name ?? ""} ${order.statusText ?? ""}`);
+    const canPay = !isCancelled && !order.isPaid && !paymentPending && order.canPay;
     const handlePay = async () => {
-        if (!order.orderId || isPaying)
+        if (!order.orderId || isPaying || isCancelled)
             return;
         const response = await payOrder({ orderId: order.orderId }).unwrap();
         if (response.payment.paid)
@@ -56,10 +57,13 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
         </div>) : null}
       <div className={styles.details__sectionTitle}>Состав заказа / {order.productsCount} товара</div>
       <div className={styles.details__products}>
-        {order.products.map((product, index) => (<article className={styles.product} key={`${product.offerId ?? product.id}-${index}`}>
-            <div className={styles.product__media}>{product.image ? <Image src={product.image} className={styles.product__image}/> : <div className={styles.product__placeholder}>Фото скоро</div>}</div>
+        {order.products.map((product, index) => {
+        const productPath = product.slug && product.sectionSlug ? `/catalog/${product.sectionSlug}/${product.slug}/` : null;
+        const media = <div className={styles.product__media}>{product.image ? <Image src={product.image} alt={product.name} className={styles.product__image}/> : <div className={styles.product__placeholder}>Фото скоро</div>}</div>;
+        return (<article className={styles.product} key={`${product.offerId ?? product.id}-${index}`}>
+            {productPath ? <Link to={productPath} className={styles.product__mediaLink} aria-label={`Открыть товар ${product.name}`}>{media}</Link> : media}
             <div className={styles.product__info}>
-              <h3>{product.name}</h3>
+              <h3>{productPath ? <Link to={productPath}>{product.name}</Link> : product.name}</h3>
               {product.size && <p>Размер: {product.size}</p>}
               {product.color && <p>Цвет: {product.color}</p>}
               <p>Количество: {product.quantity} шт.</p>
@@ -68,7 +72,8 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
               {product.oldPrice && product.oldPrice > (product.price ?? 0) && <span className={styles.product__oldPrice}>{money(product.oldPrice, order.currency)}</span>}
               <strong>{money(product.lineTotal ?? ((product.price ?? 0) * product.quantity), order.currency)}</strong>
             </div>
-          </article>))}
+          </article>);
+    })}
       </div>
       <div className={styles.details__summary}>
         <div><span>Товары:</span><strong>{money(order.productsTotal ?? productsTotal, order.currency)}</strong></div>
@@ -80,4 +85,3 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
     </div>);
 };
 export default OrderDetails;
-

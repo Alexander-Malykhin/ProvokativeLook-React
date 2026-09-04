@@ -26,6 +26,10 @@ export const router = createBrowserRouter([
                 lazy: page(() => import("@pages/CatalogCategoryPage/CatalogCategoryPage")),
             },
             {
+                path: "catalog/:sectionSlug/:productSlug",
+                lazy: page(() => import("@pages/ProductPage/ProductPage")),
+            },
+            {
                 path: "catalog/*",
                 lazy: page(() => import("@pages/CatalogCategoryPage/CatalogCategoryPage")),
             },
@@ -74,10 +78,6 @@ export const router = createBrowserRouter([
                 lazy: page(() => import("@pages/ProfilePage/ProfilePage")),
             },
             {
-                path: "product/:id",
-                lazy: page(() => import("@pages/ProductPage/ProductPage")),
-            },
-            {
                 path: "public-offer",
                 lazy: page(() => import("@pages/LegalPage/LegalPage")),
             },
@@ -87,6 +87,10 @@ export const router = createBrowserRouter([
             },
             {
                 path: "privacy-policy",
+                lazy: page(() => import("@pages/LegalPage/LegalPage")),
+            },
+            {
+                path: "cookie-policy",
                 lazy: page(() => import("@pages/LegalPage/LegalPage")),
             },
             {
@@ -100,4 +104,3 @@ export const router = createBrowserRouter([
         ],
     },
 ], { basename: "/" });
-

@@ -7,7 +7,7 @@ import type { CatalogCategoriesInterface } from "@components/CatalogCategories/t
 const CatalogCategories = ({ cards, variant = "promo", isLoading = false, }: CatalogCategoriesInterface) => {
     return (<SectionLayout>
       <MainLayoutContainer className={`${styles.category} ${styles[`category_${variant}`]}`}>
-        {isLoading ? (<CatalogCategoriesSkeleton />) : (cards.map((item, index) => (<CatalogCategoryCard key={`${item.path}-${item.id ?? index}`} id={item.id ?? index + 1} title={item.title} path={item.path} image={item.image} variant={variant} buttonText={item.buttonText}/>)))}
+        {isLoading ? (<CatalogCategoriesSkeleton />) : (cards.map((item, index) => (<CatalogCategoryCard key={`${item.path}-${item.id ?? index}`} id={item.id ?? index + 1} title={item.title} path={item.path} image={item.image} imageScale={item.imageScale} imagePositionX={item.imagePositionX} imagePositionY={item.imagePositionY} variant={variant} buttonText={item.buttonText}/>)))}
       </MainLayoutContainer>
     </SectionLayout>);
 };

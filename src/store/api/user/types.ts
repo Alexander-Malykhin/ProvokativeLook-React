@@ -19,7 +19,6 @@ export interface UpdateUserRequest {
     firstName?: string;
     lastName?: string;
     birthday?: string;
-    email?: string;
     phone?: string;
     city?: string;
     country?: string;
@@ -71,4 +70,3 @@ export interface PasswordResetResponse {
     success: boolean;
     message?: string;
 }
-

@@ -71,31 +71,16 @@ export const requestBrowserNotificationPermission = async (): Promise<BrowserNot
         return "unsupported";
     }
 };
-export const useRealtimeUpdates = () => {
+export const useRealtimeUpdates = (enabled = true) => {
     const dispatch = useDispatch();
     const sourceRef = useRef<EventSource | null>(null);
     useEffect(() => {
-        let disposed = false;
-        let fallbackTimer: number | null = null;
-        let reconnectTimer: number | null = null;
-        const invalidateRealtimeData = () => {
-            dispatch(baseApi.util.invalidateTags(["Orders", "Notifications"]));
-        };
-        const startFallbackPolling = () => {
-            if (fallbackTimer !== null)
-                return;
-            fallbackTimer = window.setInterval(invalidateRealtimeData, 15000);
-        };
-        const connect = () => {
-            if (disposed || typeof EventSource === "undefined") {
-                startFallbackPolling();
-                return;
-            }
-            const url = `${SITE_API_BASE_URL}events`;
-            const source = new EventSource(url, { withCredentials: true });
-            sourceRef.current = source;
-            source.addEventListener("snapshot", (event) => {
-                invalidateRealtimeData();
+        if (!enabled || typeof EventSource === "undefined")
+            return;
+        const url = `${SITE_API_BASE_URL}events`;
+        const source = new EventSource(url, { withCredentials: true });
+        sourceRef.current = source;
+        source.addEventListener("snapshot", (event) => {
                 try {
                     const payload = JSON.parse((event as MessageEvent<string>).data) as RealtimeSnapshot;
                     if (payload.latestNotification) {
@@ -104,46 +89,26 @@ export const useRealtimeUpdates = () => {
                 }
                 catch {
                 }
-            });
-            source.addEventListener("orders.changed", invalidateRealtimeData);
-            source.addEventListener("notifications.changed", () => {
-                dispatch(baseApi.util.invalidateTags(["Notifications"]));
-            });
-            source.addEventListener("notification.created", (event) => {
-                dispatch(baseApi.util.invalidateTags(["Orders", "Notifications"]));
+        });
+        source.addEventListener("orders.changed", () => {
+            dispatch(baseApi.util.invalidateTags(["Orders"]));
+        });
+        source.addEventListener("notifications.changed", () => {
+            dispatch(baseApi.util.invalidateTags(["Notifications"]));
+        });
+        source.addEventListener("notification.created", (event) => {
+            dispatch(baseApi.util.invalidateTags(["Orders", "Notifications"]));
                 try {
                     const payload = JSON.parse((event as MessageEvent<string>).data) as RealtimeNotification;
                     showBrowserNotification(payload);
                 }
                 catch {
                 }
-            });
-            source.onopen = () => {
-                if (fallbackTimer !== null) {
-                    window.clearInterval(fallbackTimer);
-                    fallbackTimer = null;
-                }
-            };
-            source.onerror = () => {
-                source.close();
-                if (sourceRef.current === source)
-                    sourceRef.current = null;
-                startFallbackPolling();
-                if (!disposed) {
-                    reconnectTimer = window.setTimeout(connect, 5000);
-                }
-            };
-        };
-        connect();
+        });
         return () => {
-            disposed = true;
-            sourceRef.current?.close();
-            sourceRef.current = null;
-            if (fallbackTimer !== null)
-                window.clearInterval(fallbackTimer);
-            if (reconnectTimer !== null)
-                window.clearTimeout(reconnectTimer);
+            source.close();
+            if (sourceRef.current === source)
+                sourceRef.current = null;
         };
-    }, [dispatch]);
+    }, [dispatch, enabled]);
 };
-

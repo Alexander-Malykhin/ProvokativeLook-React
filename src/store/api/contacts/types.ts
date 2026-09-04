@@ -8,7 +8,6 @@ export interface ContactsLink {
 export interface ContactsResponse {
     id: number;
     code: string;
-    title: string;
     phone: string;
     email: string;
     address: string;
@@ -16,4 +15,3 @@ export interface ContactsResponse {
     map: string | null;
     links: ContactsLink[];
 }
-

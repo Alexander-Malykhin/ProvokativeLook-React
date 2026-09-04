@@ -10,13 +10,12 @@ import CatalogFilterButtons from './components/CatalogFilterButtons/CatalogFilte
 import CatalogFilter from './components/CatalogFilter/CatalogFilter';
 import { useAppDispatch, useAppSelector } from '@store/hooks';
 import { close as closeFilter } from '@store/slices/toggleFIlterSlice';
-import { useGetCatalogProductsQuery } from '@store/api/catalog/catalogApi';
-import { useGetCategoriesQuery } from '@store/api/categories/categoriesApi';
+import { useGetCatalogProductsQuery, useGetCatalogSectionsQuery } from '@store/api/catalog/catalogApi';
 import { getRequestErrorMessage } from '@store/api/getRequestErrorMessage';
 import type { CatalogFilters, CatalogSort } from '@store/api/catalog/types';
-import { getCatalogCategorySlug, normalizeCatalogTitle } from '@/helpers/catalog';
+import { slugifyCatalogValue } from '@/helpers/catalog';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 18;
 const EMPTY_FILTERS: CatalogFilters = {
     sizes: [],
     colors: [],
@@ -57,23 +56,21 @@ const CatalogProducts = () => {
         }
         return pathname.split('/').filter(Boolean).at(-1) ?? 'all';
     }, [categorySlug, pathname]);
-    const { data: categoriesData } = useGetCategoriesQuery();
+    const { data: sectionsData } = useGetCatalogSectionsQuery();
+    const topSections = sectionsData?.sections ?? [];
+    const actualSection = useMemo(() => topSections.find((section) => slugifyCatalogValue(section.name) === resolvedSlug || slugifyCatalogValue(section.code) === resolvedSlug), [topSections, resolvedSlug]);
     const navigationItems = useMemo<CatalogNavigationItem[]>(() => {
-        const apiItems = (categoriesData?.items ?? [])
-            .filter((item) => item.catalogPage.show)
-            .filter((item) => item.sectionIds.length > 0)
-            .sort((a, b) => a.sort - b.sort || a.id - b.id)
-            .map((item) => ({
-            slug: getCatalogCategorySlug(item),
-            title: normalizeCatalogTitle(item.name).toLocaleUpperCase('ru-RU'),
-            sectionIds: item.sectionIds,
+        const sectionItems = topSections.map((section) => ({
+            slug: slugifyCatalogValue(section.code || section.name),
+            title: section.name.toLocaleUpperCase('ru-RU'),
+            sectionIds: [section.id],
         }));
-        return dedupeNavigationItems([ALL_NAVIGATION_ITEM, ...apiItems]);
-    }, [categoriesData]);
+        return dedupeNavigationItems([ALL_NAVIGATION_ITEM, ...sectionItems]);
+    }, [topSections]);
     const category = useMemo(() => {
         return (navigationItems.find((item) => item.slug === resolvedSlug) ??
-            ALL_NAVIGATION_ITEM);
-    }, [navigationItems, resolvedSlug]);
+            (actualSection ? { slug: resolvedSlug, title: actualSection.name, sectionIds: [actualSection.id] } : ALL_NAVIGATION_ITEM));
+    }, [actualSection, navigationItems, resolvedSlug]);
     const [page, setPage] = useState(1);
     const [sort, setSort] = useState<CatalogSort>('popular');
     const [filters, setFilters] = useState<CatalogFilters>(EMPTY_FILTERS);
@@ -113,12 +110,18 @@ const CatalogProducts = () => {
         setSort(nextSort);
         setPage(1);
     };
+    const handlePageChange = (nextPage: number) => {
+        setPage(nextPage);
+        if (typeof window !== 'undefined') {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
     return (<SectionLayout className={styles.category}>
       <MainLayoutContainer className={styles.category__content}>
         <CatalogNavigation activeSlug={category.slug} items={navigationItems}/>
 
         <div className={styles.category__list}>
-          <CatalogFilterButtons sort={sort} onSortChange={handleSortChange}/>
+          <CatalogFilterButtons sort={sort} options={filterOptions} onSortChange={handleSortChange}/>
 
           <CatalogList products={products} isLoading={isLoading} isFetching={isFetching} errorMessage={error
             ? getRequestErrorMessage(error, 'Не удалось получить товары каталога')
@@ -126,10 +129,9 @@ const CatalogProducts = () => {
         </div>
       </MainLayoutContainer>
 
-      {!isLoading && !error && total > 0 && (<Pagination page={page} total={total} pageSize={PAGE_SIZE} totalPages={totalPages} onChange={setPage}/>)}
+      {!isLoading && !error && total > PAGE_SIZE && (<Pagination page={page} total={total} pageSize={PAGE_SIZE} totalPages={totalPages} onChange={handlePageChange}/>)}
 
       {isFilterOpen && (<CatalogFilter productsCount={total} options={filterOptions} value={filters} sort={sort} onChange={handleFiltersChange} onSortChange={handleSortChange} onReset={() => setPage(1)}/>)}
     </SectionLayout>);
 };
 export default CatalogProducts;
-

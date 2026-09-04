@@ -2,6 +2,7 @@ import type { FieldErrors, UseFormRegister } from "react-hook-form";
 import type { OrderFormValues } from "../../model/types";
 import OrderFieldInput from "../OrderFieldInput/OrderFieldInput";
 import OrderStepContainer from "../OrderStepContainer/OrderStepContainer";
+import { formatPhone, isValidPhone } from "@components/common/PhoneInput/phone";
 interface RecipientStepProps {
     register: UseFormRegister<OrderFormValues>;
     errors: FieldErrors<OrderFormValues>;
@@ -12,7 +13,12 @@ const RecipientStep = ({ register, errors }: RecipientStepProps) => (<OrderStepC
     <OrderFieldInput label="Электронная почта*" placeholder="mail@example.ru" type="email" register={register("email", {
         required: "Введите электронную почту",
     })} error={errors.email?.message}/>
-    <OrderFieldInput label="Телефон*" placeholder="+7 (999) 999-99-99" type="tel" register={register("phone", { required: "Введите телефон" })} error={errors.phone?.message}/>
+    <OrderFieldInput label="Телефон*" placeholder="+7 (999) 999-99-99" type="tel" register={register("phone", {
+        required: "Введите телефон",
+        validate: (value) => isValidPhone(value) || "Введите корректный телефон",
+        onChange: (event) => {
+            event.target.value = formatPhone(event.target.value);
+        },
+    })} error={errors.phone?.message}/>
   </OrderStepContainer>);
 export default RecipientStep;
-

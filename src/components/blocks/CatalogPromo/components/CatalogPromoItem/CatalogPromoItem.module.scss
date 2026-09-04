@@ -17,7 +17,7 @@
     align-items: flex-start;
     gap: rem(22);
 
-    max-width: 70%;
+    max-width: 42%;
   }
 
   &__information_title {
@@ -46,7 +46,7 @@
     align-items: flex-end;
     justify-content: flex-end;
 
-    width: 62%;
+    width: 55%;
 
     pointer-events: none;
   }
@@ -61,18 +61,18 @@
   }
 
   &_1 &__imageBox {
-    width: 60%;
-    transform: translate(rem(20), 0);
+    width: 55%;
+    transform: none;
   }
 
   &_2 &__imageBox {
-    width: 60%;
-    transform: translate(rem(15), 0);
+    width: 55%;
+    transform: none;
   }
 
   &_3 &__imageBox {
-    width: 60%;
-    transform: translate(rem(15), 0);
+    width: 55%;
+    transform: none;
   }
 
   @media (max-width: rem($desktop-x)) {
@@ -92,7 +92,7 @@
     }
 
     &__imageBox {
-      width: 60%;
+      width: 55%;
     }
   }
 
@@ -102,7 +102,7 @@
 
     &__information {
       gap: rem(8);
-      max-width: 70%;
+      max-width: 42%;
     }
 
     &__information_title {
@@ -115,7 +115,7 @@
     }
 
     &__imageBox {
-      width: 62%;
+      width: 55%;
     }
   }
 
@@ -125,7 +125,7 @@
 
     &__information {
       gap: rem(8);
-      max-width: 70%;
+      max-width: 42%;
     }
 
     &__information_title {
@@ -140,7 +140,7 @@
     }
 
     &__imageBox {
-      width: 70%;
+      width: 55%;
     }
   }
 }

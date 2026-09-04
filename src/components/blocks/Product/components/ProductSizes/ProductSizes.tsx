@@ -3,11 +3,12 @@ import styles from "./ProductSizes.module.scss";
 import { openTableSizes } from "@store/slices/toggleModalTableSizesSlice.ts";
 interface ProductSizesProps {
     sizes: string[];
+    sizeTable: string[][];
     selectedSize: string | null;
     disabledSizes?: string[];
     onChange: (size: string) => void;
 }
-const ProductSizes = ({ sizes, selectedSize, disabledSizes = [], onChange, }: ProductSizesProps) => {
+const ProductSizes = ({ sizes, sizeTable, selectedSize, disabledSizes = [], onChange, }: ProductSizesProps) => {
     const dispatch = useAppDispatch();
     return (<div className={styles.sizes}>
       <h2 className={styles.sizes__title}>размер</h2>
@@ -21,10 +22,9 @@ const ProductSizes = ({ sizes, selectedSize, disabledSizes = [], onChange, }: Pr
         })}
       </div>
 
-      <button type="button" className={styles.sizes__button} onClick={() => dispatch(openTableSizes())}>
+      {sizeTable.length > 0 && <button type="button" className={styles.sizes__button} onClick={() => dispatch(openTableSizes({ rows: sizeTable }))}>
         Таблица размеров
-      </button>
+      </button>}
     </div>);
 };
 export default ProductSizes;
-

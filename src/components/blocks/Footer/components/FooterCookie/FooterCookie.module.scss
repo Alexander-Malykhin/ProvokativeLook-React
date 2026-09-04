@@ -2,9 +2,45 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: rem(24);
 
   position: relative;
-  padding: rem(10) rem(40);
+  padding: rem(12) rem(48) rem(12) rem(24);
+
+  &__text {
+    margin: 0;
+    @include font(14, $fw-light);
+  }
+
+  &__details {
+    color: $black;
+    text-decoration: underline;
+    text-decoration-thickness: rem(1);
+    text-underline-offset: rem(3);
+    border-bottom: rem(1) solid currentColor;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: rem(8);
+    flex-shrink: 0;
+  }
+
+  &__choice {
+    min-width: rem(105);
+    padding: rem(9) rem(14);
+    border: rem(1) solid $black;
+    color: $black;
+    background: transparent;
+    @include font(13, $fw-light);
+    cursor: pointer;
+
+    &_accept {
+      color: $white;
+      background: $black;
+    }
+  }
 
   &__button {
     position: absolute;
@@ -18,6 +54,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
   }
 
   &__button_line {
@@ -32,6 +69,34 @@
 
     &:last-child {
       transform: rotate(-45deg);
+    }
+  }
+
+  @media (max-width: rem($mobile)) {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: rem(12);
+    padding: rem(16) rem(44) rem(16) rem(16);
+
+    &__text {
+      @include font(12, $fw-light);
+    }
+
+    &__actions {
+      width: auto;
+      gap: rem(6);
+    }
+
+    &__choice {
+      flex: none;
+      min-width: rem(88);
+      padding: rem(7) rem(10);
+      @include font(11, $fw-light);
+    }
+
+    &__button {
+      top: rem(18);
+      transform: none;
     }
   }
 }

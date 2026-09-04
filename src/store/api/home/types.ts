@@ -33,7 +33,6 @@ export interface FooterSocialItem {
 export interface HomeResponse {
     id: number;
     code: string;
-    title: string;
     bannerText: string[];
     bannerImageLeft: string | null;
     bannerImageRight: string | null;
@@ -42,4 +41,3 @@ export interface HomeResponse {
     footerNavigation: FooterNavigationItem[];
     footerSocials: FooterSocialItem[];
 }
-

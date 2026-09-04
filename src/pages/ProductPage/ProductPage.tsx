@@ -8,4 +8,3 @@ const ProductPage = () => {
     </PageStack>);
 };
 export default ProductPage;
-

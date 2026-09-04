@@ -8,6 +8,7 @@ import { useAddFavoriteMutation, useGetFavoritesQuery, useRemoveFavoriteMutation
 import { useGetUserQuery } from "@store/api/user/userApi";
 import { useAppDispatch } from "@store/hooks";
 import { openAuthModal } from "@store/slices/toggleAuthModalSlice";
+import { Link } from "react-router-dom";
 interface BasketItemProps {
     item: CartItem;
     checked: boolean;
@@ -32,8 +33,9 @@ const BasketItem = ({ item, checked, onCheckedChange, onQuantityChange, onDelete
     });
     const [addFavorite, { isLoading: isAddingFavorite }] = useAddFavoriteMutation();
     const [removeFavorite, { isLoading: isRemovingFavorite }] = useRemoveFavoriteMutation();
-    const isFavorite = favoritesData?.items.some((favorite) => favorite.id === item.productId) ?? false;
+    const isFavorite = favoritesData?.ids?.includes(item.productId) ?? favoritesData?.items.some((favorite) => favorite.id === item.productId) ?? false;
     const favoriteBusy = isUserLoading || isAddingFavorite || isRemovingFavorite;
+    const productPath = item.slug && item.sectionSlug ? `/catalog/${item.sectionSlug}/${item.slug}/` : null;
     const handleFavorite = async () => {
         if (favoriteBusy)
             return;
@@ -68,12 +70,12 @@ const BasketItem = ({ item, checked, onCheckedChange, onQuantityChange, onDelete
 
       <div className={styles.item__body}>
         <div className={styles.item__top}>
-          {item.image ? (<Image src={item.image} alt={item.name} className={styles.item__image}/>) : (<div className={`${styles.item__image} ${styles.item__image_empty}`}/>)}
+          {productPath ? (<Link to={productPath} className={styles.item__imageLink} aria-label={`Открыть товар ${item.name}`}>{item.image ? (<Image src={item.image} alt={item.name} className={styles.item__image}/>) : (<div className={`${styles.item__image} ${styles.item__image_empty}`}/>)}</Link>) : item.image ? (<Image src={item.image} alt={item.name} className={styles.item__image}/>) : (<div className={`${styles.item__image} ${styles.item__image_empty}`}/>)}
 
           <div className={styles.item__content}>
             <div className={styles.item__main}>
               <div className={styles.item__header}>
-                <h2 className={styles.item__header_title}>{item.name}</h2>
+                <h2 className={styles.item__header_title}>{productPath ? <Link to={productPath}>{item.name}</Link> : item.name}</h2>
 
                 <div className={styles.item__header_buttons}>
                   <BasketActions onDelete={onDelete} onFavorite={handleFavorite} isFavorite={isFavorite} disabled={isUpdating || favoriteBusy}/>

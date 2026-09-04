@@ -1,9 +1,0 @@
-.dots {
-  display: none;
-
-  @media (max-width: rem(420)) {
-    display: flex;
-    gap: rem(10);
-    width: 100%;
-  }
-}

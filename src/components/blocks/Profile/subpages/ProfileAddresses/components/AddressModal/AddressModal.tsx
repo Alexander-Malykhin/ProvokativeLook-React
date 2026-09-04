@@ -17,17 +17,21 @@ interface AddressModalProps {
     countryCode?: string;
     isSaving?: boolean;
 }
+type MappedPickupPoint = PickupPoint & {
+    coordinates?: Coordinates;
+    resolvedAddress?: ParsedAddress;
+};
 const providerLabel = (provider: DeliveryProvider) => provider === "cdek" ? "СДЭК" : "Почта России";
 const AddressModal = ({ open, onClose, onSave, city: initialCity = "Ростов-на-Дону", country: initialCountry = "Россия", countryCode: initialCountryCode = "RU", isSaving = false, }: AddressModalProps) => {
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
     const mapRef = useRef<YandexMapInstance | null>(null);
-    const placemarkRef = useRef<YandexPlacemark | null>(null);
+    const placemarksRef = useRef<YandexPlacemark[]>([]);
     const requestRef = useRef(0);
     const [city, setCity] = useState(initialCity || "Ростов-на-Дону");
     const [country, setCountry] = useState(initialCountry || "Россия");
     const [countryCode, setCountryCode] = useState((initialCountryCode || "RU").toUpperCase());
     const [provider, setProvider] = useState<DeliveryProvider>("cdek");
-    const [points, setPoints] = useState<PickupPoint[]>([]);
+    const [points, setPoints] = useState<MappedPickupPoint[]>([]);
     const [selectedId, setSelectedId] = useState("");
     const [selectedResolved, setSelectedResolved] = useState<ParsedAddress | null>(null);
     const [error, setError] = useState("");
@@ -68,23 +72,57 @@ const AddressModal = ({ open, onClose, onSave, city: initialCity = "Ростов
         }
         return ymaps;
     };
-    const showSelectedOnMap = async (point: PickupPoint, resolved: ParsedAddress, requestId: number) => {
+    const showPointsOnMap = async (nextPoints: MappedPickupPoint[], center: Coordinates, requestId: number) => {
+        const ymaps = await ensureMap(center, requestId);
+        if (!ymaps || !mapRef.current || requestRef.current !== requestId)
+            return;
+        placemarksRef.current.forEach((placemark) => mapRef.current?.geoObjects.remove(placemark));
+        placemarksRef.current = [];
+        const coordinates: Coordinates[] = [];
+        nextPoints.forEach((point) => {
+            if (!point.coordinates || !mapRef.current)
+                return;
+            coordinates.push(point.coordinates);
+            const placemark = new ymaps.Placemark(point.coordinates, {
+                balloonContentHeader: point.name,
+                balloonContentBody: point.address,
+            }, { preset: "islands#blackIcon", iconColor: "#000000" });
+            placemark.events?.add?.("click", () => selectPoint(point));
+            mapRef.current.geoObjects.add(placemark);
+            placemarksRef.current.push(placemark);
+        });
+        if (coordinates.length > 1 && mapRef.current.setBounds) {
+            const latitudes = coordinates.map((item) => item[0]);
+            const longitudes = coordinates.map((item) => item[1]);
+            mapRef.current.setBounds([
+                [Math.min(...latitudes), Math.min(...longitudes)],
+                [Math.max(...latitudes), Math.max(...longitudes)],
+            ], { checkZoomRange: true, zoomMargin: 35 });
+        }
+    };
+    const showSelectedOnMap = async (point: MappedPickupPoint, resolved: ParsedAddress, requestId: number) => {
         const coordinates: Coordinates = [resolved.latitude, resolved.longitude];
         const ymaps = await ensureMap(coordinates, requestId);
         if (!ymaps || !mapRef.current || requestRef.current !== requestId)
             return;
-        if (placemarkRef.current) {
-            mapRef.current.geoObjects.remove(placemarkRef.current);
+        if (point.coordinates) {
+            mapRef.current.setCenter(coordinates, 15, { duration: 200 });
+            return;
         }
         const placemark = new ymaps.Placemark(coordinates, {
             balloonContentHeader: point.name,
             balloonContentBody: point.address,
-        }, { preset: "islands#blackIcon" });
+        }, { preset: "islands#blackIcon", iconColor: "#000000" });
         mapRef.current.geoObjects.add(placemark);
-        placemarkRef.current = placemark;
+        placemarksRef.current.push(placemark);
         mapRef.current.setCenter(coordinates, 15, { duration: 200 });
     };
-    const resolvePoint = async (point: PickupPoint, requestId: number) => {
+    async function resolvePoint(point: MappedPickupPoint, requestId: number) {
+        if (point.resolvedAddress) {
+            setSelectedResolved(point.resolvedAddress);
+            mapRef.current?.setCenter(point.coordinates ?? [point.resolvedAddress.latitude, point.resolvedAddress.longitude], 15, { duration: 200 });
+            return;
+        }
         setIsResolvingPoint(true);
         try {
             const geocoded = await geocode({
@@ -110,7 +148,7 @@ const AddressModal = ({ open, onClose, onSave, city: initialCity = "Ростов
             if (requestRef.current === requestId)
                 setIsResolvingPoint(false);
         }
-    };
+    }
     const loadPoints = async () => {
         if (!open || !city.trim())
             return;
@@ -138,21 +176,54 @@ const AddressModal = ({ open, onClose, onSave, city: initialCity = "Ростов
             if (provider === "mail" && actualCountryCode !== "RU") {
                 throw new Error("Почта России доступна только для городов России");
             }
-            await ensureMap([resolvedCity.latitude, resolvedCity.longitude], requestId);
-            const response = await getPickupPoints({
+            const ymaps = await ensureMap([resolvedCity.latitude, resolvedCity.longitude], requestId);
+            if (!ymaps) {
+                throw new Error("Не удалось загрузить Яндекс Карту");
+            }
+            const pickupRequest = {
                 city: resolvedCity.city || city,
                 provider,
                 country: resolvedCity.country || country,
                 countryCode: actualCountryCode,
-            }).unwrap();
+            };
+            let response;
+            try {
+                response = await getPickupPoints(pickupRequest, false).unwrap();
+            }
+            catch (firstError) {
+                if (requestRef.current !== requestId)
+                    return;
+                await new Promise((resolve) => window.setTimeout(resolve, 450));
+                if (requestRef.current !== requestId)
+                    return;
+                response = await getPickupPoints(pickupRequest, false).unwrap();
+            }
             if (requestRef.current !== requestId)
                 return;
-            const nextPoints = response.points ?? [];
-            setPoints(nextPoints);
-            if (nextPoints.length > 0) {
-                setSelectedId(nextPoints[0].id);
-                await resolvePoint(nextPoints[0], requestId);
+            let nextPoints = response.points ?? [];
+            if (provider === "mail" && nextPoints.length === 0) {
+                await new Promise((resolve) => window.setTimeout(resolve, 450));
+                if (requestRef.current !== requestId)
+                    return;
+                const retryResponse = await getPickupPoints(pickupRequest, false).unwrap();
+                if (requestRef.current !== requestId)
+                    return;
+                nextPoints = retryResponse.points ?? [];
             }
+            const mappedPoints = nextPoints.map((point): MappedPickupPoint => {
+                const latitude = Number(point.latitude);
+                const longitude = Number(point.longitude);
+                if (!Number.isFinite(latitude) || !Number.isFinite(longitude) || latitude === 0 || longitude === 0)
+                    return point;
+                return {
+                    ...point,
+                    coordinates: [latitude, longitude],
+                };
+            });
+            if (requestRef.current !== requestId)
+                return;
+            setPoints(mappedPoints);
+            await showPointsOnMap(mappedPoints, [resolvedCity.latitude, resolvedCity.longitude], requestId);
         }
         catch (requestError) {
             if (requestRef.current === requestId) {
@@ -172,7 +243,7 @@ const AddressModal = ({ open, onClose, onSave, city: initialCity = "Ростов
             requestRef.current += 1;
             mapRef.current?.destroy();
             mapRef.current = null;
-            placemarkRef.current = null;
+            placemarksRef.current = [];
         };
     }, [city, open, provider]);
     const changeCity = (nextCity: string, resolved?: ParsedAddress) => {
@@ -182,13 +253,13 @@ const AddressModal = ({ open, onClose, onSave, city: initialCity = "Ростов
         if (resolved?.countryCode)
             setCountryCode(resolved.countryCode.toUpperCase());
     };
-    const selectPoint = (point: PickupPoint) => {
+    function selectPoint(point: MappedPickupPoint) {
         const requestId = requestRef.current;
         setSelectedId(point.id);
         setSelectedResolved(null);
         setError("");
         void resolvePoint(point, requestId);
-    };
+    }
     const save = () => {
         if (!selected || !selectedResolved)
             return;
@@ -233,14 +304,16 @@ const AddressModal = ({ open, onClose, onSave, city: initialCity = "Ростов
           <div className={styles.pickupServices}>
             <label className={`${styles.pickupService} ${provider === "cdek" ? styles.pickupService_active : ""}`}>
               <input type="radio" name="pickup-provider" checked={provider === "cdek"} onChange={() => setProvider("cdek")}/>
-              <span>СДЭК</span>
+              <span className={styles.pickupService__content}>СДЭК</span>
             </label>
 
-            <label className={`${styles.pickupService} ${provider === "mail" ? styles.pickupService_active : ""}`} title={isRussianPostAvailable
+            <label className={`${styles.pickupService} ${provider === "mail" ? styles.pickupService_active : ""} ${!isRussianPostAvailable ? styles.pickupService_disabled : ""}`} aria-disabled={!isRussianPostAvailable} title={isRussianPostAvailable
             ? undefined
             : "Почта России доступна только в России"}>
               <input type="radio" name="pickup-provider" checked={provider === "mail"} disabled={!isRussianPostAvailable} onChange={() => setProvider("mail")}/>
-              <span>Почта России</span>
+              <span className={styles.pickupService__content}>
+                <span>Почта России</span>
+              </span>
             </label>
           </div>
 
@@ -296,4 +369,3 @@ const AddressModal = ({ open, onClose, onSave, city: initialCity = "Ростов
     </Modal>);
 };
 export default AddressModal;
-

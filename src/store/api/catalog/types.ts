@@ -1,4 +1,21 @@
 export type CatalogSort = 'popular' | 'new' | 'priceAsc' | 'priceDesc';
+export interface CatalogSection {
+    id: number;
+    name: string;
+    code: string;
+    parentId: number | null;
+    depthLevel: number;
+    image: string | null;
+    imageScale: number | null;
+    imagePositionX: number | null;
+    imagePositionY: number | null;
+    sort: number | null;
+    children: CatalogSection[];
+}
+export interface CatalogSectionsResponse {
+    success: boolean;
+    sections: CatalogSection[];
+}
 export interface CatalogFilters {
     sizes: string[];
     colors: string[];
@@ -18,6 +35,9 @@ export interface CatalogProductItem {
     sectionId: number | null;
     name: string;
     code: string;
+    slug: string;
+    sectionSlug: string;
+    sectionName: string;
     previewText: string;
     image: string | null;
     price: number | null;
@@ -25,6 +45,8 @@ export interface CatalogProductItem {
     sizes: string[];
     colors: string[];
     hasOffers: boolean;
+    isNew?: boolean;
+    isBestseller?: boolean;
 }
 export interface CatalogPagination {
     total: number;
@@ -63,20 +85,28 @@ export interface CatalogProductDetail {
     sectionId?: number | null;
     name: string;
     code?: string;
+    slug: string;
+    sectionSlug: string;
+    sectionName: string;
     previewText?: string;
     description?: string;
+    article?: string | null;
+    sizeTable?: string[][];
     image?: string | null;
     images?: string[];
     price?: number | null;
     currency?: string | null;
     offers: CatalogProductOffer[];
 }
+export type FeaturedProductType = 'new' | 'bestsellers';
+export interface FeaturedProductsResponse { success: boolean; products: CatalogProductItem[]; }
 export interface CatalogProductResponse {
     success: boolean;
     product: CatalogProductDetail;
 }
 export interface GetCatalogProductRequest {
-    id: number;
+    slug: string;
+    sectionSlug: string;
 }
 export interface CatalogSearchResponse {
     success: boolean;
@@ -92,4 +122,3 @@ export interface CatalogSearchRequest {
     q: string;
     limit?: number;
 }
-

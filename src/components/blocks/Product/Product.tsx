@@ -29,12 +29,12 @@ const ProductSkeleton = () => (<SectionLayout>
     </div>
   </SectionLayout>);
 const Product = () => {
-    const { id } = useParams<{
-        id: string;
+    const { sectionSlug, productSlug } = useParams<{
+        sectionSlug: string;
+        productSlug: string;
     }>();
-    const productId = Number(id);
-    const canRequest = Number.isInteger(productId) && productId > 0;
-    const { data, error, isLoading } = useGetCatalogProductQuery({ id: productId }, { skip: !canRequest });
+    const canRequest = Boolean(sectionSlug && productSlug);
+    const { data, error, isLoading } = useGetCatalogProductQuery({ sectionSlug: sectionSlug ?? "", slug: productSlug ?? "" }, { skip: !canRequest });
     const product = data?.product;
     const [addRecentlyViewed] = useAddRecentlyViewedMutation();
     const recordedViewedIdRef = useRef<number | null>(null);
@@ -70,13 +70,9 @@ const Product = () => {
     }, [availableOffers, selectedOfferId]);
     const colors = useMemo(() => Array.from(new Set(allOffers.map((offer) => offer.color).filter(Boolean))) as string[], [allOffers]);
     const disabledColors = useMemo(() => colors.filter((color) => !allOffers.some((offer) => offer.color === color && offer.available)), [allOffers, colors]);
-    const sizes = useMemo(() => {
-        const selectedColor = selectedOffer?.color ?? null;
-        return Array.from(new Set(allOffers
-            .filter((offer) => !selectedColor || offer.color === selectedColor)
-            .map((offer) => offer.size)
-            .filter(Boolean))) as string[];
-    }, [allOffers, selectedOffer?.color]);
+    const sizes = useMemo(() => Array.from(new Set(allOffers
+        .map((offer) => offer.size)
+        .filter(Boolean))) as string[], [allOffers]);
     const disabledSizes = useMemo(() => {
         const selectedColor = selectedOffer?.color ?? null;
         return sizes.filter((size) => !allOffers.some((offer) => offer.size === size &&
@@ -96,7 +92,7 @@ const Product = () => {
         setSelectedOfferId((exact ?? fallback)?.id ?? null);
     };
     if (!canRequest) {
-        return <SectionLayout>Некорректный ID товара</SectionLayout>;
+        return <SectionLayout>Некорректная ссылка на товар</SectionLayout>;
     }
     if (isLoading) {
         return <ProductSkeleton />;
@@ -116,10 +112,9 @@ const Product = () => {
         <ProductImages productImages={productImages} title={product.name}/>
 
         <div className={`${styles.product__information} ${styles.product__information_sticky}`}>
-          <ProductInformation id={product.id} title={product.name} description={product.description ?? product.previewText ?? ""} price={formatPrice(currentPrice, currentCurrency)} colors={colors} selectedColor={selectedOffer?.color ?? null} onColorChange={handleColorChange} disabledColors={disabledColors} sizes={sizes} selectedSize={selectedOffer?.size ?? null} onSizeChange={handleSizeChange} disabledSizes={disabledSizes} selectedOfferId={selectedOffer?.id ?? null} selectedOfferAvailable={selectedOffer?.available ?? availableOffers.length === 0}/>
+          <ProductInformation id={product.id} title={product.name} article={product.article ?? null} sectionTitle={product.sectionName} sectionSlug={product.sectionSlug} description={product.description ?? ""} sizeTable={product.sizeTable ?? []} price={formatPrice(currentPrice, currentCurrency)} colors={colors} selectedColor={selectedOffer?.color ?? null} onColorChange={handleColorChange} disabledColors={disabledColors} sizes={sizes} selectedSize={selectedOffer?.size ?? null} onSizeChange={handleSizeChange} disabledSizes={disabledSizes} selectedOfferId={selectedOffer?.id ?? null} selectedOfferAvailable={selectedOffer?.available ?? availableOffers.length === 0}/>
         </div>
       </div>
     </SectionLayout>);
 };
 export default Product;
-

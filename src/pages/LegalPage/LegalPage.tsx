@@ -6,6 +6,7 @@ const LEGAL_PAGE_CODES: Record<string, string> = {
     "/public-offer": "public-offer",
     "/terms-of-use": "terms-of-use",
     "/privacy-policy": "privacy-policy",
+    "/cookie-policy": "cookie-policy",
     "/personal-data-consent": "personal-data-consent",
 };
 const LegalPage = () => {
@@ -20,4 +21,3 @@ const LegalPage = () => {
     </PageStack>);
 };
 export default LegalPage;
-

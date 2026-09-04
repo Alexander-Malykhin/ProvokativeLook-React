@@ -10,6 +10,9 @@ export interface OrderProductDto {
     price?: number | null;
     oldPrice?: number | null;
     lineTotal?: number | null;
+    slug?: string | null;
+    sectionSlug?: string | null;
+    sectionName?: string | null;
 }
 export interface OrderMethodDto {
     code: string;
@@ -115,4 +118,3 @@ export interface CreateOrderPaymentResponse {
         paid?: boolean;
     };
 }
-

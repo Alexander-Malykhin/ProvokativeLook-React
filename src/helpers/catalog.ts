@@ -1,4 +1,26 @@
 import type { CategoryItem } from "@store/api/categories/types";
+import type { CatalogSection } from "@store/api/catalog/types";
+
+const CYRILLIC_TO_LATIN: Record<string, string> = {
+    а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'e', ё: 'e', ж: 'zh', з: 'z',
+    и: 'i', й: 'y', к: 'k', л: 'l', м: 'm', н: 'n', о: 'o', п: 'p', р: 'r',
+    с: 's', т: 't', у: 'u', ф: 'f', х: 'h', ц: 'c', ч: 'ch', ш: 'sh',
+    щ: 'sch', ъ: '', ы: 'y', ь: '', э: 'e', ю: 'yu', я: 'ya',
+};
+
+export const slugifyCatalogValue = (value: string): string => value
+    .trim()
+    .toLocaleLowerCase('ru-RU')
+    .split('')
+    .map((letter) => CYRILLIC_TO_LATIN[letter] ?? letter)
+    .join('')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+export const flattenCatalogSections = (sections: CatalogSection[]): CatalogSection[] => sections.flatMap((section) => [
+    section,
+    ...flattenCatalogSections(section.children ?? []),
+]);
 
 const CANONICAL_CATALOG_SECTIONS: Array<{ slug: string; sectionIds: number[] }> = [
     { slug: 'costumes', sectionIds: [179, 140] },

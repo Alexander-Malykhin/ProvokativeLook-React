@@ -3,19 +3,15 @@ import styles from "./NavigationMobileCatalog.module.scss";
 import arrowRightImage from "@assets/arrows/arrow-shevron-right.svg";
 import Image from "@UI/media/Image/Image";
 import type { NavigationMobileCatalogInterface } from "./types";
-import { useGetCategoriesQuery } from "@store/api/categories/categoriesApi";
-import { getCatalogCategorySlug, normalizeCatalogTitle } from "@/helpers/catalog";
+import { useGetCatalogSectionsQuery } from "@store/api/catalog/catalogApi";
+import { slugifyCatalogValue } from "@/helpers/catalog";
 const NavigationMobileCatalog = ({ onBack, onClose, }: NavigationMobileCatalogInterface) => {
-    const { data } = useGetCategoriesQuery();
+    const { data } = useGetCatalogSectionsQuery();
     const catalogItems = [
         { text: "СМОТРЕТЬ ВСЁ", path: "/catalog/all" },
-        ...(data?.items ?? [])
-            .filter((item) => item.catalogPage.show)
-            .filter((item) => item.sectionIds.length > 0)
-            .sort((a, b) => a.sort - b.sort || a.id - b.id)
-            .map((item) => ({
-            text: normalizeCatalogTitle(item.name),
-            path: `/catalog/${getCatalogCategorySlug(item)}`,
+        ...(data?.sections ?? []).map((item) => ({
+            text: item.name,
+            path: `/catalog/${slugifyCatalogValue(item.code || item.name)}`,
         })),
     ];
     return (<nav className={styles.catalog}>
@@ -32,4 +28,3 @@ const NavigationMobileCatalog = ({ onBack, onClose, }: NavigationMobileCatalogIn
     </nav>);
 };
 export default NavigationMobileCatalog;
-

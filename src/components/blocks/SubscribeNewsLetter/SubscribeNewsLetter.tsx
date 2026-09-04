@@ -11,7 +11,6 @@ import { useSubscribeMutation } from "@store/api/subscription/subscriptionApi";
 import { getRequestErrorMessage } from "@store/api/getRequestErrorMessage";
 interface SubscribeFormValues {
     email: string;
-    advertising: boolean;
     privacy: boolean;
 }
 const SubscribeNewsLetter = () => {
@@ -20,7 +19,6 @@ const SubscribeNewsLetter = () => {
     const { register, handleSubmit, reset, formState: { errors }, } = useForm<SubscribeFormValues>({
         defaultValues: {
             email: "",
-            advertising: false,
             privacy: false,
         },
     });
@@ -57,16 +55,6 @@ const SubscribeNewsLetter = () => {
           </div>
 
           <div className={styles.subscribe__form__column}>
-            <MainCheckbox register={register("advertising", {
-            required: "Подтвердите получение предложений",
-        })}>
-              Хочу получать рекламные предложения и узнавать о новинках, скидках и бонусах
-            </MainCheckbox>
-
-            {errors.advertising && (<span className={styles.subscribe__form_checkbox_error}>
-                Поставьте галочку, чтобы получать предложения
-              </span>)}
-
             <MainCheckbox register={register("privacy", {
             required: "Подтвердите согласие на обработку данных",
         })}>
@@ -90,4 +78,3 @@ const SubscribeNewsLetter = () => {
     </SectionLayout>);
 };
 export default SubscribeNewsLetter;
-

@@ -8,10 +8,9 @@ import ProductCard from "@components/ProductCard/ProductCard";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import { close as closeSearch } from "@store/slices/toggleSearchSlice";
 import { useDebouncedValue } from "@hooks/useDebouncedValue";
-import { useGetCatalogProductsQuery, useSearchCatalogQuery } from "@store/api/catalog/catalogApi";
-import { useGetCategoriesQuery } from "@store/api/categories/categoriesApi";
+import { useGetCatalogProductsQuery, useGetCatalogSectionsQuery, useSearchCatalogQuery } from "@store/api/catalog/catalogApi";
 import { catalogProductToListItem } from "@store/api/catalog/format";
-import { getCatalogCategorySlug } from "@/helpers/catalog";
+import { slugifyCatalogValue } from "@/helpers/catalog";
 import styles from "./SearchModal.module.scss";
 import { POPULAR_SEARCHES, SEARCH_SUGGESTIONS } from "./data";
 
@@ -27,6 +26,14 @@ const SearchModal = () => {
     const active = useAppSelector((state) => state.toggleSearch.active);
     const [query, setQuery] = useState("");
     const [submittedQuery, setSubmittedQuery] = useState("");
+    const [recentSearches, setRecentSearches] = useState<string[]>(() => {
+        try {
+            const saved = JSON.parse(localStorage.getItem("plRecentSearches") ?? "[]");
+            return Array.isArray(saved) ? saved.filter((item): item is string => typeof item === "string").slice(0, 10) : [];
+        } catch {
+            return [];
+        }
+    });
     const normalizedQuery = query.trim();
     const debouncedQuery = useDebouncedValue(normalizedQuery, 300);
     const searchQuery = submittedQuery === normalizedQuery && submittedQuery.length >= 2
@@ -34,28 +41,22 @@ const SearchModal = () => {
         : debouncedQuery;
     const canSearch = searchQuery.length >= 2;
     const canSubmit = query.trim().length >= 2;
-    const { data: categoriesData } = useGetCategoriesQuery(undefined, { skip: !active });
-    const { data: searchData, isFetching: isSearching } = useSearchCatalogQuery({ q: searchQuery, limit: 12 }, { skip: !active || !canSearch });
+    const { data: sectionsData } = useGetCatalogSectionsQuery(undefined, { skip: !active });
+    const { data: searchData, isFetching: isSearching } = useSearchCatalogQuery({ q: searchQuery, limit: 50 }, { skip: !active || !canSearch });
     const { data: popularData, isFetching: isLoadingPopular } = useGetCatalogProductsQuery({ limit: 4, offset: 0, sort: "popular" }, { skip: !active || canSearch });
     const products = canSearch
         ? searchData?.products ?? []
         : popularData?.products ?? [];
     const productCards = useMemo(() => products.map(catalogProductToListItem), [products]);
     const searchSections = canSearch ? searchData?.sections ?? [] : [];
-    const fallbackCategories = useMemo(() => (categoriesData?.items ?? []).filter((item) => item.catalog?.show !== false).slice(0, 5), [categoriesData?.items]);
+    const fallbackCategories = useMemo(() => sectionsData?.sections ?? [], [sectionsData?.sections]);
     const searchCategoryLinks = useMemo(() => searchSections.map((section) => {
-        const category = (categoriesData?.items ?? []).find((item) => item.sectionIds.includes(section.id));
-
         return {
             ...section,
-            name: formatCategoryTitle(category?.catalog?.title || category?.name || section.name),
-            path: category
-                ? `/catalog/${getCatalogCategorySlug(category)}`
-                : section.code
-                    ? `/catalog/${section.code}`
-                    : "/catalog",
+            name: formatCategoryTitle(section.name),
+            path: `/catalog/${slugifyCatalogValue(section.code || section.name)}`,
         };
-    }), [categoriesData?.items, searchSections]);
+    }), [searchSections]);
     const close = () => {
         setQuery("");
         setSubmittedQuery("");
@@ -66,15 +67,21 @@ const SearchModal = () => {
         const value = query.trim();
         if (value.length < 2)
             return;
-        setSubmittedQuery(value);
-        close();
-        navigate(`/search?q=${encodeURIComponent(value)}`);
+        goToSearch(value);
     };
-    const applyQuery = (value: string) => {
+    const goToSearch = (value: string) => {
+        const normalized = value.trim();
+        if (normalized.length < 2)
+            return;
+        const nextRecent = [normalized, ...recentSearches.filter((item) => item.toLocaleLowerCase("ru-RU") !== normalized.toLocaleLowerCase("ru-RU"))].slice(0, 10);
+        setRecentSearches(nextRecent);
+        localStorage.setItem("plRecentSearches", JSON.stringify(nextRecent));
+        setQuery("");
         setSubmittedQuery("");
-        setQuery(value);
+        dispatch(closeSearch());
+        navigate(`/search?q=${encodeURIComponent(normalized)}`);
     };
-    const isBusy = isSearching || isLoadingPopular;
+    const isBusy = (isSearching || isLoadingPopular) && productCards.length === 0;
     return (<Modal open={active} onClose={close} overlayClassName={styles.search} contentClassName={styles.search__content} ariaLabelledBy="search-modal-title">
       <div className={styles.search__mobileTitle}>
         <button type="button" className={styles.search__mobileBack} onClick={close} aria-label="Закрыть поиск">
@@ -103,7 +110,7 @@ const SearchModal = () => {
 
       <div className={styles.search__bottom}>
         <div className={styles.search__category}>
-          {SEARCH_SUGGESTIONS.map((suggestion) => (<button key={suggestion} type="button" className={styles.search__category_item} onClick={() => applyQuery(suggestion)}>
+          {(recentSearches.length > 0 ? recentSearches : SEARCH_SUGGESTIONS).map((suggestion) => (<button key={suggestion} type="button" className={styles.search__category_item} onClick={() => goToSearch(suggestion)}>
               {suggestion}
             </button>))}
         </div>
@@ -111,9 +118,9 @@ const SearchModal = () => {
         <div className={styles.popular}>
           <aside className={styles.aside}>
             <div className={styles.aside__content}>
-              <h2 className={styles.aside__content_title}>Популярные запросы</h2>
+              <h2 className={styles.aside__content_title}>{recentSearches.length ? "Последние запросы" : "Популярные запросы"}</h2>
               <div className={styles.aside__list}>
-                {POPULAR_SEARCHES.map((item) => (<button key={item} type="button" className={styles.aside__list_item} onClick={() => applyQuery(item)}>
+                {(recentSearches.length ? recentSearches : POPULAR_SEARCHES).map((item) => (<button key={item} type="button" className={styles.aside__list_item} onClick={() => goToSearch(item)}>
                     {item}
                   </button>))}
               </div>
@@ -127,9 +134,9 @@ const SearchModal = () => {
                         <Image src={CategoryImage} alt=""/>
                         {section.name}
                       </Link>))
-            : fallbackCategories.map((category) => (<Link key={category.id} to={`/catalog/${getCatalogCategorySlug(category)}`} className={styles.aside__list_category} onClick={close}>
+            : fallbackCategories.map((category) => (<Link key={category.id} to={`/catalog/${slugifyCatalogValue(category.code || category.name)}`} className={styles.aside__list_category} onClick={close}>
                         <Image src={CategoryImage} alt=""/>
-                        {formatCategoryTitle(category.catalog?.title || category.name)}
+                        {formatCategoryTitle(category.name)}
                       </Link>))}
               </div>
             </div>
@@ -152,7 +159,7 @@ const SearchModal = () => {
                 if ((event.target as HTMLElement).closest("a"))
                     close();
             }}>
-                {productCards.map((card, index) => <ProductCard key={`${card.id}-${index}`} {...card}/>)}
+                {productCards.map((card, index) => <ProductCard key={`${card.id}-${index}`} {...card} variant="search"/>)}
               </div>) : canSearch ? (<div className={styles.grid__empty}>По вашему запросу товары не найдены</div>) : null}
           </div>
         </div>
@@ -160,4 +167,3 @@ const SearchModal = () => {
     </Modal>);
 };
 export default SearchModal;
-

@@ -108,9 +108,56 @@
   cursor: pointer;
   @include font(14, $fw-light);
 
-  input { width: rem(13); height: rem(13); margin: 0; }
+  input {
+    appearance: none;
+    width: rem(15);
+    height: rem(15);
+    margin: 0;
+    flex: 0 0 rem(15);
+    border: rem(1) solid $black;
+    border-radius: 50%;
+    background: $white;
+    cursor: pointer;
+
+    &:checked {
+      background: $black;
+      box-shadow: inset 0 0 0 rem(3) $white;
+    }
+
+    &:disabled {
+      opacity: .35;
+      cursor: default;
+    }
+  }
 
   &_active { border-color: $black; }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: rem(2);
+    min-width: 0;
+
+    small {
+      @include font(9, $fw-light);
+      color: rgba($black, .62);
+      white-space: nowrap;
+    }
+  }
+
+  &_disabled {
+    border-style: dashed;
+    border-color: rgba($black, .24);
+    color: rgba($black, .45);
+    background: rgba($black, .055);
+    cursor: not-allowed;
+
+    input,
+    .pickupService__content {
+      opacity: .65;
+      cursor: not-allowed;
+    }
+  }
 }
 
 .pickupList {

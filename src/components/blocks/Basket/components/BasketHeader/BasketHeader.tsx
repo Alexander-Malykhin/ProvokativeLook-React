@@ -9,14 +9,13 @@ interface BasketHeaderProps {
 }
 const BasketHeader = ({ isAllSelected, hasSelectedItems, onSelectAll, onDeleteSelected, disabled = false, }: BasketHeaderProps) => {
     return (<div className={styles.header}>
-      <button type="button" className={styles.header__select} onClick={onSelectAll} disabled={disabled}>
-        <InputCheck checked={isAllSelected} onChange={(event) => {
-            event.stopPropagation();
+      <div className={styles.header__select}>
+        <InputCheck checked={isAllSelected} disabled={disabled} onChange={() => {
             onSelectAll();
         }}/>
 
-        <span>Выбрать все</span>
-      </button>
+        <button type="button" onClick={onSelectAll} disabled={disabled}>Выбрать все</button>
+      </div>
 
       <button type="button" className={styles.header__delete} onClick={onDeleteSelected} disabled={!hasSelectedItems || disabled}>
         Удалить выбранное
@@ -24,4 +23,3 @@ const BasketHeader = ({ isAllSelected, hasSelectedItems, onSelectAll, onDeleteSe
     </div>);
 };
 export default BasketHeader;
-

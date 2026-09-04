@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./OrderCard.module.scss";
 import type { OrderDto } from "@store/api/orders/types";
 import { usePayOrderMutation } from "@store/api/orders/ordersApi";
@@ -28,9 +28,10 @@ const OrderCard = ({ order }: OrderCardProps) => {
     const justReturnedFromPayment = !order.isPaid && pendingUntil > Date.now() && Boolean(returnedOrder)
         && (String(order.orderId ?? "") === returnedOrder || String(order.number) === returnedOrder);
     const paymentPending = order.paymentState === "pending" || justReturnedFromPayment;
-    const canPay = !order.isPaid && !paymentPending && order.canPay;
+    const isCancelled = order.status === "cancelled" || /отмен/iu.test(`${order.stage?.name ?? ""} ${order.statusText ?? ""}`);
+    const canPay = !isCancelled && !order.isPaid && !paymentPending && order.canPay;
     const handlePay = async () => {
-        if (!order.orderId || isPaying)
+        if (!order.orderId || isPaying || isCancelled)
             return;
         const response = await payOrder({ orderId: order.orderId }).unwrap();
         if (response.payment.paid) {
@@ -88,9 +89,13 @@ const OrderCard = ({ order }: OrderCardProps) => {
       </div>
 
       <div className={styles.card__list}>
-        {order.products.slice(0, 4).map((item, index) => (<article className={styles.card__list_item} key={`${item.id}-${index}`}>
-            {item.image ? (<Image src={item.image} className={styles.card__list_image}/>) : (<div className={styles.card__list_placeholder}>Фото скоро</div>)}
-          </article>))}
+        {order.products.slice(0, 4).map((item, index) => {
+        const productPath = item.slug && item.sectionSlug ? `/catalog/${item.sectionSlug}/${item.slug}/` : null;
+        const media = item.image ? (<Image src={item.image} alt={item.name} className={styles.card__list_image}/>) : (<div className={styles.card__list_placeholder}>Фото скоро</div>);
+        return (<article className={styles.card__list_item} key={`${item.id}-${index}`}>
+            {productPath ? <Link to={productPath} aria-label={`Открыть товар ${item.name}`} className={styles.card__list_link}>{media}</Link> : media}
+          </article>);
+    })}
 
         {order.products.length > 4 && (<article className={styles.card__list_end}>
             {order.products.length - 4}+
@@ -99,4 +104,3 @@ const OrderCard = ({ order }: OrderCardProps) => {
     </article>);
 };
 export default OrderCard;
-

@@ -7,19 +7,17 @@ import Image from "@UI/media/Image/Image";
 import BannerTitle from "@UI/titles/BannerTitle/BannerTitle.tsx";
 import MainButton from "@/UI/buttons/MainButton/MainButton";
 import { useGetHomeQuery } from "@store/api/home/homeApi.ts";
-import { useGetCategoriesQuery } from "@store/api/categories/categoriesApi";
+import { useGetBannersQuery } from "@store/api/banners/bannersApi";
 const Banner = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { data, isLoading, isError } = useGetHomeQuery();
-    const { data: categoriesData, isLoading: isCategoriesLoading, isError: isCategoriesError, } = useGetCategoriesQuery();
+    const { data: categoriesData, isLoading: isCategoriesLoading, isError: isCategoriesError, } = useGetBannersQuery('miniBanners');
     if (isLoading || isCategoriesLoading)
         return <BannerSkeleton />;
     if (isError || isCategoriesError || !data || !categoriesData)
         return null;
-    const bannerCategories = (categoriesData.items ?? [])
-        .filter((category) => category.banner.show)
-        .sort((a, b) => a.sort - b.sort);
+    const bannerCategories = [...(categoriesData.items ?? [])].sort((a, b) => a.sort - b.sort);
     return (<SectionLayout className={styles.banner}>
       <div className={styles.banner__content}>
         {data.bannerImageLeft && <Image src={data.bannerImageLeft}/>}
@@ -55,4 +53,3 @@ const Banner = () => {
     </SectionLayout>);
 };
 export default Banner;
-

@@ -9,7 +9,7 @@ const siteBaseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryErro
         url: `${SITE_API_BASE_URL}${route}`,
         credentials: request.credentials ?? "include",
         cache: "no-store",
-        responseHandler: request.responseHandler ?? (async (response) => {
+                responseHandler: request.responseHandler ?? (async (response) => {
             const text = await response.text();
             if (!text.trim())
                 return null;
@@ -35,8 +35,8 @@ const siteBaseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryErro
 export const baseApi = createApi({
     reducerPath: "api",
     baseQuery: siteBaseQuery,
-    keepUnusedDataFor: 0,
-    refetchOnMountOrArgChange: true,
+    keepUnusedDataFor: 60,
+    refetchOnMountOrArgChange: false,
     tagTypes: [
         "User",
         "Addresses",

@@ -11,10 +11,16 @@
     display: flex;
     align-items: center;
     gap: rem(16);
-    cursor: pointer;
 
-    span:last-child {
+    button {
       @include font(14, $fw-light);
+      color: $black;
+      cursor: pointer;
+
+      &:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
     }
   }
 

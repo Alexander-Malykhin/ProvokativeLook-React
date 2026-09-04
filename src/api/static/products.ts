@@ -1,6 +1,7 @@
 import productIMage from "@assets/products/product-1.png";
 import type { ProductListItem } from "@/types/product";
-export const products: ProductListItem[] = [
+import { slugifyCatalogValue } from "@/helpers/catalog";
+const productItems: ProductListItem[] = [
     {
         id: 1,
         title: "Шуба",
@@ -87,3 +88,15 @@ export const products: ProductListItem[] = [
     },
 ];
 
+const SECTION_BY_TITLE: Record<string, string> = {
+    "Шуба": "outerwear",
+    "Босоножки": "shoes",
+    "Комбинезон с накидкой": "costumes",
+    "Свитшот": "hoodie",
+};
+
+export const products: ProductListItem[] = productItems.map((product) => ({
+    ...product,
+    slug: slugifyCatalogValue(product.title),
+    sectionSlug: SECTION_BY_TITLE[product.title] ?? "catalog",
+}));

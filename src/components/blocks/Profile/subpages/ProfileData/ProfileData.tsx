@@ -168,8 +168,8 @@ const ProfileData = ({ title }: ProfilePageProps) => {
     };
     const save = async () => {
         setMessage("");
-        if (!form.firstName.trim() || !form.lastName.trim() || !form.email.trim()) {
-            setMessage("Заполните имя, фамилию и электронную почту");
+        if (!form.firstName.trim() || !form.lastName.trim()) {
+            setMessage("Заполните имя и фамилию");
             return;
         }
         if (!isValidPhone(form.phone)) {
@@ -181,7 +181,6 @@ const ProfileData = ({ title }: ProfilePageProps) => {
                 firstName: form.firstName.trim(),
                 lastName: form.lastName.trim(),
                 birthday: form.birthday.trim(),
-                email: form.email.trim(),
                 phone: normalizePhone(form.phone, detectCountry(form.phone)),
                 city: form.city.trim(),
                 country: form.country.trim(),
@@ -238,10 +237,13 @@ const ProfileData = ({ title }: ProfilePageProps) => {
           {isEditing ? (<BirthdayPicker value={form.birthday} onChange={(value) => changeField("birthday", value)}/>) : (<p className={styles.content__value}>{displayBirthday(form.birthday)}</p>)}
         </div>
 
-        <label className={styles.content__field}>
-          <span className={styles.content__label}>Электронная почта*</span>
-          {isEditing ? (<input type="email" className={styles.content__input} value={form.email} onChange={(event) => changeField("email", event.target.value)}/>) : (<p className={styles.content__value}>{form.email || "Не указано"}</p>)}
-        </label>
+        <div className={`${styles.content__field} ${styles.content__field_locked}`}>
+          <div className={styles.content__labelRow}>
+            <span className={styles.content__label}>Электронная почта</span>
+            <span className={styles.content__locked}>Не редактируется</span>
+          </div>
+          <p className={styles.content__value}>{form.email || "Не указано"}</p>
+        </div>
 
         <label className={styles.content__field}>
           <span className={styles.content__label}>Телефон*</span>
@@ -276,4 +278,3 @@ const ProfileData = ({ title }: ProfilePageProps) => {
     </div>);
 };
 export default ProfileData;
-

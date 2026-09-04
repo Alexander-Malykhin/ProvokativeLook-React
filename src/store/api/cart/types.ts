@@ -14,6 +14,9 @@ export interface CartItem {
     availableQuantity: number;
     isAvailable: boolean;
     availabilityMessage: string | null;
+    slug?: string | null;
+    sectionSlug?: string | null;
+    sectionName?: string | null;
 }
 export interface Cart {
     items: CartItem[];
@@ -37,4 +40,3 @@ export interface UpdateCartItemRequest {
 export interface RemoveCartItemRequest {
     id: number;
 }
-

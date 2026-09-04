@@ -7,7 +7,7 @@ import ProductCard from "@components/ProductCard/ProductCard";
 import { useClearFavoritesMutation, useGetFavoritesQuery } from "@store/api/favorites/favoritesApi";
 import { catalogProductToListItem } from "@store/api/catalog/format";
 const Favorites = () => {
-    const { data, isLoading, isFetching } = useGetFavoritesQuery();
+    const { data, isLoading, isFetching } = useGetFavoritesQuery(undefined, { refetchOnMountOrArgChange: true });
     const [clearFavorites, { isLoading: isClearing }] = useClearFavoritesMutation();
     const products = (data?.items ?? []).map(catalogProductToListItem);
     return (<SectionLayout>

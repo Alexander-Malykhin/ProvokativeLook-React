@@ -18,7 +18,6 @@ export const recentlyViewedApi = baseApi.injectEndpoints({
             productId: number;
         }>({
             query: (body) => ({ url: 'recently-viewed/add', method: 'POST', body }),
-            invalidatesTags: ['RecentlyViewed'],
         }),
         clearRecentlyViewed: builder.mutation<{
             success: boolean;

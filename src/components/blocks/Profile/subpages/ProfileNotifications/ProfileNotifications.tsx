@@ -6,7 +6,7 @@ import NotNotification from "./components/NotNotification/NotNotification";
 import NotificationItem from "./components/NotificationItem/NotificationItem";
 import { rememberBrowserNotificationBaseline, requestBrowserNotificationPermission, type BrowserNotificationPermissionResult, } from "@hooks/realtime/useRealtimeUpdates";
 const ProfileNotifications = ({ title }: ProfilePageProps) => {
-    const [limit, setLimit] = useState(10);
+    const [limit, setLimit] = useState(5);
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
     const [pushPermission, setPushPermission] = useState<BrowserNotificationPermissionResult>("default");
     useEffect(() => {
@@ -22,7 +22,10 @@ const ProfileNotifications = ({ title }: ProfilePageProps) => {
         }
         setPushPermission(Notification.permission);
     }, []);
-    const { data, isLoading, isFetching, isError, refetch } = useGetNotificationsQuery({ limit, offset: 0 });
+    const { data, isLoading, isFetching, isError, refetch } = useGetNotificationsQuery(
+        { limit, offset: 0 },
+        { pollingInterval: 3000, skipPollingIfUnfocused: false, refetchOnMountOrArgChange: true }
+    );
     const [markAsRead] = useMarkNotificationAsReadMutation();
     const [markAllAsRead, { isLoading: isMarkingAll }] = useMarkAllNotificationsAsReadMutation();
     const [deleteNotification] = useDeleteNotificationMutation();
@@ -33,6 +36,7 @@ const ProfileNotifications = ({ title }: ProfilePageProps) => {
     const latestNotificationId = notifications.reduce((max, item) => Math.max(max, item.id), 0);
     const visibleIds = useMemo(() => notifications.map((item) => item.id), [notifications]);
     const allVisibleSelected = visibleIds.length > 0 && visibleIds.every((id) => selectedIds.includes(id));
+    const allNotificationsSelected = allVisibleSelected && !pagination?.hasMore;
     useEffect(() => {
         setSelectedIds((current) => {
             const next = current.filter((id) => visibleIds.includes(id));
@@ -66,15 +70,11 @@ const ProfileNotifications = ({ title }: ProfilePageProps) => {
     const deleteSelected = async () => {
         if (selectedIds.length === 0)
             return;
-        if (!window.confirm(`Удалить выбранные уведомления (${selectedIds.length})?`))
-            return;
         await Promise.all(selectedIds.map((id) => deleteNotification(id).unwrap()));
         setSelectedIds([]);
     };
     const deleteAll = async () => {
         if (notifications.length === 0)
-            return;
-        if (!window.confirm("Удалить все уведомления? Это действие нельзя отменить."))
             return;
         await deleteAllNotifications().unwrap();
         setSelectedIds([]);
@@ -88,7 +88,7 @@ const ProfileNotifications = ({ title }: ProfilePageProps) => {
               Включить уведомления
             </button>)}
 
-          {pushPermission === "granted" && (<span className={styles.content__pushEnabled}>Уведомления включены</span>)}
+          {pushPermission === "granted" && (<span className={`${styles.content__pushEnabled} ${styles.content__pushEnabled_active}`}>Уведомления включены</span>)}
 
           {pushPermission === "denied" && (<span className={styles.content__pushEnabled}>
               Уведомления запрещены в настройках браузера
@@ -115,7 +115,7 @@ const ProfileNotifications = ({ title }: ProfilePageProps) => {
           </label>
 
           <div className={styles.content__deleteActions}>
-            {selectedIds.length > 0 && (<button type="button" onClick={() => void deleteSelected()}>
+            {selectedIds.length > 0 && !allNotificationsSelected && (<button type="button" onClick={() => void deleteSelected()}>
                 Удалить выбранные ({selectedIds.length})
               </button>)}
             <button type="button" onClick={() => void deleteAll()} disabled={isDeletingAll}>
@@ -134,11 +134,17 @@ const ProfileNotifications = ({ title }: ProfilePageProps) => {
             {notifications.map((item) => (<NotificationItem key={item.id} item={item} selected={selectedIds.includes(item.id)} onSelect={(checked) => toggleSelected(item.id, checked)} onClick={() => handleNotificationClick(item.id, item.isRead)}/>))}
           </div>
 
-          {pagination?.hasMore && (<button type="button" className={styles.button} disabled={isFetching} onClick={() => setLimit((current) => current + 10)}>
-              {isFetching ? "Загрузка..." : "Загрузить ещё"}
-            </button>)}
+          {pagination?.hasMore && (<button
+            type="button"
+            className={styles.button}
+            disabled={isFetching}
+            onClick={() => {
+              setLimit((current) => current + 5);
+            }}
+          >
+            Загрузить ещё
+          </button>)}
         </>) : (<NotNotification />)}
     </div>);
 };
 export default ProfileNotifications;
-

@@ -17,8 +17,8 @@ const EMPTY_OPTIONS: CatalogFilterOptions = {
     sizes: [],
     colors: [],
     price: {
-        min: DEFAULT_MIN_PRICE,
-        max: DEFAULT_MAX_PRICE,
+        min: null,
+        max: null,
     },
 };
 type FilterSection = 'size' | 'color' | 'price' | 'sort';
@@ -80,7 +80,9 @@ const CatalogFilter = ({ productsCount = 0, options = EMPTY_OPTIONS, value = EMP
     const realMaxPrice = apiMaxPrice > realMinPrice
         ? apiMaxPrice
         : Math.max(realMinPrice + 1, DEFAULT_MAX_PRICE);
-    const hasPriceRange = true;
+    const hasPriceRange = (safeOptions.price.min !== null &&
+        safeOptions.price.max !== null &&
+        safeOptions.price.max > safeOptions.price.min);
     const [minInput, setMinInput] = useState(safeValue.minPrice !== null ? String(safeValue.minPrice) : '');
     const [maxInput, setMaxInput] = useState(safeValue.maxPrice !== null ? String(safeValue.maxPrice) : '');
     useEffect(() => {
@@ -346,4 +348,3 @@ const CatalogFilter = ({ productsCount = 0, options = EMPTY_OPTIONS, value = EMP
     </div>);
 };
 export default CatalogFilter;
-

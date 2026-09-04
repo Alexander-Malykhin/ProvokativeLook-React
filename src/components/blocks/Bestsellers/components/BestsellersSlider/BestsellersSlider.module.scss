@@ -1,7 +1,7 @@
 .list {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: rem(270);
+  grid-auto-columns: rem(322);
   gap: rem(24);
 
   overflow-x: auto;
@@ -14,5 +14,9 @@
 
   > * {
     scroll-snap-align: start;
+  }
+
+  @media (max-width: rem($mobile)) {
+    grid-auto-columns: rem(254);
   }
 }

@@ -94,4 +94,3 @@ export const normalizeCoordinates = (value: unknown): Coordinates | null => {
         ? [latitude, longitude]
         : null;
 };
-

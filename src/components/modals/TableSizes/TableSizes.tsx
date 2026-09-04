@@ -2,10 +2,10 @@ import Modal from "@UI/overlays/Modal/Modal";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import { closeTableSizes } from "@store/slices/toggleModalTableSizesSlice";
 import styles from "./TableSizes.module.scss";
-import { TABLE_SIZE_ROWS } from "./data";
 const TableSizes = () => {
     const dispatch = useAppDispatch();
     const isOpen = useAppSelector((state) => state.toggleModalTableSizes.isModalTableSizesOpen);
+    const rows = useAppSelector((state) => state.toggleModalTableSizes.rows);
     const close = () => dispatch(closeTableSizes());
     return (<Modal open={isOpen} onClose={close} overlayClassName={styles.modals} contentClassName={styles.modals__table} ariaLabelledBy="table-sizes-title">
       <div className={styles.modals__header}>
@@ -21,7 +21,7 @@ const TableSizes = () => {
       <div className={styles.modals__content}>
         <table className={styles.modals__sizes}>
           <tbody className={styles.modals__sizes_body}>
-            {TABLE_SIZE_ROWS.map((row, rowIndex) => (<tr key={row[0]} className={styles.modals__sizes_row}>
+            {rows.map((row, rowIndex) => (<tr key={`${rowIndex}-${row[0] ?? ''}`} className={styles.modals__sizes_row}>
                 {row.map((cell, cellIndex) => (<td key={`${rowIndex}-${cellIndex}`} className={`${styles.modals__sizes_cell} ${cellIndex === 0 ? styles.modals__sizes_cell_name : ""}`}>
                     {cell}
                   </td>))}
@@ -32,4 +32,3 @@ const TableSizes = () => {
     </Modal>);
 };
 export default TableSizes;
-

@@ -1,6 +1,4 @@
 import { Link } from "react-router-dom";
-import { useAppDispatch } from "@store/hooks";
-import { openTableSizes } from "@store/slices/toggleModalTableSizesSlice";
 import type { FooterNavigationProps } from "./types";
 import styles from "./FooterNavigation.module.scss";
 const normalizeTitle = (value: string) => value
@@ -32,7 +30,6 @@ const resolveFooterLink = (title: string, link: string) => {
     return knownRoutes[normalized] ?? "/";
 };
 const FooterNavigation = ({ items, opened, onToggle, }: FooterNavigationProps) => {
-    const dispatch = useAppDispatch();
     return (<nav className={styles.nav}>
       {items.map((item) => {
             const title = item.navigationTitle;
@@ -48,9 +45,7 @@ const FooterNavigation = ({ items, opened, onToggle, }: FooterNavigationProps) =
               {navigationList.map((link) => {
                     const normalizedLinkTitle = normalizeTitle(link.title);
                     if (normalizedLinkTitle === "таблица размеров") {
-                        return (<button key={link.title} type="button" className={`${styles.nav__item_link} ${styles.nav__item_link_button}`} onClick={() => dispatch(openTableSizes())}>
-                      {link.title.replace(/^-/, "")}
-                    </button>);
+                        return null;
                     }
                     const resolvedLink = resolveFooterLink(link.title, link.link);
                     if (/^https?:\/\//i.test(resolvedLink)) {
@@ -68,4 +63,3 @@ const FooterNavigation = ({ items, opened, onToggle, }: FooterNavigationProps) =
     </nav>);
 };
 export default FooterNavigation;
-

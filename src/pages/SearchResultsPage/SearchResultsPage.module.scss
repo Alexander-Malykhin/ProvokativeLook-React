@@ -1,43 +1,30 @@
 .searchResults {
-  padding-top: rem(32);
-  padding-bottom: rem(64);
+  padding: rem(24) 0 rem(64);
 
-  &__content {
-    display: flex;
-    flex-direction: column;
-    gap: rem(30);
-  }
-
+  &__content { display: flex; flex-direction: column; gap: rem(28); }
   &__header {
     display: flex;
-    flex-direction: column;
-    gap: rem(10);
-
-    h1 {
-      margin: 0;
-      @include font(28, $fw-light);
-    }
-
-    p {
-      margin: 0;
-      @include font(15, $fw-light);
-      color: rgba($black, 0.65);
-    }
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: rem(20);
+    h1 { margin: 0; @include font(30, $fw-light); }
+    p { margin: 0; @include font(15, $fw-light); color: rgba($black, .62); }
   }
+  &__layout { display: grid; grid-template-columns: minmax(0, rem(322)) minmax(0, 1fr); gap: rem(24); align-items: start; }
+  &__products { display: flex; flex-direction: column; gap: rem(24); min-width: 0; }
+  &__empty { @include font(15, $fw-light); color: rgba($black, .65); }
+}
 
-  &__empty {
-    @include font(15, $fw-light);
-    color: rgba($black, 0.65);
+@media (max-width: rem($mobile)) {
+  .searchResults {
+    &__layout { grid-template-columns: 1fr; gap: rem(20); }
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: rem($mobile)) {
   .searchResults {
-    padding-top: rem(20);
-    padding-bottom: rem(40);
-
-    &__content { gap: rem(22); }
-
-    &__header h1 { @include font(22, $fw-light); }
+    padding: rem(14) 0 rem(40);
+    &__content { gap: rem(20); }
+    &__header { align-items: flex-start; flex-direction: column; gap: rem(6); h1 { @include font(23, $fw-light); } }
   }
 }

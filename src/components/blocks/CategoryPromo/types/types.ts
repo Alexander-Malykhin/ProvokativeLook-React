@@ -1,5 +1,4 @@
-import type { CategoryItem } from "@store/api/categories/types";
+import type { BannerItem } from "@store/api/banners/types";
 export interface CategoryPromoItemProps {
-    item: CategoryItem;
+    item: BannerItem;
 }
-

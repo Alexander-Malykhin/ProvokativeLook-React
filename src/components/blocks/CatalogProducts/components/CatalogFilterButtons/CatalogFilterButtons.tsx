@@ -5,9 +5,10 @@ import FilterImage from '@assets/filters/filters.svg';
 import Image from '@UI/buttons/Image/Image.tsx';
 import { useAppDispatch } from '@store/hooks';
 import { add } from '@store/slices/toggleFIlterSlice';
-import type { CatalogSort } from '@store/api/catalog/types';
+import type { CatalogFilterOptions, CatalogSort } from '@store/api/catalog/types';
 type CatalogFilterButtonsProps = {
     sort: CatalogSort;
+    options: CatalogFilterOptions;
     onSortChange: (sort: CatalogSort) => void;
 };
 const SORT_OPTIONS: Array<{
@@ -19,11 +20,19 @@ const SORT_OPTIONS: Array<{
     { value: 'priceAsc', title: 'По возрастанию цены' },
     { value: 'priceDesc', title: 'По убыванию цены' },
 ];
-const CatalogFilterButtons = ({ sort, onSortChange }: CatalogFilterButtonsProps) => {
+const CatalogFilterButtons = ({ sort, options, onSortChange }: CatalogFilterButtonsProps) => {
     const dispatch = useAppDispatch();
     const [isSortOpen, setIsSortOpen] = useState(false);
     const sortRef = useRef<HTMLDivElement>(null);
     const activeSort = SORT_OPTIONS.find((item) => item.value === sort) ?? SORT_OPTIONS[0];
+    const hasSizes = Array.isArray(options?.sizes) && options.sizes.length > 0;
+    const hasColors = Array.isArray(options?.colors) && options.colors.length > 0;
+    const hasPriceRange = (options?.price?.min !== null &&
+        options?.price?.min !== undefined &&
+        options?.price?.max !== null &&
+        options?.price?.max !== undefined &&
+        options.price.max > options.price.min);
+    const hasFilters = hasSizes || hasColors || hasPriceRange;
     useEffect(() => {
         const handlePointerDown = (event: PointerEvent) => {
             if (sortRef.current && !sortRef.current.contains(event.target as Node)) {
@@ -36,26 +45,26 @@ const CatalogFilterButtons = ({ sort, onSortChange }: CatalogFilterButtonsProps)
     const openFilters = () => dispatch(add());
     return (<div className={styles.filter}>
       <div className={styles.filter__list}>
-        <button type="button" className={styles.filter__button} onClick={openFilters}>
+        {hasSizes && <button type="button" className={styles.filter__button} onClick={openFilters}>
           Размер
           <Image src={ArrowImage}/>
-        </button>
+        </button>}
 
-        <button type="button" className={styles.filter__button} onClick={openFilters}>
+        {hasColors && <button type="button" className={styles.filter__button} onClick={openFilters}>
           Цвет
           <Image src={ArrowImage}/>
-        </button>
+        </button>}
 
-        <button type="button" className={styles.filter__button} onClick={openFilters}>
+        {hasPriceRange && <button type="button" className={styles.filter__button} onClick={openFilters}>
           Цена
           <Image src={ArrowImage}/>
-        </button>
+        </button>}
       </div>
 
-      <button type="button" className={`${styles.filter__button} ${styles.filter__mobile}`} onClick={openFilters}>
+      {hasFilters && <button type="button" className={`${styles.filter__button} ${styles.filter__mobile}`} onClick={openFilters}>
         <Image src={FilterImage}/>
         ФИЛЬТРЫ
-      </button>
+      </button>}
 
       <div className={styles.filter__sort} ref={sortRef}>
         <button type="button" className={styles.filter__sortTrigger} onClick={() => setIsSortOpen((previous) => !previous)} aria-expanded={isSortOpen}>
@@ -77,4 +86,3 @@ const CatalogFilterButtons = ({ sort, onSortChange }: CatalogFilterButtonsProps)
     </div>);
 };
 export default CatalogFilterButtons;
-

@@ -1,31 +1,34 @@
 .item {
+  position: relative;
+
   aspect-ratio: 667 / 435;
   min-height: rem(150);
   max-height: rem(435);
-
-  display: grid;
-  grid-template-columns: 1fr max-content;
 
   background-color: $light-white;
   overflow: hidden;
   text-decoration: none;
 
   &__image {
-    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    width: 72%;
     height: 100%;
     display: block;
 
     object-fit: contain;
-    object-position: left center;
+    object-position: left bottom;
   }
 
   &__information {
-    align-self: start;
-    justify-self: start;
+    position: absolute;
+    top: rem(96);
+    right: rem(30);
+    z-index: 2;
 
-    margin: rem(96) rem(30) 0 0;
-    transform: translateX(rem(-10));
-
+    margin: 0;
     white-space: nowrap;
   }
 
@@ -35,7 +38,8 @@
     }
 
     &__information {
-      margin: rem(60) rem(20) 0 0;
+      top: rem(60);
+      right: rem(20);
     }
   }
 
@@ -45,7 +49,8 @@
     }
 
     &__information {
-      margin: rem(60) rem(25) 0 0;
+      top: rem(60);
+      right: rem(25);
     }
   }
 
@@ -58,14 +63,13 @@
     max-height: none;
 
     &__image {
-      width: 100%;
+      width: 72%;
       height: 100%;
     }
 
     &__information {
-      margin: clamp(rem(24), 8vw, rem(50)) clamp(rem(16), 5vw, rem(30)) 0 0;
-
-      transform: none;
+      top: clamp(rem(24), 8vw, rem(50));
+      right: clamp(rem(16), 5vw, rem(30));
     }
 
     &__title {

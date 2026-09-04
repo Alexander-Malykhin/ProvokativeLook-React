@@ -5,19 +5,22 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
   padding: 0;
   background-color: rgba($black, 0.46);
   pointer-events: auto;
+
+  &::-webkit-scrollbar { display: none; }
 
   &__content {
     position: relative;
     z-index: 2;
     width: 100vw;
     max-width: none;
-    max-height: min(rem(690), 100vh);
-    max-height: min(rem(690), 100dvh);
-    overflow-y: auto;
+    max-height: none;
+    overflow: visible;
     background-color: $white;
     box-shadow: 0 rem(24) rem(70) rgba($black, 0.22);
     pointer-events: auto;
@@ -217,10 +220,41 @@
 
   &__content,
   &__skeleton {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-start;
     gap: rem(18);
+    width: 100%;
     min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: thin;
+    padding-bottom: rem(10);
+  }
+
+  &__content > *,
+  &__skeleton > * {
+    flex: 0 0 rem(207);
+    width: rem(207);
+    max-width: rem(207);
+    height: rem(350);
+    max-height: rem(350);
+  }
+
+  // Макет поиска: изображение/пустышка 206.8 x 275.52.
+  // Фиксируем медиаблок, чтобы он не ужимался из-за названия, размеров или цены.
+  &__content > * > a:first-child {
+    flex: 0 0 rem(276);
+    width: rem(207);
+    height: rem(276);
+    min-height: rem(276);
+    aspect-ratio: auto;
+  }
+
+  &__content > * > a:first-child > * {
+    width: 100%;
+    height: 100%;
   }
 
   &__skeletonCard {
@@ -249,9 +283,11 @@
     gap: rem(24);
   }
 
-  .grid__content,
-  .grid__skeleton {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .grid__content > *,
+  .grid__skeleton > * {
+    flex: 0 0 rem(207);
+    width: rem(207);
+    max-width: rem(207);
   }
 }
 
@@ -368,9 +404,30 @@
     width: 100%;
   }
 
+  // Мобильный макет поиска: карточка 145 x 265 px.
+  // Не наследуем глобальные 254 x 456 px от ProductCard, они нужны
+  // только для мобильных «Новинок»/«Бестселлеров».
   .grid__content,
   .grid__skeleton {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: rem(10);
+    gap: rem(8);
+    width: 100%;
+  }
+
+  .grid__content > *,
+  .grid__skeleton > * {
+    flex: 0 0 rem(145);
+    width: rem(145);
+    max-width: rem(145);
+    height: rem(265);
+    max-height: rem(265);
+    gap: rem(8);
+  }
+
+  .grid__content > * > a:first-child {
+    flex: 0 0 rem(193);
+    width: rem(145);
+    height: rem(193);
+    min-height: rem(193);
+    aspect-ratio: auto;
   }
 }

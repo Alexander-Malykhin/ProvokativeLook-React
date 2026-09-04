@@ -30,6 +30,11 @@
     object-fit: cover;
   }
 
+  &__imageLink {
+    display: block;
+    width: rem(90);
+  }
+
   &__content {
     min-width: 0;
     justify-content: space-between;

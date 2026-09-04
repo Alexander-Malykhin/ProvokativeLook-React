@@ -32,6 +32,29 @@
     border: rem(1) solid rgba($black, 0.1);
     border-radius: rem(10);
     background-color: $white;
+
+    &_locked {
+      background-color: rgba($black, 0.035);
+      border-style: dashed;
+      cursor: not-allowed;
+    }
+  }
+
+  &__labelRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(12);
+  }
+
+  &__locked {
+    @include font(11, $fw-light);
+    color: rgba($black, 0.5);
+
+    &::before {
+      content: "\1F512";
+      margin-right: rem(4);
+    }
   }
 
   &__label {

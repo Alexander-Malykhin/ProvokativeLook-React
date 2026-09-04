@@ -1,17 +1,16 @@
 import styles from "./BannerCategory.module.scss";
 import BannerCategoryItem from "@components/blocks/Banner/components/BannerCategoryItem/BannerCategoryItem.tsx";
-import type { CategoryItem } from "@store/api/categories/types";
+import type { BannerItem } from "@store/api/banners/types";
 interface BannerCategoryProps {
-    items: CategoryItem[];
+    items: BannerItem[];
 }
 const BannerCategory = ({ items }: BannerCategoryProps) => {
     if (items.length === 0)
         return null;
     return (<div className={styles.category}>
       <div className={styles.category__list}>
-        {items.map((item) => (<BannerCategoryItem key={item.id} image={item.banner.image} title={item.banner.title || item.name} path={item.link}/>))}
+        {items.map((item) => (<BannerCategoryItem key={item.id} image={item.image} title={item.title || item.name} path={item.link}/>))}
       </div>
     </div>);
 };
 export default BannerCategory;
-

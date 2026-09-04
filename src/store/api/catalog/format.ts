@@ -10,9 +10,11 @@ export const formatCatalogPrice = (price: number | null | undefined, currency: s
 };
 export const catalogProductToListItem = (product: CatalogProductItem): ProductListItem => ({
     id: product.id,
+    slug: product.slug,
+    sectionSlug: product.sectionSlug,
+    sectionName: product.sectionName,
     title: product.name,
     image: product.image ?? '',
     price: formatCatalogPrice(product.price, product.currency),
     sizes: product.sizes ?? [],
 });
-

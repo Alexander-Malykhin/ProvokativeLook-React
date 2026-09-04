@@ -19,6 +19,8 @@ export interface PickupPoint {
     uri: string;
     distance?: number | null;
     source?: string;
+    latitude?: number | null;
+    longitude?: number | null;
 }
 interface PickupPointsResponse {
     success: boolean;
@@ -109,4 +111,3 @@ export const addressApi = baseApi.injectEndpoints({
     }),
 });
 export const { useLazyGeocodeAddressQuery, useLazyGetPickupPointsQuery, useLazyGetAddressSuggestionsQuery, useGetAddressesQuery, useAddAddressMutation, useUpdateAddressMutation, useSetDefaultAddressMutation, useDeleteAddressMutation, } = addressApi;
-

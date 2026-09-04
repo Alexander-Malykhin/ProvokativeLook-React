@@ -19,3 +19,9 @@ export interface CreateReviewResponse {
     review: ForumReviewItem;
 }
 
+
+export interface ReviewStatusResponse {
+    forumModule: boolean;
+    canCreate: boolean;
+    currentUserId?: number | null;
+}

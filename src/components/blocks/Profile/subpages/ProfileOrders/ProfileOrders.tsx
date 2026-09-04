@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import styles from "./ProfileOrders.module.scss";
 import type { ProfilePageProps } from "@components/blocks/Profile/types/types.ts";
@@ -7,6 +7,7 @@ import OrderCard from "./components/OrderCard/OrderCard";
 import OrderDetails from "./components/OrderDetails/OrderDetails";
 import NotOrder from "./components/NotOrder/NotOrder";
 const ProfileOrders = ({ title }: ProfilePageProps) => {
+    const [limit, setLimit] = useState(5);
     const navigate = useNavigate();
     const { id } = useParams<{
         id?: string;
@@ -14,11 +15,22 @@ const ProfileOrders = ({ title }: ProfilePageProps) => {
     const [searchParams] = useSearchParams();
     const paidOrder = searchParams.get("paid");
     const paymentSuccess = searchParams.get("payment") === "success";
-    const returnedOrder = typeof window !== "undefined" ? sessionStorage.getItem("provokativelook.payment.returnedOrder") : null;
-    const pendingUntil = typeof window !== "undefined" ? Number(sessionStorage.getItem("provokativelook.payment.pendingUntil") ?? 0) : 0;
-    const shouldPollPayment = Boolean(returnedOrder) && pendingUntil > Date.now();
-    const { data, isLoading, isError, refetch } = useGetOrdersQuery({ limit: 50, offset: 0 }, { refetchOnMountOrArgChange: true, pollingInterval: shouldPollPayment ? 2000 : 0 });
+    const [returnedOrder, setReturnedOrder] = useState<string | null>(() => typeof window !== "undefined" ? sessionStorage.getItem("provokativelook.payment.returnedOrder") : null);
+    const [pendingUntil] = useState(() => typeof window !== "undefined" ? Number(sessionStorage.getItem("provokativelook.payment.pendingUntil") ?? 0) : 0);
+    const shouldPollPayment = Boolean(returnedOrder) && Date.now() < pendingUntil;
+    const { data, isLoading, isFetching, isError, refetch } = useGetOrdersQuery(
+        { limit, offset: 0 },
+        {
+            refetchOnMountOrArgChange: true,
+            // Обычный список заказов обновляется через SSE (orders.changed).
+            // Polling нужен только кратковременно после возврата с оплаты,
+            // чтобы не дёргать пагинацию и hasMore каждые 3 секунды.
+            pollingInterval: shouldPollPayment ? 3000 : 0,
+            skipPollingIfUnfocused: false,
+        }
+    );
     const orders = data?.data.items ?? [];
+    const pagination = data?.data.pagination;
     const selected = useMemo(() => id ? orders.find((order) => String(order.id) === id) : undefined, [id, orders]);
     useEffect(() => {
         if (!returnedOrder)
@@ -31,6 +43,7 @@ const ProfileOrders = ({ title }: ProfilePageProps) => {
             if (found?.isPaid || Date.now() >= pendingUntil) {
                 sessionStorage.removeItem("provokativelook.payment.returnedOrder");
                 sessionStorage.removeItem("provokativelook.payment.pendingUntil");
+                setReturnedOrder(null);
             }
         }
     }, [orders, pendingUntil, returnedOrder]);
@@ -48,8 +61,12 @@ const ProfileOrders = ({ title }: ProfilePageProps) => {
             : isError ? <div className={styles.content__error}><span>Не удалось загрузить заказы.</span><button type="button" onClick={() => void refetch()}>Повторить</button></div>
                 : id && !selected ? <div className={styles.content__error}><span>Заказ не найден.</span><button type="button" onClick={() => navigate('/profile/orders')}>К заказам</button></div>
                     : selected ? <OrderDetails order={selected}/>
-                        : orders.length === 0 ? <NotOrder /> : <div className={styles.content__list}>{orders.map((order) => <OrderCard key={order.id} order={order}/>)}</div>}
+                        : orders.length === 0 ? <NotOrder /> : <>
+                            <div className={styles.content__list}>{orders.map((order) => <OrderCard key={order.id} order={order}/>)}</div>
+                            {pagination?.hasMore && <button type="button" className={styles.content__loadMore} disabled={isFetching} onClick={() => setLimit((current) => current + 5)}>
+                                {isFetching ? "Загружаем..." : "Загрузить ещё"}
+                              </button>}
+                          </>}
   </div>;
 };
 export default ProfileOrders;
-

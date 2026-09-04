@@ -4,15 +4,17 @@ import ProductHeader from "@components/blocks/Product/components/ProductHeader/P
 import ProductPrice from "@components/blocks/Product/components/ProductPrice/ProductPrice.tsx";
 import ProductColors from "@components/blocks/Product/components/ProductColors/ProductColors.tsx";
 import ProductSizes from "@components/blocks/Product/components/ProductSizes/ProductSizes.tsx";
-import ProductParams from "@components/blocks/Product/components/ProductParams/ProductParams.tsx";
-import ProductsComposition from "@components/blocks/Product/components/ProductsComposition/ProductsComposition.tsx";
 import ProductsButtons from "@components/blocks/Product/components/ProductsButtons/ProductsButtons.tsx";
 import ProductDelivery from "@components/blocks/Product/components/ProductDelivery/ProductDelivery.tsx";
 import ProductDescription from "@components/blocks/Product/components/ProductDescription/ProductDescription.tsx";
 interface ProductInformationProps {
     id: number;
     title: string;
+    article: string | null;
+    sectionTitle: string;
+    sectionSlug: string;
     description: string;
+    sizeTable: string[][];
     price: string;
     colors: string[];
     selectedColor: string | null;
@@ -25,27 +27,20 @@ interface ProductInformationProps {
     selectedOfferId: number | null;
     selectedOfferAvailable: boolean;
 }
-const DEFAULT_DESCRIPTION = "Кардиган имеет элегантный силуэт, который подчеркивает фигуру, а его длина позволяет носить его как с джинсами, так и с платьями. Дизайнерские элементы, такие как оригинальные пуговицы и аккуратные швы, придают изделию уникальный шарм.";
-const ProductInformation = ({ id, title, description, price, colors, selectedColor, onColorChange, disabledColors = [], sizes, selectedSize, onSizeChange, disabledSizes = [], selectedOfferId, selectedOfferAvailable, }: ProductInformationProps) => {
-    const visibleDescription = description.trim() || DEFAULT_DESCRIPTION;
+const ProductInformation = ({ id, title, article, sectionTitle, sectionSlug, description, sizeTable, price, colors, selectedColor, onColorChange, disabledColors = [], sizes, selectedSize, onSizeChange, disabledSizes = [], selectedOfferId, selectedOfferAvailable, }: ProductInformationProps) => {
     return (<div className={styles.information}>
-      <ProductBreadCrumbs title={title}/>
+      <ProductBreadCrumbs title={title} sectionTitle={sectionTitle} sectionSlug={sectionSlug}/>
 
-      <ProductHeader id={id} title={title}/>
+      <ProductHeader article={article} title={title}/>
       <ProductPrice price={price}/>
 
       {colors.length > 0 && (<ProductColors colors={colors} selectedColor={selectedColor} onChange={onColorChange} disabledColors={disabledColors}/>)}
 
-      {sizes.length > 0 && (<ProductSizes sizes={sizes} selectedSize={selectedSize} onChange={onSizeChange} disabledSizes={disabledSizes}/>)}
-
-      <ProductParams />
-      <ProductsComposition />
+      {sizes.length > 0 && (<ProductSizes sizes={sizes} sizeTable={sizeTable} selectedSize={selectedSize} onChange={onSizeChange} disabledSizes={disabledSizes}/>)}
 
       <ProductsButtons cartProductId={selectedOfferId ?? id} favoriteProductId={id} disabled={!selectedOfferAvailable}/>
-
-      <ProductDescription text={visibleDescription}/>
+      <ProductDescription text={description}/>
       <ProductDelivery />
     </div>);
 };
 export default ProductInformation;
-

@@ -1,7 +1,10 @@
 .card {
   display: flex;
   flex-direction: column;
-  flex: 1 0 rem(322);
+  flex: 0 0 rem(322);
+  width: rem(322);
+  height: rem(547);
+  max-width: 100%;
   gap: rem(16);
   min-width: 0;
 
@@ -63,7 +66,25 @@
 
     &_title {
       @include font(14, $fw-extra-light);
+      display: block;
+      width: 100%;
+      min-width: 0;
+      height: 1.25em;
+      line-height: 1.25;
+      overflow: hidden;
+      white-space: nowrap;
       color: $black;
+
+      &[data-marquee="true"]:hover .card__information_titleText {
+        animation: productTitleMarquee 4.5s linear infinite;
+      }
+    }
+
+    &_titleText {
+      display: inline-block;
+      min-width: max-content;
+      white-space: nowrap;
+      will-change: transform;
     }
   }
 
@@ -72,7 +93,10 @@
   }
 
   @media (max-width: rem($mobile)) {
-    flex: 1 0 rem(160);
+    flex: 0 0 rem(254);
+    width: rem(254);
+    height: rem(456.4);
+    max-width: none;
     gap: rem(10);
 
     &__header {
@@ -89,4 +113,56 @@
       height: rem(36);
     }
   }
+
+
+  /* Search modal has a compact product card from the design: image + title + price.
+     Sizes are intentionally hidden in ProductCard.tsx for this variant. */
+  &_search {
+    height: auto;
+
+    .card__body {
+      gap: rem(8);
+    }
+
+    .card__information {
+      gap: 0;
+    }
+  }
+
+  /* Catalog grid uses its own mobile card size.
+     Slider cards keep the 254 px width from the design. */
+  &_catalog {
+    @media (max-width: rem($mobile)) {
+      flex: 0 1 auto;
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+      gap: rem(8);
+
+      .card__header {
+        width: 100%;
+        aspect-ratio: 0.78;
+      }
+
+      .card__body {
+        gap: rem(6);
+      }
+
+      .card__information {
+        gap: rem(8);
+
+        &_title {
+          min-width: 0;
+          line-height: 1.25;
+        }
+      }
+    }
+  }
+}
+
+
+@keyframes productTitleMarquee {
+  0%, 12% { transform: translateX(0); }
+  78%, 90% { transform: translateX(var(--title-shift, 0)); }
+  100% { transform: translateX(0); }
 }

@@ -1,22 +1,31 @@
 .navigation {
   display: flex;
   flex-direction: column;
-  gap: rem(40);
-  padding: rem(40) rem(10);
+  gap: rem(32);
+  padding: rem(40) rem(10) rem(32);
 
   &__item {
-    @include font(12, $fw-extra-light);
+    @include font(13, $fw-extra-light);
     color: $black;
   }
 
   &__list {
     display: flex;
     align-items: center;
-    gap: rem(12);
+    gap: rem(14);
   }
 
   &__title {
     @include font(26, $fw-light);
+  }
+
+  &__separator {
+    @include font(13, $fw-extra-light);
+    color: $black;
+  }
+
+  &__title_hidden {
+    display: none;
   }
 
   @media (max-width: rem($mobile)) {
