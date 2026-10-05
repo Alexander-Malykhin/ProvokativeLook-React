@@ -8,7 +8,7 @@ import CarouselDots from "@components/Carousel/CarouselDots";
 import BestsellersSlider from "./components/BestsellersSlider/BestsellersSlider";
 const Bestsellers = () => {
     const { data } = useGetFeaturedProductsQuery('bestsellers');
-    const products = (data?.products ?? []).map(catalogProductToListItem);
+    const products = (data?.products ?? []).filter((product) => Boolean(product.image?.trim())).map(catalogProductToListItem);
     const carousel = useCarousel({ itemCount: products.length });
     if (products.length === 0) return null;
     return (<SectionLayout className={styles.bestsellers}>

@@ -58,7 +58,18 @@ export default defineConfig({
             '/local/api': {
                 target: 'https://24.provokativelook.ru',
                 changeOrigin: true,
+                // Upstream Bitrix cookies belong to its domain; the browser receives them on localhost.
+                cookieDomainRewrite: '',
                 secure: false,
+                configure: (proxy) => {
+                    proxy.on('proxyRes', (response, request) => {
+                        // Only the HTTP loopback dev server needs these cookie attributes adjusted.
+                        if (!/^(localhost|127\.0\.0\.1)(:\d+)?$/i.test(request.headers.host ?? '')) return;
+                        const cookies = response.headers['set-cookie'];
+                        if (cookies) response.headers['set-cookie'] = cookies.map(cookie =>
+                            cookie.replace(/;\s*Secure\b/gi, '').replace(/;\s*SameSite=None\b/gi, '; SameSite=Lax'));
+                    });
+                },
             },
         },
     },

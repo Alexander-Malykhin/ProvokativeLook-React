@@ -3,6 +3,7 @@ import styles from "./OrderCard.module.scss";
 import type { OrderDto } from "@store/api/orders/types";
 import { usePayOrderMutation } from "@store/api/orders/ordersApi";
 import Image from "@UI/media/Image/Image";
+import DeliveryPayment from '../OrderDetails/DeliveryPayment';
 interface OrderCardProps {
     order: OrderDto;
 }
@@ -25,7 +26,7 @@ const OrderCard = ({ order }: OrderCardProps) => {
     const paymentName = order.payment?.name || (isReservedOrder ? "Оплата при получении" : "");
     const returnedOrder = typeof window !== "undefined" ? sessionStorage.getItem("provokativelook.payment.returnedOrder") : null;
     const pendingUntil = typeof window !== "undefined" ? Number(sessionStorage.getItem("provokativelook.payment.pendingUntil") ?? 0) : 0;
-    const justReturnedFromPayment = !order.isPaid && pendingUntil > Date.now() && Boolean(returnedOrder)
+    const justReturnedFromPayment = sessionStorage.getItem('provokativelook.payment.purpose') !== 'delivery' && !order.isPaid && pendingUntil > Date.now() && Boolean(returnedOrder)
         && (String(order.orderId ?? "") === returnedOrder || String(order.number) === returnedOrder);
     const paymentPending = order.paymentState === "pending" || justReturnedFromPayment;
     const isCancelled = order.status === "cancelled" || /отмен/iu.test(`${order.stage?.name ?? ""} ${order.statusText ?? ""}`);
@@ -39,6 +40,7 @@ const OrderCard = ({ order }: OrderCardProps) => {
             return;
         }
         if (response.payment.url) {
+            sessionStorage.removeItem('provokativelook.payment.purpose');
             sessionStorage.setItem("provokativelook.payment.url", response.payment.url);
             sessionStorage.setItem("provokativelook.payment.order", String(order.orderId));
             navigate("/payment/redirect");
@@ -86,6 +88,7 @@ const OrderCard = ({ order }: OrderCardProps) => {
               {isPaying ? "Переходим к оплате..." : "Оплатить заказ"}
             </button>) : null}
         </div>
+        <div className={styles.card__shipping}><DeliveryPayment order={order}/></div>
       </div>
 
       <div className={styles.card__list}>

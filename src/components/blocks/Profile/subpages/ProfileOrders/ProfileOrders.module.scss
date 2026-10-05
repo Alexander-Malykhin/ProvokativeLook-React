@@ -40,6 +40,29 @@
     color: rgba($black, 0.5);
     border-bottom: rem(1) solid currentColor;
   }
+
+  @media (max-width: rem($tablet)) {
+    // На планшете список заказов получает собственный вертикальный touch-scroll.
+    // Это не блокирует скролл всей страницы и позволяет листать длинный список пальцем.
+    max-height: calc(100dvh - #{rem(120)});
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    padding-right: rem(4);
+    scrollbar-gutter: stable;
+  }
+
+  @media (max-width: rem($mobile)) {
+    // На телефоне возвращаем обычный скролл документа.
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+    scrollbar-gutter: auto;
+  }
+
 }
 
 .content {

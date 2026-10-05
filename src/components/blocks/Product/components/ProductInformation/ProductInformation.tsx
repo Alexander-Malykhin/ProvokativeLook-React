@@ -26,8 +26,9 @@ interface ProductInformationProps {
     disabledSizes?: string[];
     selectedOfferId: number | null;
     selectedOfferAvailable: boolean;
+    availableQuantity: number;
 }
-const ProductInformation = ({ id, title, article, sectionTitle, sectionSlug, description, sizeTable, price, colors, selectedColor, onColorChange, disabledColors = [], sizes, selectedSize, onSizeChange, disabledSizes = [], selectedOfferId, selectedOfferAvailable, }: ProductInformationProps) => {
+const ProductInformation = ({ id, title, article, sectionTitle, sectionSlug, description, sizeTable, price, colors, selectedColor, onColorChange, disabledColors = [], sizes, selectedSize, onSizeChange, disabledSizes = [], selectedOfferId, selectedOfferAvailable, availableQuantity, }: ProductInformationProps) => {
     return (<div className={styles.information}>
       <ProductBreadCrumbs title={title} sectionTitle={sectionTitle} sectionSlug={sectionSlug}/>
 
@@ -38,7 +39,7 @@ const ProductInformation = ({ id, title, article, sectionTitle, sectionSlug, des
 
       {sizes.length > 0 && (<ProductSizes sizes={sizes} sizeTable={sizeTable} selectedSize={selectedSize} onChange={onSizeChange} disabledSizes={disabledSizes}/>)}
 
-      <ProductsButtons cartProductId={selectedOfferId ?? id} favoriteProductId={id} disabled={!selectedOfferAvailable}/>
+      <ProductsButtons key={selectedOfferId ?? id} cartProductId={selectedOfferId ?? id} favoriteProductId={id} disabled={!selectedOfferAvailable} availableQuantity={availableQuantity}/>
       <ProductDescription text={description}/>
       <ProductDelivery />
     </div>);

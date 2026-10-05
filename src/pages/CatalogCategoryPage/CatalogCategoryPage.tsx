@@ -3,7 +3,6 @@ import { useLocation, useParams } from 'react-router-dom';
 import PageStack from '@layouts/PageStack/PageStack';
 import CatalogProducts from '@components/blocks/CatalogProducts/CatalogProducts.tsx';
 import AnswersToQuestions from '@components/blocks/AnswersToQuestions/AnswersToQuestions.tsx';
-import Reviews from '@components/blocks/Reviews/Reviews.tsx';
 import SubscribeNewsLetter from '@components/blocks/SubscribeNewsLetter/SubscribeNewsLetter.tsx';
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.tsx';
 import { useGetCatalogSectionsQuery } from '@store/api/catalog/catalogApi';
@@ -38,7 +37,6 @@ const CatalogCategoryPage = () => {
       <Breadcrumbs title={title} hideTitleOnMobile hideTitle/>
       <PageStack>
         <CatalogProducts />
-        <Reviews />
         <AnswersToQuestions />
         <SubscribeNewsLetter />
       </PageStack>

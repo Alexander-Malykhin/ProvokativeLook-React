@@ -19,6 +19,7 @@ const isChunkLoadError = (error: unknown): boolean => {
     return (message.includes("failed to fetch dynamically imported module") ||
         message.includes("error loading dynamically imported module") ||
         message.includes("importing a module script failed") ||
+        (message.includes("requested module") && message.includes("does not provide an export named")) ||
         message.includes("chunkloaderror") ||
         message.includes("loading chunk") ||
         message.includes("load failed") ||

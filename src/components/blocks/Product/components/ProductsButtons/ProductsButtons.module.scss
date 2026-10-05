@@ -2,6 +2,21 @@
   display: flex;
   flex-direction: column;
   gap: rem(8);
+  &__quantity {
+    display: flex; align-items: center; flex-wrap: wrap; gap: rem(8); margin-bottom: rem(12); font-size: rem(14);
+    button, input { height: rem(40); border: 1px solid $gray; border-radius: rem(6); background: $white; color: $black; text-align: center; font: inherit; }
+    button { width: rem(36); cursor: pointer; &:disabled { opacity: .4; cursor: default; } }
+    input {
+      width: rem(44);
+      padding: 0;
+      text-align: center;
+      appearance: textfield;
+      -moz-appearance: textfield;
+      &::-webkit-inner-spin-button,
+      &::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    }
+    span { width: 100%; font-size: rem(12); }
+  }
 }
 
 .buttons__error {

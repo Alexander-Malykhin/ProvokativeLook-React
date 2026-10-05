@@ -1,5 +1,6 @@
 import { useEffect, useRef, type MouseEvent, type ReactNode } from "react";
 import { createPortal } from "react-dom";
+import motion from './Modal.module.scss';
 interface ModalProps {
     open: boolean;
     onClose: () => void;
@@ -20,6 +21,8 @@ const FOCUSABLE_SELECTOR = [
 ].join(",");
 const Modal = ({ open, onClose, children, overlayClassName, contentClassName, ariaLabelledBy, closeDisabled = false, closeOnBackdrop = true, }: ModalProps) => {
     const contentRef = useRef<HTMLDivElement>(null);
+    const dragStart = useRef<number | null>(null);
+    const dragged = useRef(false);
     const onCloseRef = useRef(onClose);
     useEffect(() => {
         onCloseRef.current = onClose;
@@ -31,7 +34,7 @@ const Modal = ({ open, onClose, children, overlayClassName, contentClassName, ar
         const previouslyFocused = document.activeElement as HTMLElement | null;
         const previousOverflow = document.body.style.overflow;
         document.body.style.overflow = "hidden";
-        const focusable = contentRef.current?.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
+        const focusable = Array.from(contentRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR) ?? []).find((element) => element.getClientRects().length > 0);
         focusable?.focus({ preventScroll: true });
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === "Escape" && !closeDisabled) {
@@ -41,7 +44,7 @@ const Modal = ({ open, onClose, children, overlayClassName, contentClassName, ar
             if (event.key !== "Tab" || !contentRef.current) {
                 return;
             }
-            const elements = Array.from(contentRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR));
+            const elements = Array.from(contentRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter((element) => element.getClientRects().length > 0);
             if (elements.length === 0) {
                 event.preventDefault();
                 return;
@@ -74,8 +77,13 @@ const Modal = ({ open, onClose, children, overlayClassName, contentClassName, ar
             onClose();
         }
     };
-    return createPortal(<div className={overlayClassName} onMouseDown={handleBackdropMouseDown}>
-      <div ref={contentRef} className={contentClassName} role="dialog" aria-modal="true" aria-labelledby={ariaLabelledBy} onMouseDown={(event) => event.stopPropagation()}>
+    return createPortal(<div data-modal-overlay className={`${overlayClassName} ${motion.overlay}`} onMouseDown={handleBackdropMouseDown}>
+      <div data-modal-content ref={contentRef} className={`${contentClassName} ${motion.content}`} role="dialog" aria-modal="true" aria-labelledby={ariaLabelledBy} onMouseDown={(event) => event.stopPropagation()}>
+        <button type="button" className={motion.handle} aria-label="Потяните вниз, чтобы закрыть" disabled={closeDisabled} onClick={() => { if (!dragged.current) onClose(); }}
+          onPointerDown={(event) => { if (closeDisabled) return; dragged.current = false; dragStart.current = event.clientY; event.currentTarget.setPointerCapture(event.pointerId); }}
+          onPointerMove={(event) => { if (dragStart.current !== null && contentRef.current) { const delta = event.clientY - dragStart.current; if (Math.abs(delta) > 5) dragged.current = true; contentRef.current.style.translate = `0 ${Math.max(0, delta)}px`; } }}
+          onPointerUp={(event) => { const delta = dragStart.current === null ? 0 : event.clientY - dragStart.current; dragStart.current = null; if (contentRef.current) contentRef.current.style.translate = ''; if (delta > 60 && !closeDisabled) onClose(); }}
+          onPointerCancel={() => { dragStart.current = null; if (contentRef.current) contentRef.current.style.translate = ''; }}/>
         {children}
       </div>
     </div>, document.body);

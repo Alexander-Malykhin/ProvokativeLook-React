@@ -3,6 +3,7 @@ import Image from "@UI/media/Image/Image";
 import type { OrderDto } from "@store/api/orders/types";
 import { usePayOrderMutation } from "@store/api/orders/ordersApi";
 import styles from "./OrderDetails.module.scss";
+import DeliveryPayment from './DeliveryPayment';
 interface OrderDetailsProps {
     order: OrderDto;
 }
@@ -21,7 +22,7 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
     const paymentName = order.payment?.name || (isReservedOrder ? "Оплата при получении" : "");
     const returnedOrder = typeof window !== "undefined" ? sessionStorage.getItem("provokativelook.payment.returnedOrder") : null;
     const pendingUntil = typeof window !== "undefined" ? Number(sessionStorage.getItem("provokativelook.payment.pendingUntil") ?? 0) : 0;
-    const justReturnedFromPayment = !order.isPaid && pendingUntil > Date.now() && Boolean(returnedOrder)
+    const justReturnedFromPayment = sessionStorage.getItem('provokativelook.payment.purpose') !== 'delivery' && !order.isPaid && pendingUntil > Date.now() && Boolean(returnedOrder)
         && (String(order.orderId ?? "") === returnedOrder || String(order.number) === returnedOrder);
     const paymentPending = order.paymentState === "pending" || justReturnedFromPayment;
     const isCancelled = order.status === "cancelled" || /отмен/iu.test(`${order.stage?.name ?? ""} ${order.statusText ?? ""}`);
@@ -33,6 +34,7 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
         if (response.payment.paid)
             return;
         if (response.payment.url) {
+            sessionStorage.removeItem('provokativelook.payment.purpose');
             sessionStorage.setItem("provokativelook.payment.url", response.payment.url);
             sessionStorage.setItem("provokativelook.payment.order", String(order.orderId));
             navigate("/payment/redirect");
@@ -48,7 +50,7 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
       {paymentPending && !order.isPaid ? (<div className={`${styles.details__paymentNotice} ${styles.details__paymentNotice_pending}`}>
           <div>
             <strong>Подтверждаем оплату</strong>
-            <span>Платёж получен и сейчас подтверждается. Обычно это занимает несколько секунд.</span>
+            <span>Ожидаем подтверждение платёжной системы. Статус обновляется автоматически.</span>
           </div>
           <span className={styles.details__paymentLoader} aria-hidden="true"/>
         </div>) : canPay ? (<div className={styles.details__paymentNotice}>
@@ -56,6 +58,7 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
           <button type="button" onClick={() => void handlePay()} disabled={isPaying}>{isPaying ? "Переходим..." : "Оплатить заказ"}</button>
         </div>) : null}
       <div className={styles.details__sectionTitle}>Состав заказа / {order.productsCount} товара</div>
+      <DeliveryPayment order={order}/>
       <div className={styles.details__products}>
         {order.products.map((product, index) => {
         const productPath = product.slug && product.sectionSlug ? `/catalog/${product.sectionSlug}/${product.slug}/` : null;

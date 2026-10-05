@@ -15,11 +15,6 @@ export const CITY_OPTIONS: CityOptionInterface[] = [
         label: 'г. САНКТ-ПЕТЕРБУРГ',
         coordinates: [59.939095, 30.315868],
     },
-    {
-        value: 'Краснодар',
-        label: 'г. КРАСНОДАР',
-        coordinates: [45.03547, 38.975313],
-    },
 ];
 export const DEFAULT_CITY = CITY_OPTIONS[0];
 export const getCityOption = (city: string): CityOptionInterface => {

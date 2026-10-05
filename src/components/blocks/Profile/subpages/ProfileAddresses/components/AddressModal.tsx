@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef, type FormEvent } from "react";
 import Modal from "@UI/overlays/Modal/Modal";
+import { animateModalClose } from "@UI/overlays/Modal/animateModalClose";
 import { YANDEX_MAPS_API_KEY } from "@/config/env";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import styles from "../ProfileAddresses.module.scss";
+import styles from "./AddressPicker.module.scss";
 import { MOBILE_BREAKPOINT } from "../model/constants";
 import type { ProfileAddress } from "../model/types";
 import { useAddressEditor } from "../hooks/useAddressEditor";
@@ -11,15 +12,19 @@ import { useGetUserQuery } from "@store/api/user/userApi";
 import { useDeliveryCity } from "@/hooks/useDeliveryCity";
 import AddressCitySelect from "./AddressCitySelect/AddressCitySelect.tsx";
 import AddressDetailsForm from "./AddressDetailsForm/AddressDetailsForm.tsx";
-import AddressMap from "./AddressMap";
-import AddressSearch from "./AddressSearch";
-import AddressSuggestions from "./AddressSuggestions";
+import AddressMap from "./AddressMap/AddressMap";
+import AddressSearch from "./AddressSearch/AddressSearch";
+import AddressSuggestions from "./AddressSuggestions/AddressSuggestions";
 interface AddressModalProps {
+    postalSelection?: boolean;
+    deliverySelection?: boolean;
+    requireHouse?: boolean;
     open: boolean;
     onClose: () => void;
     onSave: (address: ProfileAddress) => void;
 }
-const AddressModal = ({ open, onClose, onSave }: AddressModalProps) => {
+const AddressModal = ({ open, onClose, onSave, postalSelection = false, deliverySelection = false, requireHouse = false }: AddressModalProps) => {
+    const selectingDelivery = postalSelection || deliverySelection;
     const isMobile = useMediaQuery(`(max-width: ${MOBILE_BREAKPOINT}px)`);
     const { data: userData } = useGetUserQuery();
     const { city: deliveryCity } = useDeliveryCity();
@@ -48,14 +53,27 @@ const AddressModal = ({ open, onClose, onSave }: AddressModalProps) => {
             resetEditor();
         }
     }, [open, resetEditor]);
-    const close = useCallback(() => {
+    const close = useCallback(() => animateModalClose(() => {
         resetEditor();
         onClose();
-    }, [onClose, resetEditor]);
+    }), [onClose, resetEditor]);
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        event.stopPropagation();
         const address = editor.createAddress();
         if (!address) {
+            return;
+        }
+        if (selectingDelivery && !address.postalCode.trim()) {
+            editor.setError('Укажите почтовый индекс получателя.');
+            return;
+        }
+        if (requireHouse && !editor.selectedAddress?.hasHouse) {
+            editor.setError('Выберите адрес с номером дома для курьерской доставки.');
+            return;
+        }
+        if (postalSelection && (address.countryCode.toUpperCase() !== 'RU' || !editor.selectedAddress?.hasHouse)) {
+            editor.setError('Выберите адрес дома в России. Увеличьте карту или воспользуйтесь поиском.');
             return;
         }
         onSave(address);
@@ -81,7 +99,7 @@ const AddressModal = ({ open, onClose, onSave }: AddressModalProps) => {
       {!isMobile ? (<>
           <div className={styles.modal__header}>
             <h2 id="address-modal-title" className={styles.modal__title}>
-              Добавить новый адрес
+              {selectingDelivery ? 'Выбрать адрес доставки' : 'Добавить новый адрес'}
             </h2>
             <button type="button" aria-label="Закрыть окно" className={styles.modal__close} onClick={close}/>
           </div>
@@ -90,10 +108,10 @@ const AddressModal = ({ open, onClose, onSave }: AddressModalProps) => {
             <div className={styles.modal__form}>
               <AddressCitySelect value={editor.form.city} defaultCity={defaultCity} onChange={editor.selectCity}/>
               {search()}
-              <AddressDetailsForm form={editor.form} onChange={editor.updateField}/>
+              <AddressDetailsForm form={editor.form} onChange={editor.updateField} postalOnly={selectingDelivery}/>
               {errorMessage}
-              <button type="submit" disabled={!editor.selectedAddress} className={styles.modal__save}>
-                Сохранить
+              <button type="submit" disabled={!editor.selectedAddress || editor.isSearching} className={styles.modal__save}>
+                {selectingDelivery ? 'Выбрать этот адрес' : 'Сохранить'}
               </button>
             </div>
 
@@ -116,7 +134,7 @@ const AddressModal = ({ open, onClose, onSave }: AddressModalProps) => {
               <div className={styles.modal__mobileFooter}>
                 {search(false)}
                 {errorMessage}
-                <button type="button" disabled={!editor.selectedAddress} className={styles.modal__continue} onClick={() => editor.setMobileStep("form")}>
+                <button type="button" disabled={!editor.selectedAddress || editor.isSearching} className={styles.modal__continue} onClick={() => editor.setMobileStep("form")}>
                   Продолжить
                 </button>
               </div>
@@ -137,7 +155,7 @@ const AddressModal = ({ open, onClose, onSave }: AddressModalProps) => {
               <div className={styles.modal__mobileFormHeader}>
                 <button type="button" aria-label="Назад" className={styles.modal__back} onClick={() => editor.setMobileStep("selected")}/>
                 <h2 id="address-modal-title" className={styles.modal__mobileTitle}>
-                  Добавить новый адрес
+                  {selectingDelivery ? 'Выбрать адрес доставки' : 'Добавить новый адрес'}
                 </h2>
               </div>
               <div className={styles.modal__selectedAddress}>
@@ -146,10 +164,10 @@ const AddressModal = ({ open, onClose, onSave }: AddressModalProps) => {
                   {editor.form.formattedAddress}
                 </p>
               </div>
-              <AddressDetailsForm form={editor.form} onChange={editor.updateField}/>
+              <AddressDetailsForm form={editor.form} onChange={editor.updateField} postalOnly={selectingDelivery}/>
               {errorMessage}
-              <button type="submit" className={styles.modal__save}>
-                Сохранить
+              <button type="submit" disabled={!editor.selectedAddress || editor.isSearching} className={styles.modal__save}>
+                {selectingDelivery ? 'Выбрать этот адрес' : 'Сохранить'}
               </button>
             </form>)}
         </>)}

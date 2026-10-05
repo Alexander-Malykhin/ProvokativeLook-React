@@ -5,6 +5,8 @@ import { INITIAL_ADDRESS_FORM, SEARCH_DELAY } from "../model/constants";
 import type { AddressFormState, Coordinates, MobileStep, ParsedAddress, ProfileAddress, Suggestion, } from "../model/types";
 export const useAddressEditor = (isMobile: boolean, initialCity = INITIAL_ADDRESS_FORM.city, initialCountry = INITIAL_ADDRESS_FORM.country, initialCountryCode = INITIAL_ADDRESS_FORM.countryCode) => {
     const requestIdRef = useRef(0);
+    const geocodeIdRef = useRef(0);
+    useEffect(() => () => { geocodeIdRef.current += 1; }, []);
     const createInitialForm = useCallback((): AddressFormState => ({
         ...INITIAL_ADDRESS_FORM,
         city: initialCity.trim() || INITIAL_ADDRESS_FORM.city,
@@ -29,6 +31,7 @@ export const useAddressEditor = (isMobile: boolean, initialCity = INITIAL_ADDRES
         setForm((previous) => ({ ...previous, [key]: value }));
     }, []);
     const reset = useCallback(() => {
+        geocodeIdRef.current += 1;
         requestIdRef.current += 1;
         setForm(createInitialForm());
         setSelectedAddress(null);
@@ -62,19 +65,35 @@ export const useAddressEditor = (isMobile: boolean, initialCity = INITIAL_ADDRES
         }
     }, [isMobile]);
     const resolveAddress = useCallback(async (geocodeValue: string) => {
+        const requestId = ++geocodeIdRef.current;
+        setSelectedAddress(null);
         try {
             const result = await geocode({
                 geocode: geocodeValue,
                 results: 1,
             }).unwrap();
+            if (requestId !== geocodeIdRef.current) return;
             const address = result[0];
             if (!address) {
                 throw new Error("Геокодер не нашёл адрес");
             }
+            if (!address.postalCode && address.hasHouse) {
+                try {
+                    const candidates = await geocode({ geocode: `${address.longitude},${address.latitude}`, results: 5 }).unwrap();
+                    if (requestId !== geocodeIdRef.current) return;
+                    const exact = candidates.find((candidate) => candidate.hasHouse && candidate.postalCode
+                        && candidate.countryCode === address.countryCode
+                        && candidate.address1 === address.address1
+                        && Math.abs(candidate.latitude - address.latitude) < 0.0002
+                        && Math.abs(candidate.longitude - address.longitude) < 0.0002);
+                    if (exact) { applyAddress({ ...address, postalCode: exact.postalCode }); return; }
+                } catch { /* Keep the selected address and allow manual postcode entry. */ }
+            }
+            if (requestId !== geocodeIdRef.current) return;
             applyAddress(address);
         }
         catch (requestError) {
-            setError(getRequestErrorMessage(requestError, "Не удалось определить адрес"));
+            if (requestId === geocodeIdRef.current) setError(getRequestErrorMessage(requestError, "Не удалось определить адрес"));
         }
     }, [applyAddress, geocode]);
     const reverseGeocode = useCallback((coordinates: Coordinates) => {
@@ -86,10 +105,6 @@ export const useAddressEditor = (isMobile: boolean, initialCity = INITIAL_ADDRES
     useEffect(() => {
         const normalizedQuery = query.trim();
         if (normalizedQuery.length < 2 || !form.city.trim() || selectedAddress) {
-            setSuggestions([]);
-            if (selectedAddress || normalizedQuery.length < 2) {
-                setIsAddressListOpen(false);
-            }
             return;
         }
         const requestId = ++requestIdRef.current;
@@ -119,6 +134,7 @@ export const useAddressEditor = (isMobile: boolean, initialCity = INITIAL_ADDRES
         return () => window.clearTimeout(timer);
     }, [form.city, getSuggestions, query, selectedAddress]);
     const selectCity = useCallback((city: string, resolved?: ParsedAddress) => {
+        geocodeIdRef.current += 1;
         requestIdRef.current += 1;
         setForm((previous) => ({
             ...previous,
@@ -146,6 +162,9 @@ export const useAddressEditor = (isMobile: boolean, initialCity = INITIAL_ADDRES
         await resolveAddress(suggestion.fullText);
     }, [resolveAddress]);
     const changeQuery = useCallback((value: string) => {
+        geocodeIdRef.current += 1;
+        requestIdRef.current += 1;
+        setSuggestions([]);
         setQuery(value);
         setIsAddressListOpen(value.trim().length >= 2);
         setSelectedAddress(null);
@@ -161,6 +180,7 @@ export const useAddressEditor = (isMobile: boolean, initialCity = INITIAL_ADDRES
         }
     }, [isMobile]);
     const clearSearch = useCallback(() => {
+        geocodeIdRef.current += 1;
         requestIdRef.current += 1;
         setQuery("");
         setSuggestions([]);

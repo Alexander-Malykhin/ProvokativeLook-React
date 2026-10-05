@@ -1,6 +1,7 @@
 import * as React from "react";
 import { createBrowserRouter } from "react-router-dom";
 import RootLayout from "@layouts/RootLayout/RootLayout";
+import PageLoader from '@components/system/PageLoader/PageLoader';
 import RouteErrorBoundary from "./RouteErrorBoundary";
 const page = (loader: () => Promise<{
     default: React.ComponentType;
@@ -11,6 +12,7 @@ export const router = createBrowserRouter([
     {
         path: "/",
         element: <RootLayout />,
+        hydrateFallbackElement: <PageLoader full />,
         errorElement: <RouteErrorBoundary />,
         children: [
             {

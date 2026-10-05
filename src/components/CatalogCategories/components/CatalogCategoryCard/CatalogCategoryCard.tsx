@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "./CatalogCategoryCard.module.scss";
 import { convertAliasTitle } from "@helpers/convertAliasTitle.tsx";
 import Image from "@UI/media/Image/Image";
 import type { CategoryCardInterface } from "@components/CatalogCategories/types/types.ts";
 const CatalogCategoryCard = ({ id, image, imageScale, path, title, variant = "promo", buttonText = "Смотреть все" }: CategoryCardInterface) => {
+    const [failedImage, setFailedImage] = useState<string | null>(null);
     const cardClassName = `${styles.card} ${id ? styles[`card_${id}`] : ""}`;
     const safeImageScale = imageScale ?? 1;
     const cardContent = (<>
@@ -17,10 +19,11 @@ const CatalogCategoryCard = ({ id, image, imageScale, path, title, variant = "pr
           </Link>)}
       </div>
 
-      {image && (<div className={styles.card__imageBox}>
+      {image && image !== failedImage && (<div className={styles.card__imageBox}>
         <Image
           src={image}
-          alt={title}
+          alt=""
+          onError={() => setFailedImage(image)}
           className={styles.card__image}
           style={{
             width: "auto",

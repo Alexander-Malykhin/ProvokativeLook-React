@@ -6,6 +6,9 @@ const siteBaseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryErro
     const route = request.url.replace(/^\//, "");
     return rawBaseQuery({
         ...request,
+        // Bound reads so a stalled connection cannot leave the UI loading forever.
+        // Mutation timeouts stay endpoint-specific: a timed-out write may still succeed.
+        timeout: request.timeout ?? ((request.method ?? 'GET').toUpperCase() === 'GET' ? 20000 : undefined),
         url: `${SITE_API_BASE_URL}${route}`,
         credentials: request.credentials ?? "include",
         cache: "no-store",

@@ -15,7 +15,7 @@ const Favorites = () => {
         <FavoritesHeader count={data?.count ?? 0} isClearing={isClearing} onClear={() => void clearFavorites()}/>
 
         {(isLoading || isFetching) && products.length === 0 ? (<div className={styles.favorites__skeleton} aria-label="Загрузка избранного"/>) : products.length > 0 ? (<div className={styles.favorites__list}>
-            {products.map((card) => <ProductCard key={card.id} {...card}/>)}
+            {products.map((card) => <ProductCard key={card.id} {...card} variant="catalog"/>)}
           </div>) : (<div className={styles.favorites__empty}>
             <p>Нет избранных товаров</p>
             <Link to="/catalog">Перейти в каталог</Link>

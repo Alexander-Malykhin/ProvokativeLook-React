@@ -18,7 +18,7 @@ const ViewedProducts = () => {
             ? currentProductId
             : undefined,
     });
-    const products = (data?.items ?? []).map(catalogProductToListItem);
+    const products = (data?.items ?? []).filter((product) => Boolean(product.image?.trim())).map(catalogProductToListItem);
     const carousel = useCarousel({ itemCount: products.length });
     if (isLoading) {
         return (<SectionLayout>

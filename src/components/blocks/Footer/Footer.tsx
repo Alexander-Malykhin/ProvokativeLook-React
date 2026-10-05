@@ -1,6 +1,5 @@
 import { useState } from "react";
 import MainLayoutContainer from "@layouts/MainLayoutContainer/MainLayoutContainer.tsx";
-import FooterCitySelect from "./components/FooterCitySelect/FooterCitySelect";
 import FooterContacts from "./components/FooterContacts/FooterContacts";
 import FooterNavigation from "./components/FooterNavigation/FooterNavigation";
 import FooterSocials from "./components/FooterSocials/FooterSocials";
@@ -23,8 +22,6 @@ const Footer = () => {
     const address = getInfo("address");
     const requisites = getInfo("requisites");
     return (<footer className={styles.footer}>
-      <FooterCitySelect />
-
       <div className={styles.footer__line}>
         <MainLayoutContainer className={styles.footer__content}>
           <FooterContacts phone={phone} workTime={workTime} email={email} address={address}/>

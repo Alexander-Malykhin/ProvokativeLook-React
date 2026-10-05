@@ -40,5 +40,19 @@
 }
 
 @media (max-width: rem($tablet)) {
-  .favorites__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .favorites {
+    gap: rem(24);
+  }
+
+  .favorites__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: rem(16) rem(8);
+  }
+}
+
+@media (max-width: rem($mobile)) {
+  .favorites__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: rem(20) rem(8);
+  }
 }

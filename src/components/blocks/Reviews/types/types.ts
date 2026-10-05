@@ -1,11 +1,13 @@
 import type { RefObject } from "react";
 export interface ReviewItem {
+    photos?: string[];
     id: number;
     name: string;
     date: string;
     text: string;
 }
 export interface ReviewsItemProps {
+    photos?: string[];
     name: string;
     date: string;
     text: string;

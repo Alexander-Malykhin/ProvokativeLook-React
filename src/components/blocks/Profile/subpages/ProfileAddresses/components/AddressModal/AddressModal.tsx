@@ -1,3 +1,4 @@
+import { animateModalClose } from "@UI/overlays/Modal/animateModalClose";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Modal from "@UI/overlays/Modal/Modal";
 import { YANDEX_MAPS_API_KEY } from "@/config/env";
@@ -9,6 +10,8 @@ import AddressCitySelect from "../AddressCitySelect/AddressCitySelect";
 import styles from "./AddressModal.module.scss";
 export type DeliveryProvider = "cdek" | "mail";
 interface AddressModalProps {
+    cdekOnly?: boolean;
+    mailOnly?: boolean;
     open: boolean;
     onClose: () => void;
     onSave: (address: ProfileAddress) => void;
@@ -22,7 +25,8 @@ type MappedPickupPoint = PickupPoint & {
     resolvedAddress?: ParsedAddress;
 };
 const providerLabel = (provider: DeliveryProvider) => provider === "cdek" ? "СДЭК" : "Почта России";
-const AddressModal = ({ open, onClose, onSave, city: initialCity = "Ростов-на-Дону", country: initialCountry = "Россия", countryCode: initialCountryCode = "RU", isSaving = false, }: AddressModalProps) => {
+const AddressModal = ({ cdekOnly = false, mailOnly = false, open, onClose: finishClose, onSave, city: initialCity = "Ростов-на-Дону", country: initialCountry = "Россия", countryCode: initialCountryCode = "RU", isSaving = false, }: AddressModalProps) => {
+    const onClose = () => animateModalClose(finishClose);
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
     const mapRef = useRef<YandexMapInstance | null>(null);
     const placemarksRef = useRef<YandexPlacemark[]>([]);
@@ -30,7 +34,7 @@ const AddressModal = ({ open, onClose, onSave, city: initialCity = "Ростов
     const [city, setCity] = useState(initialCity || "Ростов-на-Дону");
     const [country, setCountry] = useState(initialCountry || "Россия");
     const [countryCode, setCountryCode] = useState((initialCountryCode || "RU").toUpperCase());
-    const [provider, setProvider] = useState<DeliveryProvider>("cdek");
+    const [provider, setProvider] = useState<DeliveryProvider>(mailOnly ? "mail" : "cdek");
     const [points, setPoints] = useState<MappedPickupPoint[]>([]);
     const [selectedId, setSelectedId] = useState("");
     const [selectedResolved, setSelectedResolved] = useState<ParsedAddress | null>(null);
@@ -47,17 +51,17 @@ const AddressModal = ({ open, onClose, onSave, city: initialCity = "Ростов
         setCity(initialCity || "Ростов-на-Дону");
         setCountry(initialCountry || "Россия");
         setCountryCode((initialCountryCode || "RU").toUpperCase());
-        setProvider("cdek");
+        setProvider(mailOnly ? "mail" : "cdek");
         setPoints([]);
         setSelectedId("");
         setSelectedResolved(null);
         setError("");
-    }, [open, initialCity, initialCountry, initialCountryCode]);
+    }, [open, initialCity, initialCountry, initialCountryCode, mailOnly]);
     useEffect(() => {
         if (!isRussianPostAvailable && provider === "mail") {
-            setProvider("cdek");
+            setProvider(mailOnly ? "mail" : "cdek");
         }
-    }, [isRussianPostAvailable, provider]);
+    }, [isRussianPostAvailable, provider, mailOnly]);
     const ensureMap = async (center: Coordinates, requestId: number) => {
         if (!YANDEX_MAPS_API_KEY || !mapContainerRef.current)
             return null;
@@ -301,21 +305,21 @@ const AddressModal = ({ open, onClose, onSave, city: initialCity = "Ростов
         <div className={styles.modal__form}>
           <AddressCitySelect value={city} defaultCity={initialCity || "Ростов-на-Дону"} onChange={changeCity}/>
 
-          <div className={styles.pickupServices}>
+          {!mailOnly && <div className={styles.pickupServices}>
             <label className={`${styles.pickupService} ${provider === "cdek" ? styles.pickupService_active : ""}`}>
               <input type="radio" name="pickup-provider" checked={provider === "cdek"} onChange={() => setProvider("cdek")}/>
               <span className={styles.pickupService__content}>СДЭК</span>
             </label>
 
-            <label className={`${styles.pickupService} ${provider === "mail" ? styles.pickupService_active : ""} ${!isRussianPostAvailable ? styles.pickupService_disabled : ""}`} aria-disabled={!isRussianPostAvailable} title={isRussianPostAvailable
+            {!cdekOnly && <label className={`${styles.pickupService} ${provider === "mail" ? styles.pickupService_active : ""} ${!isRussianPostAvailable ? styles.pickupService_disabled : ""}`} aria-disabled={!isRussianPostAvailable} title={isRussianPostAvailable
             ? undefined
             : "Почта России доступна только в России"}>
               <input type="radio" name="pickup-provider" checked={provider === "mail"} disabled={!isRussianPostAvailable} onChange={() => setProvider("mail")}/>
               <span className={styles.pickupService__content}>
                 <span>Почта России</span>
               </span>
-            </label>
-          </div>
+            </label>}
+          </div>}
 
           <div className={styles.pickupList}>
             {isLoading && (<p className={styles.pickupStatus}>
@@ -369,3 +373,4 @@ const AddressModal = ({ open, onClose, onSave, city: initialCity = "Ростов
     </Modal>);
 };
 export default AddressModal;
+

@@ -1,128 +1,90 @@
-.banner {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: rem(66);
-
-  &__content {
-    display: grid;
-    grid-template-columns:
-      minmax(0, max-content) minmax(rem(320), rem(430))
-      minmax(0, max-content);
-    align-items: stretch;
-    justify-content: space-between;
-    background-color: $gray;
-    overflow: hidden;
-    min-height: rem(160);
-    max-height: rem(640);
-
-    > img {
-      max-width: 100%;
-      height: auto;
-      display: block;
-      object-fit: cover;
-    }
-
-    > img:first-child {
-      object-position: right center;
-    }
-
-    > img:last-child {
-      object-position: left center;
-    }
-  }
-
-  &__information {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: rem(46);
-    padding: rem(40) rem(20);
-    text-align: center;
-
-    &_title {
-      max-width: rem(400);
-      text-align: left;
-
-      &:first-child {
-        padding-left: rem(32);
-      }
-    }
-
-    &_footer {
-      padding: rem(34) 0 0;
-    }
-
-    &_button {
-      @include font(20, $fw-regular);
-      border-bottom: rem(1) solid $black;
-      cursor: pointer;
-    }
-  }
-
-  @media (max-width: rem($desktop-x)) {
-    &__information {
-      &_title {
-        max-width: rem(300);
-
-        &:first-child {
-          padding-left: 0;
-        }
-      }
-    }
-  }
-
-  @media (max-width: rem($mobile)) {
-    gap: rem(56);
-
-    &__content {
-      grid-template-columns: 30% minmax(0, 1fr);
-
-      > img:last-child {
-        display: none;
-      }
-    }
-
-    &__information {
-      align-items: center;
-      justify-content: center;
-
-      &_footer {
-        padding: 0;
-      }
-
-      &_button {
-        @include font(14, $fw-regular);
-      }
-    }
-  }
-
-  @media (max-width: rem($mobile-x)) {
-    gap: rem(56);
-
-    &__content {
-      grid-template-columns: 30% minmax(0, 1fr);
-
-      > img:last-child {
-        display: none;
-      }
-    }
-
-    &__information {
-      align-items: center;
-      justify-content: center;
-
-      &_title {
-        display: none;
-      }
-
-      &_footer {
-        padding: 0;
-      }
-
-      &_button {
-        @include font(14, $fw-regular);
-      }
-    }
-  }
+.banner { display: grid; grid-template-columns: minmax(0, 1fr); width: 100%; min-width: 0; gap: rem(66); }
+.hero { position: relative; min-width: 0; }
+.track {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  &::-webkit-scrollbar { display: none; }
+  &[data-dragging] { cursor: grabbing; user-select: none; }
 }
+.slide {
+  position: relative;
+  display: grid;
+  flex: 0 0 100%;
+  min-width: 0;
+  aspect-ratio: 9 / 4;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  overflow: hidden;
+  text-decoration: none;
+  background: $gray;
+  &:focus-visible { outline: 2px solid currentColor; outline-offset: -4px; }
+}
+.picture {
+  position: absolute;
+  inset: 0;
+  img { display: block; width: 100%; height: 100%; object-fit: cover; }
+}
+.information {
+  color: inherit;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(rem(20), 3.2vw, rem(46));
+  width: 34%;
+  max-width: rem(430);
+  margin-inline: auto;
+  padding: rem(24) rem(12) rem(40);
+  text-align: left;
+  overflow-wrap: anywhere;
+  pointer-events: none;
+}
+.information p, .information a { color: inherit; }
+.title { @include font(40, $fw-extra-light); font-size: clamp(rem(20), 2.8vw, rem(40)); line-height: 1.15; width: 100%; white-space: pre-line; }
+.title:first-child { padding-left: rem(24); }
+.subtitle { font-size: clamp(rem(18), 2.52vw, rem(36)); }
+.label { @include font(20, $fw-extra-light); font-size: clamp(rem(16), 1.4vw, rem(20)); line-height: 1.2; text-align: center; text-decoration: underline; text-underline-offset: rem(4); text-decoration-thickness: rem(1); pointer-events: auto; padding: rem(8); margin-top: rem(12); cursor: pointer; }
+.label:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.information .label,
+.information .label:visited,
+.information .label:hover,
+.information .label:active {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-color: currentColor;
+}
+.error { padding: rem(24); text-align: center; }
+.error button { color: inherit; text-decoration: underline; cursor: pointer; }
+.dots {
+  position: absolute;
+  bottom: rem(4);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: calc(100% - 32px);
+}
+.dot {
+  display: grid; place-items: center; width: rem(24); height: rem(28); padding: 0;
+  border: 0; background: transparent; cursor: pointer;
+  &::before { content: ''; width: rem(4); height: rem(4); border-radius: 50%; background: rgba(34, 34, 34, .22); transition: background .2s; }
+  &[aria-pressed='true']::before { background: rgba(34, 34, 34, .55); }
+  &:focus-visible { outline: 2px solid #222; border-radius: 50%; }
+}
+@media (max-width: rem($mobile)) {
+  .banner { gap: rem(56); }
+  .slide { aspect-ratio: 9 / 4; }
+  .information { width: 70%; max-width: none; margin-left: 30%; margin-right: 0; gap: 0; padding: rem(12) rem(8) rem(28); }
+  .title { display: none; }
+  .label { font-size: clamp(rem(16), 3.4vw, rem(24)); margin-top: 0; }
+  .dots { bottom: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .dot::before { transition: none; } }
+

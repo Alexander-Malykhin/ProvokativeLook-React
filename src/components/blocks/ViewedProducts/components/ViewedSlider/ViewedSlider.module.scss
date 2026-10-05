@@ -17,11 +17,18 @@
   scroll-snap-type: x proximity;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-x;
+  touch-action: pan-x pan-y pinch-zoom;
   overscroll-behavior-x: contain;
+  user-select: none;
+  -webkit-user-select: none;
   cursor: grab;
 
-  &:active {
+  a {
+    cursor: inherit;
+  }
+
+  &[data-dragging="true"],
+  &[data-dragging="true"] * {
     cursor: grabbing;
   }
 
@@ -34,8 +41,8 @@
     flex: 0 0 rem(207);
     width: rem(207);
     max-width: rem(207);
-    height: rem(394);
-    max-height: rem(394);
+    height: auto;
+    max-height: none;
     gap: rem(10);
   }
 
@@ -61,6 +68,11 @@
     gap: rem(16) rem(8);
     overflow: visible;
     scroll-snap-type: none;
+    cursor: auto;
+
+    a {
+      cursor: pointer;
+    }
 
     > * {
       width: 100%;
@@ -80,12 +92,6 @@
 
     &:not(.list_expanded) > *:nth-child(n + 5) {
       display: none;
-    }
-
-    &_single {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      justify-content: initial;
-      overflow: visible;
     }
   }
 }

@@ -10,15 +10,17 @@ interface PaymentStepProps {
     errors: FieldErrors<OrderFormValues>;
     isSubmitting: boolean;
     errorMessage?: string;
+    delivery: OrderFormValues['delivery'];
 }
-const PaymentStep = ({ register, errors, isSubmitting, errorMessage }: PaymentStepProps) => (<OrderStepContainer title="3. Оплата" mode="radio">
-    <OrderFieldRadio name="payment" value="cash" register={register("payment", { required: true })}>
+const PaymentStep = ({ register, errors, isSubmitting, errorMessage, delivery }: PaymentStepProps) => (<OrderStepContainer title="3. Оплата" mode="radio">
+    {!delivery && <p>Сначала выберите доставку или самовывоз.</p>}
+    {delivery === 'pickup' && <OrderFieldRadio name="payment" value="cash" register={register("payment", { required: true })}>
       Оплата при получении
-    </OrderFieldRadio>
+    </OrderFieldRadio>}
 
-    <OrderFieldRadio name="payment" value="card" register={register("payment", { required: true })}>
+    {delivery === 'delivery' && <OrderFieldRadio name="payment" value="card" register={register("payment", { required: true })}>
       Оплата банковской картой
-    </OrderFieldRadio>
+    </OrderFieldRadio>}
 
     <div className={styles.order__footer}>
       <MainButton type="submit" disabled={isSubmitting}>

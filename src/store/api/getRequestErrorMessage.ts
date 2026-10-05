@@ -11,6 +11,7 @@ export const getRequestErrorMessage = (error: unknown, fallback = "Не удал
         return fallback;
     }
     const candidate = error as {
+        status?: number | string;
         data?: ErrorPayload | string;
         error?: string;
         message?: string;
@@ -35,6 +36,9 @@ export const getRequestErrorMessage = (error: unknown, fallback = "Не удал
             return firstError;
         }
     }
+    if (candidate.status === 'TIMEOUT_ERROR') return 'Сервер не ответил вовремя. Проверьте подключение и попробуйте позже.';
+    if (candidate.status === 'FETCH_ERROR') return 'Нет соединения с сервером. Проверьте подключение и попробуйте позже.';
+    if (typeof candidate.status === 'number' && candidate.status >= 500) return 'Сервер временно недоступен. Не удалось получить ответ. Попробуйте позже.';
     return candidate.message || candidate.error || fallback;
 };
 

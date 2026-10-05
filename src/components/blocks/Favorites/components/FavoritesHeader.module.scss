@@ -10,3 +10,15 @@
     color: rgba($black, 0.6);
   }
 }
+
+@media (max-width: rem($mobile)) {
+  .header {
+    align-items: flex-start;
+    gap: rem(12);
+  }
+
+  .header__count,
+  .header__button {
+    @include font(12, $fw-light);
+  }
+}

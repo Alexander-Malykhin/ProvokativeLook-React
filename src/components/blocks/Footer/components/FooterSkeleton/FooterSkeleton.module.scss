@@ -6,7 +6,6 @@
   &__line {
     border-top: rem(1) solid $gray;
     border-bottom: rem(1) solid $gray;
-    margin-top: rem(12);
   }
 
   &__content {
@@ -19,7 +18,6 @@
     padding: rem(40) rem(20) rem(24);
   }
 
-  &__select,
   &__contacts,
   &__nav,
   &__socials,
@@ -33,11 +31,6 @@
     );
     background-size: 200% 100%;
     animation: skeleton-loading 1.2s infinite linear;
-  }
-
-  &__select {
-    width: rem(260);
-    height: rem(24);
   }
 
   &__contacts {

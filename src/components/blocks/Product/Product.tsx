@@ -34,7 +34,7 @@ const Product = () => {
         productSlug: string;
     }>();
     const canRequest = Boolean(sectionSlug && productSlug);
-    const { data, error, isLoading } = useGetCatalogProductQuery({ sectionSlug: sectionSlug ?? "", slug: productSlug ?? "" }, { skip: !canRequest });
+    const { currentData: data, error, isLoading, isFetching, refetch } = useGetCatalogProductQuery({ sectionSlug: sectionSlug ?? "", slug: productSlug ?? "" }, { skip: !canRequest, refetchOnReconnect: true });
     const product = data?.product;
     const [addRecentlyViewed] = useAddRecentlyViewedMutation();
     const recordedViewedIdRef = useRef<number | null>(null);
@@ -51,18 +51,6 @@ const Product = () => {
             recordedViewedIdRef.current = null;
         });
     }, [product?.id, addRecentlyViewed]);
-    useEffect(() => {
-        if (!availableOffers.length) {
-            setSelectedOfferId(null);
-            return;
-        }
-        setSelectedOfferId((current) => {
-            if (current && availableOffers.some((offer) => offer.id === current)) {
-                return current;
-            }
-            return availableOffers[0].id;
-        });
-    }, [availableOffers]);
     const selectedOffer = useMemo<CatalogProductOffer | null>(() => {
         if (!selectedOfferId)
             return availableOffers[0] ?? null;
@@ -94,11 +82,15 @@ const Product = () => {
     if (!canRequest) {
         return <SectionLayout>Некорректная ссылка на товар</SectionLayout>;
     }
-    if (isLoading) {
+    if (isLoading || (isFetching && !product)) {
         return <ProductSkeleton />;
     }
-    if (error || !product) {
-        return <SectionLayout>Не удалось загрузить товар</SectionLayout>;
+    if (!product) {
+        const notFound = error && 'status' in error && error.status === 404;
+        return <SectionLayout><div className={styles.product__error} role="status">
+          <h2>{notFound ? 'Товар не найден' : 'Не удалось загрузить товар'}</h2>
+          {!notFound && <><p>Проверьте подключение и попробуйте ещё раз.</p><button type="button" onClick={() => refetch()}>Повторить загрузку</button></>}
+        </div></SectionLayout>;
     }
     const productImages = product.images?.length
         ? product.images
@@ -112,9 +104,10 @@ const Product = () => {
         <ProductImages productImages={productImages} title={product.name}/>
 
         <div className={`${styles.product__information} ${styles.product__information_sticky}`}>
-          <ProductInformation id={product.id} title={product.name} article={product.article ?? null} sectionTitle={product.sectionName} sectionSlug={product.sectionSlug} description={product.description ?? ""} sizeTable={product.sizeTable ?? []} price={formatPrice(currentPrice, currentCurrency)} colors={colors} selectedColor={selectedOffer?.color ?? null} onColorChange={handleColorChange} disabledColors={disabledColors} sizes={sizes} selectedSize={selectedOffer?.size ?? null} onSizeChange={handleSizeChange} disabledSizes={disabledSizes} selectedOfferId={selectedOffer?.id ?? null} selectedOfferAvailable={selectedOffer?.available ?? availableOffers.length === 0}/>
+          <ProductInformation id={product.id} title={product.name} article={product.article ?? null} sectionTitle={product.sectionName} sectionSlug={product.sectionSlug} description={product.description ?? ""} sizeTable={product.sizeTable ?? []} price={formatPrice(currentPrice, currentCurrency)} colors={colors} selectedColor={selectedOffer?.color ?? null} onColorChange={handleColorChange} disabledColors={disabledColors} sizes={sizes} selectedSize={selectedOffer?.size ?? null} onSizeChange={handleSizeChange} disabledSizes={disabledSizes} selectedOfferId={selectedOffer?.id ?? null} selectedOfferAvailable={Boolean(selectedOffer?.available)} availableQuantity={selectedOffer?.quantity ?? 0}/>
         </div>
       </div>
     </SectionLayout>);
 };
 export default Product;
+

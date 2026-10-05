@@ -7,10 +7,13 @@
   align-items: center;
   gap: rem(16);
 
-  &__image {
+  & &__image {
     width: rem(90);
     height: rem(90);
-    object-fit: contain;
+    flex: 0 0 auto;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    object-fit: cover;
   }
 
   &__title {
@@ -23,7 +26,7 @@
   .item {
     gap: rem(10);
 
-    &__image {
+    & &__image {
       width: rem(72);
       height: rem(72);
     }

@@ -1,32 +1,27 @@
-import Modal from "@UI/overlays/Modal/Modal";
-import styles from "./AuthModal.module.scss";
-import AuthTabs from "./components/AuthTabs";
-import ConfirmEmailForm from "./components/ConfirmEmailForm";
-import LoginForm from "./components/LoginForm";
-import RegisterForm from "./components/RegisterForm";
-import ResetPasswordRequestForm from "./components/ResetPasswordRequestForm";
-import ResetPasswordConfirmForm from "./components/ResetPasswordConfirmForm";
-import { useAuthFlow } from "./hooks/useAuthFlow";
-const AuthModal = () => {
-    const auth = useAuthFlow();
-    return (<Modal open={auth.active} onClose={auth.close} overlayClassName={styles.overlay} contentClassName={styles.modal} ariaLabelledBy="auth-modal-title" closeDisabled={false}>
-      <button type="button" className={styles.modal__close} onClick={auth.close} aria-label="Закрыть">
-        <span />
-        <span />
-      </button>
-
-      {(auth.mode === "login" || auth.mode === "register") && (<AuthTabs mode={auth.mode} disabled={auth.isLoginLoading || auth.isRegisterLoading} onChange={auth.changeMode}/>)}
-
-      {auth.mode === "login" && (<LoginForm form={auth.loginForm} isLoading={auth.isLoginLoading} errorMessage={auth.errorMessage} successMessage={auth.successMessage} fieldErrors={auth.loginFieldErrors} onChange={auth.handleLoginChange} onSubmit={(event) => void auth.submitLogin(event)} onSwitch={() => auth.changeMode("register")} onForgotPassword={() => auth.changeMode("resetRequest")}/>)}
-
-      {auth.mode === "register" && (<RegisterForm form={auth.registerForm} isLoading={auth.isRegisterLoading} errorMessage={auth.errorMessage} fieldErrors={auth.registerFieldErrors} onChange={auth.handleRegisterChange} onSubmit={(event) => void auth.submitRegister(event)} onSwitch={() => auth.changeMode("login")}/>)}
-
-      {auth.mode === "resetRequest" && (<ResetPasswordRequestForm email={auth.resetForm.email} isLoading={auth.isResetLoading} errorMessage={auth.errorMessage} successMessage={auth.successMessage} onEmailChange={auth.handleResetEmailChange} onSubmit={(event) => void auth.submitResetRequest(event)} onBack={() => auth.changeMode("login")}/>)}
-
-      {auth.mode === "resetConfirm" && (<ResetPasswordConfirmForm email={auth.resetForm.email} code={auth.resetForm.code} password={auth.resetForm.password} confirmPassword={auth.resetForm.confirmPassword} isLoading={auth.isResetLoading} errorMessage={auth.errorMessage} successMessage={auth.successMessage} onChange={auth.handleResetChange} onSubmit={(event) => void auth.submitResetConfirm(event)} onBack={() => auth.changeMode("login")}/>)}
-
-      {auth.mode === "confirm" && (<ConfirmEmailForm email={auth.registerForm.email} code={auth.confirmForm.code} isLoading={auth.isConfirmLoading} errorMessage={auth.errorMessage} successMessage={auth.successMessage} onCodeChange={auth.handleConfirmChange} onSubmit={(event) => void auth.submitConfirm(event)} onBack={() => auth.changeMode("register")}/>)}
-    </Modal>);
-};
-export default AuthModal;
-
+import Modal from '@UI/overlays/Modal/Modal';
+import { useEffect, useState } from 'react';
+import EmailLogin from './components/EmailLogin';
+import { useGetUserQuery } from '@store/api/user/userApi';
+import { animateModalClose } from '@UI/overlays/Modal/animateModalClose';
+import { useAppDispatch, useAppSelector } from '@store/hooks';
+import { closeAuthModal } from '@store/slices/toggleAuthModalSlice';
+import { close as closeProfileMenu } from '@store/slices/toggleMenuProfileSlice';
+import PhoneVerification from '@components/auth/PhoneVerification';
+import styles from './AuthModal.module.scss';
+export default function AuthModal(){
+ const active=useAppSelector(state=>state.toggleAuthModal.active); const dispatch=useAppDispatch();
+ const [emailLogin,setEmailLogin]=useState(false);
+ const [phonePurpose,setPhonePurpose]=useState<'login'|'register'>('login');
+ const {data,isLoading,isFetching,error,refetch}=useGetUserQuery(undefined,{skip:!active,refetchOnMountOrArgChange:true});
+ const authenticated=Boolean(data?.success&&data.user);
+ const unauthorized=error&&'status' in error&&error.status===401;
+ useEffect(()=>{if(active&&authenticated)dispatch(closeAuthModal());},[active,authenticated,dispatch]);
+ const close=()=>animateModalClose(()=>dispatch(closeAuthModal()));
+ return <Modal open={active} onClose={close} overlayClassName={styles.overlay} contentClassName={styles.modal} ariaLabelledBy="auth-modal-title">
+  <button type="button" className={styles.modal__close} onClick={close} aria-label="Закрыть"><span/><span/></button>
+  {active&&!authenticated&&(isLoading?<p id="auth-modal-title">Проверяем вход…</p>:(unauthorized||isFetching)?(<>
+   {emailLogin?<EmailLogin onPhone={()=>{setEmailLogin(false);setPhonePurpose('login');}}/>:<><PhoneVerification key={phonePurpose} purpose={phonePurpose} onDone={()=>{dispatch(closeProfileMenu());close();}}/><button type="button" className={styles.form__switch} onClick={()=>setEmailLogin(true)}>Войти по почте и паролю</button></>}
+   <button type="button" className={styles.form__switch} onClick={()=>{setEmailLogin(false);setPhonePurpose(phonePurpose==='register'&&!emailLogin?'login':'register');}}>{phonePurpose==='register'&&!emailLogin?'Уже есть аккаунт? Войти':'Зарегистрироваться'}</button>
+  </>):<div><p id="auth-modal-title">Не удалось проверить вход.</p><button type="button" onClick={()=>void refetch()}>Повторить</button></div>)}
+ </Modal>;
+}

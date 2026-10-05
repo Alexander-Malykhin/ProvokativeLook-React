@@ -1,0 +1,26 @@
+.postal { display: grid; gap: 16px; padding-top: 20px; font-size: 14px; line-height: 1.5;
+  label { display: grid; gap: 8px; }
+  input { width: 100%; padding: 13px 14px; border: 1px solid #cfcfd5; background: #fff; border-radius: 6px; font: inherit; color: #222; }
+  button { font: inherit; cursor: pointer; }
+  button:disabled { opacity: .5; cursor: wait; }
+}
+.methods { display: flex; gap: 8px; flex-wrap: wrap;
+  button { padding: 10px 16px; border: 1px solid #ccc; border-radius: 6px; background: transparent; color: #222; }
+  button[aria-pressed=true] { background: #222; border-color: #222; color: #fff; }
+}
+.calculate { padding: 13px 18px; border-radius: 6px; background: #222; color: #fff; border: 1px solid #222; }
+.mapButton { padding: 13px 18px; border-radius: 6px; background: transparent; color: #222; border: 1px solid #222; }
+.result { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; padding-top: 14px; border-top: 1px solid #ddd; }
+.error { color: #c3170a; }
+.note { color: #686868; font-size: 13px; }
+.package { border: 0; padding: 0; margin: 0; min-width: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;
+  legend { margin-bottom: 12px; }
+  input { min-width: 0; box-sizing: border-box; }
+  @media (max-width: 600px) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.addresses { display: grid; }
+.postal .addressChoice { display: flex; flex-direction: row; align-items: center; gap: 14px; border-block-end: 1px solid #ddd; padding: 14px 0; cursor: pointer;
+  input { width: 16px; height: 16px; padding: 0; flex: 0 0 16px; accent-color: #222; }
+  > span { display: grid; gap: 5px; }
+}
+.modalError { position: fixed; bottom: 20px; left: 5%; right: 5%; z-index: 1200; padding: 12px; background: #fff; color: #c3170a; }

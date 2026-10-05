@@ -95,3 +95,5 @@
     transform: translateX(100%);
   }
 }
+.product__error { padding: 64px 20px; text-align: center; display: grid; justify-items: center; gap: 20px; }
+.product__error button { background: #222; color: #fff; border-radius: 8px; padding: 14px 24px; cursor: pointer; }

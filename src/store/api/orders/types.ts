@@ -37,6 +37,7 @@ export interface OrderStageDto {
     color?: string;
 }
 export interface OrderDto {
+    shipping?: PostalShipping | null;
     id: number;
     orderId?: number | null;
     number: string;
@@ -71,15 +72,37 @@ export interface OrdersResponse {
     };
 }
 export interface CreateOrderRequest {
+    courierAddress?: { formattedAddress: string; address1: string; city: string; region: string; province: string; country: string; countryId: number; countryCode: string; postalCode: string; apartment: string; entrance: string; floor: string; comment: string; latitude: number; longitude: number };
+    shippingQuoteId?: string;
     recipient: {
         firstName: string;
         lastName: string;
         email: string;
         phone: string;
     };
-    addressId: number;
+    addressId?: number;
+    delivery: 'delivery' | 'pickup';
     payment: "cash" | "card";
     privacy: boolean;
+}
+export interface PostalQuote {
+    id: string;
+    expiresAt: number;
+    provider: 'mail';
+    mode: 'office' | 'door';
+    amount: number;
+    currency: string;
+    address: { formattedAddress: string; pickupName: string; postalCode: string };
+}
+export interface PostalShipping {
+    workflow?: string;
+    provider: 'mail' | 'cdek';
+    mode: 'office' | 'door';
+    amount: number;
+    currency: string;
+    paid: boolean;
+    status: string;
+    trackingNumber?: string;
 }
 export interface CreateOrderResponse {
     success: boolean;

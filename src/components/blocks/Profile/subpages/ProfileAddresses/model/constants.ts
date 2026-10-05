@@ -10,7 +10,6 @@ export const ADDRESS_CITIES = [
     "Ростов-на-Дону",
     "Москва",
     "Санкт-Петербург",
-    "Краснодар",
 ];
 export const INITIAL_ADDRESS_FORM: AddressFormState = {
     formattedAddress: "",

@@ -30,17 +30,45 @@ const ProfileOrders = ({ title }: ProfilePageProps) => {
         }
     );
     const orders = data?.data.items ?? [];
+    const paymentInQueue = orders.some((order) => !order.isPaid && order.paymentState === 'pending');
+    useEffect(() => {
+        if (!paymentInQueue || shouldPollPayment) return;
+        const timer = window.setInterval(() => {
+            if (document.visibilityState === 'visible') void refetch();
+        }, 3000);
+        return () => window.clearInterval(timer);
+    }, [paymentInQueue, shouldPollPayment, refetch]);
+    useEffect(() => {
+        if (!returnedOrder) return;
+        const timer = window.setTimeout(() => {
+            sessionStorage.removeItem('provokativelook.payment.returnedOrder');
+            sessionStorage.removeItem('provokativelook.payment.pendingUntil');
+            setReturnedOrder(null);
+        }, Math.max(0, pendingUntil - Date.now()));
+        return () => window.clearTimeout(timer);
+    }, [returnedOrder, pendingUntil]);
+    const waitingForTrack = orders.some((order) => order.isPaid && order.shipping && (order.shipping.workflow === 'manager'
+        ? ['awaiting_manager', 'approved', 'creating', 'checking', 'created', 'awaiting_invoice'].includes(order.shipping.status)
+        : order.shipping.paid && ['paid', 'creating', 'checking', 'created'].includes(order.shipping.status)));
+    useEffect(() => {
+        if (!waitingForTrack) return;
+        const timer = window.setInterval(() => {
+            if (document.visibilityState === 'visible') void refetch();
+        }, 10000);
+        return () => window.clearInterval(timer);
+    }, [waitingForTrack, refetch]);
     const pagination = data?.data.pagination;
     const selected = useMemo(() => id ? orders.find((order) => String(order.id) === id) : undefined, [id, orders]);
     useEffect(() => {
         if (!returnedOrder)
             return;
         const found = orders.find((order) => String(order.orderId ?? "") === returnedOrder || String(order.number) === returnedOrder);
-        if (found?.isPaid || found?.paymentState === "pending" || Date.now() >= pendingUntil) {
-            if (found?.isPaid) {
+        const paid = sessionStorage.getItem('provokativelook.payment.purpose') === 'delivery' ? found?.shipping?.paid : found?.isPaid;
+        if (paid || found?.paymentState === "pending" || Date.now() >= pendingUntil) {
+            if (paid) {
                 sessionStorage.removeItem("provokativelook.payment.order");
             }
-            if (found?.isPaid || Date.now() >= pendingUntil) {
+            if (paid || Date.now() >= pendingUntil) {
                 sessionStorage.removeItem("provokativelook.payment.returnedOrder");
                 sessionStorage.removeItem("provokativelook.payment.pendingUntil");
                 setReturnedOrder(null);

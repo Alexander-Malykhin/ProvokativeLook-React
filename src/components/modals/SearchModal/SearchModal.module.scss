@@ -28,6 +28,7 @@
   }
 
   &__mobileTitle { display: none; }
+  &__status { min-height: rem(28); padding: rem(4) rem(34); font-size: rem(12); color: rgba($black, .55); }
 
   &__top {
     position: sticky;
@@ -144,6 +145,8 @@
 }
 
 .popular {
+  transition: opacity .2s ease;
+  &_updating { opacity: .6; }
   display: grid;
   grid-template-columns: minmax(rem(230), rem(330)) minmax(0, 1fr);
   align-items: flex-start;
@@ -173,6 +176,9 @@
     display: flex;
     flex-direction: column;
     gap: rem(12);
+    max-height: rem(310);
+    overflow-y: auto;
+    scrollbar-width: thin;
 
     &_item {
       position: relative;
@@ -213,6 +219,7 @@
 }
 
 .grid {
+  min-height: rem(390);
   display: flex;
   flex-direction: column;
   gap: rem(16);
@@ -232,6 +239,7 @@
     scrollbar-width: thin;
     padding-bottom: rem(10);
   }
+  &__content { animation: searchResultsAppear .24s ease-out both; }
 
   &__content > *,
   &__skeleton > * {
@@ -276,6 +284,8 @@
   from { background-position: 200% 0; }
   to { background-position: -200% 0; }
 }
+@keyframes searchResultsAppear { from { opacity: .35; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .popular { transition: none; } .grid__content, .grid__skeletonCard { animation: none; } }
 
 @media (max-width: rem($tablet)) {
   .popular {
@@ -402,6 +412,7 @@
 
   .grid {
     width: 100%;
+    min-height: rem(305);
   }
 
   // Мобильный макет поиска: карточка 145 x 265 px.

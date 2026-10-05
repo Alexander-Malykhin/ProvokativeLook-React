@@ -6,7 +6,6 @@ export const CITY_OPTIONS = [
     "Ростов-на-Дону",
     "Москва",
     "Санкт-Петербург",
-    "Краснодар",
 ];
 interface ResolvedCity {
     city: string;

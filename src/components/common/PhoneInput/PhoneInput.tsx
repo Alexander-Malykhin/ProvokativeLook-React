@@ -28,6 +28,8 @@ const MAX_DROPDOWN_HEIGHT = 330;
 const PhoneInput = ({ value, onChange, className, selectClassName, placeholder = "+7 (999) 999-99-99", required, disabled, ariaInvalid, dataField, }: Props) => {
     const [countryIso, setCountryIso] = useState(() => detectCountry(value, "RU"));
     const [isOpen, setIsOpen] = useState(false);
+    const [editing, setEditing] = useState(false);
+    const [draft, setDraft] = useState('');
     const [dropdownPosition, setDropdownPosition] = useState<DropdownPosition | null>(null);
     const rootRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
@@ -141,7 +143,7 @@ const PhoneInput = ({ value, onChange, className, selectClassName, placeholder =
           </button>
         </div>
 
-        <input type="tel" inputMode="tel" autoComplete="tel" value={formatPhone(value)} onChange={(event) => handlePhoneChange(event.target.value)} className={`${styles.phone__input} ${className ?? ""}`.trim()} placeholder={placeholder} required={required} disabled={disabled} aria-invalid={ariaInvalid} data-register-field={dataField}/>
+        <input type="tel" inputMode="tel" autoComplete="tel" value={editing ? draft : formatPhone(value)} onFocus={() => {setDraft(formatPhone(value));setEditing(true);}} onBlur={() => setEditing(false)} onChange={(event) => {setDraft(event.target.value);handlePhoneChange(event.target.value);}} className={`${styles.phone__input} ${className ?? ""}`.trim()} placeholder={placeholder} required={required} disabled={disabled} aria-invalid={ariaInvalid} data-register-field={dataField}/>
       </div>
 
       {dropdown}

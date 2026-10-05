@@ -5,8 +5,9 @@ import BoxImage from "@assets/params/box.svg";
 import InfoImage from "@assets/params/info.svg";
 import ShopImage from "@assets/params/shop.svg";
 import CarImage from "@assets/params/car.svg";
-import CitySelect from "@components/CitySelect/CitySelect";
-import { DEFAULT_DELIVERY_CITY, useDeliveryCity } from "@/hooks/useDeliveryCity";
+import Modal from "@UI/overlays/Modal/Modal";
+import { animateModalClose } from "@UI/overlays/Modal/animateModalClose";
+import { useMediaQuery } from "@hooks/useMediaQuery";
 const DELIVERY_ITEMS = [
     {
         id: "courier",
@@ -28,17 +29,21 @@ const DELIVERY_ITEMS = [
     },
 ];
 const ProductDelivery = () => {
-    const { city, setCity } = useDeliveryCity();
     const [openInfoId, setOpenInfoId] = useState<string | null>(null);
+    const mobile = useMediaQuery('(max-width: 767px)');
+    const selectedInfo = DELIVERY_ITEMS.find((item) => item.id === openInfoId);
+    const closeInfo = () => animateModalClose(() => setOpenInfoId(null));
     const deliveryRef = useRef<HTMLDivElement | null>(null);
     useEffect(() => {
         const handlePointerDown = (event: PointerEvent) => {
+            if (mobile) return;
             const target = event.target as Node | null;
             if (!target || deliveryRef.current?.contains(target))
                 return;
             setOpenInfoId(null);
         };
         const handleKeyDown = (event: KeyboardEvent) => {
+            if (mobile) return;
             if (event.key === "Escape")
                 setOpenInfoId(null);
         };
@@ -48,22 +53,20 @@ const ProductDelivery = () => {
             document.removeEventListener("pointerdown", handlePointerDown);
             window.removeEventListener("keydown", handleKeyDown);
         };
-    }, []);
+    }, [mobile]);
     const openOnHover = (id: string) => {
+        if (mobile) return;
         if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches)
             return;
         setOpenInfoId(id);
     };
     const closeOnHover = () => {
+        if (mobile) return;
         if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches)
             return;
         setOpenInfoId(null);
     };
     return (<div ref={deliveryRef} className={styles.delivery}>
-      <div className={styles.delivery__city}>
-        <CitySelect value={city} onChange={setCity} label="Доставка в" defaultCity={DEFAULT_DELIVERY_CITY} allowReset className={styles.delivery__citySelect}/>
-      </div>
-
       <div className={styles.delivery__items}>
         {DELIVERY_ITEMS.map((item) => {
             const isInfoOpen = openInfoId === item.id;
@@ -81,13 +84,18 @@ const ProductDelivery = () => {
                   <Image src={InfoImage} className={styles.delivery__info}/>
                 </button>
 
-                {isInfoOpen && (<div className={styles.delivery__tooltip} role="tooltip" onPointerDown={(event) => event.stopPropagation()}>
+                {isInfoOpen && !mobile && (<div className={styles.delivery__tooltip} role="tooltip" onPointerDown={(event) => event.stopPropagation()}>
                     {item.details}
                   </div>)}
               </div>
             </article>);
         })}
       </div>
+      <Modal open={mobile && Boolean(selectedInfo)} onClose={closeInfo} overlayClassName={styles.infoOverlay} contentClassName={styles.infoSheet} ariaLabelledBy="delivery-info-title">
+        <button type="button" className={styles.infoClose} onClick={closeInfo} aria-label="Закрыть информацию о доставке">×</button>
+        <h3 id="delivery-info-title">{selectedInfo?.title}</h3>
+        <p>{selectedInfo?.details}</p>
+      </Modal>
     </div>);
 };
 export default ProductDelivery;

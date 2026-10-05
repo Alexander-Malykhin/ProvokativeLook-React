@@ -24,6 +24,7 @@ export const PHONE_COUNTRIES: PhoneCountry[] = [
 export const digitsOnly = (value: string) => value.replace(/\D/g, "");
 export const normalizePhone = (value: string, countryIso = "RU"): string => {
     let digits = digitsOnly(value);
+    if (!digits) return "";
     const country = PHONE_COUNTRIES.find((item) => item.iso === countryIso) ?? PHONE_COUNTRIES[0];
     if (country.iso === "RU") {
         if (digits.startsWith("8")) {

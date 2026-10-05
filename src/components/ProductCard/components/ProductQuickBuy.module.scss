@@ -1,0 +1,49 @@
+.overlay { position: fixed; inset: 0; z-index: 2200; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, .45); }
+.dialog {
+  position: relative;
+  width: min(rem(440), calc(100vw - rem(24)));
+  max-height: calc(100dvh - rem(32));
+  margin: 0;
+  padding: rem(32);
+  overflow-y: auto;
+  border: 0;
+  border-radius: rem(8);
+  background: $white;
+  color: $black;
+  font: inherit;
+  &::backdrop { background: rgba(0, 0, 0, 0.45); }
+  h2 { padding-right: rem(24); font-size: rem(18); line-height: 1.4; margin-bottom: rem(24); }
+  @media (max-width: rem($mobile)) {
+    width: min(rem(360), calc(100vw - rem(20)));
+    max-width: calc(100vw - rem(20));
+    max-height: calc(100dvh - rem(24));
+    padding: rem(18) rem(16);
+
+    h2 {
+      padding-right: rem(26);
+      font-size: rem(15);
+      line-height: 1.3;
+      margin-bottom: rem(16);
+      overflow-wrap: anywhere;
+    }
+  }
+}
+.close {
+  position: absolute;
+  top: rem(8);
+  right: rem(8);
+  width: rem(40);
+  height: rem(40);
+  border: 0;
+  background: transparent;
+  color: $black;
+  font-size: rem(28);
+  cursor: pointer;
+  @media (max-width: rem($mobile)) {
+    top: rem(4);
+    right: rem(4);
+    width: rem(36);
+    height: rem(36);
+    font-size: rem(24);
+  }
+}

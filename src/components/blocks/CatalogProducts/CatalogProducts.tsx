@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import styles from './CatalogProducts.module.scss';
 import SectionLayout from '@layouts/SectionLayout/SectionLayout.tsx';
@@ -30,6 +30,43 @@ const EMPTY_FILTER_OPTIONS = {
         max: null,
     },
 };
+
+const FILTER_STATE_STORAGE_KEY = 'plCatalogFilterState';
+type StoredCatalogFilterState = {
+    slug: string;
+    filters: CatalogFilters;
+    sort: CatalogSort;
+};
+const readStoredFilterState = (slug: string): StoredCatalogFilterState | null => {
+    if (typeof window === 'undefined') return null;
+    try {
+        const raw = window.sessionStorage.getItem(FILTER_STATE_STORAGE_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw) as Partial<StoredCatalogFilterState>;
+        if (parsed.slug !== slug || !parsed.filters || !parsed.sort) return null;
+        return {
+            slug,
+            filters: {
+                sizes: Array.isArray(parsed.filters.sizes) ? parsed.filters.sizes : [],
+                colors: Array.isArray(parsed.filters.colors) ? parsed.filters.colors : [],
+                minPrice: parsed.filters.minPrice ?? null,
+                maxPrice: parsed.filters.maxPrice ?? null,
+            },
+            sort: parsed.sort,
+        };
+    } catch {
+        return null;
+    }
+};
+const writeStoredFilterState = (state: StoredCatalogFilterState) => {
+    if (typeof window === 'undefined') return;
+    try {
+        window.sessionStorage.setItem(FILTER_STATE_STORAGE_KEY, JSON.stringify(state));
+    } catch {
+        // sessionStorage can be unavailable in privacy mode; in-memory state still works.
+    }
+};
+
 const ALL_NAVIGATION_ITEM: CatalogNavigationItem = {
     slug: 'all',
     title: 'СМОТРЕТЬ ВСЁ',
@@ -71,16 +108,26 @@ const CatalogProducts = () => {
         return (navigationItems.find((item) => item.slug === resolvedSlug) ??
             (actualSection ? { slug: resolvedSlug, title: actualSection.name, sectionIds: [actualSection.id] } : ALL_NAVIGATION_ITEM));
     }, [actualSection, navigationItems, resolvedSlug]);
+    const initialStoredState = useMemo(() => readStoredFilterState(resolvedSlug), [resolvedSlug]);
     const [page, setPage] = useState(1);
-    const [sort, setSort] = useState<CatalogSort>('popular');
-    const [filters, setFilters] = useState<CatalogFilters>(EMPTY_FILTERS);
+    const [sort, setSort] = useState<CatalogSort>(() => initialStoredState?.sort ?? 'popular');
+    const [filters, setFilters] = useState<CatalogFilters>(() => initialStoredState?.filters ?? EMPTY_FILTERS);
+    const previousSectionSlug = useRef(resolvedSlug);
     const isFilterOpen = useAppSelector((state) => state.toggleFilter.active);
+
     useEffect(() => {
+        if (previousSectionSlug.current === resolvedSlug) return;
+        previousSectionSlug.current = resolvedSlug;
         setPage(1);
         setSort('popular');
         setFilters(EMPTY_FILTERS);
+        writeStoredFilterState({ slug: resolvedSlug, filters: EMPTY_FILTERS, sort: 'popular' });
         dispatch(closeFilter());
-    }, [category.slug, dispatch]);
+    }, [resolvedSlug, dispatch]);
+
+    useEffect(() => {
+        writeStoredFilterState({ slug: resolvedSlug, filters, sort });
+    }, [resolvedSlug, filters, sort]);
     const offset = (page - 1) * PAGE_SIZE;
     const queryFilters = useDebouncedValue(filters, 250);
     const { data, isLoading, isFetching, error } = useGetCatalogProductsQuery({

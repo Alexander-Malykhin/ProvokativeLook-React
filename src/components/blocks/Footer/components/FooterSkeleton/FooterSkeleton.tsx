@@ -2,10 +2,6 @@ import MainLayoutContainer from "@layouts/MainLayoutContainer/MainLayoutContaine
 import styles from "./FooterSkeleton.module.scss";
 const FooterSkeleton = () => {
     return (<footer className={styles.skeleton}>
-      <MainLayoutContainer>
-        <div className={styles.skeleton__select}/>
-      </MainLayoutContainer>
-
       <div className={styles.skeleton__line}>
         <MainLayoutContainer className={styles.skeleton__content}>
           <div className={styles.skeleton__contacts}/>

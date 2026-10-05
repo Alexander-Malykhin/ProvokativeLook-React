@@ -16,9 +16,14 @@ interface ProductsButtonsProps {
     cartProductId: number | null;
     favoriteProductId: number;
     disabled?: boolean;
+    availableQuantity: number;
 }
 
-const ProductsButtons = ({ cartProductId, favoriteProductId, disabled = false, }: ProductsButtonsProps) => {
+const ProductsButtons = ({ cartProductId, favoriteProductId, disabled = false, availableQuantity, }: ProductsButtonsProps) => {
+    const [quantity, setQuantity] = useState("1");
+    const maxQuantity = Math.max(0, Math.floor(availableQuantity));
+    const count = Number(quantity);
+    const validQuantity = Number.isInteger(count) && count >= 1 && count <= maxQuantity;
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { data: userData, isLoading: isUserLoading } = useGetUserQuery();
@@ -54,7 +59,7 @@ const ProductsButtons = ({ cartProductId, favoriteProductId, disabled = false, }
     };
 
     const handleAddToBasket = async () => {
-        if (!cartProductId || disabled || isCartLoading)
+        if (!cartProductId || disabled || isCartLoading || (!isCurrentOfferInCart && !validQuantity))
             return;
         if (requireAuth())
             return;
@@ -64,7 +69,7 @@ const ProductsButtons = ({ cartProductId, favoriteProductId, disabled = false, }
         }
         setErrorMessage("");
         try {
-            await addCartItem({ productId: cartProductId, quantity: 1 }).unwrap();
+            await addCartItem({ productId: cartProductId, quantity: count }).unwrap();
         }
         catch (error) {
             setErrorMessage(getRequestErrorMessage(error, "Не удалось добавить товар в корзину"));
@@ -91,7 +96,15 @@ const ProductsButtons = ({ cartProductId, favoriteProductId, disabled = false, }
     };
 
     return (<div className={styles.buttons}>
-      <MainButton onClick={handleAddToBasket} disabled={disabled || isUserLoading || isCartLoading || !cartProductId}>
+      {!disabled && !isCurrentOfferInCart && <div className={styles.buttons__quantity}>
+        <label htmlFor={`product-quantity-${cartProductId}`}>Количество</label>
+        <button type="button" aria-label="Уменьшить количество" disabled={isCartLoading || count <= 1} onClick={() => setQuantity(String(Math.max(1, (count || 1) - 1)))}>−</button>
+        <input id={`product-quantity-${cartProductId}`} type="number" inputMode="numeric" min={1} max={maxQuantity} step={1} value={quantity} disabled={isCartLoading} onChange={(event) => setQuantity(event.target.value)}/>
+        <button type="button" aria-label="Увеличить количество" disabled={isCartLoading || count >= maxQuantity} onClick={() => setQuantity(String(Math.min(maxQuantity, (count || 0) + 1)))}>+</button>
+        <span>В наличии: {maxQuantity} шт.</span>
+      </div>}
+      {!disabled && !isCurrentOfferInCart && !validQuantity && <p role="alert">Выберите от 1 до {maxQuantity} шт.</p>}
+      <MainButton onClick={handleAddToBasket} disabled={disabled || isUserLoading || isCartLoading || !cartProductId || (!isCurrentOfferInCart && !validQuantity)}>
         {disabled
             ? "Нет в наличии"
             : isCartLoading

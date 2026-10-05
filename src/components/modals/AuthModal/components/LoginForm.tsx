@@ -29,7 +29,7 @@ const LoginForm = ({ form, isLoading, errorMessage, successMessage, fieldErrors,
       {isLoading ? "Входим..." : "Войти"}
     </button>
     <button type="button" className={styles.form__switch} onClick={onSwitch} disabled={isLoading}>
-      Нет аккаунта? Зарегистрироваться
+      Войти по телефону
     </button>
   </form>);
 export default LoginForm;

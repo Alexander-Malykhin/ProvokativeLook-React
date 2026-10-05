@@ -1,5 +1,4 @@
 import PageStack from "@layouts/PageStack/PageStack";
-import Reviews from "@components/blocks/Reviews/Reviews.tsx";
 import AnswersToQuestions from "@components/blocks/AnswersToQuestions/AnswersToQuestions.tsx";
 import SubscribeNewsLetter from "@components/blocks/SubscribeNewsLetter/SubscribeNewsLetter.tsx";
 import Breadcrumbs from "@components/Breadcrumbs/Breadcrumbs.tsx";
@@ -27,7 +26,6 @@ const CatalogPage = () => {
             <CatalogCategories cards={cards} variant="grid" isLoading={isLoading}/>
           </MainLayoutContainer>
         </SectionLayout>
-        <Reviews />
         <AnswersToQuestions />
         <SubscribeNewsLetter />
       </PageStack>

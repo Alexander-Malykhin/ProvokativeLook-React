@@ -8,7 +8,7 @@ import CarouselDots from "@components/Carousel/CarouselDots";
 import NewsSlider from "./components/NewsSlider/NewsSlider";
 const News = () => {
     const { data } = useGetFeaturedProductsQuery('new');
-    const products = (data?.products ?? []).map(catalogProductToListItem);
+    const products = (data?.products ?? []).filter((product) => Boolean(product.image?.trim())).map(catalogProductToListItem);
     const carousel = useCarousel({ itemCount: products.length });
     if (products.length === 0) return null;
     return (<SectionLayout className={styles.news} id="new-collection">

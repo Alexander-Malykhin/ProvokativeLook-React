@@ -7,8 +7,11 @@ import type { Suggestion } from "@components/blocks/Profile/subpages/ProfileAddr
 import { getRequestErrorMessage } from "@store/api/getRequestErrorMessage";
 import BirthdayPicker from "./components/BirthdayPicker/BirthdayPicker";
 import { useLazySearchCountriesQuery } from "@store/api/countries/countriesApi";
-import PhoneInput from "@components/common/PhoneInput/PhoneInput";
-import { detectCountry, formatPhone, isValidPhone, normalizePhone } from "@components/common/PhoneInput/phone";
+import PhoneVerification from '@components/auth/PhoneVerification';
+import Modal from '@UI/overlays/Modal/Modal';
+import { animateModalClose } from '@UI/overlays/Modal/animateModalClose';
+import authStyles from '@components/modals/AuthModal/AuthModal.module.scss';
+import { formatPhone } from "@components/common/PhoneInput/phone";
 interface ProfileFormState {
     firstName: string;
     lastName: string;
@@ -42,6 +45,7 @@ const ProfileData = ({ title }: ProfilePageProps) => {
     const [geocode] = useLazyGeocodeAddressQuery();
     const [searchCountries] = useLazySearchCountriesQuery();
     const [isEditing, setIsEditing] = useState(false);
+    const [changingPhone, setChangingPhone] = useState(false);
     const [form, setForm] = useState<ProfileFormState>(EMPTY_FORM);
     const [citySuggestions, setCitySuggestions] = useState<Suggestion[]>([]);
     const [cityOpen, setCityOpen] = useState(false);
@@ -172,19 +176,13 @@ const ProfileData = ({ title }: ProfilePageProps) => {
             setMessage("Заполните имя и фамилию");
             return;
         }
-        if (!isValidPhone(form.phone)) {
-            setMessage("Введите корректный номер телефона");
-            return;
-        }
         try {
             await updateUser({
                 firstName: form.firstName.trim(),
                 lastName: form.lastName.trim(),
                 birthday: form.birthday.trim(),
-                phone: normalizePhone(form.phone, detectCountry(form.phone)),
                 city: form.city.trim(),
-                country: form.country.trim(),
-                countryId: form.countryId,
+                ...(form.country.trim() ? { country: form.country.trim(), countryId: form.countryId } : {}),
             }).unwrap();
             setMessage("");
             setIsEditing(false);
@@ -245,10 +243,11 @@ const ProfileData = ({ title }: ProfilePageProps) => {
           <p className={styles.content__value}>{form.email || "Не указано"}</p>
         </div>
 
-        <label className={styles.content__field}>
+        <div className={styles.content__field}>
           <span className={styles.content__label}>Телефон*</span>
-          {isEditing ? (<PhoneInput value={form.phone} onChange={(value) => changeField("phone", value)} className={styles.content__input} selectClassName={styles.content__phoneCountry} required/>) : (<p className={styles.content__value}>{form.phone ? formatPhone(form.phone) : "Не указано"}</p>)}
-        </label>
+          <p className={styles.content__value}>{user.phone ? formatPhone(user.phone) : 'Не указано'}</p>
+          <button type="button" className={styles.content__edit} onClick={() => setChangingPhone(true)}>Изменить номер</button>
+        </div>
 
         <label className={styles.content__field}>
           <span className={styles.content__label}>Город</span>
@@ -274,6 +273,10 @@ const ProfileData = ({ title }: ProfilePageProps) => {
       </div>
 
       {message && <p className={styles.content__message}>{message}</p>}
+      <Modal open={changingPhone} onClose={() => animateModalClose(() => setChangingPhone(false))} overlayClassName={authStyles.overlay} contentClassName={authStyles.modal} ariaLabelledBy="auth-modal-title">
+        <button type="button" aria-label="Закрыть" className={authStyles.modal__close} onClick={() => animateModalClose(() => setChangingPhone(false))}><span/><span/></button>
+        {changingPhone && <PhoneVerification purpose="change" onDone={() => {setIsEditing(false); animateModalClose(() => setChangingPhone(false));}}/>}
+      </Modal>
 
     </div>);
 };

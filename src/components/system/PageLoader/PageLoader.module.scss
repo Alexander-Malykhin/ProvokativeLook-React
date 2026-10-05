@@ -1,0 +1,9 @@
+.bar { position: fixed; inset: 0 0 auto; height: 3px; z-index: 9999; overflow: hidden; background: #e4e4ec; pointer-events: none; }
+.line { display: block; width: 35%; height: 3px; background: #222; animation: progress 1.1s ease-in-out infinite; }
+.full { min-height: 65dvh; display: grid; place-items: center; position: relative; background: #fff; }
+.full > .line { position: absolute; top: 0; left: 0; }
+.full { overflow: hidden; }
+.brand { font-size: 20px; letter-spacing: .15em; text-align: center; }
+.brand span { display: block; font-size: 12px; letter-spacing: .06em; color: #777; margin-top: 16px; }
+@keyframes progress { from { transform: translateX(-110%); } to { transform: translateX(390%); } }
+@media (prefers-reduced-motion: reduce) { .line { animation: none; width: 100%; opacity: .4; } }

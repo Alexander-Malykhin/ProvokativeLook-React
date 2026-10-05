@@ -1,3 +1,4 @@
+import { animateModalClose } from "@UI/overlays/Modal/animateModalClose";
 import Modal from "@UI/overlays/Modal/Modal";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import { closeTableSizes } from "@store/slices/toggleModalTableSizesSlice";
@@ -6,7 +7,7 @@ const TableSizes = () => {
     const dispatch = useAppDispatch();
     const isOpen = useAppSelector((state) => state.toggleModalTableSizes.isModalTableSizesOpen);
     const rows = useAppSelector((state) => state.toggleModalTableSizes.rows);
-    const close = () => dispatch(closeTableSizes());
+    const close = () => animateModalClose(() => { dispatch(closeTableSizes()); });
     return (<Modal open={isOpen} onClose={close} overlayClassName={styles.modals} contentClassName={styles.modals__table} ariaLabelledBy="table-sizes-title">
       <div className={styles.modals__header}>
         <h2 id="table-sizes-title" className={styles.modals__header_title}>

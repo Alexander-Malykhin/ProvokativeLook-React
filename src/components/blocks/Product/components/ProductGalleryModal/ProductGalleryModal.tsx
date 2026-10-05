@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+import { animateModalClose } from "@UI/overlays/Modal/animateModalClose";
+import { useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import styles from "./ProductGalleryModal.module.scss";
 import Image from "@UI/media/Image/Image";
@@ -9,18 +10,19 @@ interface ProductGalleryModalProps {
     onChange: (index: number) => void;
     onClose: () => void;
 }
-const ProductGalleryModal = ({ images, activeIndex, title, onChange, onClose, }: ProductGalleryModalProps) => {
+const ProductGalleryModal = ({ images, activeIndex, title, onChange, onClose: finishClose, }: ProductGalleryModalProps) => {
+    const onClose = useCallback(() => animateModalClose(finishClose), [finishClose]);
     const touchStartX = useRef<number | null>(null);
-    const previous = () => {
+    const previous = useCallback(() => {
         if (!images.length)
             return;
         onChange((activeIndex - 1 + images.length) % images.length);
-    };
-    const next = () => {
+    }, [activeIndex, images.length, onChange]);
+    const next = useCallback(() => {
         if (!images.length)
             return;
         onChange((activeIndex + 1) % images.length);
-    };
+    }, [activeIndex, images.length, onChange]);
     useEffect(() => {
         const previousOverflow = document.body.style.overflow;
         document.body.style.overflow = "hidden";
@@ -37,7 +39,7 @@ const ProductGalleryModal = ({ images, activeIndex, title, onChange, onClose, }:
             document.body.style.overflow = previousOverflow;
             window.removeEventListener("keydown", handleKeyDown);
         };
-    }, [activeIndex, images.length, onClose, onChange]);
+    }, [onClose, next, previous]);
     if (!images.length)
         return null;
     const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
@@ -56,10 +58,10 @@ const ProductGalleryModal = ({ images, activeIndex, title, onChange, onClose, }:
         else
             next();
     };
-    return createPortal(<div className={styles.gallery} role="dialog" aria-modal="true" aria-label={`Галерея ${title}`}>
+    return createPortal(<div data-modal-overlay data-modal-fullscreen className={styles.gallery} role="dialog" aria-modal="true" aria-label={`Галерея ${title}`}>
       <button type="button" className={styles.gallery__overlay} onClick={onClose} aria-label="Закрыть галерею"/>
 
-      <div className={styles.gallery__content}>
+      <div data-modal-content className={styles.gallery__content}>
         <button type="button" className={styles.gallery__close} onClick={onClose} aria-label="Закрыть">
           ×
         </button>
