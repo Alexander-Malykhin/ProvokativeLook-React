@@ -1,3 +1,4 @@
+import { safeLocalStorage } from "@helpers/browserStorage";
 import { useCallback, useEffect, useState } from "react";
 const STORAGE_KEY = "provokative-look-delivery-city";
 const EVENT_NAME = "provokative-look-delivery-city-change";
@@ -5,7 +6,7 @@ export const DEFAULT_DELIVERY_CITY = "Ростов-на-Дону";
 const readCity = () => {
     if (typeof window === "undefined")
         return DEFAULT_DELIVERY_CITY;
-    return window.localStorage.getItem(STORAGE_KEY)?.trim() || DEFAULT_DELIVERY_CITY;
+    return safeLocalStorage.getItem(STORAGE_KEY)?.trim() || DEFAULT_DELIVERY_CITY;
 };
 export const useDeliveryCity = () => {
     const [city, setCityState] = useState(readCity);
@@ -20,12 +21,12 @@ export const useDeliveryCity = () => {
     }, []);
     const setCity = useCallback((nextCity: string) => {
         const normalized = nextCity.trim() || DEFAULT_DELIVERY_CITY;
-        window.localStorage.setItem(STORAGE_KEY, normalized);
+        safeLocalStorage.setItem(STORAGE_KEY, normalized);
         setCityState(normalized);
         window.dispatchEvent(new Event(EVENT_NAME));
     }, []);
     const resetCity = useCallback(() => {
-        window.localStorage.removeItem(STORAGE_KEY);
+        safeLocalStorage.removeItem(STORAGE_KEY);
         setCityState(DEFAULT_DELIVERY_CITY);
         window.dispatchEvent(new Event(EVENT_NAME));
     }, []);

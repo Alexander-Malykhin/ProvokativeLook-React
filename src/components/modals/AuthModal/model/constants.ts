@@ -6,7 +6,6 @@ export const INITIAL_LOGIN_FORM: LoginFormState = {
 export const INITIAL_REGISTER_FORM: RegisterFormState = {
     firstName: "",
     lastName: "",
-    phone: "",
     email: "",
     password: "",
     confirmPassword: "",

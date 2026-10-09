@@ -1,3 +1,4 @@
+import { safeSessionStorage } from "@helpers/browserStorage";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./PaymentRedirectPage.module.scss";
@@ -5,7 +6,7 @@ const PaymentRedirectPage = () => {
     const navigate = useNavigate();
     const [seconds, setSeconds] = useState(2);
     useEffect(() => {
-        const paymentUrl = sessionStorage.getItem("provokativelook.payment.url") ?? "";
+        const paymentUrl = safeSessionStorage.getItem("provokativelook.payment.url") ?? "";
         if (!paymentUrl) {
             navigate("/profile/orders", { replace: true });
             return;

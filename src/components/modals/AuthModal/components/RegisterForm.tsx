@@ -1,9 +1,7 @@
-import type { ChangeEvent } from "react";
 import styles from "../AuthModal.module.scss";
 import type { RegisterFormProps } from "../model/types";
 import AuthMessages from "./AuthMessages";
 import PasswordInput from "./PasswordInput";
-import PhoneInput from "@components/common/PhoneInput/PhoneInput";
 const RegisterForm = ({ form, isLoading, errorMessage, fieldErrors, onChange, onSubmit, onSwitch, }: RegisterFormProps) => {
     const passwordChecks = [
         { label: "8+ символов", passed: form.password.length >= 8 },
@@ -13,8 +11,8 @@ const RegisterForm = ({ form, isLoading, errorMessage, fieldErrors, onChange, on
     ];
     return (<form className={styles.form} onSubmit={onSubmit} noValidate>
       <div className={styles.form__header}>
-        <h2 id="auth-modal-title" className={styles.form__title}>Регистрация</h2>
-        <p className={styles.form__description}>Заполните данные для создания аккаунта</p>
+        <h2 id="auth-modal-title" className={styles.form__title}>Регистрация по почте</h2>
+        <p className={styles.form__description}>Запасной способ, если не получается подтвердить телефон. Отправим код на email. Телефон можно добавить в личном кабинете после подтверждения номера.</p>
       </div>
 
       <div className={styles.form__fields}>
@@ -42,11 +40,6 @@ const RegisterForm = ({ form, isLoading, errorMessage, fieldErrors, onChange, on
 
         <PasswordInput name="confirmPassword" value={form.confirmPassword} label="Повторите пароль" placeholder="Повторите пароль" autoComplete="new-password" onChange={onChange} error={fieldErrors.confirmPassword} dataField="confirmPassword"/>
 
-        <label className={`${styles.field} ${fieldErrors.phone ? styles.field_error : ""}`}>
-          <span className={styles.field__label}>Телефон</span>
-          <PhoneInput value={form.phone} onChange={(value) => onChange({ target: { name: "phone", value } } as ChangeEvent<HTMLInputElement>)} className={styles.field__input} selectClassName={styles.field__phoneCountry} ariaInvalid={Boolean(fieldErrors.phone)} dataField="phone"/>
-          {fieldErrors.phone && <span id="phone-error" className={styles.field__error}>{fieldErrors.phone}</span>}
-        </label>
       </div>
 
       <div className={styles.form__passwordRules} aria-live="polite">

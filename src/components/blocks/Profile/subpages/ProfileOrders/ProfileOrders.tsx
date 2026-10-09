@@ -1,3 +1,4 @@
+import { safeSessionStorage } from "@helpers/browserStorage";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import styles from "./ProfileOrders.module.scss";
@@ -15,8 +16,8 @@ const ProfileOrders = ({ title }: ProfilePageProps) => {
     const [searchParams] = useSearchParams();
     const paidOrder = searchParams.get("paid");
     const paymentSuccess = searchParams.get("payment") === "success";
-    const [returnedOrder, setReturnedOrder] = useState<string | null>(() => typeof window !== "undefined" ? sessionStorage.getItem("provokativelook.payment.returnedOrder") : null);
-    const [pendingUntil] = useState(() => typeof window !== "undefined" ? Number(sessionStorage.getItem("provokativelook.payment.pendingUntil") ?? 0) : 0);
+    const [returnedOrder, setReturnedOrder] = useState<string | null>(() => typeof window !== "undefined" ? safeSessionStorage.getItem("provokativelook.payment.returnedOrder") : null);
+    const [pendingUntil] = useState(() => typeof window !== "undefined" ? Number(safeSessionStorage.getItem("provokativelook.payment.pendingUntil") ?? 0) : 0);
     const shouldPollPayment = Boolean(returnedOrder) && Date.now() < pendingUntil;
     const { data, isLoading, isFetching, isError, refetch } = useGetOrdersQuery(
         { limit, offset: 0 },
@@ -41,8 +42,8 @@ const ProfileOrders = ({ title }: ProfilePageProps) => {
     useEffect(() => {
         if (!returnedOrder) return;
         const timer = window.setTimeout(() => {
-            sessionStorage.removeItem('provokativelook.payment.returnedOrder');
-            sessionStorage.removeItem('provokativelook.payment.pendingUntil');
+            safeSessionStorage.removeItem('provokativelook.payment.returnedOrder');
+            safeSessionStorage.removeItem('provokativelook.payment.pendingUntil');
             setReturnedOrder(null);
         }, Math.max(0, pendingUntil - Date.now()));
         return () => window.clearTimeout(timer);
@@ -63,14 +64,14 @@ const ProfileOrders = ({ title }: ProfilePageProps) => {
         if (!returnedOrder)
             return;
         const found = orders.find((order) => String(order.orderId ?? "") === returnedOrder || String(order.number) === returnedOrder);
-        const paid = sessionStorage.getItem('provokativelook.payment.purpose') === 'delivery' ? found?.shipping?.paid : found?.isPaid;
+        const paid = safeSessionStorage.getItem('provokativelook.payment.purpose') === 'delivery' ? found?.shipping?.paid : found?.isPaid;
         if (paid || found?.paymentState === "pending" || Date.now() >= pendingUntil) {
             if (paid) {
-                sessionStorage.removeItem("provokativelook.payment.order");
+                safeSessionStorage.removeItem("provokativelook.payment.order");
             }
             if (paid || Date.now() >= pendingUntil) {
-                sessionStorage.removeItem("provokativelook.payment.returnedOrder");
-                sessionStorage.removeItem("provokativelook.payment.pendingUntil");
+                safeSessionStorage.removeItem("provokativelook.payment.returnedOrder");
+                safeSessionStorage.removeItem("provokativelook.payment.pendingUntil");
                 setReturnedOrder(null);
             }
         }
@@ -85,8 +86,9 @@ const ProfileOrders = ({ title }: ProfilePageProps) => {
     }, [id, navigate, orders, paidOrder, paymentSuccess]);
     return <div className={styles.content}>
     <h2 className={styles.content__title}>{title}</h2>
+    {isError && data && <p role="status">Не удалось обновить заказы. Показаны последние загруженные данные. <button type="button" disabled={isFetching} onClick={() => void refetch()}>Повторить</button></p>}
     {isLoading ? <div className={styles.content__skeleton} aria-label="Загрузка заказов">{Array.from({ length: 3 }).map((_, i) => <div key={i} className={styles.content__skeletonItem}/>)}</div>
-            : isError ? <div className={styles.content__error}><span>Не удалось загрузить заказы.</span><button type="button" onClick={() => void refetch()}>Повторить</button></div>
+            : isError && !data ? <div className={styles.content__error}><span>Не удалось загрузить заказы.</span><button type="button" disabled={isFetching} onClick={() => void refetch()}>Повторить</button></div>
                 : id && !selected ? <div className={styles.content__error}><span>Заказ не найден.</span><button type="button" onClick={() => navigate('/profile/orders')}>К заказам</button></div>
                     : selected ? <OrderDetails order={selected}/>
                         : orders.length === 0 ? <NotOrder /> : <>

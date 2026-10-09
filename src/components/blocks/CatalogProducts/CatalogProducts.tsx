@@ -1,3 +1,4 @@
+import { safeSessionStorage } from "@helpers/browserStorage";
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import styles from './CatalogProducts.module.scss';
@@ -40,7 +41,7 @@ type StoredCatalogFilterState = {
 const readStoredFilterState = (slug: string): StoredCatalogFilterState | null => {
     if (typeof window === 'undefined') return null;
     try {
-        const raw = window.sessionStorage.getItem(FILTER_STATE_STORAGE_KEY);
+        const raw = safeSessionStorage.getItem(FILTER_STATE_STORAGE_KEY);
         if (!raw) return null;
         const parsed = JSON.parse(raw) as Partial<StoredCatalogFilterState>;
         if (parsed.slug !== slug || !parsed.filters || !parsed.sort) return null;
@@ -61,7 +62,7 @@ const readStoredFilterState = (slug: string): StoredCatalogFilterState | null =>
 const writeStoredFilterState = (state: StoredCatalogFilterState) => {
     if (typeof window === 'undefined') return;
     try {
-        window.sessionStorage.setItem(FILTER_STATE_STORAGE_KEY, JSON.stringify(state));
+        safeSessionStorage.setItem(FILTER_STATE_STORAGE_KEY, JSON.stringify(state));
     } catch {
         // sessionStorage can be unavailable in privacy mode; in-memory state still works.
     }
@@ -130,7 +131,7 @@ const CatalogProducts = () => {
     }, [resolvedSlug, filters, sort]);
     const offset = (page - 1) * PAGE_SIZE;
     const queryFilters = useDebouncedValue(filters, 250);
-    const { data, isLoading, isFetching, error } = useGetCatalogProductsQuery({
+    const { currentData: data, isLoading, isFetching, error } = useGetCatalogProductsQuery({
         sectionIds: category.sectionIds,
         sizes: queryFilters.sizes,
         colors: queryFilters.colors,
@@ -145,10 +146,10 @@ const CatalogProducts = () => {
     const products = data?.products ?? [];
     const filterOptions = data?.filterOptions ?? EMPTY_FILTER_OPTIONS;
     useEffect(() => {
-        if (page > totalPages) {
+        if (data && page > totalPages) {
             setPage(totalPages);
         }
-    }, [page, totalPages]);
+    }, [data, page, totalPages]);
     const handleFiltersChange = (nextFilters: CatalogFilters) => {
         setFilters(nextFilters);
         setPage(1);
@@ -170,13 +171,13 @@ const CatalogProducts = () => {
         <div className={styles.category__list}>
           <CatalogFilterButtons sort={sort} options={filterOptions} onSortChange={handleSortChange}/>
 
-          <CatalogList products={products} isLoading={isLoading} isFetching={isFetching} errorMessage={error
+          <CatalogList products={products} isLoading={isLoading || (!data && isFetching)} isFetching={isFetching} errorMessage={error
             ? getRequestErrorMessage(error, 'Не удалось получить товары каталога')
             : null}/>
         </div>
       </MainLayoutContainer>
 
-      {!isLoading && !error && total > PAGE_SIZE && (<Pagination page={page} total={total} pageSize={PAGE_SIZE} totalPages={totalPages} onChange={handlePageChange}/>)}
+      {!isLoading && !error && total > PAGE_SIZE && (<Pagination page={page} total={total} pageSize={PAGE_SIZE} itemCount={products.length} totalPages={totalPages} disabled={isFetching} onChange={handlePageChange}/>)}
 
       {isFilterOpen && (<CatalogFilter productsCount={total} options={filterOptions} value={filters} sort={sort} onChange={handleFiltersChange} onSortChange={handleSortChange} onReset={() => setPage(1)}/>)}
     </SectionLayout>);

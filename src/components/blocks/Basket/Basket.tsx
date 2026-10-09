@@ -27,7 +27,7 @@ const BasketSkeleton = () => (<SectionLayout>
   </SectionLayout>);
 const Basket = () => {
     const navigate = useNavigate();
-    const { data, isLoading, isFetching, error } = useGetCartQuery();
+    const { data, isLoading, isFetching, error, refetch } = useGetCartQuery();
     const [updateCartItem] = useUpdateCartItemMutation();
     const [removeCartItem] = useRemoveCartItemMutation();
     const [clearCart] = useClearCartMutation();
@@ -120,6 +120,7 @@ const Basket = () => {
         <MainLayoutContainer>
           <div className={styles.basket__error}>
             Не удалось загрузить корзину
+            <button type="button" disabled={isFetching} onClick={() => void refetch()}>Повторить</button>
           </div>
         </MainLayoutContainer>
       </SectionLayout>);

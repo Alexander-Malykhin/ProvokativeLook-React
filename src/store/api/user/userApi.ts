@@ -3,7 +3,11 @@ import type { LoginRequest, LoginResponse, LogoutResponse, RegisterConfirmReques
 export const userApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getUser: builder.query<UserResponse, void>({
-            query: () => ({ url: "user" }),
+            query: () => ({
+                url: "user", timeout: 8000,
+                validateStatus: (response, body) => response.status === 200 && body?.success === true
+                    && typeof body.user?.id === 'number' && body.user.id > 0,
+            }),
             providesTags: ["User"],
         }),
         updateUser: builder.mutation<UserResponse, UpdateUserRequest>({
@@ -20,6 +24,7 @@ export const userApi = baseApi.injectEndpoints({
                     }));
                 }
                 catch {
+                    // The mutation exposes its error to the form; retain the cached profile.
                 }
             },
             invalidatesTags: ["User", "Addresses"],

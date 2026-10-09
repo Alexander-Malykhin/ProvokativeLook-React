@@ -5,8 +5,7 @@
 .list {
   display: grid;
   grid-auto-flow: column;
-  // Макет «Вы смотрели»: компактная карточка 207 x 394 px.
-  // Не даём общему ProductCard (322 x 547) растягивать этот слайдер.
+  // Компактные фотографии 207 x 276 px, каждая ведёт на страницу товара.
   grid-auto-columns: rem(207);
   gap: rem(18);
 
@@ -46,16 +45,6 @@
     gap: rem(10);
   }
 
-  // Картинка/пустышка в этом блоке имеет собственный размер,
-  // чтобы карточка не оставалась высотой 547 px.
-  > * > a:first-child {
-    flex: 0 0 rem(276);
-    width: rem(207);
-    height: rem(276);
-    min-height: rem(276);
-    aspect-ratio: auto;
-  }
-
   @media (max-width: rem($tablet)) {
     grid-auto-columns: rem(207);
     gap: rem(12);
@@ -82,18 +71,22 @@
       min-width: 0;
     }
 
-    > * > a:first-child {
-      width: 100%;
-      height: auto;
-      min-height: 0;
-      flex-basis: auto;
-      aspect-ratio: 0.75;
-    }
-
     &:not(.list_expanded) > *:nth-child(n + 5) {
       display: none;
     }
   }
+}
+
+.item {
+  display: block;
+  aspect-ratio: 0.75;
+  overflow: hidden;
+}
+
+.item .image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .moreButton {

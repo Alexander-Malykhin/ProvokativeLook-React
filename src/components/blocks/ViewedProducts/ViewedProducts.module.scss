@@ -41,7 +41,7 @@
 }
 
 .cardSkeleton {
-  height: rem(360);
+  aspect-ratio: 0.75;
 }
 
 @keyframes viewedSkeleton {
@@ -77,7 +77,4 @@
     gap: rem(10);
   }
 
-  .cardSkeleton {
-    height: rem(280);
-  }
 }

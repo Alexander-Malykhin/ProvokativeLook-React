@@ -5,7 +5,7 @@ import PasswordInput from "./PasswordInput";
 const LoginForm = ({ form, isLoading, errorMessage, successMessage, fieldErrors, onChange, onSubmit, onSwitch, onForgotPassword, }: LoginFormProps) => (<form className={styles.form} onSubmit={onSubmit} noValidate>
     <div className={styles.form__header}>
       <h2 id="auth-modal-title" className={styles.form__title}>
-        Вход в кабинет
+        Вход по почте
       </h2>
       <p className={styles.form__description}>
         Введите электронную почту и пароль

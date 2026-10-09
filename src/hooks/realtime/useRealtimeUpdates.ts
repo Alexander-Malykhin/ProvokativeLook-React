@@ -1,3 +1,4 @@
+import { safeLocalStorage } from "@helpers/browserStorage";
 import { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { SITE_API_BASE_URL } from "@/config/env";
@@ -25,13 +26,13 @@ export type BrowserNotificationPermissionResult = NotificationPermission | "unsu
 const getLastShownNotificationId = (): number => {
     if (typeof window === "undefined")
         return 0;
-    const value = Number(window.localStorage.getItem(LAST_BROWSER_NOTIFICATION_KEY) ?? 0);
+    const value = Number(safeLocalStorage.getItem(LAST_BROWSER_NOTIFICATION_KEY) ?? 0);
     return Number.isFinite(value) && value > 0 ? value : 0;
 };
 export const rememberBrowserNotificationBaseline = (notificationId: number) => {
     if (typeof window === "undefined" || notificationId <= 0)
         return;
-    window.localStorage.setItem(LAST_BROWSER_NOTIFICATION_KEY, String(notificationId));
+    safeLocalStorage.setItem(LAST_BROWSER_NOTIFICATION_KEY, String(notificationId));
 };
 const showBrowserNotification = (payload: RealtimeNotification) => {
     if (!canUseBrowserNotifications() || Notification.permission !== "granted") {
@@ -88,6 +89,7 @@ export const useRealtimeUpdates = (enabled = true) => {
                     }
                 }
                 catch {
+                    // Ignore a malformed event; the next snapshot can recover the stream.
                 }
         });
         source.addEventListener("orders.changed", () => {
@@ -103,6 +105,7 @@ export const useRealtimeUpdates = (enabled = true) => {
                     showBrowserNotification(payload);
                 }
                 catch {
+                    // Query invalidation above still refreshes the authoritative data.
                 }
         });
         return () => {

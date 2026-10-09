@@ -50,7 +50,7 @@ const RouteErrorBoundary = () => {
         Обновить приложение
       </button>
 
-      <details open>
+      {import.meta.env.DEV && <details open>
         <summary>Техническая информация</summary>
         <pre style={{
             whiteSpace: "pre-wrap",
@@ -63,7 +63,7 @@ const RouteErrorBoundary = () => {
         }}>
           {message || "Неизвестная ошибка"}
         </pre>
-      </details>
+      </details>}
     </main>);
 };
 export default RouteErrorBoundary;

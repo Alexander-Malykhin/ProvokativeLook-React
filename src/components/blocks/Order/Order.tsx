@@ -1,3 +1,4 @@
+import { safeSessionStorage } from "@helpers/browserStorage";
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm, useWatch } from "react-hook-form";
@@ -26,13 +27,14 @@ const Order = () => {
     const [postalQuote, setPostalQuote] = useState<PostalQuote | null>(null);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const { data: cartData, isLoading: isCartLoading } = useGetCartQuery();
-    const { data: userData, isLoading: isUserLoading } = useGetUserQuery();
-    const { data: addressesData, isLoading: isAddressesLoading } = useGetAddressesQuery();
+    const { data: cartData, isLoading: isCartLoading, error: cartError, refetch: refetchCart } = useGetCartQuery();
+    const { data: userData, isLoading: isUserLoading, error: userError, refetch: refetchUser } = useGetUserQuery();
+    const { data: addressesData, isLoading: isAddressesLoading, error: addressesError, refetch: refetchAddresses } = useGetAddressesQuery();
     const [recentlySavedAddress, setRecentlySavedAddress] = useState<ProfileAddress | null>(null);
     const [createOrder, { isLoading: isCreating }] = useCreateOrderMutation();
     const [errorMessage, setErrorMessage] = useState("");
     const initializedRef = useRef(false);
+    const creatingRef = useRef(false);
     const deliveryRef = useRef<HTMLDivElement>(null);
     const scrollToDelivery = () => {
         deliveryRef.current?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
@@ -80,6 +82,7 @@ const Order = () => {
         initializedRef.current = true;
     }, [addresses, addressesData, reset, userData?.user]);
     const onSubmit = (event: FormEvent<HTMLFormElement>) => handleSubmit(async (values) => {
+        if (creatingRef.current) return;
         setErrorMessage("");
         if (!cart || cart.items.length === 0) {
             setErrorMessage("Корзина пуста");
@@ -94,6 +97,7 @@ const Order = () => {
             scrollToDelivery();
             return;
         }
+        creatingRef.current = true;
         try {
             const response = await createOrder({
                 recipient: {
@@ -110,9 +114,9 @@ const Order = () => {
                 privacy: values.privacy,
             }).unwrap();
             if (response.order.payment.required && response.order.payment.url) {
-                sessionStorage.removeItem('provokativelook.payment.purpose');
-                sessionStorage.setItem("provokativelook.payment.url", response.order.payment.url);
-                sessionStorage.setItem("provokativelook.payment.order", String(response.order.orderId));
+                safeSessionStorage.removeItem('provokativelook.payment.purpose');
+                safeSessionStorage.setItem("provokativelook.payment.url", response.order.payment.url);
+                safeSessionStorage.setItem("provokativelook.payment.order", String(response.order.orderId));
                 navigate("/payment/redirect");
                 window.setTimeout(() => {
                     dispatch(baseApi.util.invalidateTags(["Cart"]));
@@ -126,6 +130,8 @@ const Order = () => {
         }
         catch (error) {
             setErrorMessage(getRequestErrorMessage(error, "Не удалось оформить заказ"));
+        } finally {
+            creatingRef.current = false;
         }
     }, (invalid) => {
         if (invalid.delivery || invalid.addressId || !delivery) scrollToDelivery();
@@ -140,6 +146,12 @@ const Order = () => {
           <div className={styles.order__loading}>Загрузка данных заказа...</div>
         </MainLayoutContainer>
       </SectionLayout>);
+    }
+    if ((!cartData && cartError) || (!userData && userError) || (!addressesData && addressesError)) {
+        return <SectionLayout><MainLayoutContainer><div role="alert">
+            Не удалось загрузить данные заказа. Проверьте подключение.
+            <button type="button" onClick={() => { void refetchCart(); void refetchUser(); void refetchAddresses(); }}>Повторить загрузку</button>
+        </div></MainLayoutContainer></SectionLayout>;
     }
     if (!cart || cart.items.length === 0) {
         return (<SectionLayout>

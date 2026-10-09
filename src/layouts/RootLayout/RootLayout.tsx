@@ -1,3 +1,4 @@
+import { safeSessionStorage } from "@helpers/browserStorage";
 import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate, useNavigation } from "react-router-dom";
 import PageLoader from '@components/system/PageLoader/PageLoader';
@@ -22,11 +23,11 @@ const RootLayout = () => {
         const params = new URLSearchParams(location.search);
         if (params.get("payment") !== "success")
             return;
-        const returnedOrder = params.get("order") ?? sessionStorage.getItem("provokativelook.payment.order") ?? "";
-        sessionStorage.removeItem("provokativelook.payment.url");
+        const returnedOrder = params.get("order") ?? safeSessionStorage.getItem("provokativelook.payment.order") ?? "";
+        safeSessionStorage.removeItem("provokativelook.payment.url");
         if (returnedOrder) {
-            sessionStorage.setItem("provokativelook.payment.returnedOrder", returnedOrder);
-            sessionStorage.setItem("provokativelook.payment.pendingUntil", String(Date.now() + 60000));
+            safeSessionStorage.setItem("provokativelook.payment.returnedOrder", returnedOrder);
+            safeSessionStorage.setItem("provokativelook.payment.pendingUntil", String(Date.now() + 60000));
         }
         navigate("/profile/orders", { replace: true });
     }, [location.search, navigate]);

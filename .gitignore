@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local tests
+/src/tests/
+/.api-audit-eslint.json

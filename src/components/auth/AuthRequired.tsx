@@ -7,8 +7,8 @@ const AuthRequired = ({ children }: PropsWithChildren) => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const { data, isLoading, isFetching, error, refetch } = useGetUserQuery();
-    const authenticated = Boolean(data?.success && data.user);
     const unauthorized = error && 'status' in error && error.status === 401;
+    const authenticated = Boolean(data?.success && data.user && !unauthorized);
     useEffect(() => {
         if (isLoading || isFetching || authenticated || !unauthorized)
             return;

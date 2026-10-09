@@ -1,3 +1,4 @@
+import { safeSessionStorage } from "@helpers/browserStorage";
 import { Link, useNavigate } from "react-router-dom";
 import Image from "@UI/media/Image/Image";
 import type { OrderDto } from "@store/api/orders/types";
@@ -20,9 +21,9 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
     const [payOrder, { isLoading: isPaying }] = usePayOrderMutation();
     const isReservedOrder = /резерв/iu.test(`${order.stage?.name ?? ""} ${order.statusText ?? ""}`);
     const paymentName = order.payment?.name || (isReservedOrder ? "Оплата при получении" : "");
-    const returnedOrder = typeof window !== "undefined" ? sessionStorage.getItem("provokativelook.payment.returnedOrder") : null;
-    const pendingUntil = typeof window !== "undefined" ? Number(sessionStorage.getItem("provokativelook.payment.pendingUntil") ?? 0) : 0;
-    const justReturnedFromPayment = sessionStorage.getItem('provokativelook.payment.purpose') !== 'delivery' && !order.isPaid && pendingUntil > Date.now() && Boolean(returnedOrder)
+    const returnedOrder = typeof window !== "undefined" ? safeSessionStorage.getItem("provokativelook.payment.returnedOrder") : null;
+    const pendingUntil = typeof window !== "undefined" ? Number(safeSessionStorage.getItem("provokativelook.payment.pendingUntil") ?? 0) : 0;
+    const justReturnedFromPayment = safeSessionStorage.getItem('provokativelook.payment.purpose') !== 'delivery' && !order.isPaid && pendingUntil > Date.now() && Boolean(returnedOrder)
         && (String(order.orderId ?? "") === returnedOrder || String(order.number) === returnedOrder);
     const paymentPending = order.paymentState === "pending" || justReturnedFromPayment;
     const isCancelled = order.status === "cancelled" || /отмен/iu.test(`${order.stage?.name ?? ""} ${order.statusText ?? ""}`);
@@ -34,9 +35,9 @@ const OrderDetails = ({ order }: OrderDetailsProps) => {
         if (response.payment.paid)
             return;
         if (response.payment.url) {
-            sessionStorage.removeItem('provokativelook.payment.purpose');
-            sessionStorage.setItem("provokativelook.payment.url", response.payment.url);
-            sessionStorage.setItem("provokativelook.payment.order", String(order.orderId));
+            safeSessionStorage.removeItem('provokativelook.payment.purpose');
+            safeSessionStorage.setItem("provokativelook.payment.url", response.payment.url);
+            safeSessionStorage.setItem("provokativelook.payment.order", String(order.orderId));
             navigate("/payment/redirect");
         }
     };

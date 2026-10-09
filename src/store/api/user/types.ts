@@ -36,7 +36,6 @@ export interface LoginResponse {
 export interface RegisterRequest {
     firstName: string;
     lastName: string;
-    phone: string;
     email: string;
     password: string;
     confirmPassword: string;
@@ -48,6 +47,8 @@ export interface RegisterResponse {
 export interface RegisterConfirmRequest {
     email: string;
     code: string;
+    password: string;
+    confirmPassword: string;
 }
 export interface RegisterConfirmResponse {
     success: boolean;

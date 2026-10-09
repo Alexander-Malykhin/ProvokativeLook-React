@@ -6,7 +6,6 @@ export interface LoginFormState {
 export interface RegisterFormState {
     firstName: string;
     lastName: string;
-    phone: string;
     email: string;
     password: string;
     confirmPassword: string;

@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useDragScroll } from "@hooks/useDragScroll";
 import styles from "./ViewedSlider.module.scss";
-import ProductCard from "@components/ProductCard/ProductCard";
+import { Link } from "react-router-dom";
+import Image from "@UI/media/Image/Image";
+import { slugifyCatalogValue } from "@/helpers/catalog";
 import type { ViewedSliderProps } from "@components/blocks/ViewedProducts/types/types";
 
 const ViewedSlider = ({ sliderRef, products }: ViewedSliderProps) => {
@@ -13,7 +15,14 @@ const ViewedSlider = ({ sliderRef, products }: ViewedSliderProps) => {
         <div className={styles.wrapper}>
             <div ref={sliderRef} className={className}>
                 {products.map((product) => (
-                    <ProductCard key={product.id} {...product} />
+                    <Link
+                        key={product.id}
+                        to={`/catalog/${product.sectionSlug || 'catalog'}/${product.slug || slugifyCatalogValue(product.title)}/`}
+                        className={styles.item}
+                        aria-label={`Открыть товар ${product.title}`}
+                    >
+                        <Image src={product.image} alt={product.title} className={styles.image} draggable={false}/>
+                    </Link>
                 ))}
             </div>
             {products.length > 4 && !isExpanded && (

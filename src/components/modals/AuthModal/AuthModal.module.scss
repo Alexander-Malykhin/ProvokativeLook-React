@@ -1,3 +1,10 @@
+.fallbackHint {
+  margin: rem(24) 0 rem(4);
+  text-align: center;
+  font-size: rem(13);
+  color: #777;
+}
+
 .modal > .form__switch {
   display: block;
   width: fit-content;
@@ -669,4 +676,12 @@
   .form__passwordRule {
     @include font(9, $fw-light);
   }
+}
+.connectionStatus {
+  margin-top: 16px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #666;
+  button { text-decoration: underline; cursor: pointer; }
+  button:disabled { cursor: default; }
 }

@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import styles from "./PhoneInput.module.scss";
-import { PHONE_COUNTRIES, detectCountry, formatPhone, normalizePhone, } from "./phone";
+import { PHONE_COUNTRIES, detectCountry, formatNationalPhone, nationalPhone, phoneFromInput } from "./phone";
 type Props = {
     value: string;
     onChange: (value: string) => void;
@@ -12,6 +12,7 @@ type Props = {
     disabled?: boolean;
     ariaInvalid?: boolean;
     dataField?: string;
+    countryCodes?: readonly string[];
 };
 type DropdownPosition = {
     top: number;
@@ -25,8 +26,9 @@ const DROPDOWN_GAP = 8;
 const VIEWPORT_GAP = 12;
 const MIN_DROPDOWN_HEIGHT = 160;
 const MAX_DROPDOWN_HEIGHT = 330;
-const PhoneInput = ({ value, onChange, className, selectClassName, placeholder = "+7 (999) 999-99-99", required, disabled, ariaInvalid, dataField, }: Props) => {
-    const [countryIso, setCountryIso] = useState(() => detectCountry(value, "RU"));
+const PhoneInput = ({ value, onChange, className, selectClassName, placeholder, required, disabled, ariaInvalid, dataField, countryCodes }: Props) => {
+    const [selectedCountry, setCountryIso] = useState(() => detectCountry(value, "RU"));
+    const countryIso = detectCountry(value, selectedCountry);
     const [isOpen, setIsOpen] = useState(false);
     const [editing, setEditing] = useState(false);
     const [draft, setDraft] = useState('');
@@ -34,11 +36,7 @@ const PhoneInput = ({ value, onChange, className, selectClassName, placeholder =
     const rootRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
-    useEffect(() => {
-        if (value)
-            setCountryIso(detectCountry(value, countryIso));
-    }, [value]);
-    const updateDropdownPosition = () => {
+    const updateDropdownPosition = useCallback(() => {
         const trigger = triggerRef.current;
         if (!trigger)
             return;
@@ -56,13 +54,9 @@ const PhoneInput = ({ value, onChange, className, selectClassName, placeholder =
             ? Math.max(VIEWPORT_GAP, rect.top - DROPDOWN_GAP - maxHeight)
             : Math.min(viewportHeight - VIEWPORT_GAP - maxHeight, rect.bottom + DROPDOWN_GAP);
         setDropdownPosition({ top, left, width, maxHeight, openUp });
-    };
+    }, []);
     useEffect(() => {
-        if (!isOpen) {
-            setDropdownPosition(null);
-            return;
-        }
-        updateDropdownPosition();
+        if (!isOpen) return;
         const reposition = () => updateDropdownPosition();
         window.addEventListener("resize", reposition);
         window.addEventListener("scroll", reposition, true);
@@ -70,7 +64,7 @@ const PhoneInput = ({ value, onChange, className, selectClassName, placeholder =
             window.removeEventListener("resize", reposition);
             window.removeEventListener("scroll", reposition, true);
         };
-    }, [isOpen]);
+    }, [isOpen, updateDropdownPosition]);
     useEffect(() => {
         const close = (event: MouseEvent) => {
             const target = event.target as Node;
@@ -97,21 +91,20 @@ const PhoneInput = ({ value, onChange, className, selectClassName, placeholder =
     const country = useMemo(() => PHONE_COUNTRIES.find((item) => item.iso === countryIso) ?? PHONE_COUNTRIES[0], [countryIso]);
     const changeCountry = (nextIso: string) => {
         const next = PHONE_COUNTRIES.find((item) => item.iso === nextIso) ?? PHONE_COUNTRIES[0];
-        const current = PHONE_COUNTRIES.find((item) => item.iso === countryIso) ?? PHONE_COUNTRIES[0];
-        const digits = value.replace(/\D/g, "");
-        const local = digits.startsWith(current.dial) ? digits.slice(current.dial.length) : digits;
+        const local = nationalPhone(value, countryIso);
         setCountryIso(nextIso);
         setIsOpen(false);
-        onChange(normalizePhone(`${next.dial}${local}`, nextIso));
+        const nextValue = `+${next.dial}${local}`;
+        // Do not label an existing Russian number as KZ (or vice versa) after a manual switch.
+        onChange(next.dial === '7' && detectCountry(nextValue, nextIso) !== nextIso ? '+7' : nextValue);
         triggerRef.current?.focus({ preventScroll: true });
     };
     const handlePhoneChange = (raw: string) => {
-        const explicitInternational = raw.trim().startsWith("+");
-        const detected = explicitInternational ? detectCountry(raw, countryIso) : countryIso;
-        if (explicitInternational && detected !== countryIso) {
-            setCountryIso(detected);
-        }
-        onChange(normalizePhone(raw, detected));
+        const next = phoneFromInput(raw, countryIso);
+        const detected = detectCountry(next, countryIso);
+        setCountryIso(detected);
+        setDraft(nationalPhone(next, detected));
+        onChange(next);
     };
     const dropdown = isOpen && dropdownPosition && typeof document !== "undefined"
         ? createPortal(<div ref={dropdownRef} className={`${styles.phone__dropdown} ${dropdownPosition.openUp ? styles.phone__dropdown_up : ""}`.trim()} role="listbox" style={{
@@ -120,7 +113,7 @@ const PhoneInput = ({ value, onChange, className, selectClassName, placeholder =
                 width: dropdownPosition.width,
                 maxHeight: dropdownPosition.maxHeight,
             }}>
-            {PHONE_COUNTRIES.map((item) => (<button key={item.iso} type="button" role="option" aria-selected={item.iso === countryIso} className={`${styles.phone__option} ${item.iso === countryIso ? styles.phone__option_active : ""}`.trim()} onClick={() => changeCountry(item.iso)}>
+            {PHONE_COUNTRIES.filter(item => !countryCodes || countryCodes.includes(item.iso)).map((item) => (<button key={item.iso} type="button" role="option" aria-selected={item.iso === countryIso} className={`${styles.phone__option} ${item.iso === countryIso ? styles.phone__option_active : ""}`.trim()} onClick={() => changeCountry(item.iso)}>
                 <span className={styles.phone__optionName}>{item.name}</span>
                 <span className={styles.phone__optionDial}>
                   {item.iso} +{item.dial}
@@ -134,6 +127,7 @@ const PhoneInput = ({ value, onChange, className, selectClassName, placeholder =
           <button ref={triggerRef} type="button" className={`${styles.phone__countryButton} ${selectClassName ?? ""}`.trim()} onClick={() => {
             if (disabled)
                 return;
+            if (!isOpen) updateDropdownPosition();
             setIsOpen((opened) => !opened);
         }} disabled={disabled} aria-haspopup="listbox" aria-expanded={isOpen} aria-label="Выбрать страну телефона">
             <span className={styles.phone__countryCode}>
@@ -143,7 +137,7 @@ const PhoneInput = ({ value, onChange, className, selectClassName, placeholder =
           </button>
         </div>
 
-        <input type="tel" inputMode="tel" autoComplete="tel" value={editing ? draft : formatPhone(value)} onFocus={() => {setDraft(formatPhone(value));setEditing(true);}} onBlur={() => setEditing(false)} onChange={(event) => {setDraft(event.target.value);handlePhoneChange(event.target.value);}} className={`${styles.phone__input} ${className ?? ""}`.trim()} placeholder={placeholder} required={required} disabled={disabled} aria-invalid={ariaInvalid} data-register-field={dataField}/>
+        <input type="tel" inputMode="tel" autoComplete="tel-national" aria-label="Номер телефона без кода страны" value={editing ? draft : formatNationalPhone(value, countryIso)} onFocus={() => {setDraft(nationalPhone(value, countryIso));setEditing(true);}} onBlur={() => setEditing(false)} onChange={(event) => handlePhoneChange(event.target.value)} className={`${styles.phone__input} ${className ?? ""}`.trim()} placeholder={placeholder ?? (country.dial === '7' ? '(999) 999-99-99' : 'Номер телефона')} required={required} disabled={disabled} aria-invalid={ariaInvalid} data-register-field={dataField}/>
       </div>
 
       {dropdown}

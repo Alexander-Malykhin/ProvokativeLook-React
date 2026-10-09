@@ -16,9 +16,11 @@ export const getRequestErrorMessage = (error: unknown, fallback = "Не удал
         error?: string;
         message?: string;
     };
-    if (typeof candidate.data === "string" && candidate.data.trim()) {
-        return candidate.data;
-    }
+    if (candidate.status === 'TIMEOUT_ERROR') return 'Сервер не ответил вовремя. Проверьте подключение и попробуйте позже.';
+    if (candidate.status === 'FETCH_ERROR') return 'Нет соединения с сервером. Проверьте подключение и попробуйте позже.';
+    if (candidate.status === 'PARSING_ERROR') return 'Сервер вернул неполный ответ. Попробуйте ещё раз.';
+    if (typeof candidate.status === 'number' && candidate.status >= 500) return 'Сервер временно недоступен. Попробуйте позже.';
+    if (typeof candidate.data === "string") return fallback;
     if (candidate.data && typeof candidate.data === "object") {
         if (candidate.data.message) {
             return candidate.data.message;
@@ -36,9 +38,6 @@ export const getRequestErrorMessage = (error: unknown, fallback = "Не удал
             return firstError;
         }
     }
-    if (candidate.status === 'TIMEOUT_ERROR') return 'Сервер не ответил вовремя. Проверьте подключение и попробуйте позже.';
-    if (candidate.status === 'FETCH_ERROR') return 'Нет соединения с сервером. Проверьте подключение и попробуйте позже.';
-    if (typeof candidate.status === 'number' && candidate.status >= 500) return 'Сервер временно недоступен. Не удалось получить ответ. Попробуйте позже.';
     return candidate.message || candidate.error || fallback;
 };
 

@@ -1,3 +1,4 @@
+import { safeLocalStorage } from "@helpers/browserStorage";
 import { useMemo, useState, type FormEvent } from "react";
 import { animateModalClose } from "@UI/overlays/Modal/animateModalClose";
 import { Link, useNavigate } from "react-router-dom";
@@ -27,7 +28,7 @@ const SearchModal = () => {
     const [query, setQuery] = useState("");
     const [recentSearches, setRecentSearches] = useState<string[]>(() => {
         try {
-            const saved = JSON.parse(localStorage.getItem("plRecentSearches") ?? "[]");
+            const saved = JSON.parse(safeLocalStorage.getItem("plRecentSearches") ?? "[]");
             return Array.isArray(saved) ? saved.filter((item): item is string => typeof item === "string").slice(0, 10) : [];
         } catch {
             return [];
@@ -71,7 +72,7 @@ const SearchModal = () => {
             return;
         const nextRecent = [normalized, ...recentSearches.filter((item) => item.toLocaleLowerCase("ru-RU") !== normalized.toLocaleLowerCase("ru-RU"))].slice(0, 10);
         setRecentSearches(nextRecent);
-        localStorage.setItem("plRecentSearches", JSON.stringify(nextRecent));
+        safeLocalStorage.setItem("plRecentSearches", JSON.stringify(nextRecent));
         animateModalClose(() => {
             setQuery("");
             dispatch(closeSearch());

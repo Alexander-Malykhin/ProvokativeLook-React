@@ -45,6 +45,7 @@ export interface CatalogProductItem {
     sizes: string[];
     colors: string[];
     hasOffers: boolean;
+    available?: boolean;
     isNew?: boolean;
     isBestseller?: boolean;
 }

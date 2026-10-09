@@ -8,7 +8,6 @@ import { cartApi } from "@store/api/cart/cartApi";
 import { favoritesApi } from "@store/api/favorites/favoritesApi";
 import { userApi } from "@store/api/user/userApi";
 import { INITIAL_CONFIRM_FORM, INITIAL_LOGIN_FORM, INITIAL_REGISTER_FORM, } from "../model/constants";
-import { isValidPhone, normalizePhone, detectCountry } from "@components/common/PhoneInput/phone";
 import type { ConfirmFormState, LoginFormState, LoginFieldErrors, LoginFieldName, RegisterFormState, RegisterFieldErrors, RegisterFieldName, } from "../model/types";
 export const useAuthFlow = () => {
     const dispatch = useAppDispatch();
@@ -82,10 +81,6 @@ export const useAuthFlow = () => {
             errors.confirmPassword = "Повторите пароль";
         else if (form.confirmPassword !== form.password)
             errors.confirmPassword = "Пароли не совпадают";
-        if (!form.phone)
-            errors.phone = "Введите номер телефона";
-        else if (!isValidPhone(form.phone))
-            errors.phone = "Введите корректный номер телефона";
         return errors;
     }, []);
     const focusRegisterField = useCallback((field: RegisterFieldName) => {
@@ -270,7 +265,6 @@ export const useAuthFlow = () => {
             const response = await register({
                 firstName: registerForm.firstName.trim(),
                 lastName: registerForm.lastName.trim(),
-                phone: normalizePhone(registerForm.phone, detectCountry(registerForm.phone)),
                 email: registerForm.email.trim(),
                 password: registerForm.password,
                 confirmPassword: registerForm.confirmPassword,
@@ -296,26 +290,18 @@ export const useAuthFlow = () => {
             const response = await confirmRegister({
                 email: registerForm.email.trim(),
                 code: confirmForm.code,
+                password: registerForm.password,
+                confirmPassword: registerForm.confirmPassword,
             }).unwrap();
             if (!response.success) {
                 setErrorMessage(response.message ?? "Неверный код подтверждения");
                 return;
             }
-            const loginResponse = await login({
-                email: registerForm.email.trim(),
-                password: registerForm.password,
-            }).unwrap();
-            if (loginResponse.success) {
-                await syncClientState();
-                dispatch(closeProfileMenu());
-                dispatch(closeAuthModal());
-                setRegisterForm(INITIAL_REGISTER_FORM);
-                setConfirmForm(INITIAL_CONFIRM_FORM);
-                return;
-            }
-            setLoginForm({ email: registerForm.email, password: "" });
-            dispatch(setAuthModalMode("login"));
-            setSuccessMessage("Почта подтверждена. Теперь войдите в аккаунт");
+            await syncClientState();
+            dispatch(closeProfileMenu());
+            dispatch(closeAuthModal());
+            setRegisterForm(INITIAL_REGISTER_FORM);
+            setConfirmForm(INITIAL_CONFIRM_FORM);
         }
         catch (error) {
             setErrorMessage(getRequestErrorMessage(error));

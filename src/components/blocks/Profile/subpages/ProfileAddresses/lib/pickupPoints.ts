@@ -23,18 +23,6 @@ const OVERPASS_ENDPOINTS = [
     "https://overpass-api.de/api/interpreter",
     "https://overpass.nchc.org.tw/api/interpreter",
 ];
-const withTimeout = async <T>(promise: Promise<T>, timeout = 9000): Promise<T> => {
-    let timer = 0;
-    const timeoutPromise = new Promise<never>((_, reject) => {
-        timer = window.setTimeout(() => reject(new Error("timeout")), timeout);
-    });
-    try {
-        return await Promise.race([promise, timeoutPromise]);
-    }
-    finally {
-        window.clearTimeout(timer);
-    }
-};
 const addressFromTags = (tags: Record<string, string>, city: string): string => {
     if (tags["addr:full"])
         return tags["addr:full"];
@@ -91,15 +79,19 @@ const parseElements = (provider: PickupProvider, city: string, elements: Overpas
         .filter((point): point is PickupPointResult => point !== null);
 };
 const requestEndpoint = async (endpoint: string, query: string, provider: PickupProvider, city: string): Promise<PickupPointResult[]> => {
-    const response = await withTimeout(fetch(endpoint, {
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), 9000);
+    try {
+    const response = await fetch(endpoint, {
         method: "POST",
         mode: "cors",
+        signal: controller.signal,
         headers: {
             Accept: "application/json",
             "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
         },
         body: new URLSearchParams({ data: query }).toString(),
-    }));
+    });
     if (!response.ok)
         throw new Error(`HTTP ${response.status}`);
     const payload = (await response.json()) as {
@@ -109,6 +101,9 @@ const requestEndpoint = async (endpoint: string, query: string, provider: Pickup
     if (!points.length)
         throw new Error("empty");
     return points;
+    } finally {
+        window.clearTimeout(timer);
+    }
 };
 export const loadPickupPoints = async (provider: PickupProvider, center: Coordinates, city: string): Promise<PickupPointResult[]> => {
     const query = makeQuery(provider, center);

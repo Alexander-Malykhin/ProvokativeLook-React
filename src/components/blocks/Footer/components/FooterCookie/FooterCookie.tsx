@@ -1,3 +1,4 @@
+import { safeLocalStorage, safeSessionStorage } from "@helpers/browserStorage";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "./FooterCookie.module.scss";
@@ -9,9 +10,9 @@ const COOKIE_POLICY_VERSION = "2026-09-03";
 const COOKIE_CONSENT_MAX_AGE = 180 * 24 * 60 * 60 * 1000;
 
 const hasCurrentConsent = () => {
-    const choice = window.localStorage.getItem(COOKIE_CONSENT_KEY);
-    const savedAt = Number(window.localStorage.getItem(COOKIE_CONSENT_DATE_KEY));
-    const version = window.localStorage.getItem(COOKIE_POLICY_VERSION_KEY);
+    const choice = safeLocalStorage.getItem(COOKIE_CONSENT_KEY);
+    const savedAt = Number(safeLocalStorage.getItem(COOKIE_CONSENT_DATE_KEY));
+    const version = safeLocalStorage.getItem(COOKIE_POLICY_VERSION_KEY);
 
     return ((choice === "accepted" || choice === "rejected") &&
         Number.isFinite(savedAt) &&
@@ -24,7 +25,7 @@ const FooterCookie = () => {
     const [isVisible, setIsVisible] = useState(() => {
         try {
             return (!hasCurrentConsent() &&
-                !window.sessionStorage.getItem(COOKIE_DISMISSED_KEY));
+                !safeSessionStorage.getItem(COOKIE_DISMISSED_KEY));
         }
         catch {
             return true;
@@ -32,9 +33,9 @@ const FooterCookie = () => {
     });
     const saveConsent = (value: "accepted" | "rejected") => {
         try {
-            window.localStorage.setItem(COOKIE_CONSENT_KEY, value);
-            window.localStorage.setItem(COOKIE_CONSENT_DATE_KEY, String(Date.now()));
-            window.localStorage.setItem(COOKIE_POLICY_VERSION_KEY, COOKIE_POLICY_VERSION);
+            safeLocalStorage.setItem(COOKIE_CONSENT_KEY, value);
+            safeLocalStorage.setItem(COOKIE_CONSENT_DATE_KEY, String(Date.now()));
+            safeLocalStorage.setItem(COOKIE_POLICY_VERSION_KEY, COOKIE_POLICY_VERSION);
         }
         catch {
             // Баннер всё равно закрывается, даже если хранилище браузера недоступно.
@@ -46,7 +47,7 @@ const FooterCookie = () => {
     };
     const dismiss = () => {
         try {
-            window.sessionStorage.setItem(COOKIE_DISMISSED_KEY, "1");
+            safeSessionStorage.setItem(COOKIE_DISMISSED_KEY, "1");
         }
         catch {
             // Закрытие работает и при заблокированном sessionStorage.

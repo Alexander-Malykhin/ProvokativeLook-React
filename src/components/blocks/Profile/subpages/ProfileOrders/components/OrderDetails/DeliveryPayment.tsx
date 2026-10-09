@@ -1,3 +1,4 @@
+import { safeSessionStorage } from "@helpers/browserStorage";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePayDeliveryMutation } from '@store/api/orders/ordersApi';
@@ -19,9 +20,9 @@ export default function DeliveryPayment({ order }: { order: OrderDto }) {
         try {
             const response = await pay({ orderId: order.orderId }).unwrap();
             if (response.payment.url) {
-                sessionStorage.setItem('provokativelook.payment.url', response.payment.url);
-                sessionStorage.setItem('provokativelook.payment.order', String(order.orderId));
-                sessionStorage.setItem('provokativelook.payment.purpose', 'delivery');
+                safeSessionStorage.setItem('provokativelook.payment.url', response.payment.url);
+                safeSessionStorage.setItem('provokativelook.payment.order', String(order.orderId));
+                safeSessionStorage.setItem('provokativelook.payment.purpose', 'delivery');
                 navigate('/payment/redirect');
             }
         } catch (err) { setError(getRequestErrorMessage(err, 'Не удалось получить счёт на доставку')); }
