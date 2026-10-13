@@ -8,6 +8,7 @@ import FormRow from "@components/blocks/Basket/UI/FormRow/FormRow.tsx";
 import type { Cart } from "@store/api/cart/types";
 interface OrderFormProps {
     cart?: Cart;
+    disabled?: boolean;
 }
 const formatMoney = (value: number, currency: string) => {
     const formatted = new Intl.NumberFormat("ru-RU", {
@@ -15,7 +16,7 @@ const formatMoney = (value: number, currency: string) => {
     }).format(value);
     return currency === "RUB" ? `${formatted} ₽` : `${formatted} ${currency}`;
 };
-const OrderForm = ({ cart }: OrderFormProps) => {
+const OrderForm = ({ cart, disabled }: OrderFormProps) => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { data: userData, isFetching: isUserFetching } = useGetUserQuery();
@@ -43,7 +44,7 @@ const OrderForm = ({ cart }: OrderFormProps) => {
       </div>
 
       {!pathOrder && (<>
-          <MainButton type="button" onClick={handleCheckout} disabled={hasUnavailableItems || isUserFetching}>
+          <MainButton type="button" onClick={handleCheckout} disabled={disabled || hasUnavailableItems || isUserFetching}>
             Оформить заказ
           </MainButton>
           {hasUnavailableItems && (<p className={styles.form__stockError}>

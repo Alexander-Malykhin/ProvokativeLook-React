@@ -14,7 +14,14 @@
     "test:server:write": "node src/tests/serverRequests.run.mjs --write",
     "test:resilience": "node --test src/tests/apiResilience.test.mjs src/tests/phoneCheck.test.mjs src/tests/phone.test.mjs",
     "test:auth:integration": "node --test src/tests/authServer.integration.test.mjs",
-    "test:catalog:integration": "node --test src/tests/catalogServer.integration.test.mjs"
+    "test:password:integration": "node --test src/tests/passwordReset.integration.test.mjs",
+    "test:checkout:integration": "node --test src/tests/checkoutServer.integration.test.mjs",
+    "test:audit:unit": "node --test src/tests/apiResilience.test.mjs src/tests/phoneCheck.test.mjs src/tests/phone.test.mjs src/tests/deliveryAddresses.test.mjs src/tests/yandexMaps.test.mjs src/tests/catalogRouting.test.mjs src/tests/checkoutAttempt.test.mjs src/tests/purchasableOffers.test.mjs",
+    "test:delivery": "node --test src/tests/deliveryAddresses.test.mjs src/tests/yandexMaps.test.mjs",
+    "test:cookies": "node --test src/tests/cookieConsent.test.mjs",
+    "test:catalog:integration": "node --test src/tests/catalogServer.integration.test.mjs",
+    "test:featured": "node --test src/tests/carouselDots.test.mjs src/tests/carouselWindow.test.mjs src/tests/featuredCatalog.integration.test.mjs",
+    "test:featured:browser": "node src/tests/serveFeatured.mjs"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.12.0",

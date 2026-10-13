@@ -1,10 +1,11 @@
-export type PhoneCheckInput = { challenge: string; code?: string; email?: string };
+export type PhoneCheckInput = { challenge: string; code?: string; email?: string; password?: string; confirmPassword?: string };
 export type PhoneCheckResult = {
     success: boolean;
     challenge?: string;
     channel?: 'mobile-id' | 'sms';
     expiresIn?: number;
     retryAfter?: number;
+    requiresPassword?: boolean;
     state: 'pending' | 'code' | 'processing' | 'email' | 'done';
 };
 type Request = (input: PhoneCheckInput) => Promise<PhoneCheckResult>;

@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
 import { createPortal } from "react-dom";
 import styles from "./PhoneInput.module.scss";
-import { PHONE_COUNTRIES, detectCountry, formatNationalPhone, nationalPhone, phoneFromInput } from "./phone";
+import { PHONE_COUNTRIES, detectCountry, editPhoneInput, formatNationalPhone, nationalPhone } from "./phone";
 type Props = {
     value: string;
     onChange: (value: string) => void;
@@ -30,8 +30,11 @@ const PhoneInput = ({ value, onChange, className, selectClassName, placeholder, 
     const [selectedCountry, setCountryIso] = useState(() => detectCountry(value, "RU"));
     const countryIso = detectCountry(value, selectedCountry);
     const [isOpen, setIsOpen] = useState(false);
-    const [editing, setEditing] = useState(false);
-    const [draft, setDraft] = useState('');
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [caret, setCaret] = useState<number | null>(null);
+    useLayoutEffect(() => {
+        if (caret !== null && document.activeElement === inputRef.current) inputRef.current?.setSelectionRange(caret, caret);
+    }, [caret, value]);
     const [dropdownPosition, setDropdownPosition] = useState<DropdownPosition | null>(null);
     const rootRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
@@ -99,12 +102,12 @@ const PhoneInput = ({ value, onChange, className, selectClassName, placeholder, 
         onChange(next.dial === '7' && detectCountry(nextValue, nextIso) !== nextIso ? '+7' : nextValue);
         triggerRef.current?.focus({ preventScroll: true });
     };
-    const handlePhoneChange = (raw: string) => {
-        const next = phoneFromInput(raw, countryIso);
-        const detected = detectCountry(next, countryIso);
-        setCountryIso(detected);
-        setDraft(nationalPhone(next, detected));
-        onChange(next);
+    const handlePhoneChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const next = editPhoneInput(event.target.value, event.target.selectionStart ?? event.target.value.length,
+            countryIso, formatNationalPhone(value, countryIso), (event.nativeEvent as InputEvent).inputType);
+        setCountryIso(next.country);
+        setCaret(next.caret);
+        onChange(next.value);
     };
     const dropdown = isOpen && dropdownPosition && typeof document !== "undefined"
         ? createPortal(<div ref={dropdownRef} className={`${styles.phone__dropdown} ${dropdownPosition.openUp ? styles.phone__dropdown_up : ""}`.trim()} role="listbox" style={{
@@ -137,7 +140,7 @@ const PhoneInput = ({ value, onChange, className, selectClassName, placeholder, 
           </button>
         </div>
 
-        <input type="tel" inputMode="tel" autoComplete="tel-national" aria-label="Номер телефона без кода страны" value={editing ? draft : formatNationalPhone(value, countryIso)} onFocus={() => {setDraft(nationalPhone(value, countryIso));setEditing(true);}} onBlur={() => setEditing(false)} onChange={(event) => handlePhoneChange(event.target.value)} className={`${styles.phone__input} ${className ?? ""}`.trim()} placeholder={placeholder ?? (country.dial === '7' ? '(999) 999-99-99' : 'Номер телефона')} required={required} disabled={disabled} aria-invalid={ariaInvalid} data-register-field={dataField}/>
+        <input ref={inputRef} type="tel" inputMode="tel" autoComplete="tel-national" aria-label="Номер телефона без кода страны" value={formatNationalPhone(value, countryIso)} onChange={handlePhoneChange} className={`${styles.phone__input} ${className ?? ""}`.trim()} placeholder={placeholder ?? (country.dial === '7' ? '(999) 999-99-99' : 'Номер телефона')} required={required} disabled={disabled} aria-invalid={ariaInvalid} data-register-field={dataField}/>
       </div>
 
       {dropdown}

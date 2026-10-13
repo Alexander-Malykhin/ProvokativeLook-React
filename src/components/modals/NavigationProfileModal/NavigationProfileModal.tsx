@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import { baseApi } from "@store/api/baseApi";
@@ -17,6 +17,7 @@ const NavigationProfileModal = () => {
     const active = useAppSelector((state) => state.toggleMenuProfile.active);
     const { data, isLoading } = useGetUserQuery();
     const [logout, { isLoading: isLogoutLoading }] = useLogoutMutation();
+    const [logoutError, setLogoutError] = useState('');
     const isAuthenticated = Boolean(data?.success && data.user);
     useEffect(() => {
         if (!active) {
@@ -45,6 +46,7 @@ const NavigationProfileModal = () => {
         dispatch(openAuthModal("login"));
     };
     const handleLogout = async () => {
+        setLogoutError('');
         try {
             await logout().unwrap();
             dispatch(baseApi.util.resetApiState());
@@ -52,6 +54,7 @@ const NavigationProfileModal = () => {
             navigate("/", { replace: true });
         }
         catch {
+            setLogoutError('Не удалось выйти. Проверьте подключение и повторите попытку.');
         }
     };
     if (!active) {
@@ -75,6 +78,7 @@ const NavigationProfileModal = () => {
             <span>{isLogoutLoading ? "Выходим..." : "Выйти из аккаунта"}</span>
             <Image src={LogoutImage} alt="" className={styles.modal__button_icon} aria-hidden="true"/>
           </button>
+          {logoutError && <p role="alert">{logoutError}</p>}
         </>) : (<div className={styles.modal__guest}>
           <span className={styles.modal__guest_title}>Личный кабинет</span>
 

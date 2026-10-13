@@ -1,11 +1,7 @@
-import { useDragScroll } from "@hooks/useDragScroll";
 import styles from "./BestsellersSlider.module.scss";
-import ProductCard from "@components/ProductCard/ProductCard";
+import FeaturedProductsSlider from "@components/Carousel/FeaturedProductsSlider";
 import type { BestsellersSliderProps } from "@components/blocks/Bestsellers/types/type.ts";
 const BestsellersSlider = ({ sliderRef, products }: BestsellersSliderProps) => {
-    useDragScroll(sliderRef, products.length);
-    return (<div ref={sliderRef} className={styles.list}>
-      {products.map((product) => (<ProductCard {...product} key={product.id}/>))}
-    </div>);
+    return <FeaturedProductsSlider sliderRef={sliderRef} products={products} className={styles.list}/>;
 };
 export default BestsellersSlider;

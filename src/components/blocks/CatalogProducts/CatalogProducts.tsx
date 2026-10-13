@@ -14,7 +14,7 @@ import { close as closeFilter } from '@store/slices/toggleFIlterSlice';
 import { useGetCatalogProductsQuery, useGetCatalogSectionsQuery } from '@store/api/catalog/catalogApi';
 import { getRequestErrorMessage } from '@store/api/getRequestErrorMessage';
 import type { CatalogFilters, CatalogSort } from '@store/api/catalog/types';
-import { slugifyCatalogValue } from '@/helpers/catalog';
+import { resolveCatalogSectionIds, slugifyCatalogValue } from '@/helpers/catalog';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 const PAGE_SIZE = 18;
 const EMPTY_FILTERS: CatalogFilters = {
@@ -94,8 +94,9 @@ const CatalogProducts = () => {
         }
         return pathname.split('/').filter(Boolean).at(-1) ?? 'all';
     }, [categorySlug, pathname]);
-    const { data: sectionsData } = useGetCatalogSectionsQuery();
-    const topSections = sectionsData?.sections ?? [];
+    const { data: sectionsData, isLoading: sectionsLoading, error: sectionsError, refetch: refetchSections } = useGetCatalogSectionsQuery();
+    const topSections = useMemo(() => sectionsData?.sections ?? [], [sectionsData?.sections]);
+    const resolvedSectionIds = useMemo(() => resolveCatalogSectionIds(resolvedSlug, topSections), [resolvedSlug, topSections]);
     const actualSection = useMemo(() => topSections.find((section) => slugifyCatalogValue(section.name) === resolvedSlug || slugifyCatalogValue(section.code) === resolvedSlug), [topSections, resolvedSlug]);
     const navigationItems = useMemo<CatalogNavigationItem[]>(() => {
         const sectionItems = topSections.map((section) => ({
@@ -107,8 +108,9 @@ const CatalogProducts = () => {
     }, [topSections]);
     const category = useMemo(() => {
         return (navigationItems.find((item) => item.slug === resolvedSlug) ??
-            (actualSection ? { slug: resolvedSlug, title: actualSection.name, sectionIds: [actualSection.id] } : ALL_NAVIGATION_ITEM));
-    }, [actualSection, navigationItems, resolvedSlug]);
+            (actualSection ? { slug: resolvedSlug, title: actualSection.name, sectionIds: [actualSection.id] } :
+                resolvedSectionIds ? { slug: resolvedSlug, title: '', sectionIds: resolvedSectionIds } : ALL_NAVIGATION_ITEM));
+    }, [actualSection, navigationItems, resolvedSlug, resolvedSectionIds]);
     const initialStoredState = useMemo(() => readStoredFilterState(resolvedSlug), [resolvedSlug]);
     const [page, setPage] = useState(1);
     const [sort, setSort] = useState<CatalogSort>(() => initialStoredState?.sort ?? 'popular');
@@ -140,7 +142,7 @@ const CatalogProducts = () => {
         sort,
         limit: PAGE_SIZE,
         offset,
-    });
+    }, { skip: !sectionsData || resolvedSectionIds === null });
     const total = data?.pagination?.total ?? 0;
     const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
     const products = data?.products ?? [];
@@ -171,9 +173,9 @@ const CatalogProducts = () => {
         <div className={styles.category__list}>
           <CatalogFilterButtons sort={sort} options={filterOptions} onSortChange={handleSortChange}/>
 
-          <CatalogList products={products} isLoading={isLoading || (!data && isFetching)} isFetching={isFetching} errorMessage={error
+          {sectionsError ? <div role="alert">Не удалось загрузить разделы каталога. <button type="button" onClick={() => void refetchSections()}>Повторить</button></div> : sectionsData && resolvedSectionIds === null ? <p>Раздел каталога не найден.</p> : <CatalogList products={products} isLoading={sectionsLoading || isLoading || (!data && isFetching)} isFetching={isFetching} errorMessage={error
             ? getRequestErrorMessage(error, 'Не удалось получить товары каталога')
-            : null}/>
+            : null}/>}
         </div>
       </MainLayoutContainer>
 

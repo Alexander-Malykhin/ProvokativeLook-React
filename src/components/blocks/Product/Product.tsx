@@ -7,6 +7,7 @@ import ProductInformation from "@components/blocks/Product/components/ProductInf
 import { useGetCatalogProductQuery } from "@store/api/catalog/catalogApi";
 import { useAddRecentlyViewedMutation } from "@store/api/recentlyViewed/recentlyViewedApi";
 import type { CatalogProductOffer } from "@store/api/catalog/types";
+import { purchasableOffers } from '@store/api/catalog/purchasableOffers';
 const formatPrice = (price?: number | null, currency?: string | null): string => {
     if (price == null)
         return "Цена не указана";
@@ -39,7 +40,7 @@ const Product = () => {
     const [addRecentlyViewed] = useAddRecentlyViewedMutation();
     const recordedViewedIdRef = useRef<number | null>(null);
     const allOffers = useMemo(() => product?.offers ?? [], [product?.offers]);
-    const availableOffers = useMemo(() => allOffers.filter((offer) => offer.available), [allOffers]);
+    const availableOffers = useMemo(() => purchasableOffers(product), [product]);
     const [selectedOfferId, setSelectedOfferId] = useState<number | null>(null);
     useEffect(() => {
         if (!product?.id || recordedViewedIdRef.current === product.id)
@@ -57,16 +58,16 @@ const Product = () => {
         return availableOffers.find((offer) => offer.id === selectedOfferId) ?? availableOffers[0] ?? null;
     }, [availableOffers, selectedOfferId]);
     const colors = useMemo(() => Array.from(new Set(allOffers.map((offer) => offer.color).filter(Boolean))) as string[], [allOffers]);
-    const disabledColors = useMemo(() => colors.filter((color) => !allOffers.some((offer) => offer.color === color && offer.available)), [allOffers, colors]);
+    const disabledColors = useMemo(() => colors.filter((color) => !availableOffers.some((offer) => offer.color === color)), [availableOffers, colors]);
     const sizes = useMemo(() => Array.from(new Set(allOffers
         .map((offer) => offer.size)
         .filter(Boolean))) as string[], [allOffers]);
     const disabledSizes = useMemo(() => {
         const selectedColor = selectedOffer?.color ?? null;
-        return sizes.filter((size) => !allOffers.some((offer) => offer.size === size &&
+        return sizes.filter((size) => !availableOffers.some((offer) => offer.size === size &&
             (!selectedColor || offer.color === selectedColor) &&
             offer.available));
-    }, [allOffers, selectedOffer?.color, sizes]);
+    }, [availableOffers, selectedOffer?.color, sizes]);
     const handleColorChange = (color: string) => {
         const currentSize = selectedOffer?.size ?? null;
         const exact = availableOffers.find((offer) => offer.color === color && (!currentSize || offer.size === currentSize));

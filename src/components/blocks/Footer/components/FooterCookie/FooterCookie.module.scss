@@ -4,8 +4,23 @@
   justify-content: center;
   gap: rem(24);
 
-  position: relative;
-  padding: rem(12) rem(48) rem(12) rem(24);
+  position: fixed;
+  inset: auto 0 0;
+  z-index: 1000;
+  padding: rem(16) rem(24) max(rem(16), env(safe-area-inset-bottom));
+  border-top: rem(1) solid $gray;
+  background: $white;
+  box-shadow: 0 rem(-4) rem(18) rgba(0, 0, 0, 0.08);
+
+  &__copy {
+    min-width: 0;
+    max-width: rem(900);
+  }
+
+  &__status {
+    margin: rem(6) 0 0;
+    @include font(12, $fw-light);
+  }
 
   &__text {
     margin: 0;
@@ -40,35 +55,14 @@
       color: $white;
       background: $black;
     }
-  }
 
-  &__button {
-    position: absolute;
-    right: rem(14);
-    top: 50%;
-    transform: translateY(-50%);
-
-    width: rem(16);
-    height: rem(16);
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-
-  &__button_line {
-    position: absolute;
-    width: rem(12);
-    height: rem(1);
-    background-color: $black;
-
-    &:first-child {
-      transform: rotate(45deg);
+    &:focus-visible {
+      outline: rem(2) solid $black;
+      outline-offset: rem(3);
     }
-
-    &:last-child {
-      transform: rotate(-45deg);
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
     }
   }
 
@@ -76,7 +70,7 @@
     align-items: flex-start;
     flex-direction: column;
     gap: rem(12);
-    padding: rem(16) rem(44) rem(16) rem(16);
+    padding: rem(16) rem(16) max(rem(16), env(safe-area-inset-bottom));
 
     &__text {
       @include font(12, $fw-light);
@@ -92,11 +86,6 @@
       min-width: rem(88);
       padding: rem(7) rem(10);
       @include font(11, $fw-light);
-    }
-
-    &__button {
-      top: rem(18);
-      transform: none;
     }
   }
 }

@@ -1,6 +1,7 @@
 import { animateModalClose } from "@UI/overlays/Modal/animateModalClose";
 import { useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
+import { lockBodyScroll } from '@helpers/bodyScrollLock';
 import styles from "./ProductGalleryModal.module.scss";
 import Image from "@UI/media/Image/Image";
 interface ProductGalleryModalProps {
@@ -24,8 +25,7 @@ const ProductGalleryModal = ({ images, activeIndex, title, onChange, onClose: fi
         onChange((activeIndex + 1) % images.length);
     }, [activeIndex, images.length, onChange]);
     useEffect(() => {
-        const previousOverflow = document.body.style.overflow;
-        document.body.style.overflow = "hidden";
+        const unlockScroll = lockBodyScroll();
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === "Escape")
                 onClose();
@@ -36,7 +36,7 @@ const ProductGalleryModal = ({ images, activeIndex, title, onChange, onClose: fi
         };
         window.addEventListener("keydown", handleKeyDown);
         return () => {
-            document.body.style.overflow = previousOverflow;
+            unlockScroll();
             window.removeEventListener("keydown", handleKeyDown);
         };
     }, [onClose, next, previous]);

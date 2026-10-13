@@ -23,7 +23,7 @@ export const catalogApi = baseApi.injectEndpoints({
             keepUnusedDataFor: 60,
         }),
         getFeaturedProducts: builder.query<FeaturedProductsResponse, FeaturedProductType>({
-            query: (type) => ({ url: 'catalog/featured', params: { type, limit: 12 } }),
+            query: (type) => ({ url: 'catalog/featured', params: { type } }),
             keepUnusedDataFor: 60,
         }),
         searchCatalog: builder.query<CatalogSearchResponse, CatalogSearchRequest>({

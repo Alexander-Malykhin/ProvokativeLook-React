@@ -55,35 +55,44 @@ declare global {
     }
 }
 const SCRIPT_ID = "yandex-maps-api";
-export const loadYandexMaps = (apiKey: string): Promise<YandexApi> => new Promise((resolve, reject) => {
-    const resolveReady = () => {
-        if (!window.ymaps) {
-            reject(new Error("Яндекс Карты не инициализированы"));
-            return;
+let loadingMaps: Promise<YandexApi> | null = null;
+export const loadYandexMaps = (apiKey: string): Promise<YandexApi> => {
+    if (loadingMaps) return loadingMaps;
+    loadingMaps = new Promise<YandexApi>((resolve, reject) => {
+        let script = document.getElementById(SCRIPT_ID) as HTMLScriptElement | null;
+        let settled = false;
+        const cleanup = () => {
+            clearTimeout(timer);
+            script?.removeEventListener('load', ready);
+            script?.removeEventListener('error', fail);
+        };
+        const fail = () => {
+            if (settled) return;
+            settled = true; cleanup();
+            script?.remove();
+            reject(new Error('Карта временно недоступна. Попробуйте открыть её ещё раз.'));
+        };
+        const ready = () => {
+            if (!window.ymaps) { fail(); return; }
+            window.ymaps.ready(() => {
+                if (settled) return;
+                settled = true; cleanup(); resolve(window.ymaps as YandexApi);
+            });
+        };
+        const timer = setTimeout(fail, 12000);
+        if (window.ymaps) { ready(); return; }
+        const existing = Boolean(script);
+        if (!script) {
+            script = document.createElement('script');
+            script.id = SCRIPT_ID; script.async = true;
+            script.src = `https://api-maps.yandex.ru/2.1/?apikey=${encodeURIComponent(apiKey)}&lang=ru_RU`;
         }
-        window.ymaps.ready(() => resolve(window.ymaps as YandexApi));
-    };
-    if (window.ymaps) {
-        resolveReady();
-        return;
-    }
-    const existing = document.getElementById(SCRIPT_ID) as HTMLScriptElement | null;
-    if (existing) {
-        existing.addEventListener("load", resolveReady, { once: true });
-        existing.addEventListener("error", () => reject(new Error("Не удалось загрузить Яндекс Карты")), { once: true });
-        return;
-    }
-    const script = document.createElement("script");
-    script.id = SCRIPT_ID;
-    script.async = true;
-    script.src =
-        "https://api-maps.yandex.ru/2.1/" +
-            `?apikey=${encodeURIComponent(apiKey)}` +
-            "&lang=ru_RU";
-    script.onload = resolveReady;
-    script.onerror = () => reject(new Error("Не удалось загрузить Яндекс Карты"));
-    document.head.appendChild(script);
-});
+        script.addEventListener('load', ready, { once: true });
+        script.addEventListener('error', fail, { once: true });
+        if (!existing) document.head.appendChild(script);
+    }).catch(error => { loadingMaps = null; throw error; });
+    return loadingMaps;
+};
 export const normalizeCoordinates = (value: unknown): Coordinates | null => {
     if (!Array.isArray(value) || value.length < 2) {
         return null;

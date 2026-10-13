@@ -17,7 +17,7 @@ const ResetPasswordRequestForm = ({ email, isLoading, errorMessage, successMessa
     <div className={styles.form__fields}>
       <label className={styles.field}>
         <span className={styles.field__label}>Электронная почта</span>
-        <input type="email" value={email} onChange={(e) => onEmailChange(e.target.value)} placeholder="mail@example.ru" autoComplete="email" className={styles.field__input} required/>
+        <input type="email" value={email} onChange={(e) => onEmailChange(e.target.value)} placeholder="mail@example.ru" autoComplete="email" className={styles.field__input} required disabled={isLoading}/>
       </label>
     </div>
     <AuthMessages errorMessage={errorMessage} successMessage={successMessage}/>

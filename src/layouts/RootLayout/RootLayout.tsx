@@ -4,6 +4,7 @@ import { Outlet, useLocation, useNavigate, useNavigation } from "react-router-do
 import PageLoader from '@components/system/PageLoader/PageLoader';
 import Header from "@components/blocks/Header/Header.tsx";
 import Footer from "@components/blocks/Footer/Footer.tsx";
+import FooterCookie from "@components/blocks/Footer/components/FooterCookie/FooterCookie";
 import ScrollToHash from "@components/ScrollToHash/ScrollToHash";
 import NavigationMobile from "@components/NavigationMobile/NavigationMobile.tsx";
 import RunningLine from "@components/RunningLine/RunningLine.tsx";
@@ -39,6 +40,7 @@ const RootLayout = () => {
       <RunningLine />
       <Outlet />
       <Footer />
+      <FooterCookie />
       <NavigationMobile />
       <SearchModal />
       <TableSizes />

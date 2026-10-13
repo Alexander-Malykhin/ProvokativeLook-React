@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { purchasableOffers } from '@store/api/catalog/purchasableOffers';
 import { Link } from "react-router-dom";
 import { useGetCatalogProductQuery } from "@store/api/catalog/catalogApi";
 import { useAddCartItemMutation } from "@store/api/cart/cartApi";
@@ -16,20 +17,20 @@ const ProductCardPurchase = ({ slug, sectionSlug, fallbackPrice, title, onClose 
     const [quantity, setQuantity] = useState("1");
     const [message, setMessage] = useState("");
     const [added, setAdded] = useState(false);
+    const addingRef = useRef(false);
     const dispatch = useAppDispatch();
     const { currentData: data, isFetching, isError, refetch } = useGetCatalogProductQuery({ slug, sectionSlug }, { refetchOnMountOrArgChange: true });
     const { data: userData, isLoading: isUserLoading } = useGetUserQuery();
     const [addCartItem, { isLoading: isAdding }] = useAddCartItemMutation();
     const product = data?.product;
-    const offers = product?.offers ?? [];
-    const available = offers.filter((offer) => offer.available && offer.quantity >= 1);
+    const available = purchasableOffers(product);
     const selected = available.find((offer) => offer.id === offerId) ?? available[0];
     const sizes = [...new Set(available.map((offer) => offer.size))];
     const colors = [...new Set(available.filter((offer) => offer.size === selected?.size).map((offer) => offer.color))];
     const maxQuantity = selected ? Math.floor(selected.quantity) : 999;
     const count = Number(quantity);
     const validQuantity = Number.isInteger(count) && count >= 1 && count <= maxQuantity;
-    const soldOut = offers.length > 0 && !selected;
+    const soldOut = Boolean(product && !selected);
     const busy = isAdding || isFetching;
 
     const choose = (id: number | undefined) => {
@@ -41,7 +42,7 @@ const ProductCardPurchase = ({ slug, sectionSlug, fallbackPrice, title, onClose 
     };
 
     const add = async () => {
-        if (!product || soldOut || !validQuantity || busy) return;
+        if (!product || soldOut || !validQuantity || busy || addingRef.current) return;
         if (!userData?.success || !userData.user) {
             onClose();
             dispatch(openAuthModal("login"));
@@ -49,6 +50,7 @@ const ProductCardPurchase = ({ slug, sectionSlug, fallbackPrice, title, onClose 
         }
         setMessage("");
         setAdded(false);
+        addingRef.current = true;
         try {
             const result = await addCartItem({ productId: selected?.id ?? product.id, quantity: count }).unwrap();
             if (!result.success) throw new Error("Не удалось добавить товар в корзину");
@@ -56,7 +58,8 @@ const ProductCardPurchase = ({ slug, sectionSlug, fallbackPrice, title, onClose 
         } catch (error) {
             setMessage(getRequestErrorMessage(error, "Не удалось добавить товар в корзину"));
         } finally {
-            void refetch();
+            await refetch();
+            addingRef.current = false;
         }
     };
 
@@ -77,13 +80,13 @@ const ProductCardPurchase = ({ slug, sectionSlug, fallbackPrice, title, onClose 
                 <input type="number" inputMode="numeric" min={1} max={maxQuantity} step={1} value={quantity} disabled={busy} onChange={(event) => { setQuantity(event.target.value); setAdded(false); setMessage(""); }}/>
             </label>}
             <span className={styles.stock} role="status" aria-live="polite">
-                {selected ? `В наличии: ${maxQuantity} шт.` : soldOut ? "В наличии: 0 шт." : "Остаток не указан"}
+                {selected ? `В наличии: ${maxQuantity} шт.` : soldOut ? "Нет доступного варианта с указанной ценой" : "Остаток не указан"}
             </span>
         </div>}
         <div className={styles.row}>
             <span>{product ? formatCatalogPrice(selected?.price ?? product.price, selected?.currency ?? product.currency) : fallbackPrice}</span>
             <button type="button" className={styles.add} disabled={!product || isError || soldOut || !validQuantity || busy || isUserLoading} onClick={() => void add()}>
-                {soldOut ? "Нет в наличии" : isAdding ? "Добавляем…" : "В корзину"}
+                {soldOut ? "Покупка недоступна" : isAdding ? "Добавляем…" : "В корзину"}
             </button>
         </div>
         {isFetching && !product && <span role="status">Загрузка вариантов…</span>}

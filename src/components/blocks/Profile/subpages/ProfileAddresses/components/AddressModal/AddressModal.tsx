@@ -19,18 +19,21 @@ interface AddressModalProps {
     country?: string;
     countryCode?: string;
     isSaving?: boolean;
+    saveError?: string;
 }
 type MappedPickupPoint = PickupPoint & {
     coordinates?: Coordinates;
     resolvedAddress?: ParsedAddress;
 };
 const providerLabel = (provider: DeliveryProvider) => provider === "cdek" ? "СДЭК" : "Почта России";
-const AddressModal = ({ cdekOnly = false, mailOnly = false, open, onClose: finishClose, onSave, city: initialCity = "Ростов-на-Дону", country: initialCountry = "Россия", countryCode: initialCountryCode = "RU", isSaving = false, }: AddressModalProps) => {
+const escapeHtml = (value: string) => value.replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]!));
+const AddressModal = ({ cdekOnly = false, mailOnly = false, open, onClose: finishClose, onSave, city: initialCity = "Ростов-на-Дону", country: initialCountry = "Россия", countryCode: initialCountryCode = "RU", isSaving = false, saveError = '', }: AddressModalProps) => {
     const onClose = () => animateModalClose(finishClose);
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
     const mapRef = useRef<YandexMapInstance | null>(null);
     const placemarksRef = useRef<YandexPlacemark[]>([]);
     const requestRef = useRef(0);
+    const selectionRef = useRef(0);
     const [city, setCity] = useState(initialCity || "Ростов-на-Дону");
     const [country, setCountry] = useState(initialCountry || "Россия");
     const [countryCode, setCountryCode] = useState((initialCountryCode || "RU").toUpperCase());
@@ -39,6 +42,7 @@ const AddressModal = ({ cdekOnly = false, mailOnly = false, open, onClose: finis
     const [selectedId, setSelectedId] = useState("");
     const [selectedResolved, setSelectedResolved] = useState<ParsedAddress | null>(null);
     const [error, setError] = useState("");
+    const [mapError, setMapError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isResolvingPoint, setIsResolvingPoint] = useState(false);
     const [geocode] = useLazyGeocodeAddressQuery();
@@ -88,8 +92,8 @@ const AddressModal = ({ cdekOnly = false, mailOnly = false, open, onClose: finis
                 return;
             coordinates.push(point.coordinates);
             const placemark = new ymaps.Placemark(point.coordinates, {
-                balloonContentHeader: point.name,
-                balloonContentBody: point.address,
+                balloonContentHeader: escapeHtml(point.name),
+                balloonContentBody: escapeHtml(point.address),
             }, { preset: "islands#blackIcon", iconColor: "#000000" });
             placemark.events?.add?.("click", () => selectPoint(point));
             mapRef.current.geoObjects.add(placemark);
@@ -114,14 +118,15 @@ const AddressModal = ({ cdekOnly = false, mailOnly = false, open, onClose: finis
             return;
         }
         const placemark = new ymaps.Placemark(coordinates, {
-            balloonContentHeader: point.name,
-            balloonContentBody: point.address,
+            balloonContentHeader: escapeHtml(point.name),
+            balloonContentBody: escapeHtml(point.address),
         }, { preset: "islands#blackIcon", iconColor: "#000000" });
         mapRef.current.geoObjects.add(placemark);
         placemarksRef.current.push(placemark);
         mapRef.current.setCenter(coordinates, 15, { duration: 200 });
     };
     async function resolvePoint(point: MappedPickupPoint, requestId: number) {
+        const selectionId = ++selectionRef.current;
         if (point.resolvedAddress) {
             setSelectedResolved(point.resolvedAddress);
             mapRef.current?.setCenter(point.coordinates ?? [point.resolvedAddress.latitude, point.resolvedAddress.longitude], 15, { duration: 200 });
@@ -133,23 +138,24 @@ const AddressModal = ({ cdekOnly = false, mailOnly = false, open, onClose: finis
                 geocode: point.address,
                 results: 1,
             }).unwrap();
-            if (requestRef.current !== requestId)
+            if (requestRef.current !== requestId || selectionRef.current !== selectionId)
                 return;
             const resolved = geocoded[0];
             if (!resolved) {
                 throw new Error("Не удалось определить координаты выбранного пункта");
             }
             setSelectedResolved(resolved);
-            await showSelectedOnMap(point, resolved, requestId);
+            try { await showSelectedOnMap(point, resolved, requestId); }
+            catch { if (requestRef.current === requestId) setMapError('Карта временно недоступна. Выберите пункт из списка.'); }
         }
         catch (requestError) {
-            if (requestRef.current === requestId) {
+            if (requestRef.current === requestId && selectionRef.current === selectionId) {
                 setSelectedResolved(null);
                 setError(getRequestErrorMessage(requestError, "Не удалось показать выбранный пункт на карте"));
             }
         }
         finally {
-            if (requestRef.current === requestId)
+            if (requestRef.current === requestId && selectionRef.current === selectionId)
                 setIsResolvingPoint(false);
         }
     }
@@ -162,6 +168,8 @@ const AddressModal = ({ cdekOnly = false, mailOnly = false, open, onClose: finis
         setPoints([]);
         setSelectedId("");
         setSelectedResolved(null);
+        setIsResolvingPoint(false);
+        setMapError('');
         try {
             const cityQuery = [city, country].filter(Boolean).join(", ");
             const geocoded = await geocode({ geocode: cityQuery, results: 1 }).unwrap();
@@ -179,10 +187,6 @@ const AddressModal = ({ cdekOnly = false, mailOnly = false, open, onClose: finis
             const actualCountryCode = (resolvedCity.countryCode || countryCode).toUpperCase();
             if (provider === "mail" && actualCountryCode !== "RU") {
                 throw new Error("Почта России доступна только для городов России");
-            }
-            const ymaps = await ensureMap([resolvedCity.latitude, resolvedCity.longitude], requestId);
-            if (!ymaps) {
-                throw new Error("Не удалось загрузить Яндекс Карту");
             }
             const pickupRequest = {
                 city: resolvedCity.city || city,
@@ -227,7 +231,11 @@ const AddressModal = ({ cdekOnly = false, mailOnly = false, open, onClose: finis
             if (requestRef.current !== requestId)
                 return;
             setPoints(mappedPoints);
-            await showPointsOnMap(mappedPoints, [resolvedCity.latitude, resolvedCity.longitude], requestId);
+            setIsLoading(false);
+            try {
+                if (!YANDEX_MAPS_API_KEY) throw new Error('Map unavailable');
+                await showPointsOnMap(mappedPoints, [resolvedCity.latitude, resolvedCity.longitude], requestId);
+            } catch { if (requestRef.current === requestId) setMapError('Карта временно недоступна. Выберите пункт из списка.'); }
         }
         catch (requestError) {
             if (requestRef.current === requestId) {
@@ -280,7 +288,7 @@ const AddressModal = ({ cdekOnly = false, mailOnly = false, open, onClose: finis
             country: selectedResolved.country || country,
             countryId: 0,
             countryCode: selectedResolved.countryCode || countryCode,
-            postalCode: selected.code || selectedResolved.postalCode || "",
+            postalCode: selected.postalCode || selectedResolved.postalCode || (provider === 'mail' ? selected.code : '') || "",
             entrance: "",
             floor: "",
             apartment: "",
@@ -305,7 +313,7 @@ const AddressModal = ({ cdekOnly = false, mailOnly = false, open, onClose: finis
         <div className={styles.modal__form}>
           <AddressCitySelect value={city} defaultCity={initialCity || "Ростов-на-Дону"} onChange={changeCity}/>
 
-          {!mailOnly && <div className={styles.pickupServices}>
+          {!mailOnly && !cdekOnly && <div className={styles.pickupServices}>
             <label className={`${styles.pickupService} ${provider === "cdek" ? styles.pickupService_active : ""}`}>
               <input type="radio" name="pickup-provider" checked={provider === "cdek"} onChange={() => setProvider("cdek")}/>
               <span className={styles.pickupService__content}>СДЭК</span>
@@ -349,6 +357,7 @@ const AddressModal = ({ cdekOnly = false, mailOnly = false, open, onClose: finis
               </button>))}
           </div>
 
+          {saveError && <p className={styles.pickupError} role="alert">{saveError}</p>}
           <button type="button" disabled={!selected ||
             !selectedResolved ||
             isLoading ||
@@ -364,6 +373,7 @@ const AddressModal = ({ cdekOnly = false, mailOnly = false, open, onClose: finis
 
         <div className={styles.pickupMapWrap}>
           <div ref={mapContainerRef} className={styles.pickupMap}/>
+          {mapError && <div className={styles.pickupMapStatus} role="status">{mapError}</div>}
           {isLoading && !mapRef.current && (<div className={styles.pickupMapStatus}>Загружаем карту…</div>)}
           {!isLoading && points.length === 0 && (<div className={styles.pickupMapStatus}>
               Выберите другой город или службу доставки

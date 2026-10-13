@@ -39,6 +39,16 @@ const CANONICAL_CATALOG_SECTIONS: Array<{ slug: string; sectionIds: number[] }> 
     { slug: 'accessories', sectionIds: [129] },
 ];
 
+export const resolveCatalogSectionIds = (slug: string, sections: CatalogSection[]): number[] | null => {
+    if (slug === 'all') return [];
+    const flat = flattenCatalogSections(sections);
+    const actual = flat.find(section => slugifyCatalogValue(section.code || '') === slug || slugifyCatalogValue(section.name) === slug);
+    if (actual) return [actual.id];
+    const legacy = CANONICAL_CATALOG_SECTIONS.find(section => section.slug === slug);
+    const ids = legacy?.sectionIds.filter(id => flat.some(section => section.id === id)) ?? [];
+    return ids.length ? ids : null;
+};
+
 export const normalizeCatalogPath = (link: string): string => {
     if (!link)
         return "/catalog";

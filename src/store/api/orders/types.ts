@@ -72,6 +72,7 @@ export interface OrdersResponse {
     };
 }
 export interface CreateOrderRequest {
+    requestId?: string;
     courierAddress?: { formattedAddress: string; address1: string; city: string; region: string; province: string; country: string; countryId: number; countryCode: string; postalCode: string; apartment: string; entrance: string; floor: string; comment: string; latitude: number; longitude: number };
     shippingQuoteId?: string;
     recipient: {
@@ -92,7 +93,7 @@ export interface PostalQuote {
     mode: 'office' | 'door';
     amount: number;
     currency: string;
-    address: { formattedAddress: string; pickupName: string; postalCode: string };
+    address: { id?: number; formattedAddress: string; pickupName: string; postalCode: string };
 }
 export interface PostalShipping {
     workflow?: string;

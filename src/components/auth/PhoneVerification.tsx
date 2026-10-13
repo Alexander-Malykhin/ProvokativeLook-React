@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 import PhoneInput from '@components/common/PhoneInput/PhoneInput';
+import PasswordInput from '@components/modals/AuthModal/components/PasswordInput';
 import { AUTH_PHONE_COUNTRIES, isValidPhone, normalizePhone, detectCountry } from '@components/common/PhoneInput/phone';
 import { baseApi } from '@store/api/baseApi';
 import { useAppDispatch } from '@store/hooks';
@@ -25,14 +26,15 @@ export default function PhoneVerification({ purpose = 'login', onDone }: {
     const [phone, setPhone] = useState('+7');
     const [code, setCode] = useState('');
     const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [requiresPassword, setRequiresPassword] = useState(true);
     const [challenge, setChallenge] = useState('');
     const [stage, setStage] = useState<'phone' | PhoneCheckResult['state']>('phone');
     const [channel, setChannel] = useState<'mobile-id' | 'sms'>('mobile-id');
     const [expiresAt, setExpiresAt] = useState(0);
     const [error, setError] = useState('');
     const [notice, setNotice] = useState('');
-    const [retryAt, setRetryAt] = useState(0);
-    const [remaining, setRemaining] = useState(0);
     const [submitting, setSubmitting] = useState(false);
     const [queue] = useState(() => new PhoneCheckQueue());
     const [send, sendState] = phoneApi.useSendPhoneMutation();
@@ -55,16 +57,21 @@ export default function PhoneVerification({ purpose = 'login', onDone }: {
         setChallenge('');
         setStage('phone');
         setCode('');
+        setPassword('');
+        setConfirmPassword('');
         setNotice('');
         setError(message);
     }, []);
 
     const applyResult = useCallback((result: PhoneCheckResult) => {
+        if (result.state === 'email') setRequiresPassword(result.requiresPassword !== false);
         setStage(result.state);
         setError('');
         setNotice('');
         if (['processing', 'email', 'done'].includes(result.state)) setCode('');
         if (result.state === 'done') {
+            setPassword('');
+            setConfirmPassword('');
             doneRef.current();
             dispatch(baseApi.util.invalidateTags(['User', 'Cart', 'Favorites', 'Addresses', 'Orders']));
         }
@@ -79,11 +86,6 @@ export default function PhoneVerification({ purpose = 'login', onDone }: {
         try { return await request.unwrap(); }
         finally { signal.removeEventListener('abort', abort); }
     }, [check]);
-
-    useEffect(() => {
-        const timer = window.setInterval(() => setRemaining(Math.max(0, Math.ceil((retryAt - Date.now()) / 1000))), 1000);
-        return () => clearInterval(timer);
-    }, [retryAt]);
 
     useEffect(() => {
         if (!challenge || !expiresAt || stage === 'done') return;
@@ -135,12 +137,18 @@ export default function PhoneVerification({ purpose = 'login', onDone }: {
                 setStage(result.state);
                 setChannel(result.channel ?? 'mobile-id');
                 setCode('');
-                setRetryAt(Date.now() + (result.retryAfter ?? 60) * 1000);
-                setRemaining(result.retryAfter ?? 60);
                 setExpiresAt(Date.now() + (result.expiresIn ?? 300) * 1000);
+                if (result.state === 'done' || result.state === 'email') applyResult(result);
             } else {
+                if (stage === 'email' && requiresPassword) {
+                    if (password.length < 8) throw new Error('Пароль должен содержать минимум 8 символов');
+                    if (/[А-Яа-яЁё]/.test(password) || !/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/\d/.test(password) || !/[^A-Za-z0-9]/.test(password)) {
+                        throw new Error('Используйте заглавную и строчную латинские буквы, цифру и спецсимвол');
+                    }
+                    if (password !== confirmPassword) throw new Error('Пароли не совпадают');
+                }
                 if (stage !== 'email') setStage('processing');
-                const result = await queue.submit(requestCheck, { challenge, ...(stage === 'email' ? { email } : { code }) }, {
+                const result = await queue.submit(requestCheck, { challenge, ...(stage === 'email' ? { email, ...(requiresPassword ? { password, confirmPassword } : {}) } : { code }) }, {
                     signal,
                     onRetry: () => setNotice('Сервис ещё обрабатывает запрос. Повторяем проверку автоматически…'),
                 });
@@ -152,9 +160,7 @@ export default function PhoneVerification({ purpose = 'login', onDone }: {
             setNotice('');
             const retryAfter = getPhoneRetryAfter(failure);
             if (previousStage === 'phone' && retryAfter !== null) {
-                setRetryAt(Date.now() + retryAfter * 1000);
-                setRemaining(retryAfter);
-                setError('Слишком много запросов. Дождитесь окончания таймера.');
+                setError('Сервис пока не принял отправку. Попробуйте ещё раз чуть позже.');
                 return;
             }
             setError(isTemporaryPhoneError(failure)
@@ -166,24 +172,30 @@ export default function PhoneVerification({ purpose = 'login', onDone }: {
     };
 
     const busy = sendState.isLoading || submitting;
-    return <form className={styles.form} onSubmit={submit}>
+    const loader = <div className={styles.loading} role="status"><span className={styles.spinner} aria-hidden="true"/><span>Подтверждаем…</span></div>;
+    return <form className={styles.form} onSubmit={submit} aria-busy={busy || stage === 'processing'}>
         <h2 id="auth-modal-title">{purpose === 'change' ? 'Изменить телефон' : purpose === 'register' ? 'Регистрация по телефону' : 'Вход по телефону'}</h2>
         {stage === 'phone' ? <>
-            <p>{purpose === 'change' ? 'Подтвердите новый номер телефона.' : purpose === 'register' ? 'Подтвердите номер телефона, затем укажите email для чеков и заказов.' : 'Введите ваш номер телефона и подтвердите вход.'}</p>
+            <p>{purpose === 'change' ? 'Подтвердите новый номер телефона.' : purpose === 'register' ? 'Подтвердите номер телефона, затем укажите email и создайте пароль.' : 'Введите ваш номер телефона и подтвердите вход.'}</p>
             <PhoneInput value={phone} onChange={setPhone} countryCodes={AUTH_PHONE_COUNTRIES} required disabled={busy} />
-            <button className={styles.primary} disabled={busy || remaining > 0}>{busy ? 'Отправляем…' : remaining ? 'Повторить через ' + remaining + ' с' : 'Получить подтверждение'}</button>
-        </> : stage === 'processing' ? <p role="status">Проверяем код. Дождитесь подтверждения…</p> : stage === 'email' ? <>
-            <p>Телефон подтверждён. Укажите email для чеков и информации о заказах. Для входа в дальнейшем используйте телефон.</p>
+            <button className={styles.primary} disabled={busy}>{busy ? <><span className={styles.buttonSpinner} aria-hidden="true"/>Отправляем…</> : 'Получить подтверждение'}</button>
+        </> : stage === 'processing' ? loader : stage === 'email' ? <>
+            <p>{requiresPassword ? 'Телефон подтверждён. Укажите email и создайте пароль. Войти в личный кабинет можно будет по телефону или по email и паролю.' : 'Телефон подтверждён. Укажите email для чеков и информации о заказах.'}</p>
             <label>Email<input type="email" autoComplete="email" value={email} onChange={event => setEmail(event.target.value)} required disabled={busy} /></label>
-            <button className={styles.primary} disabled={busy}>Продолжить</button>
+            {requiresPassword && <>
+                <PasswordInput className={styles.passwordField} name="password" value={password} label="Пароль" placeholder="Придумайте пароль" autoComplete="new-password" onChange={event => setPassword(event.target.value)} disabled={busy}/>
+                <PasswordInput className={styles.passwordField} name="confirmPassword" value={confirmPassword} label="Повторите пароль" placeholder="Повторите пароль" autoComplete="new-password" onChange={event => setConfirmPassword(event.target.value)} disabled={busy}/>
+                <p>Минимум 8 символов: заглавная и строчная латинские буквы, цифра и спецсимвол.</p>
+            </>}
+            <button className={styles.primary} disabled={busy}>{busy ? <><span className={styles.buttonSpinner} aria-hidden="true"/>Сохраняем…</> : 'Продолжить'}</button>
             <button type="button" disabled={busy} onClick={() => reset()}>Начать заново</button>
         </> : stage === 'done' ? <p role="status">Телефон подтверждён.</p> : <>
             <p>{stage === 'code' ? 'Введите код из SMS на ' + phone : 'Подтвердите вход в уведомлении на телефоне ' + phone + '. Если придёт SMS, введите код.'}</p>
             <label>Код подтверждения<input inputMode="numeric" autoComplete="one-time-code" value={code} onChange={event => setCode(event.target.value.replace(/\D/g, '').slice(0, channel === 'sms' ? 6 : 8))} minLength={channel === 'sms' ? 6 : 4} maxLength={channel === 'sms' ? 6 : 8} required disabled={busy} /></label>
             <button className={styles.primary} disabled={busy || code.length < (channel === 'sms' ? 6 : 4)}>Подтвердить</button>
-            <button type="button" disabled={busy || remaining > 0} onClick={() => reset()}>{remaining ? 'Повторить через ' + remaining + ' с' : 'Другой номер / повторить'}</button>
+            <button type="button" disabled={busy} onClick={() => reset()}>Другой номер / повторить</button>
         </>}
-        {notice && <p role="status">{notice}</p>}
+        {notice && stage !== 'processing' && loader}
         {error && <p role="alert" className={styles.error}>{error}</p>}
     </form>;
 }

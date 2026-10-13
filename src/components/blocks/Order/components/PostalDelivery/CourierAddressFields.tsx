@@ -16,6 +16,5 @@ export default function CourierAddressFields({ postalCode, address, internationa
         <label>Почтовый индекс<input aria-label="Почтовый индекс" inputMode={international ? 'text' : 'numeric'} maxLength={international ? 12 : 6} placeholder={international ? 'Индекс получателя' : '6 цифр'} value={postalCode} onChange={(e) => onPostalCode(international ? e.target.value : e.target.value.replace(/\D/g, ''))}/></label>
         <label>Адрес получателя<input aria-label="Адрес получателя" placeholder="Город, улица, дом, квартира" value={address} onChange={(e) => onAddress(e.target.value)}/></label>
         {international && address && !postalCode && <p role="status">Карта не вернула индекс этого дома. Укажите почтовый индекс получателя вручную.</p>}
-        <p className={styles.note}>Адрес используется только в этом заказе и не сохраняется в личном кабинете.</p>
     </>;
 }

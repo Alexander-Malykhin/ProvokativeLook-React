@@ -4,7 +4,6 @@ import FooterContacts from "./components/FooterContacts/FooterContacts";
 import FooterNavigation from "./components/FooterNavigation/FooterNavigation";
 import FooterSocials from "./components/FooterSocials/FooterSocials";
 import FooterBottom from "./components/FooterBottom/FooterBottom";
-import FooterCookie from "./components/FooterCookie/FooterCookie";
 import FooterSkeleton from "./components/FooterSkeleton/FooterSkeleton";
 import { useGetHomeQuery } from "@store/api/home/homeApi.ts";
 import styles from "./Footer.module.scss";
@@ -34,7 +33,6 @@ const Footer = () => {
         </MainLayoutContainer>
       </div>
 
-      <FooterCookie />
     </footer>);
 };
 export default Footer;

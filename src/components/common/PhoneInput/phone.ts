@@ -83,10 +83,39 @@ export const nationalPhone = (value: string, countryIso: string): string => {
 };
 export const formatNationalPhone = (value: string, countryIso: string): string => {
     const local = nationalPhone(value, countryIso);
-    if ((countryIso === 'RU' || countryIso === 'KZ') && local.length === 10) {
-        return `(${local.slice(0, 3)}) ${local.slice(3, 6)}-${local.slice(6, 8)}-${local.slice(8)}`;
+    if ((countryIso === 'RU' || countryIso === 'KZ') && local.length > 0 && local.length <= 10) {
+        let result = `(${local.slice(0, 3)}`;
+        if (local.length >= 3) result += ')';
+        if (local.length > 3) result += ` ${local.slice(3, 6)}`;
+        if (local.length > 6) result += `-${local.slice(6, 8)}`;
+        if (local.length > 8) result += `-${local.slice(8)}`;
+        return result;
     }
     return local;
+};
+export const editPhoneInput = (raw: string, caret: number, countryIso: string, previous: string, inputType = '') => {
+    let before = digitsOnly(raw.slice(0, caret)).length;
+    // Backspace/Delete on a mask separator removes the adjacent digit, not just punctuation.
+    if (inputType.startsWith('delete') && digitsOnly(raw) === digitsOnly(previous)) {
+        const digits = digitsOnly(raw);
+        const index = inputType === 'deleteContentBackward' ? before - 1 : before;
+        if (index >= 0 && index < digits.length) {
+            raw = digits.slice(0, index) + digits.slice(index + 1);
+            if (inputType === 'deleteContentBackward') before--;
+        }
+    }
+    const value = phoneFromInput(raw, countryIso);
+    const country = detectCountry(value, countryIso);
+    const national = nationalPhone(value, country);
+    before = Math.max(0, Math.min(national.length, before - Math.max(0, digitsOnly(raw).length - national.length)));
+    const formatted = formatNationalPhone(value, country);
+    let position = 0, digits = 0;
+    while (position < formatted.length && digits < before) {
+        if (/\d/.test(formatted[position])) digits++;
+        position++;
+    }
+    while (position < formatted.length && !/\d/.test(formatted[position])) position++;
+    return { value, country, caret: position };
 };
 export const isValidPhone = (value: string, countryIso?: string): boolean => {
     const normalized = normalizePhone(value, countryIso ?? detectCountry(value));

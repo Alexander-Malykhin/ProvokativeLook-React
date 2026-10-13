@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Basket.module.scss";
 import SectionLayout from "@layouts/SectionLayout/SectionLayout.tsx";
@@ -31,23 +31,16 @@ const Basket = () => {
     const [updateCartItem] = useUpdateCartItemMutation();
     const [removeCartItem] = useRemoveCartItemMutation();
     const [clearCart] = useClearCartMutation();
-    const [selectedIds, setSelectedIds] = useState<number[]>([]);
+    const [selection, setSelectedIds] = useState<number[]>([]);
+    const mutationLock = useRef(false);
     const [updatingId, setUpdatingId] = useState<number | null>(null);
     const [isBulkUpdating, setIsBulkUpdating] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const cart = data?.cart;
     const items = useMemo(() => cart?.items ?? [], [cart?.items]);
+    const selectedIds = selection.filter(id => items.some(item => item.id === id));
+    const busy = isBulkUpdating || updatingId !== null || isFetching;
     const isAllSelected = items.length > 0 && selectedIds.length === items.length;
-    useEffect(() => {
-        const actualIds = new Set(items.map((item) => item.id));
-        setSelectedIds((current) => {
-            const next = current.filter((id) => actualIds.has(id));
-            if (next.length === current.length && next.every((id, index) => id === current[index])) {
-                return current;
-            }
-            return next;
-        });
-    }, [items]);
     const handleSelectAll = () => {
         setSelectedIds(isAllSelected ? [] : items.map((item) => item.id));
     };
@@ -57,6 +50,8 @@ const Basket = () => {
             : current.filter((itemId) => itemId !== id));
     };
     const handleQuantityChange = async (id: number, quantity: number) => {
+        if (mutationLock.current || busy) return;
+        mutationLock.current = true;
         setErrorMessage("");
         setUpdatingId(id);
         try {
@@ -66,10 +61,14 @@ const Basket = () => {
             setErrorMessage(getRequestErrorMessage(requestError, "Не удалось изменить количество"));
         }
         finally {
+            await refetch();
+            mutationLock.current = false;
             setUpdatingId(null);
         }
     };
     const handleDelete = async (id: number) => {
+        if (mutationLock.current || busy) return;
+        mutationLock.current = true;
         setErrorMessage("");
         setUpdatingId(id);
         try {
@@ -79,26 +78,33 @@ const Basket = () => {
             setErrorMessage(getRequestErrorMessage(requestError, "Не удалось удалить товар"));
         }
         finally {
+            await refetch();
+            mutationLock.current = false;
             setUpdatingId(null);
         }
     };
     const handleDeleteSelected = async () => {
-        if (!selectedIds.length)
+        if (!selectedIds.length || mutationLock.current || busy)
             return;
+        mutationLock.current = true;
         setErrorMessage("");
         setIsBulkUpdating(true);
         try {
-            await Promise.all(selectedIds.map((id) => removeCartItem({ id }).unwrap()));
+            for (const id of selectedIds) await removeCartItem({ id }).unwrap();
             setSelectedIds([]);
         }
         catch (requestError) {
             setErrorMessage(getRequestErrorMessage(requestError, "Не удалось удалить выбранные товары"));
         }
         finally {
+            await refetch();
+            mutationLock.current = false;
             setIsBulkUpdating(false);
         }
     };
     const handleResetBasket = async () => {
+        if (mutationLock.current || busy) return;
+        mutationLock.current = true;
         setErrorMessage("");
         setIsBulkUpdating(true);
         try {
@@ -109,6 +115,8 @@ const Basket = () => {
             setErrorMessage(getRequestErrorMessage(requestError, "Не удалось очистить корзину"));
         }
         finally {
+            await refetch();
+            mutationLock.current = false;
             setIsBulkUpdating(false);
         }
     };
@@ -139,17 +147,17 @@ const Basket = () => {
     return (<SectionLayout>
       <MainLayoutContainer className={styles.basket}>
         <div className={styles.basket__content}>
-          <BasketHeader isAllSelected={isAllSelected} hasSelectedItems={selectedIds.length > 0} onSelectAll={handleSelectAll} onDeleteSelected={handleDeleteSelected} disabled={isBulkUpdating}/>
+          <BasketHeader isAllSelected={isAllSelected} hasSelectedItems={selectedIds.length > 0} onSelectAll={handleSelectAll} onDeleteSelected={handleDeleteSelected} disabled={busy}/>
 
           {errorMessage && <div className={styles.basket__error}>{errorMessage}</div>}
           {isFetching && <div className={styles.basket__refreshLine}/>}
 
-          <BasketList items={items} selectedIds={selectedIds} onSelectItem={handleSelectItem} onQuantityChange={handleQuantityChange} onDelete={handleDelete} updatingId={updatingId}/>
+          <BasketList items={items} selectedIds={selectedIds} onSelectItem={handleSelectItem} onQuantityChange={handleQuantityChange} onDelete={handleDelete} updatingId={updatingId} disabled={busy}/>
 
-          <BasketButtonReset onClick={handleResetBasket}/>
+          <BasketButtonReset onClick={handleResetBasket} disabled={busy}/>
         </div>
 
-        <OrderSummary cart={cart}/>
+        <OrderSummary cart={cart} disabled={busy}/>
       </MainLayoutContainer>
     </SectionLayout>);
 };

@@ -176,16 +176,19 @@ export const useAuthFlow = () => {
     const handleResetChange = (field: "code" | "password" | "confirmPassword", value: string) => {
         setResetForm((previous) => ({ ...previous, [field]: value }));
     };
-    const submitResetRequest = async (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+    const submitResetRequest = async (event?: FormEvent<HTMLFormElement>) => {
+        event?.preventDefault();
+        if (isLoading) return;
         setErrorMessage("");
         setSuccessMessage("");
+        const email = resetForm.email.trim().toLowerCase();
         try {
-            const response = await requestPasswordReset({ email: resetForm.email.trim() }).unwrap();
+            const response = await requestPasswordReset({ email }).unwrap();
             if (!response.success) {
                 setErrorMessage(response.message ?? "Не удалось отправить код");
                 return;
             }
+            setResetForm(previous => ({ ...previous, email, code: '' }));
             setSuccessMessage(response.message ?? "Код отправлен на почту");
             dispatch(setAuthModalMode("resetConfirm"));
         }
@@ -195,6 +198,7 @@ export const useAuthFlow = () => {
     };
     const submitResetConfirm = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        if (isLoading) return;
         setErrorMessage("");
         setSuccessMessage("");
         if (resetForm.password !== resetForm.confirmPassword) {

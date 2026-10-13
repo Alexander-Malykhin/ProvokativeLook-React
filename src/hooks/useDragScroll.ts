@@ -1,7 +1,7 @@
 import { useEffect, type RefObject } from "react";
 
 // Touch scrolling stays native, including momentum and vertical page scrolling.
-export const useDragScroll = (ref: RefObject<HTMLDivElement | null>, itemCount: number) => {
+export const useDragScroll = (ref: RefObject<HTMLDivElement | null>, itemCount: number, snapToItem = false) => {
     useEffect(() => {
         const slider = ref.current;
         if (!slider) return;
@@ -48,7 +48,19 @@ export const useDragScroll = (ref: RefObject<HTMLDivElement | null>, itemCount: 
             slider.scrollLeft = startLeft - delta;
         };
         const onUp = (event: PointerEvent) => {
-            if (event.pointerId === pointerId) finish();
+            if (event.pointerId !== pointerId) return;
+            const distance = slider.scrollLeft - startLeft;
+            let destination: number | null = null;
+            if (snapToItem && dragging && event.type === 'pointerup' && Math.abs(distance) >= 30) {
+                const first = slider.firstElementChild as HTMLElement | null;
+                const step = (first?.offsetWidth ?? 0) + (Number.parseFloat(getComputedStyle(slider).columnGap) || 0);
+                if (step > 0) {
+                    // A short, intentional mouse gesture advances a card instead of snapping back.
+                    destination = (distance > 0 ? Math.ceil(slider.scrollLeft / step) : Math.floor(slider.scrollLeft / step)) * step;
+                }
+            }
+            finish();
+            if (destination !== null) slider.scrollTo({ left: destination, behavior: 'smooth' });
         };
         const onClick = (event: MouseEvent) => {
             if (!suppressClick || event.detail === 0) return;
@@ -76,5 +88,5 @@ export const useDragScroll = (ref: RefObject<HTMLDivElement | null>, itemCount: 
             slider.removeEventListener("dragstart", onDragStart);
             finish();
         };
-    }, [ref, itemCount]);
+    }, [ref, itemCount, snapToItem]);
 };

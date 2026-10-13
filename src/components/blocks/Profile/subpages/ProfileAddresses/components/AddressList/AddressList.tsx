@@ -6,7 +6,7 @@ interface AddressListProps {
     onDelete: (addressId: number) => void;
     disabled?: boolean;
 }
-const getProviderName = (address: ProfileAddress) => address.deliveryProvider === "mail" ? "Почта России" : "СДЭК";
+const getProviderName = (address: ProfileAddress) => address.deliveryProvider === "cdek" ? "СДЭК" : "Почта России";
 const AddressList = ({ addresses, onSetDefault, onDelete, disabled = false }: AddressListProps) => (<div className={styles.list}>
     {addresses.map((address) => (<article key={address.id} className={styles.list__item}>
         <button type="button" aria-label={`Сделать основным: ${address.title}`} aria-pressed={address.isDefault} disabled={disabled || address.isDefault} className={`${styles.list__radio} ${address.isDefault ? styles.list__radio_active : ""}`} onClick={() => onSetDefault(address.id)}/>

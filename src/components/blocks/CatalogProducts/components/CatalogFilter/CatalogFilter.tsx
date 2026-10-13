@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { lockBodyScroll } from '@helpers/bodyScrollLock';
 import styles from './CatalogFilter.module.scss';
 import ArrowImage from '@assets/arrows/arrow-shevron-bottom.svg';
 import Image from '@UI/buttons/Image/Image.tsx';
@@ -92,8 +93,7 @@ const CatalogFilter = ({ productsCount = 0, options = EMPTY_OPTIONS, value = EMP
         setMaxInput(safeValue.maxPrice !== null ? String(safeValue.maxPrice) : '');
     }, [safeValue.maxPrice]);
     useEffect(() => {
-        const previousOverflow = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
+        const unlockScroll = lockBodyScroll();
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === 'Escape') {
                 dispatch(close());
@@ -101,7 +101,7 @@ const CatalogFilter = ({ productsCount = 0, options = EMPTY_OPTIONS, value = EMP
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => {
-            document.body.style.overflow = previousOverflow;
+            unlockScroll();
             window.removeEventListener('keydown', handleKeyDown);
         };
     }, [dispatch]);

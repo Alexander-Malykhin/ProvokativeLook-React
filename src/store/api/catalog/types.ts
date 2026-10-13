@@ -82,6 +82,9 @@ export interface CatalogProductOffer {
     available: boolean;
 }
 export interface CatalogProductDetail {
+    hasOffers?: boolean;
+    available?: boolean;
+    quantity?: number;
     id: number;
     sectionId?: number | null;
     name: string;

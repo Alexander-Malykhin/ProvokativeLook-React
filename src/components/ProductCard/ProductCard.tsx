@@ -8,8 +8,10 @@ import type { ProductListItem } from "@/types/product";
 import { slugifyCatalogValue } from "@/helpers/catalog";
 export type ProductCardProps = ProductListItem & {
     variant?: "default" | "catalog" | "search";
+    showPurchase?: boolean;
+    showSizes?: boolean;
 };
-const ProductCard = ({ slug, sectionSlug, image, title, price, sizes, variant = "default" }: ProductCardProps) => {
+const ProductCard = ({ slug, sectionSlug, image, title, price, sizes, variant = "default", showPurchase = true, showSizes = true }: ProductCardProps) => {
   const titleRef = useRef<HTMLSpanElement>(null);
   const [quickBuyOpen, setQuickBuyOpen] = useState(false);
   const productPath = `/catalog/${sectionSlug || 'catalog'}/${slug || slugifyCatalogValue(title)}/`;
@@ -37,14 +39,14 @@ const ProductCard = ({ slug, sectionSlug, image, title, price, sizes, variant = 
         >
           <span ref={titleRef} className={styles.card__information_titleText}>{title}</span>
         </Link>
-        {variant !== "search" && <ProductCardSizes sizes={sizes}/>}
+        {showSizes && variant !== "search" && <ProductCardSizes sizes={sizes}/>}
       </div>
-      <div className={styles.card__purchase}>
+      {showPurchase && <div className={styles.card__purchase}>
         <span className={styles.card__price}>{price}</span>
         <button type="button" className={styles.card__quickBuy} onClick={() => setQuickBuyOpen(true)} aria-label={`Выбрать параметры и добавить в корзину: ${title}`}>В корзину</button>
-      </div>
+      </div>}
     </div>
-    {quickBuyOpen && <ProductQuickBuy slug={slug || slugifyCatalogValue(title)} sectionSlug={sectionSlug || "catalog"} fallbackPrice={price} title={title} onClose={() => setQuickBuyOpen(false)}/>}
+    {showPurchase && quickBuyOpen && <ProductQuickBuy slug={slug || slugifyCatalogValue(title)} sectionSlug={sectionSlug || "catalog"} fallbackPrice={price} title={title} onClose={() => setQuickBuyOpen(false)}/>}
   </article>);
 };
 export default ProductCard;

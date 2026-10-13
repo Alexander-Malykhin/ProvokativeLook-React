@@ -10,7 +10,7 @@ const ProductPage = () => {
     const productId = currentData?.product.id;
     return (<PageStack>
       <Product />
-      <ViewedProducts />
+      <ViewedProducts productId={productId}/>
       {productId && <Reviews key={productId} productId={productId}/>}
     </PageStack>);
 };

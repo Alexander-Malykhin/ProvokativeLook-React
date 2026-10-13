@@ -14,11 +14,7 @@ interface PaymentStepProps {
 }
 const PaymentStep = ({ register, errors, isSubmitting, errorMessage, delivery }: PaymentStepProps) => (<OrderStepContainer title="3. Оплата" mode="radio">
     {!delivery && <p>Сначала выберите доставку или самовывоз.</p>}
-    {delivery === 'pickup' && <OrderFieldRadio name="payment" value="cash" register={register("payment", { required: true })}>
-      Оплата при получении
-    </OrderFieldRadio>}
-
-    {delivery === 'delivery' && <OrderFieldRadio name="payment" value="card" register={register("payment", { required: true })}>
+    {delivery && <OrderFieldRadio name="payment" value="card" register={register("payment", { required: true })}>
       Оплата банковской картой
     </OrderFieldRadio>}
 

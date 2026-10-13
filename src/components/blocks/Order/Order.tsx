@@ -21,6 +21,7 @@ import { getRequestErrorMessage } from "@store/api/getRequestErrorMessage";
 import { detectCountry, formatPhone, normalizePhone } from "@components/common/PhoneInput/phone";
 import PostalDelivery from './components/PostalDelivery/PostalDelivery';
 import type { PostalQuote } from '@store/api/orders/types';
+import { CheckoutAttempt } from './model/checkoutAttempt';
 const Order = () => {
     const [courierAddress, setCourierAddress] = useState<ProfileAddress | null>(null);
     const [provider, setProvider] = useState<'mail' | 'cdek'>('mail');
@@ -33,6 +34,7 @@ const Order = () => {
     const [recentlySavedAddress, setRecentlySavedAddress] = useState<ProfileAddress | null>(null);
     const [createOrder, { isLoading: isCreating }] = useCreateOrderMutation();
     const [errorMessage, setErrorMessage] = useState("");
+    const [attempt] = useState(() => new CheckoutAttempt());
     const initializedRef = useRef(false);
     const creatingRef = useRef(false);
     const deliveryRef = useRef<HTMLDivElement>(null);
@@ -66,6 +68,11 @@ const Order = () => {
     });
     const delivery = useWatch({ control, name: 'delivery' });
     const selectedAddressId = useWatch({ control, name: 'addressId' });
+    const selectedPickup = effectiveAddresses.find(address => String(address.id) === selectedAddressId);
+    const needsPostalQuote = delivery === 'delivery' ? provider === 'mail' : delivery === 'pickup' && selectedPickup?.deliveryProvider === 'mail';
+    const validPostalQuote = postalQuote && (delivery === 'pickup'
+        ? postalQuote.mode === 'office' && Number(postalQuote.address.id) === Number(selectedAddressId)
+        : postalQuote.mode === 'door') ? postalQuote : null;
     useEffect(() => {
         if (initializedRef.current || !userData?.user || !addressesData)
             return;
@@ -92,14 +99,14 @@ const Order = () => {
             setErrorMessage("В корзине есть товар, которого уже нет в нужном количестве");
             return;
         }
-        if (!values.delivery || (values.delivery === 'pickup' && !values.addressId) || (values.delivery === 'delivery' && (provider === 'mail' ? !postalQuote : (!courierAddress?.postalCode.trim() || (courierAddress?.formattedAddress.trim().length ?? 0) < 10)))) {
-            setErrorMessage(values.delivery === 'pickup' ? 'Выберите адрес клиента' : provider === 'mail' ? "Рассчитайте доставку Почтой России" : "Выберите адрес доставки");
+        if (!values.delivery || (values.delivery === 'pickup' && !selectedPickup?.pickupCode) || (needsPostalQuote && (!validPostalQuote || validPostalQuote.expiresAt * 1000 <= Date.now())) || (values.delivery === 'delivery' && provider === 'cdek' && (!courierAddress?.postalCode.trim() || (courierAddress?.formattedAddress.trim().length ?? 0) < 10))) {
+            setErrorMessage(needsPostalQuote && !validPostalQuote ? 'Рассчитайте доставку Почтой России' : values.delivery === 'pickup' ? 'Выберите пункт выдачи' : 'Выберите адрес доставки');
             scrollToDelivery();
             return;
         }
         creatingRef.current = true;
         try {
-            const response = await createOrder({
+            const payload = {
                 recipient: {
                     firstName: values.firstName,
                     lastName: values.lastName,
@@ -108,11 +115,12 @@ const Order = () => {
                 },
                 addressId: values.delivery === 'pickup' ? Number(values.addressId) : undefined,
                 courierAddress: values.delivery === 'delivery' && provider === 'cdek' ? courierAddress ?? undefined : undefined,
-                shippingQuoteId: values.delivery === 'delivery' && provider === 'mail' ? postalQuote?.id : undefined,
+                shippingQuoteId: needsPostalQuote ? validPostalQuote?.id : undefined,
                 delivery: values.delivery,
                 payment: values.payment,
                 privacy: values.privacy,
-            }).unwrap();
+            };
+            const response = await createOrder({ ...payload, requestId: attempt.forPayload(payload) }).unwrap();
             if (response.order.payment.required && response.order.payment.url) {
                 safeSessionStorage.removeItem('provokativelook.payment.purpose');
                 safeSessionStorage.setItem("provokativelook.payment.url", response.order.payment.url);
@@ -173,11 +181,11 @@ const Order = () => {
 
             <RecipientStep register={register} errors={errors}/>
             <div ref={deliveryRef} tabIndex={-1} style={{ scrollMarginTop: 100 }}>
-              <DeliveryStep courierAddress={courierAddress} onCourierAddress={setCourierAddress} selectedAddressId={selectedAddressId} provider={provider} onProvider={(next) => { setProvider(next); setPostalQuote(null); }} postal={<PostalDelivery key={JSON.stringify(cart.items.map((item) => [item.offerId, item.quantity, item.price]))} quote={postalQuote} onQuote={setPostalQuote}/>} delivery={delivery} validationError={errors.delivery?.message || (delivery === 'delivery' ? errors.addressId?.message : undefined)} register={register} setValue={setValue} addresses={effectiveAddresses} onAddressSaved={setRecentlySavedAddress} city={userData?.user?.city ?? effectiveAddresses[0]?.city ?? "Ростов-на-Дону"} country={userData?.user?.country ?? effectiveAddresses[0]?.country ?? "Россия"} countryCode={userData?.user?.countryCode ?? effectiveAddresses[0]?.countryCode ?? "RU"}/>
+              <DeliveryStep pickupPostal={selectedPickup?.deliveryProvider === 'mail' ? <PostalDelivery key={JSON.stringify([selectedPickup.id, cart.items.map(item => [item.offerId, item.quantity, item.price])])} office={selectedPickup} quote={validPostalQuote} onQuote={setPostalQuote}/> : null} courierAddress={courierAddress} onCourierAddress={setCourierAddress} selectedAddressId={selectedAddressId} provider={provider} onProvider={(next) => { setProvider(next); setPostalQuote(null); }} postal={<PostalDelivery key={JSON.stringify(cart.items.map((item) => [item.offerId, item.quantity, item.price]))} quote={postalQuote} onQuote={setPostalQuote}/>} delivery={delivery} validationError={errors.delivery?.message || (delivery === 'delivery' ? errors.addressId?.message : undefined)} register={register} setValue={setValue} addresses={effectiveAddresses} onAddressSaved={setRecentlySavedAddress} city={userData?.user?.city ?? effectiveAddresses[0]?.city ?? "Ростов-на-Дону"} country={userData?.user?.country ?? effectiveAddresses[0]?.country ?? "Россия"} countryCode={userData?.user?.countryCode ?? effectiveAddresses[0]?.countryCode ?? "RU"}/>
             </div>
             <PaymentStep delivery={delivery} register={register} errors={errors} isSubmitting={isCreating} errorMessage={errorMessage}/>
           </div>
-          <div><OrderSummary cart={cart}/>{delivery === 'delivery' && provider === 'mail' && <p style={{ marginTop: 20, lineHeight: 1.5 }}>Доставка отдельным платежом: <strong>{postalQuote ? postalQuote.amount.toLocaleString('ru-RU', { style: 'currency', currency: 'RUB' }) : 'рассчитайте в разделе доставки'}</strong></p>}</div>
+          <div><OrderSummary cart={cart}/>{needsPostalQuote && <p style={{ marginTop: 20, lineHeight: 1.5 }}>Доставка отдельным платежом: <strong>{validPostalQuote ? validPostalQuote.amount.toLocaleString('ru-RU', { style: 'currency', currency: 'RUB' }) : 'рассчитайте в разделе доставки'}</strong></p>}</div>
         </MainLayoutContainer>
       </form>
     </SectionLayout>);

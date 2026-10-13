@@ -6,7 +6,7 @@ export const ordersApi = baseApi.injectEndpoints({
         resolvePostalCode: builder.mutation<{ success: boolean; address: { postalCode: string } }, { address: string }>({
             query: (body) => ({ url: 'delivery/quote', method: 'POST', body: { ...body, addressOnly: true }, timeout: 30000 }),
         }),
-        quotePostalDelivery: builder.mutation<{ success: boolean; quote: PostalQuote }, { mode: 'office' | 'door'; postalCode: string; address: string }>({
+        quotePostalDelivery: builder.mutation<{ success: boolean; quote: PostalQuote }, { mode: 'office' | 'door'; postalCode: string; address: string; addressId?: number }>({
             query: (body) => ({ url: 'delivery/quote', method: 'POST', body, timeout: 120000 }),
         }),
         payDelivery: builder.mutation<CreateOrderPaymentResponse, { orderId: number }>({
@@ -32,6 +32,7 @@ export const ordersApi = baseApi.injectEndpoints({
             query: (body) => ({
                 url: "orders/create",
                 method: "POST",
+                timeout: 120000,
                 body,
             }),
             invalidatesTags: ["Orders", "Notifications", "User"],

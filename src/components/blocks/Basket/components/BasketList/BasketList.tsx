@@ -8,10 +8,11 @@ interface BasketListProps {
     onQuantityChange: (id: number, quantity: number) => void;
     onDelete: (id: number) => void;
     updatingId?: number | null;
+    disabled?: boolean;
 }
-const BasketList = ({ items, selectedIds, onSelectItem, onQuantityChange, onDelete, updatingId = null, }: BasketListProps) => {
+const BasketList = ({ items, selectedIds, onSelectItem, onQuantityChange, onDelete, updatingId = null, disabled = false }: BasketListProps) => {
     return (<div className={styles.list}>
-      {items.map((item) => (<BasketItem key={item.id} item={item} checked={selectedIds.includes(item.id)} onCheckedChange={(checked) => onSelectItem(item.id, checked)} onQuantityChange={(quantity) => onQuantityChange(item.id, quantity)} onDelete={() => onDelete(item.id)} isUpdating={updatingId === item.id}/>))}
+      {items.map((item) => (<BasketItem key={item.id} item={item} checked={selectedIds.includes(item.id)} onCheckedChange={(checked) => onSelectItem(item.id, checked)} onQuantityChange={(quantity) => onQuantityChange(item.id, quantity)} onDelete={() => onDelete(item.id)} isUpdating={disabled || updatingId === item.id}/>))}
     </div>);
 };
 export default BasketList;

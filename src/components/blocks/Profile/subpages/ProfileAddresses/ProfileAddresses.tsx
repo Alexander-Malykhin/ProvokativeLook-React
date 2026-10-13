@@ -55,7 +55,7 @@ const ProfileAddresses = ({ title }: ProfilePageProps) => {
         <span className={styles.button__text}>Добавить новый адрес</span>
       </button>
 
-      <AddressModal open={isModalOpen} onClose={() => setIsModalOpen(false)} onSave={handleAddAddress} isSaving={addState.isLoading}/>
+      <AddressModal open={isModalOpen} onClose={() => setIsModalOpen(false)} onSave={handleAddAddress} isSaving={addState.isLoading} saveError={errorMessage}/>
     </section>);
 };
 export default ProfileAddresses;

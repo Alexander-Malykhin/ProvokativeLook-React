@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom";
 import styles from "./ViewedProducts.module.scss";
 import SectionLayout from "@layouts/SectionLayout/SectionLayout";
 import MainLayoutContainer from "@layouts/MainLayoutContainer/MainLayoutContainer";
@@ -7,18 +6,15 @@ import ViewedColumn from "./components/ViewedColumn/ViewedColumn";
 import { useCarousel } from "@hooks/useCarousel";
 import { useGetRecentlyViewedQuery } from "@store/api/recentlyViewed/recentlyViewedApi";
 import { catalogProductToListItem } from "@store/api/catalog/format";
-const ViewedProducts = () => {
-    const { id } = useParams<{
-        id: string;
-    }>();
-    const currentProductId = Number(id);
+const ViewedProducts = ({ productId }: { productId?: number }) => {
+    const currentProductId = Number(productId);
     const { data, isLoading, isFetching } = useGetRecentlyViewedQuery({
         limit: 12,
         excludeId: Number.isInteger(currentProductId) && currentProductId > 0
             ? currentProductId
             : undefined,
     });
-    const products = (data?.items ?? []).filter((product) => Boolean(product.image?.trim())).map(catalogProductToListItem);
+    const products = (data?.items ?? []).filter((product) => product.id !== currentProductId && Boolean(product.image?.trim())).map(catalogProductToListItem);
     const carousel = useCarousel({ itemCount: products.length });
     if (isLoading) {
         return (<SectionLayout>

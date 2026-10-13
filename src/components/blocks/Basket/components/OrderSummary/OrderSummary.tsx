@@ -3,9 +3,10 @@ import OrderForm from "@components/blocks/Basket/components/OrderForm/OrderForm.
 import type { Cart } from "@store/api/cart/types";
 interface OrderSummaryProps {
     cart?: Cart;
+    disabled?: boolean;
 }
-const OrderSummary = ({ cart }: OrderSummaryProps) => (<div className={styles.order}>
-    <OrderForm cart={cart}/>
+const OrderSummary = ({ cart, disabled }: OrderSummaryProps) => (<div className={styles.order}>
+    <OrderForm cart={cart} disabled={disabled}/>
   </div>);
 export default OrderSummary;
 

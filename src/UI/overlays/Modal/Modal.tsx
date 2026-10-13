@@ -1,5 +1,6 @@
 import { useEffect, useRef, type MouseEvent, type ReactNode } from "react";
 import { createPortal } from "react-dom";
+import { lockBodyScroll } from '@helpers/bodyScrollLock';
 import motion from './Modal.module.scss';
 interface ModalProps {
     open: boolean;
@@ -32,11 +33,12 @@ const Modal = ({ open, onClose, children, overlayClassName, contentClassName, ar
             return;
         }
         const previouslyFocused = document.activeElement as HTMLElement | null;
-        const previousOverflow = document.body.style.overflow;
-        document.body.style.overflow = "hidden";
+        const unlockScroll = lockBodyScroll();
         const focusable = Array.from(contentRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR) ?? []).find((element) => element.getClientRects().length > 0);
         focusable?.focus({ preventScroll: true });
         const handleKeyDown = (event: KeyboardEvent) => {
+            const overlays = document.querySelectorAll('[data-modal-overlay]');
+            if (contentRef.current?.parentElement !== overlays[overlays.length - 1]) return;
             if (event.key === "Escape" && !closeDisabled) {
                 onCloseRef.current();
                 return;
@@ -62,7 +64,7 @@ const Modal = ({ open, onClose, children, overlayClassName, contentClassName, ar
         };
         document.addEventListener("keydown", handleKeyDown);
         return () => {
-            document.body.style.overflow = previousOverflow;
+            unlockScroll();
             document.removeEventListener("keydown", handleKeyDown);
             previouslyFocused?.focus({ preventScroll: true });
         };

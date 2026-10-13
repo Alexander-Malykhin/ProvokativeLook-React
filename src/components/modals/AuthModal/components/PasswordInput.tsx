@@ -9,6 +9,8 @@ interface PasswordInputProps {
     onChange: (event: ChangeEvent<HTMLInputElement>) => void;
     error?: string;
     dataField?: string;
+    disabled?: boolean;
+    className?: string;
 }
 const EyeIcon = ({ visible }: {
     visible: boolean;
@@ -17,12 +19,12 @@ const EyeIcon = ({ visible }: {
     <circle cx="12" cy="12" r="2.6" fill="none" stroke="currentColor" strokeWidth="1.5"/>
     {!visible && <path d="M4 4 20 20" fill="none" stroke="currentColor" strokeWidth="1.5"/>}
   </svg>);
-const PasswordInput = ({ name, value, label, placeholder, autoComplete, onChange, error, dataField }: PasswordInputProps) => {
+const PasswordInput = ({ name, value, label, placeholder, autoComplete, onChange, error, dataField, disabled, className = '' }: PasswordInputProps) => {
     const [visible, setVisible] = useState(false);
-    return (<label className={`${styles.field} ${error ? styles.field_error : ""}`}>
+    return (<label className={`${styles.field} ${error ? styles.field_error : ""} ${className}`}>
       <span className={styles.field__label}>{label}</span>
       <div className={styles.field__passwordWrap}>
-        <input type={visible ? "text" : "password"} name={name} value={value} onChange={onChange} placeholder={placeholder} autoComplete={autoComplete} className={styles.field__input} data-register-field={dataField} aria-invalid={Boolean(error)} aria-describedby={error ? `${name}-error` : undefined} required={!dataField}/>
+        <input type={visible ? "text" : "password"} name={name} value={value} onChange={onChange} placeholder={placeholder} autoComplete={autoComplete} className={styles.field__input} data-register-field={dataField} aria-invalid={Boolean(error)} aria-describedby={error ? `${name}-error` : undefined} required={!dataField} disabled={disabled}/>
         <button type="button" className={styles.field__eye} onClick={() => setVisible((current) => !current)} aria-label={visible ? "Скрыть пароль" : "Показать пароль"}>
           <EyeIcon visible={visible}/>
         </button>
