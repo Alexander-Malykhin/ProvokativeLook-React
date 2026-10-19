@@ -1,11 +1,10 @@
-import { baseApi } from "@store/api/baseApi";
-import type { ContactsResponse } from "@store/api/contacts/types";
+import { baseApi } from '@store/api/baseApi';
+import type { ContactsResponse } from '@store/api/contacts/types';
 export const contactsApi = baseApi.injectEndpoints({
-    endpoints: (builder) => ({
-        getContacts: builder.query<ContactsResponse, void>({
-            query: () => "contacts",
-        }),
+  endpoints: (builder) => ({
+    getContacts: builder.query<ContactsResponse, void>({
+      query: () => 'contacts',
     }),
+  }),
 });
 export const { useGetContactsQuery } = contactsApi;
-

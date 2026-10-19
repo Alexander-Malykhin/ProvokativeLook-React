@@ -1,113 +1,138 @@
-import { baseApi } from "@store/api/baseApi";
-import { parseGeocoderResponse, parseSuggestResponse, } from "@components/blocks/Profile/subpages/ProfileAddresses/lib/addressParsers";
-import type { ParsedAddress, ProfileAddress, Suggestion, } from "@components/blocks/Profile/subpages/ProfileAddresses/model/types";
+import { baseApi } from '@store/api/baseApi';
+import {
+  parseGeocoderResponse,
+  parseSuggestResponse,
+} from '@components/blocks/Profile/subpages/ProfileAddresses/lib/addressParsers';
+import type {
+  ParsedAddress,
+  ProfileAddress,
+  Suggestion,
+} from '@components/blocks/Profile/subpages/ProfileAddresses/model/types';
 interface SuggestAddressRequest {
-    city?: string;
-    query: string;
+  city?: string;
+  query: string;
 }
 interface GeocodeAddressRequest {
-    geocode: string;
-    results?: number;
+  geocode: string;
+  results?: number;
 }
 export interface PickupPoint {
-    id: string;
-    code: string;
-    externalId?: string;
-    name: string;
-    address: string;
-    postalCode: string;
-    uri: string;
-    distance?: number | null;
-    source?: string;
-    latitude?: number | null;
-    longitude?: number | null;
+  id: string;
+  code: string;
+  externalId?: string;
+  name: string;
+  address: string;
+  postalCode: string;
+  uri: string;
+  distance?: number | null;
+  source?: string;
+  latitude?: number | null;
+  longitude?: number | null;
 }
 interface PickupPointsResponse {
-    success: boolean;
-    city: string;
-    provider: "cdek" | "mail";
-    center: {
-        latitude: number;
-        longitude: number;
-    };
-    points: PickupPoint[];
+  success: boolean;
+  city: string;
+  provider: 'cdek' | 'mail';
+  center: {
+    latitude: number;
+    longitude: number;
+  };
+  points: PickupPoint[];
 }
 interface AddressesResponse {
-    success: boolean;
-    addresses: ProfileAddress[];
-    address?: ProfileAddress;
+  success: boolean;
+  addresses: ProfileAddress[];
+  address?: ProfileAddress;
 }
 export const addressApi = baseApi.injectEndpoints({
-    endpoints: (builder) => ({
-        getAddressSuggestions: builder.query<Suggestion[], SuggestAddressRequest>({
-            query: ({ city = "", query }) => ({
-                url: "address/suggest",
-                params: {
-                    text: [city.trim(), query.trim()].filter(Boolean).join(", "),
-                },
-                responseHandler: "text",
-            }),
-            transformResponse: parseSuggestResponse,
-        }),
-        geocodeAddress: builder.query<ParsedAddress[], GeocodeAddressRequest>({
-            query: ({ geocode, results = 1 }) => ({
-                url: "address/geocode",
-                params: { geocode, results },
-                responseHandler: "text",
-            }),
-            transformResponse: parseGeocoderResponse,
-        }),
-        getPickupPoints: builder.query<PickupPointsResponse, {
-            city: string;
-            provider: "cdek" | "mail";
-            country?: string;
-            countryCode?: string;
-        }>({
-            query: ({ city, provider, country = "", countryCode = "" }) => ({
-                url: "address/pickup-points",
-                params: { city, provider, country, countryCode },
-            }),
-        }),
-        getAddresses: builder.query<AddressesResponse, void>({
-            query: () => ({ url: "addresses" }),
-            providesTags: ["Addresses"],
-        }),
-        addAddress: builder.mutation<AddressesResponse, ProfileAddress>({
-            query: (body) => ({
-                url: "addresses/add",
-                method: "POST",
-                body,
-            }),
-            invalidatesTags: ["Addresses", "User"],
-        }),
-        updateAddress: builder.mutation<AddressesResponse, ProfileAddress>({
-            query: (body) => ({
-                url: "addresses/update",
-                method: "POST",
-                body,
-            }),
-            invalidatesTags: ["Addresses", "User"],
-        }),
-        setDefaultAddress: builder.mutation<AddressesResponse, {
-            id: number;
-        }>({
-            query: (body) => ({
-                url: "addresses/default",
-                method: "POST",
-                body,
-            }),
-            invalidatesTags: ["Addresses", "User"],
-        }),
-        deleteAddress: builder.mutation<AddressesResponse, {
-            id: number;
-        }>({
-            query: (body) => ({
-                url: "addresses/delete",
-                method: "POST",
-                body,
-            }),
-            invalidatesTags: ["Addresses", "User"],
-        }),
+  endpoints: (builder) => ({
+    getAddressSuggestions: builder.query<Suggestion[], SuggestAddressRequest>({
+      query: ({ city = '', query }) => ({
+        url: 'address/suggest',
+        params: {
+          text: [city.trim(), query.trim()].filter(Boolean).join(', '),
+        },
+        responseHandler: 'text',
+      }),
+      transformResponse: parseSuggestResponse,
     }),
+    geocodeAddress: builder.query<ParsedAddress[], GeocodeAddressRequest>({
+      query: ({ geocode, results = 1 }) => ({
+        url: 'address/geocode',
+        params: { geocode, results },
+        responseHandler: 'text',
+      }),
+      transformResponse: parseGeocoderResponse,
+    }),
+    getPickupPoints: builder.query<
+      PickupPointsResponse,
+      {
+        city: string;
+        provider: 'cdek' | 'mail';
+        country?: string;
+        countryCode?: string;
+      }
+    >({
+      query: ({ city, provider, country = '', countryCode = '' }) => ({
+        url: 'address/pickup-points',
+        params: { city, provider, country, countryCode },
+      }),
+    }),
+    getAddresses: builder.query<AddressesResponse, void>({
+      query: () => ({ url: 'addresses' }),
+      providesTags: ['Addresses'],
+    }),
+    addAddress: builder.mutation<AddressesResponse, ProfileAddress>({
+      query: (body) => ({
+        url: 'addresses/add',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Addresses', 'User'],
+    }),
+    updateAddress: builder.mutation<AddressesResponse, ProfileAddress>({
+      query: (body) => ({
+        url: 'addresses/update',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Addresses', 'User'],
+    }),
+    setDefaultAddress: builder.mutation<
+      AddressesResponse,
+      {
+        id: number;
+      }
+    >({
+      query: (body) => ({
+        url: 'addresses/default',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Addresses', 'User'],
+    }),
+    deleteAddress: builder.mutation<
+      AddressesResponse,
+      {
+        id: number;
+      }
+    >({
+      query: (body) => ({
+        url: 'addresses/delete',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Addresses', 'User'],
+    }),
+  }),
 });
-export const { useLazyGeocodeAddressQuery, useLazyGetPickupPointsQuery, useLazyGetAddressSuggestionsQuery, useGetAddressesQuery, useAddAddressMutation, useUpdateAddressMutation, useSetDefaultAddressMutation, useDeleteAddressMutation, } = addressApi;
+export const {
+  useLazyGeocodeAddressQuery,
+  useLazyGetPickupPointsQuery,
+  useLazyGetAddressSuggestionsQuery,
+  useGetAddressesQuery,
+  useAddAddressMutation,
+  useUpdateAddressMutation,
+  useSetDefaultAddressMutation,
+  useDeleteAddressMutation,
+} = addressApi;

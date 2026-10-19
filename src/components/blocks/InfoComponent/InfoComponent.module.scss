@@ -52,7 +52,7 @@
   }
 
   :global(ul > li::before) {
-    content: "— ";
+    content: '— ';
   }
 
   :global(ol) {
@@ -133,7 +133,7 @@
     border-radius: rem(10);
 
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       inset: 0;
       transform: translateX(-100%);
@@ -156,7 +156,7 @@
     border-radius: rem(4);
 
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       inset: 0;
       transform: translateX(-100%);
@@ -197,7 +197,7 @@
   overflow: hidden;
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: -35%;

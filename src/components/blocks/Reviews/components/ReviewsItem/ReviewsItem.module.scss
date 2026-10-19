@@ -14,10 +14,26 @@
     right: rem(16);
     display: flex;
     gap: rem(6);
-    button { padding: 0; border: 0; background: transparent; cursor: zoom-in; }
-    img { display: block; width: rem(52); height: rem(52); object-fit: cover; border-radius: rem(4); }
+    button {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: zoom-in;
+    }
+    img {
+      display: block;
+      width: rem(52);
+      height: rem(52);
+      object-fit: cover;
+      border-radius: rem(4);
+    }
   }
-  &:has(.item__photos) .item__head { padding-right: rem(106); min-height: rem(52); flex-wrap: wrap; align-content: flex-start; }
+  &:has(.item__photos) .item__head {
+    padding-right: rem(106);
+    min-height: rem(52);
+    flex-wrap: wrap;
+    align-content: flex-start;
+  }
 
   &__head {
     display: flex;
@@ -49,7 +65,9 @@
     padding: rem(20);
     gap: rem(16);
 
-    &__photos { top: rem(20); }
+    &__photos {
+      top: rem(20);
+    }
     &__head {
       align-items: flex-start;
       flex-direction: column;
@@ -71,7 +89,36 @@
   }
 }
 
-.photoOverlay { position: fixed; inset: 0; z-index: 2400; background: rgba(0, 0, 0, .8); display: flex; align-items: center; justify-content: center; padding: rem(16); }
-.photoContent { position: relative; max-width: 100%; max-height: 100%; }
-.photoFull { display: block; max-width: calc(100vw - rem(32)); max-height: calc(100dvh - rem(64)); object-fit: contain; }
-.photoClose { position: absolute; top: 0; right: 0; width: rem(44); height: rem(44); background: $white; color: $black; border: 0; font-size: rem(28); cursor: pointer; }
+.photoOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2400;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: rem(16);
+}
+.photoContent {
+  position: relative;
+  max-width: 100%;
+  max-height: 100%;
+}
+.photoFull {
+  display: block;
+  max-width: calc(100vw - rem(32));
+  max-height: calc(100dvh - rem(64));
+  object-fit: contain;
+}
+.photoClose {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: rem(44);
+  height: rem(44);
+  background: $white;
+  color: $black;
+  border: 0;
+  font-size: rem(28);
+  cursor: pointer;
+}

@@ -2,7 +2,7 @@
   position: fixed;
   inset: 0;
   z-index: 2000;
-  animation: galleryFade .22s ease-out both;
+  animation: galleryFade 0.22s ease-out both;
 
   display: grid;
   place-items: center;
@@ -20,7 +20,7 @@
   }
 
   &__content {
-    animation: galleryEnter .22s ease-out both;
+    animation: galleryEnter 0.22s ease-out both;
     position: relative;
     z-index: 1;
 
@@ -221,6 +221,25 @@
     }
   }
 }
-@keyframes galleryFade { from { opacity: 0; } to { opacity: 1; } }
-@keyframes galleryEnter { from { transform: scale(.98); } to { transform: none; } }
-@media (prefers-reduced-motion: reduce) { .gallery, .gallery__content { animation: none; } }
+@keyframes galleryFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes galleryEnter {
+  from {
+    transform: scale(0.98);
+  }
+  to {
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gallery,
+  .gallery__content {
+    animation: none;
+  }
+}

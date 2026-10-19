@@ -1,102 +1,169 @@
-import { safeSessionStorage } from "@helpers/browserStorage";
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import styles from "./ProfileOrders.module.scss";
-import type { ProfilePageProps } from "@components/blocks/Profile/types/types.ts";
-import { useGetOrdersQuery } from "@store/api/orders/ordersApi";
-import OrderCard from "./components/OrderCard/OrderCard";
-import OrderDetails from "./components/OrderDetails/OrderDetails";
-import NotOrder from "./components/NotOrder/NotOrder";
+import { safeSessionStorage } from '@helpers/browserStorage';
+import { useDeadline } from '@hooks/useDeadline';
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import styles from './ProfileOrders.module.scss';
+import type { ProfilePageProps } from '@components/blocks/Profile/types/types.ts';
+import { useGetOrdersQuery } from '@store/api/orders/ordersApi';
+import OrderCard from './components/OrderCard/OrderCard';
+import OrderDetails from './components/OrderDetails/OrderDetails';
+import NotOrder from './components/NotOrder/NotOrder';
 const ProfileOrders = ({ title }: ProfilePageProps) => {
-    const [limit, setLimit] = useState(5);
-    const navigate = useNavigate();
-    const { id } = useParams<{
-        id?: string;
-    }>();
-    const [searchParams] = useSearchParams();
-    const paidOrder = searchParams.get("paid");
-    const paymentSuccess = searchParams.get("payment") === "success";
-    const [returnedOrder, setReturnedOrder] = useState<string | null>(() => typeof window !== "undefined" ? safeSessionStorage.getItem("provokativelook.payment.returnedOrder") : null);
-    const [pendingUntil] = useState(() => typeof window !== "undefined" ? Number(safeSessionStorage.getItem("provokativelook.payment.pendingUntil") ?? 0) : 0);
-    const shouldPollPayment = Boolean(returnedOrder) && Date.now() < pendingUntil;
-    const { data, isLoading, isFetching, isError, refetch } = useGetOrdersQuery(
-        { limit, offset: 0 },
-        {
-            refetchOnMountOrArgChange: true,
-            // Обычный список заказов обновляется через SSE (orders.changed).
-            // Polling нужен только кратковременно после возврата с оплаты,
-            // чтобы не дёргать пагинацию и hasMore каждые 3 секунды.
-            pollingInterval: shouldPollPayment ? 3000 : 0,
-            skipPollingIfUnfocused: false,
-        }
+  const [limit, setLimit] = useState(5);
+  const navigate = useNavigate();
+  const { id } = useParams<{
+    id?: string;
+  }>();
+  const [searchParams] = useSearchParams();
+  const paidOrder = searchParams.get('paid');
+  const paymentSuccess = searchParams.get('payment') === 'success';
+  const [returnedOrder, setReturnedOrder] = useState<string | null>(() =>
+    typeof window !== 'undefined' ? safeSessionStorage.getItem('provokativelook.payment.returnedOrder') : null,
+  );
+  const [initialReturnedOrder] = useState(returnedOrder);
+  const [pendingUntil] = useState(() =>
+    typeof window !== 'undefined' ? Number(safeSessionStorage.getItem('provokativelook.payment.pendingUntil') ?? 0) : 0,
+  );
+  const paymentWindowOpen = useDeadline(pendingUntil);
+  const shouldPollPayment = Boolean(returnedOrder) && paymentWindowOpen;
+  const { data, isLoading, isFetching, isError, refetch } = useGetOrdersQuery(
+    { limit, offset: 0 },
+    {
+      refetchOnMountOrArgChange: true,
+
+      pollingInterval: shouldPollPayment ? 3000 : 0,
+      skipPollingIfUnfocused: true,
+    },
+  );
+  const orders = useMemo(() => data?.data.items ?? [], [data?.data.items]);
+  const returnedOrderData = orders.find(
+    (order) => String(order.orderId ?? '') === returnedOrder || String(order.number) === returnedOrder,
+  );
+  const returnPaid =
+    safeSessionStorage.getItem('provokativelook.payment.purpose') === 'delivery'
+      ? returnedOrderData?.shipping?.paid
+      : returnedOrderData?.isPaid;
+  if (returnedOrder && (returnPaid || !paymentWindowOpen)) {
+    setReturnedOrder(null);
+  }
+  const paymentInQueue = orders.some((order) => !order.isPaid && order.paymentState === 'pending');
+  useEffect(() => {
+    if (!paymentInQueue || shouldPollPayment) return;
+    const timer = window.setInterval(() => {
+      if (document.visibilityState === 'visible') void refetch();
+    }, 3000);
+    return () => window.clearInterval(timer);
+  }, [paymentInQueue, shouldPollPayment, refetch]);
+  useEffect(() => {
+    if (!returnedOrder) return;
+    const timer = window.setTimeout(
+      () => {
+        safeSessionStorage.removeItem('provokativelook.payment.returnedOrder');
+        safeSessionStorage.removeItem('provokativelook.payment.pendingUntil');
+        setReturnedOrder(null);
+      },
+      Math.max(0, pendingUntil - Date.now()),
     );
-    const orders = data?.data.items ?? [];
-    const paymentInQueue = orders.some((order) => !order.isPaid && order.paymentState === 'pending');
-    useEffect(() => {
-        if (!paymentInQueue || shouldPollPayment) return;
-        const timer = window.setInterval(() => {
-            if (document.visibilityState === 'visible') void refetch();
-        }, 3000);
-        return () => window.clearInterval(timer);
-    }, [paymentInQueue, shouldPollPayment, refetch]);
-    useEffect(() => {
-        if (!returnedOrder) return;
-        const timer = window.setTimeout(() => {
-            safeSessionStorage.removeItem('provokativelook.payment.returnedOrder');
-            safeSessionStorage.removeItem('provokativelook.payment.pendingUntil');
-            setReturnedOrder(null);
-        }, Math.max(0, pendingUntil - Date.now()));
-        return () => window.clearTimeout(timer);
-    }, [returnedOrder, pendingUntil]);
-    const waitingForTrack = orders.some((order) => order.isPaid && order.shipping && (order.shipping.workflow === 'manager'
-        ? ['awaiting_manager', 'approved', 'creating', 'checking', 'created', 'awaiting_invoice'].includes(order.shipping.status)
-        : order.shipping.paid && ['paid', 'creating', 'checking', 'created'].includes(order.shipping.status)));
-    useEffect(() => {
-        if (!waitingForTrack) return;
-        const timer = window.setInterval(() => {
-            if (document.visibilityState === 'visible') void refetch();
-        }, 10000);
-        return () => window.clearInterval(timer);
-    }, [waitingForTrack, refetch]);
-    const pagination = data?.data.pagination;
-    const selected = useMemo(() => id ? orders.find((order) => String(order.id) === id) : undefined, [id, orders]);
-    useEffect(() => {
-        if (!returnedOrder)
-            return;
-        const found = orders.find((order) => String(order.orderId ?? "") === returnedOrder || String(order.number) === returnedOrder);
-        const paid = safeSessionStorage.getItem('provokativelook.payment.purpose') === 'delivery' ? found?.shipping?.paid : found?.isPaid;
-        if (paid || found?.paymentState === "pending" || Date.now() >= pendingUntil) {
-            if (paid) {
-                safeSessionStorage.removeItem("provokativelook.payment.order");
-            }
-            if (paid || Date.now() >= pendingUntil) {
-                safeSessionStorage.removeItem("provokativelook.payment.returnedOrder");
-                safeSessionStorage.removeItem("provokativelook.payment.pendingUntil");
-                setReturnedOrder(null);
-            }
-        }
-    }, [orders, pendingUntil, returnedOrder]);
-    useEffect(() => {
-        if (!paidOrder || id)
-            return;
-        const found = orders.find((order) => String(order.orderId ?? "") === paidOrder || String(order.number) === paidOrder);
-        if (found) {
-            navigate(`/profile/orders/${found.id}${paymentSuccess ? '?payment=success' : ''}`, { replace: true });
-        }
-    }, [id, navigate, orders, paidOrder, paymentSuccess]);
-    return <div className={styles.content}>
-    <h2 className={styles.content__title}>{title}</h2>
-    {isError && data && <p role="status">Не удалось обновить заказы. Показаны последние загруженные данные. <button type="button" disabled={isFetching} onClick={() => void refetch()}>Повторить</button></p>}
-    {isLoading ? <div className={styles.content__skeleton} aria-label="Загрузка заказов">{Array.from({ length: 3 }).map((_, i) => <div key={i} className={styles.content__skeletonItem}/>)}</div>
-            : isError && !data ? <div className={styles.content__error}><span>Не удалось загрузить заказы.</span><button type="button" disabled={isFetching} onClick={() => void refetch()}>Повторить</button></div>
-                : id && !selected ? <div className={styles.content__error}><span>Заказ не найден.</span><button type="button" onClick={() => navigate('/profile/orders')}>К заказам</button></div>
-                    : selected ? <OrderDetails order={selected}/>
-                        : orders.length === 0 ? <NotOrder /> : <>
-                            <div className={styles.content__list}>{orders.map((order) => <OrderCard key={order.id} order={order}/>)}</div>
-                            {pagination?.hasMore && <button type="button" className={styles.content__loadMore} disabled={isFetching} onClick={() => setLimit((current) => current + 5)}>
-                                {isFetching ? "Загружаем..." : "Загрузить ещё"}
-                              </button>}
-                          </>}
-  </div>;
+    return () => window.clearTimeout(timer);
+  }, [returnedOrder, pendingUntil]);
+  const waitingForTrack = orders.some(
+    (order) =>
+      order.isPaid &&
+      order.shipping &&
+      (order.shipping.workflow === 'manager'
+        ? ['awaiting_manager', 'approved', 'creating', 'checking', 'created', 'awaiting_invoice'].includes(
+            order.shipping.status,
+          )
+        : order.shipping.paid && ['paid', 'creating', 'checking', 'created'].includes(order.shipping.status)),
+  );
+  useEffect(() => {
+    if (!waitingForTrack) return;
+    const timer = window.setInterval(() => {
+      if (document.visibilityState === 'visible') void refetch();
+    }, 10000);
+    return () => window.clearInterval(timer);
+  }, [waitingForTrack, refetch]);
+  const pagination = data?.data.pagination;
+  const selected = useMemo(() => (id ? orders.find((order) => String(order.id) === id) : undefined), [id, orders]);
+  useEffect(() => {
+    if (!initialReturnedOrder) return;
+    const found = orders.find(
+      (order) => String(order.orderId ?? '') === initialReturnedOrder || String(order.number) === initialReturnedOrder,
+    );
+    const paid =
+      safeSessionStorage.getItem('provokativelook.payment.purpose') === 'delivery'
+        ? found?.shipping?.paid
+        : found?.isPaid;
+    if (paid || !paymentWindowOpen) {
+      if (paid) safeSessionStorage.removeItem('provokativelook.payment.order');
+      safeSessionStorage.removeItem('provokativelook.payment.returnedOrder');
+      safeSessionStorage.removeItem('provokativelook.payment.pendingUntil');
+    }
+  }, [orders, initialReturnedOrder, paymentWindowOpen]);
+  useEffect(() => {
+    if (!paidOrder || id) return;
+    const found = orders.find(
+      (order) => String(order.orderId ?? '') === paidOrder || String(order.number) === paidOrder,
+    );
+    if (found) {
+      navigate(`/profile/orders/${found.id}${paymentSuccess ? '?payment=success' : ''}`, { replace: true });
+    }
+  }, [id, navigate, orders, paidOrder, paymentSuccess]);
+  return (
+    <div className={styles.content}>
+      <h2 className={styles.content__title}>{title}</h2>
+      {isError && data && (
+        <p role="status">
+          Не удалось обновить заказы. Показаны последние загруженные данные.{' '}
+          <button type="button" disabled={isFetching} onClick={() => void refetch()}>
+            Повторить
+          </button>
+        </p>
+      )}
+      {isLoading ? (
+        <div className={styles.content__skeleton} aria-label="Загрузка заказов">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className={styles.content__skeletonItem} />
+          ))}
+        </div>
+      ) : isError && !data ? (
+        <div className={styles.content__error}>
+          <span>Не удалось загрузить заказы.</span>
+          <button type="button" disabled={isFetching} onClick={() => void refetch()}>
+            Повторить
+          </button>
+        </div>
+      ) : id && !selected ? (
+        <div className={styles.content__error}>
+          <span>Заказ не найден.</span>
+          <button type="button" onClick={() => navigate('/profile/orders')}>
+            К заказам
+          </button>
+        </div>
+      ) : selected ? (
+        <OrderDetails order={selected} />
+      ) : orders.length === 0 ? (
+        <NotOrder />
+      ) : (
+        <>
+          <div className={styles.content__list}>
+            {orders.map((order) => (
+              <OrderCard key={order.id} order={order} />
+            ))}
+          </div>
+          {pagination?.hasMore && (
+            <button
+              type="button"
+              className={styles.content__loadMore}
+              disabled={isFetching}
+              onClick={() => setLimit((current) => current + 5)}
+            >
+              {isFetching ? 'Загружаем...' : 'Загрузить ещё'}
+            </button>
+          )}
+        </>
+      )}
+    </div>
+  );
 };
 export default ProfileOrders;

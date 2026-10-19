@@ -1,12 +1,11 @@
-import type { RefObject } from "react";
-import type { ProductListItem } from "@/types/product";
+import type { RefObject } from 'react';
+import type { ProductListItem } from '@/types/product';
 export interface ViewedSliderProps {
-    sliderRef: RefObject<HTMLDivElement | null>;
-    products: ProductListItem[];
-    visibleProducts: ProductListItem[];
+  sliderRef: RefObject<HTMLDivElement | null>;
+  products: ProductListItem[];
+  visibleProducts: ProductListItem[];
 }
 export interface ViewedColumnProps {
-    onPrev: () => void;
-    onNext: () => void;
+  onPrev: () => void;
+  onNext: () => void;
 }
-

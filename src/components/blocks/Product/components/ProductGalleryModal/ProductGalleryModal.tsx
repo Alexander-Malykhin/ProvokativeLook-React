@@ -1,65 +1,69 @@
-import { animateModalClose } from "@UI/overlays/Modal/animateModalClose";
-import { useCallback, useEffect, useRef } from "react";
-import { createPortal } from "react-dom";
+import { animateModalClose } from '@UI/overlays/Modal/animateModalClose';
+import { useCallback, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { lockBodyScroll } from '@helpers/bodyScrollLock';
-import styles from "./ProductGalleryModal.module.scss";
-import Image from "@UI/media/Image/Image";
+import styles from './ProductGalleryModal.module.scss';
+import Image from '@UI/media/Image/Image';
 interface ProductGalleryModalProps {
-    images: string[];
-    activeIndex: number;
-    title: string;
-    onChange: (index: number) => void;
-    onClose: () => void;
+  images: string[];
+  activeIndex: number;
+  title: string;
+  onChange: (index: number) => void;
+  onClose: () => void;
 }
-const ProductGalleryModal = ({ images, activeIndex, title, onChange, onClose: finishClose, }: ProductGalleryModalProps) => {
-    const onClose = useCallback(() => animateModalClose(finishClose), [finishClose]);
-    const touchStartX = useRef<number | null>(null);
-    const previous = useCallback(() => {
-        if (!images.length)
-            return;
-        onChange((activeIndex - 1 + images.length) % images.length);
-    }, [activeIndex, images.length, onChange]);
-    const next = useCallback(() => {
-        if (!images.length)
-            return;
-        onChange((activeIndex + 1) % images.length);
-    }, [activeIndex, images.length, onChange]);
-    useEffect(() => {
-        const unlockScroll = lockBodyScroll();
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === "Escape")
-                onClose();
-            if (event.key === "ArrowLeft")
-                previous();
-            if (event.key === "ArrowRight")
-                next();
-        };
-        window.addEventListener("keydown", handleKeyDown);
-        return () => {
-            unlockScroll();
-            window.removeEventListener("keydown", handleKeyDown);
-        };
-    }, [onClose, next, previous]);
-    if (!images.length)
-        return null;
-    const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
-        touchStartX.current = event.touches[0]?.clientX ?? null;
+const ProductGalleryModal = ({
+  images,
+  activeIndex,
+  title,
+  onChange,
+  onClose: finishClose,
+}: ProductGalleryModalProps) => {
+  const onClose = useCallback(() => animateModalClose(finishClose), [finishClose]);
+  const touchStartX = useRef<number | null>(null);
+  const previous = useCallback(() => {
+    if (!images.length) return;
+    onChange((activeIndex - 1 + images.length) % images.length);
+  }, [activeIndex, images.length, onChange]);
+  const next = useCallback(() => {
+    if (!images.length) return;
+    onChange((activeIndex + 1) % images.length);
+  }, [activeIndex, images.length, onChange]);
+  useEffect(() => {
+    const unlockScroll = lockBodyScroll();
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose();
+      if (event.key === 'ArrowLeft') previous();
+      if (event.key === 'ArrowRight') next();
     };
-    const handleTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
-        if (touchStartX.current === null)
-            return;
-        const endX = event.changedTouches[0]?.clientX ?? touchStartX.current;
-        const delta = endX - touchStartX.current;
-        touchStartX.current = null;
-        if (Math.abs(delta) < 45)
-            return;
-        if (delta > 0)
-            previous();
-        else
-            next();
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      unlockScroll();
+      window.removeEventListener('keydown', handleKeyDown);
     };
-    return createPortal(<div data-modal-overlay data-modal-fullscreen className={styles.gallery} role="dialog" aria-modal="true" aria-label={`Галерея ${title}`}>
-      <button type="button" className={styles.gallery__overlay} onClick={onClose} aria-label="Закрыть галерею"/>
+  }, [onClose, next, previous]);
+  if (!images.length) return null;
+  const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
+    touchStartX.current = event.touches[0]?.clientX ?? null;
+  };
+  const handleTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
+    if (touchStartX.current === null) return;
+    const endX = event.changedTouches[0]?.clientX ?? touchStartX.current;
+    const delta = endX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(delta) < 45) return;
+    if (delta > 0) previous();
+    else next();
+  };
+  return createPortal(
+    <div
+      data-modal-overlay
+      data-modal-fullscreen
+      className={styles.gallery}
+      role="dialog"
+      aria-modal="true"
+      aria-label={`Галерея ${title}`}
+    >
+      <button type="button" className={styles.gallery__overlay} onClick={onClose} aria-label="Закрыть галерею" />
 
       <div data-modal-content className={styles.gallery__content}>
         <button type="button" className={styles.gallery__close} onClick={onClose} aria-label="Закрыть">
@@ -67,26 +71,56 @@ const ProductGalleryModal = ({ images, activeIndex, title, onChange, onClose: fi
         </button>
 
         <div className={styles.gallery__stage} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-          {images.length > 1 && (<button type="button" className={`${styles.gallery__arrow} ${styles.gallery__arrow_left}`} onClick={previous} aria-label="Предыдущее фото">
+          {images.length > 1 && (
+            <button
+              type="button"
+              className={`${styles.gallery__arrow} ${styles.gallery__arrow_left}`}
+              onClick={previous}
+              aria-label="Предыдущее фото"
+            >
               ←
-            </button>)}
+            </button>
+          )}
 
           <div className={styles.gallery__main}>
-            <Image src={images[activeIndex]} alt={`${title}, фото ${activeIndex + 1}`} className={styles.gallery__mainImage} loading="eager"/>
+            <Image
+              src={images[activeIndex]}
+              alt={`${title}, фото ${activeIndex + 1}`}
+              className={styles.gallery__mainImage}
+              loading="eager"
+            />
           </div>
 
-          {images.length > 1 && (<button type="button" className={`${styles.gallery__arrow} ${styles.gallery__arrow_right}`} onClick={next} aria-label="Следующее фото">
+          {images.length > 1 && (
+            <button
+              type="button"
+              className={`${styles.gallery__arrow} ${styles.gallery__arrow_right}`}
+              onClick={next}
+              aria-label="Следующее фото"
+            >
               →
-            </button>)}
+            </button>
+          )}
         </div>
 
-        {images.length > 1 && (<div className={styles.gallery__thumbs}>
-            {images.map((image, index) => (<button key={`${image}-${index}`} type="button" className={`${styles.gallery__thumb} ${activeIndex === index ? styles.gallery__thumb_active : ""}`} onClick={() => onChange(index)} aria-label={`Открыть фото ${index + 1}`}>
-                <Image src={image} alt="" className={styles.gallery__thumbImage} loading="lazy"/>
-              </button>))}
-          </div>)}
+        {images.length > 1 && (
+          <div className={styles.gallery__thumbs}>
+            {images.map((image, index) => (
+              <button
+                key={`${image}-${index}`}
+                type="button"
+                className={`${styles.gallery__thumb} ${activeIndex === index ? styles.gallery__thumb_active : ''}`}
+                onClick={() => onChange(index)}
+                aria-label={`Открыть фото ${index + 1}`}
+              >
+                <Image src={image} alt="" className={styles.gallery__thumbImage} loading="lazy" />
+              </button>
+            ))}
+          </div>
+        )}
       </div>
-    </div>, document.body);
+    </div>,
+    document.body,
+  );
 };
 export default ProductGalleryModal;
-

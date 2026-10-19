@@ -1,39 +1,44 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import styles from "./SubscribeNewsLetter.module.scss";
-import SectionLayout from "@layouts/SectionLayout/SectionLayout.tsx";
-import MainLayoutContainer from "@layouts/MainLayoutContainer/MainLayoutContainer.tsx";
-import MainButton from "@UI/buttons/MainButton/MainButton.tsx";
-import MainInput from "@UI/inputs/MainInput/MainInput.tsx";
-import MainCheckbox from "@UI/inputs/MainCheckbox/MainCheckbox.tsx";
-import TextAccent from "@UI/typography/TextAccent/TextAccent.tsx";
-import { useSubscribeMutation } from "@store/api/subscription/subscriptionApi";
-import { getRequestErrorMessage } from "@store/api/getRequestErrorMessage";
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import styles from './SubscribeNewsLetter.module.scss';
+import SectionLayout from '@layouts/SectionLayout/SectionLayout.tsx';
+import MainLayoutContainer from '@layouts/MainLayoutContainer/MainLayoutContainer.tsx';
+import MainButton from '@UI/buttons/MainButton/MainButton.tsx';
+import MainInput from '@UI/inputs/MainInput/MainInput.tsx';
+import MainCheckbox from '@UI/inputs/MainCheckbox/MainCheckbox.tsx';
+import TextAccent from '@UI/typography/TextAccent/TextAccent.tsx';
+import { useSubscribeMutation } from '@store/api/subscription/subscriptionApi';
+import { getRequestErrorMessage } from '@store/api/getRequestErrorMessage';
 interface SubscribeFormValues {
-    email: string;
-    privacy: boolean;
+  email: string;
+  privacy: boolean;
 }
 const SubscribeNewsLetter = () => {
-    const [message, setMessage] = useState("");
-    const [subscribe, subscribeState] = useSubscribeMutation();
-    const { register, handleSubmit, reset, formState: { errors }, } = useForm<SubscribeFormValues>({
-        defaultValues: {
-            email: "",
-            privacy: false,
-        },
-    });
-    const onSubmit = async (values: SubscribeFormValues) => {
-        setMessage("");
-        try {
-            const response = await subscribe({ email: values.email }).unwrap();
-            setMessage(response.message || "Вы успешно подписались на рассылку");
-            reset();
-        }
-        catch (error) {
-            setMessage(getRequestErrorMessage(error, "Не удалось оформить подписку"));
-        }
-    };
-    return (<SectionLayout className={styles.subscribe}>
+  const [message, setMessage] = useState('');
+  const [subscribe, subscribeState] = useSubscribeMutation();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<SubscribeFormValues>({
+    defaultValues: {
+      email: '',
+      privacy: false,
+    },
+  });
+  const onSubmit = async (values: SubscribeFormValues) => {
+    setMessage('');
+    try {
+      const response = await subscribe({ email: values.email }).unwrap();
+      setMessage(response.message || 'Вы успешно подписались на рассылку');
+      reset();
+    } catch (error) {
+      setMessage(getRequestErrorMessage(error, 'Не удалось оформить подписку'));
+    }
+  };
+  return (
+    <SectionLayout className={styles.subscribe}>
       <MainLayoutContainer className={styles.subscribe__content}>
         <p className={styles.subscribe__text}>
           Получайте информацию о новинках, акциях и специальных предложениях первой
@@ -41,40 +46,51 @@ const SubscribeNewsLetter = () => {
 
         <form className={styles.subscribe__form} onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.subscribe__form_row}>
-            <MainInput type="email" placeholder="Email" register={register("email", {
-            required: "Введите E-mail",
-            pattern: {
-                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                message: "Введите корректный E-mail",
-            },
-        })} error={errors.email?.message}/>
+            <MainInput
+              type="email"
+              placeholder="Email"
+              register={register('email', {
+                required: 'Введите E-mail',
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: 'Введите корректный E-mail',
+                },
+              })}
+              error={errors.email?.message}
+            />
 
             <MainButton type="submit" disabled={subscribeState.isLoading} className={styles.subscribe__form_button}>
-              {subscribeState.isLoading ? "Подписываем..." : "Подписаться"}
+              {subscribeState.isLoading ? 'Подписываем...' : 'Подписаться'}
             </MainButton>
           </div>
 
           <div className={styles.subscribe__form__column}>
-            <MainCheckbox register={register("privacy", {
-            required: "Подтвердите согласие на обработку данных",
-        })}>
-              Соглашаюсь на обработку моих{" "}
-              <TextAccent mode="link" path={'/personal-data-consent'}>персональных данных</TextAccent> в соответствии с{" "}
+            <MainCheckbox
+              register={register('privacy', {
+                required: 'Подтвердите согласие на обработку данных',
+              })}
+            >
+              Соглашаюсь на обработку моих{' '}
+              <TextAccent mode="link" path={'/personal-data-consent'}>
+                персональных данных
+              </TextAccent>{' '}
+              в соответствии с{' '}
               <TextAccent mode="link" path={'/privacy-policy'}>
                 политикой конфиденциальности
               </TextAccent>
             </MainCheckbox>
 
-            {errors.privacy && (<span className={styles.subscribe__form_checkbox_error}>
-                {errors.privacy.message}
-              </span>)}
+            {errors.privacy && <span className={styles.subscribe__form_checkbox_error}>{errors.privacy.message}</span>}
 
-            {message && (<span className={styles.subscribe__form_checkbox_error} role="status">
+            {message && (
+              <span className={styles.subscribe__form_checkbox_error} role="status">
                 {message}
-              </span>)}
+              </span>
+            )}
           </div>
         </form>
       </MainLayoutContainer>
-    </SectionLayout>);
+    </SectionLayout>
+  );
 };
 export default SubscribeNewsLetter;

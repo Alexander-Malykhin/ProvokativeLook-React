@@ -1,6 +1,12 @@
 .reviews {
-  &__hint { font-size: rem(12); line-height: 1.5; }
-  &__title { font-size: rem(26); line-height: 1.2; }
+  &__hint {
+    font-size: rem(12);
+    line-height: 1.5;
+  }
+  &__title {
+    font-size: rem(26);
+    line-height: 1.2;
+  }
   &__thread {
     display: flex;
     flex-direction: column;
@@ -14,7 +20,11 @@
       border-radius: rem(12);
     }
 
-    p { max-width: none; white-space: pre-wrap; overflow-wrap: anywhere; }
+    p {
+      max-width: none;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
   }
   display: grid;
   grid-template-columns: rem(210) minmax(0, 1fr);
@@ -53,7 +63,9 @@
   &_product {
     display: flex;
     flex-direction: column;
-    .reviews__column { gap: rem(16); }
+    .reviews__column {
+      gap: rem(16);
+    }
   }
 
   @media (max-width: rem($mobile)) {
@@ -65,8 +77,12 @@
       gap: rem(12);
     }
 
-    &__title { font-size: rem(22); }
-    &__thread { gap: rem(12); }
+    &__title {
+      font-size: rem(22);
+    }
+    &__thread {
+      gap: rem(12);
+    }
 
     &__content {
       width: 100%;

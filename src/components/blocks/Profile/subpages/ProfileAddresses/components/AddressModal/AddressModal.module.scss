@@ -41,7 +41,7 @@
 
     &::before,
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       top: 50%;
       left: 50%;
@@ -49,8 +49,12 @@
       height: rem(1);
       background: $black;
     }
-    &::before { transform: translate(-50%, -50%) rotate(45deg); }
-    &::after { transform: translate(-50%, -50%) rotate(-45deg); }
+    &::before {
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+    &::after {
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
   }
 
   &__desktopContent {
@@ -84,7 +88,7 @@
 
     &:disabled {
       border-color: transparent;
-      background: rgba($black, .35);
+      background: rgba($black, 0.35);
       cursor: default;
     }
   }
@@ -125,12 +129,14 @@
     }
 
     &:disabled {
-      opacity: .35;
+      opacity: 0.35;
       cursor: default;
     }
   }
 
-  &_active { border-color: $black; }
+  &_active {
+    border-color: $black;
+  }
 
   &__content {
     display: flex;
@@ -140,21 +146,21 @@
 
     small {
       @include font(9, $fw-light);
-      color: rgba($black, .62);
+      color: rgba($black, 0.62);
       white-space: nowrap;
     }
   }
 
   &_disabled {
     border-style: dashed;
-    border-color: rgba($black, .24);
-    color: rgba($black, .45);
-    background: rgba($black, .055);
+    border-color: rgba($black, 0.24);
+    color: rgba($black, 0.45);
+    background: rgba($black, 0.055);
     cursor: not-allowed;
 
     input,
     .pickupService__content {
-      opacity: .65;
+      opacity: 0.65;
       cursor: not-allowed;
     }
   }
@@ -174,7 +180,7 @@
 .pickupStatus {
   margin: 0;
   padding: rem(18) rem(4);
-  color: rgba($black, .5);
+  color: rgba($black, 0.5);
   @include font(13, $fw-light);
 }
 
@@ -205,17 +211,29 @@
   gap: rem(4);
   padding: rem(13) rem(10);
   border: 0;
-  border-bottom: rem(1) solid rgba($black, .07);
+  border-bottom: rem(1) solid rgba($black, 0.07);
   background: transparent;
   text-align: left;
   cursor: pointer;
 
-  strong { @include font(14, $fw-medium); }
-  span { @include font(12, $fw-light); color: rgba($black, .72); }
-  small { @include font(10, $fw-light); color: rgba($black, .42); }
+  strong {
+    @include font(14, $fw-medium);
+  }
+  span {
+    @include font(12, $fw-light);
+    color: rgba($black, 0.72);
+  }
+  small {
+    @include font(10, $fw-light);
+    color: rgba($black, 0.42);
+  }
 
-  &:hover { background: rgba($gray, .45); }
-  &_active { background: $gray; }
+  &:hover {
+    background: rgba($gray, 0.45);
+  }
+  &_active {
+    background: $gray;
+  }
 }
 
 .pickupMapWrap {
@@ -241,7 +259,7 @@
   justify-content: center;
   padding: rem(20);
   background: $gray;
-  color: rgba($black, .45);
+  color: rgba($black, 0.45);
   text-align: center;
   @include font(12, $fw-light);
   pointer-events: none;
@@ -260,8 +278,12 @@
       overflow-y: auto;
     }
 
-    &__header { margin-bottom: rem(18); }
-    &__title { @include font(20, $fw-light); }
+    &__header {
+      margin-bottom: rem(18);
+    }
+    &__title {
+      @include font(20, $fw-light);
+    }
 
     &__desktopContent {
       display: flex;
@@ -270,6 +292,10 @@
     }
   }
 
-  .pickupList { max-height: rem(260); }
-  .pickupMapWrap { min-height: rem(300); }
+  .pickupList {
+    max-height: rem(260);
+  }
+  .pickupMapWrap {
+    min-height: rem(300);
+  }
 }

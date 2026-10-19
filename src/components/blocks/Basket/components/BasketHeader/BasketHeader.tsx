@@ -1,25 +1,44 @@
-import styles from "./BasketHeader.module.scss";
-import InputCheck from "@components/blocks/Basket/UI/InputCheck/InputCheck.tsx";
+import styles from './BasketHeader.module.scss';
+import InputCheck from '@components/blocks/Basket/UI/InputCheck/InputCheck.tsx';
 interface BasketHeaderProps {
-    isAllSelected: boolean;
-    hasSelectedItems: boolean;
-    onSelectAll: () => void;
-    onDeleteSelected: () => void;
-    disabled?: boolean;
+  isAllSelected: boolean;
+  hasSelectedItems: boolean;
+  onSelectAll: () => void;
+  onDeleteSelected: () => void;
+  disabled?: boolean;
 }
-const BasketHeader = ({ isAllSelected, hasSelectedItems, onSelectAll, onDeleteSelected, disabled = false, }: BasketHeaderProps) => {
-    return (<div className={styles.header}>
+const BasketHeader = ({
+  isAllSelected,
+  hasSelectedItems,
+  onSelectAll,
+  onDeleteSelected,
+  disabled = false,
+}: BasketHeaderProps) => {
+  return (
+    <div className={styles.header}>
       <div className={styles.header__select}>
-        <InputCheck checked={isAllSelected} disabled={disabled} onChange={() => {
+        <InputCheck
+          checked={isAllSelected}
+          disabled={disabled}
+          onChange={() => {
             onSelectAll();
-        }}/>
+          }}
+        />
 
-        <button type="button" onClick={onSelectAll} disabled={disabled}>Выбрать все</button>
+        <button type="button" onClick={onSelectAll} disabled={disabled}>
+          Выбрать все
+        </button>
       </div>
 
-      <button type="button" className={styles.header__delete} onClick={onDeleteSelected} disabled={!hasSelectedItems || disabled}>
+      <button
+        type="button"
+        className={styles.header__delete}
+        onClick={onDeleteSelected}
+        disabled={!hasSelectedItems || disabled}
+      >
         Удалить выбранное
       </button>
-    </div>);
+    </div>
+  );
 };
 export default BasketHeader;

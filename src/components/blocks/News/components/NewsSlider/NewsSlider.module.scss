@@ -9,8 +9,8 @@
     cursor: inherit;
   }
 
-  &[data-dragging="true"],
-  &[data-dragging="true"] * {
+  &[data-dragging='true'],
+  &[data-dragging='true'] * {
     cursor: grabbing;
   }
 

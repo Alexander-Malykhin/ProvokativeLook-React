@@ -1,5 +1,4 @@
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 export interface TextInterface {
-    children: ReactNode;
+  children: ReactNode;
 }
-

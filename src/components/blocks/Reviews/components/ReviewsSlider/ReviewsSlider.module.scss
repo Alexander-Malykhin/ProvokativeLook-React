@@ -5,8 +5,8 @@
   -webkit-user-select: none;
   cursor: grab;
 
-  &[data-dragging="true"],
-  &[data-dragging="true"] * {
+  &[data-dragging='true'],
+  &[data-dragging='true'] * {
     cursor: grabbing;
   }
 

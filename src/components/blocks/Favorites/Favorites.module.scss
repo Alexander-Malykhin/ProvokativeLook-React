@@ -30,13 +30,15 @@
 .favorites__skeleton {
   width: 100%;
   height: rem(320);
-  background: linear-gradient(90deg, rgba($gray, .25), rgba($gray, .5), rgba($gray, .25));
+  background: linear-gradient(90deg, rgba($gray, 0.25), rgba($gray, 0.5), rgba($gray, 0.25));
   background-size: 200% 100%;
   animation: favoriteSkeleton 1.2s linear infinite;
 }
 
 @keyframes favoriteSkeleton {
-  to { background-position: -200% 0; }
+  to {
+    background-position: -200% 0;
+  }
 }
 
 @media (max-width: rem($tablet)) {

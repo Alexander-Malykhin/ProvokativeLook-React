@@ -1,6 +1,5 @@
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 export interface BannerTitleInterface {
-    children: ReactNode;
-    className: string;
+  children: ReactNode;
+  className: string;
 }
-

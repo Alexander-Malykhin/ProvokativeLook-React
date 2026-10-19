@@ -1,9 +1,8 @@
-@use "functions" as *;
+@use 'functions' as *;
 
-@import url("https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap');
 
-$ff-unbounded: "Unbounded", sans-serif;
-
+$ff-unbounded: 'Unbounded', sans-serif;
 
 $fw-extra-light: 200;
 $fw-light: 300;
@@ -13,13 +12,7 @@ $fw-semi-bold: 600;
 $fw-bold: 700;
 $fw-extra-bold: 800;
 
-
-@mixin font(
-  $size,
-  $weight: $fw-regular,
-  $letter-spacing: 0,
-  $line-height: normal
-) {
+@mixin font($size, $weight: $fw-regular, $letter-spacing: 0, $line-height: normal) {
   font-family: $ff-unbounded;
   font-size: rem($size);
   font-weight: $weight;

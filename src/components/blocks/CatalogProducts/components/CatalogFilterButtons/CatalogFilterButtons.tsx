@@ -7,82 +7,107 @@ import { useAppDispatch } from '@store/hooks';
 import { add } from '@store/slices/toggleFIlterSlice';
 import type { CatalogFilterOptions, CatalogSort } from '@store/api/catalog/types';
 type CatalogFilterButtonsProps = {
-    sort: CatalogSort;
-    options: CatalogFilterOptions;
-    onSortChange: (sort: CatalogSort) => void;
+  sort: CatalogSort;
+  options: CatalogFilterOptions;
+  onSortChange: (sort: CatalogSort) => void;
 };
 const SORT_OPTIONS: Array<{
-    value: CatalogSort;
-    title: string;
+  value: CatalogSort;
+  title: string;
 }> = [
-    { value: 'popular', title: 'По популярности' },
-    { value: 'new', title: 'По новизне' },
-    { value: 'priceAsc', title: 'По возрастанию цены' },
-    { value: 'priceDesc', title: 'По убыванию цены' },
+  { value: 'popular', title: 'По популярности' },
+  { value: 'new', title: 'По новизне' },
+  { value: 'priceAsc', title: 'По возрастанию цены' },
+  { value: 'priceDesc', title: 'По убыванию цены' },
 ];
 const CatalogFilterButtons = ({ sort, options, onSortChange }: CatalogFilterButtonsProps) => {
-    const dispatch = useAppDispatch();
-    const [isSortOpen, setIsSortOpen] = useState(false);
-    const sortRef = useRef<HTMLDivElement>(null);
-    const activeSort = SORT_OPTIONS.find((item) => item.value === sort) ?? SORT_OPTIONS[0];
-    const hasSizes = Array.isArray(options?.sizes) && options.sizes.length > 0;
-    const hasColors = Array.isArray(options?.colors) && options.colors.length > 0;
-    const hasPriceRange = (options?.price?.min !== null &&
-        options?.price?.min !== undefined &&
-        options?.price?.max !== null &&
-        options?.price?.max !== undefined &&
-        options.price.max > options.price.min);
-    const hasFilters = hasSizes || hasColors || hasPriceRange;
-    useEffect(() => {
-        const handlePointerDown = (event: PointerEvent) => {
-            if (sortRef.current && !sortRef.current.contains(event.target as Node)) {
-                setIsSortOpen(false);
-            }
-        };
-        document.addEventListener('pointerdown', handlePointerDown);
-        return () => document.removeEventListener('pointerdown', handlePointerDown);
-    }, []);
-    const openFilters = () => dispatch(add());
-    return (<div className={styles.filter}>
+  const dispatch = useAppDispatch();
+  const [isSortOpen, setIsSortOpen] = useState(false);
+  const sortRef = useRef<HTMLDivElement>(null);
+  const activeSort = SORT_OPTIONS.find((item) => item.value === sort) ?? SORT_OPTIONS[0];
+  const hasSizes = Array.isArray(options?.sizes) && options.sizes.length > 0;
+  const hasColors = Array.isArray(options?.colors) && options.colors.length > 0;
+  const hasPriceRange =
+    options?.price?.min !== null &&
+    options?.price?.min !== undefined &&
+    options?.price?.max !== null &&
+    options?.price?.max !== undefined &&
+    options.price.max > options.price.min;
+  const hasFilters = hasSizes || hasColors || hasPriceRange;
+  useEffect(() => {
+    const handlePointerDown = (event: PointerEvent) => {
+      if (sortRef.current && !sortRef.current.contains(event.target as Node)) {
+        setIsSortOpen(false);
+      }
+    };
+    document.addEventListener('pointerdown', handlePointerDown);
+    return () => document.removeEventListener('pointerdown', handlePointerDown);
+  }, []);
+  const openFilters = () => dispatch(add());
+  return (
+    <div className={styles.filter}>
       <div className={styles.filter__list}>
-        {hasSizes && <button type="button" className={styles.filter__button} onClick={openFilters}>
-          Размер
-          <Image src={ArrowImage}/>
-        </button>}
+        {hasSizes && (
+          <button type="button" className={styles.filter__button} onClick={openFilters}>
+            Размер
+            <Image src={ArrowImage} />
+          </button>
+        )}
 
-        {hasColors && <button type="button" className={styles.filter__button} onClick={openFilters}>
-          Цвет
-          <Image src={ArrowImage}/>
-        </button>}
+        {hasColors && (
+          <button type="button" className={styles.filter__button} onClick={openFilters}>
+            Цвет
+            <Image src={ArrowImage} />
+          </button>
+        )}
 
-        {hasPriceRange && <button type="button" className={styles.filter__button} onClick={openFilters}>
-          Цена
-          <Image src={ArrowImage}/>
-        </button>}
+        {hasPriceRange && (
+          <button type="button" className={styles.filter__button} onClick={openFilters}>
+            Цена
+            <Image src={ArrowImage} />
+          </button>
+        )}
       </div>
 
-      {hasFilters && <button type="button" className={`${styles.filter__button} ${styles.filter__mobile}`} onClick={openFilters}>
-        <Image src={FilterImage}/>
-        ФИЛЬТРЫ
-      </button>}
+      {hasFilters && (
+        <button type="button" className={`${styles.filter__button} ${styles.filter__mobile}`} onClick={openFilters}>
+          <Image src={FilterImage} />
+          ФИЛЬТРЫ
+        </button>
+      )}
 
       <div className={styles.filter__sort} ref={sortRef}>
-        <button type="button" className={styles.filter__sortTrigger} onClick={() => setIsSortOpen((previous) => !previous)} aria-expanded={isSortOpen}>
+        <button
+          type="button"
+          className={styles.filter__sortTrigger}
+          onClick={() => setIsSortOpen((previous) => !previous)}
+          aria-expanded={isSortOpen}
+        >
           {activeSort.title}
           <span className={`${styles.filter__sortArrow} ${isSortOpen ? styles.filter__sortArrow_open : ''}`}>
-            <Image src={ArrowImage}/>
+            <Image src={ArrowImage} />
           </span>
         </button>
 
-        {isSortOpen && (<div className={styles.filter__sortMenu}>
-            {SORT_OPTIONS.map((option) => (<button key={option.value} type="button" className={`${styles.filter__sortOption} ${sort === option.value ? styles.filter__sortOption_active : ''}`} onClick={() => {
-                    onSortChange(option.value);
-                    setIsSortOpen(false);
-                }}>
+        {isSortOpen && (
+          <div className={styles.filter__sortMenu}>
+            {SORT_OPTIONS.map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                className={`${styles.filter__sortOption} ${sort === option.value ? styles.filter__sortOption_active : ''}`}
+                onClick={() => {
+                  onSortChange(option.value);
+                  setIsSortOpen(false);
+                }}
+              >
                 {option.title}
-              </button>))}
-          </div>)}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
-    </div>);
+    </div>
+  );
 };
 export default CatalogFilterButtons;

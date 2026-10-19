@@ -5,7 +5,7 @@
 .list {
   display: grid;
   grid-auto-flow: column;
-  // Компактные фотографии 207 x 276 px, каждая ведёт на страницу товара.
+
   grid-auto-columns: rem(207);
   gap: rem(18);
 
@@ -26,8 +26,8 @@
     cursor: inherit;
   }
 
-  &[data-dragging="true"],
-  &[data-dragging="true"] * {
+  &[data-dragging='true'],
+  &[data-dragging='true'] * {
     cursor: grabbing;
   }
 

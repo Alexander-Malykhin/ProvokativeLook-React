@@ -138,8 +138,12 @@
     background: rgba($black, 0.035);
     box-shadow: none;
 
-    .order__information { margin-top: rem(20); }
-    .order__emptyDeliveryPoint { padding: rem(12) 0; }
+    .order__information {
+      margin-top: rem(20);
+    }
+    .order__emptyDeliveryPoint {
+      padding: rem(12) 0;
+    }
 
     @media (max-width: rem(767)) {
       margin-left: rem(16);
@@ -152,9 +156,22 @@
     margin-bottom: rem(12);
   }
   &__carrierChoice {
-    display: flex; gap: rem(8); flex-wrap: wrap; margin-bottom: rem(16);
-    button { padding: rem(12) rem(18); border: 1px solid #bbb; border-radius: rem(6); background: transparent; font: inherit; }
-    button[aria-pressed=true] { border-color: #222; background: #222; color: #fff; }
+    display: flex;
+    gap: rem(8);
+    flex-wrap: wrap;
+    margin-bottom: rem(16);
+    button {
+      padding: rem(12) rem(18);
+      border: 1px solid #bbb;
+      border-radius: rem(6);
+      background: transparent;
+      font: inherit;
+    }
+    button[aria-pressed='true'] {
+      border-color: #222;
+      background: #222;
+      color: #fff;
+    }
   }
 
   &__defaultBadge {

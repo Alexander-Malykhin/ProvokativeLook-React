@@ -6,7 +6,9 @@
   color: #222;
 }
 
-.label { line-height: 1.5; }
+.label {
+  line-height: 1.5;
+}
 
 .trigger {
   display: flex;
@@ -23,10 +25,21 @@
   text-align: left;
   line-height: 1.5;
 
-  > span:first-child { min-width: 0; overflow-wrap: anywhere; }
-  &:hover:not(:disabled), &[aria-expanded="true"] { border-color: #222; }
-  &:focus-visible { outline: 2px solid #222; outline-offset: 2px; }
-  &:disabled { cursor: default; }
+  > span:first-child {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  &:hover:not(:disabled),
+  &[aria-expanded='true'] {
+    border-color: #222;
+  }
+  &:focus-visible {
+    outline: 2px solid #222;
+    outline-offset: 2px;
+  }
+  &:disabled {
+    cursor: default;
+  }
 }
 
 .arrow {
@@ -37,7 +50,9 @@
   border-bottom: 1px solid currentColor;
   transform: translateY(-2px) rotate(45deg);
 
-  [aria-expanded="true"] & { transform: translateY(2px) rotate(225deg); }
+  [aria-expanded='true'] & {
+    transform: translateY(2px) rotate(225deg);
+  }
 }
 
 .list {
@@ -53,7 +68,7 @@
   border: 1px solid #d7d7d7;
   border-radius: 6px;
   background: #fff;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, .12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .option {
@@ -72,9 +87,17 @@
   line-height: 1.5;
   overflow-wrap: anywhere;
 
-  &[data-active="true"], &:hover { background: #f2f2f2; }
-  &[aria-selected="true"] { background: #eaeaea; }
-  &:focus-visible { outline: 2px solid #222; outline-offset: -2px; }
+  &[data-active='true'],
+  &:hover {
+    background: #f2f2f2;
+  }
+  &[aria-selected='true'] {
+    background: #eaeaea;
+  }
+  &:focus-visible {
+    outline: 2px solid #222;
+    outline-offset: -2px;
+  }
 }
 
 .check {

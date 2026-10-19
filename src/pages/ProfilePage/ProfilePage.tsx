@@ -1,18 +1,19 @@
-import AuthRequired from "@components/auth/AuthRequired";
-import PageStack from "@layouts/PageStack/PageStack";
-import Bestsellers from "@components/blocks/Bestsellers/Bestsellers.tsx";
-import Profile from "@components/blocks/Profile/Profile.tsx";
-import Breadcrumbs from "@components/Breadcrumbs/Breadcrumbs.tsx";
+import AuthRequired from '@components/auth/AuthRequired';
+import PageStack from '@layouts/PageStack/PageStack';
+import Bestsellers from '@components/blocks/Bestsellers/Bestsellers.tsx';
+import Profile from '@components/blocks/Profile/Profile.tsx';
+import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.tsx';
 const ProfilePage = () => {
-    return (<AuthRequired>
+  return (
+    <AuthRequired>
       <>
-      <Breadcrumbs />
-      <PageStack>
-        <Profile />
-        <Bestsellers />
-      </PageStack>
+        <Breadcrumbs />
+        <PageStack>
+          <Profile />
+          <Bestsellers />
+        </PageStack>
       </>
-    </AuthRequired>);
+    </AuthRequired>
+  );
 };
 export default ProfilePage;
-

@@ -1,4 +1,12 @@
-.overlay { position: fixed; inset: 0; z-index: 2200; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, .45); }
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+}
 .dialog {
   position: relative;
   width: min(rem(440), calc(100vw - rem(24)));
@@ -11,8 +19,15 @@
   background: $white;
   color: $black;
   font: inherit;
-  &::backdrop { background: rgba(0, 0, 0, 0.45); }
-  h2 { padding-right: rem(24); font-size: rem(18); line-height: 1.4; margin-bottom: rem(24); }
+  &::backdrop {
+    background: rgba(0, 0, 0, 0.45);
+  }
+  h2 {
+    padding-right: rem(24);
+    font-size: rem(18);
+    line-height: 1.4;
+    margin-bottom: rem(24);
+  }
   @media (max-width: rem($mobile)) {
     width: min(rem(360), calc(100vw - rem(20)));
     max-width: calc(100vw - rem(20));

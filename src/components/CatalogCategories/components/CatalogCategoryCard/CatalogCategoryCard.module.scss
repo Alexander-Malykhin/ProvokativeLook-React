@@ -8,8 +8,15 @@
   text-decoration: none;
   background: linear-gradient(180deg, #e4e4ec 0%, #f6f6fa 58%, #d8d8dc 100%);
 
-  &__information { position: relative; z-index: 2; max-width: 48%; }
-  &__information_title { @include font(34, $fw-extra-light); line-height: 1.05; }
+  &__information {
+    position: relative;
+    z-index: 2;
+    max-width: 48%;
+  }
+  &__information_title {
+    @include font(34, $fw-extra-light);
+    line-height: 1.05;
+  }
   &__information_button {
     display: inline-block;
     margin-top: rem(22);
@@ -46,18 +53,41 @@
   }
   @media (max-width: rem($desktop-x)) {
     padding: rem(28) rem(18);
-    &__information_title { @include font(24, $fw-extra-light); }
-    &__imageBox { top: 0; right: 0; bottom: 0; left: 0; }
+    &__information_title {
+      @include font(24, $fw-extra-light);
+    }
+    &__imageBox {
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
   }
   @media (max-width: rem($tablet)) {
     padding: rem(14) rem(12);
-    &__information { max-width: 58%; }
-    &__information_title { @include font(18, $fw-extra-light); }
-    &__imageBox { top: 0; right: 0; bottom: 0; left: 0; }
+    &__information {
+      max-width: 58%;
+    }
+    &__information_title {
+      @include font(18, $fw-extra-light);
+    }
+    &__imageBox {
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
   }
   @media (max-width: rem($mobile)) {
     padding: rem(12) rem(8);
-    &__information_title { @include font(14, $fw-extra-light); }
-    &__imageBox { top: 0; right: 0; bottom: 0; left: 0; }
+    &__information_title {
+      @include font(14, $fw-extra-light);
+    }
+    &__imageBox {
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
   }
 }

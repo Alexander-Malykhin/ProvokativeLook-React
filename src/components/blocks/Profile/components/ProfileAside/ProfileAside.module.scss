@@ -51,8 +51,6 @@
     text-align: left;
   }
 
-  
-
   &__mobile {
     display: none;
 
@@ -80,8 +78,8 @@
     text-align: left;
 
     transition:
-            background-color 0.2s ease,
-            border-radius 0.2s ease;
+      background-color 0.2s ease,
+      border-radius 0.2s ease;
   }
 
   &__select_value {
@@ -123,9 +121,9 @@
     visibility: hidden;
 
     transition:
-            grid-template-rows 0.25s ease,
-            opacity 0.2s ease,
-            visibility 0.2s ease;
+      grid-template-rows 0.25s ease,
+      opacity 0.2s ease,
+      visibility 0.2s ease;
 
     &_open {
       grid-template-rows: 1fr;
@@ -192,7 +190,6 @@
 
     text-align: left;
   }
-
 
   &__logoutIcon {
     flex-shrink: 0;

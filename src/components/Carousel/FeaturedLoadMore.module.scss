@@ -1,0 +1,16 @@
+.more {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: rem(12);
+  min-height: rem(44);
+
+  &__button {
+    min-height: rem(44);
+    padding: rem(8) rem(20);
+    border: 1px solid currentColor;
+    background: transparent;
+  }
+}

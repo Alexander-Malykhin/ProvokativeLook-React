@@ -1,5 +1,12 @@
 .card {
-  &__shipping { grid-column: 1 / -1; min-width: 0; > div { flex-wrap: wrap; margin-top: 0; } }
+  &__shipping {
+    grid-column: 1 / -1;
+    min-width: 0;
+    > div {
+      flex-wrap: wrap;
+      margin-top: 0;
+    }
+  }
   display: grid;
   grid-template-columns: minmax(0, rem(430)) minmax(0, 1fr);
   align-items: start;
@@ -15,10 +22,10 @@
     display: grid;
     grid-template-columns: max-content max-content minmax(max-content, 1fr);
     grid-template-areas:
-      "label orderId date"
-      "infoText infoSum infoCounter"
-      "actions actions actions"
-      "delivery delivery delivery";
+      'label orderId date'
+      'infoText infoSum infoCounter'
+      'actions actions actions'
+      'delivery delivery delivery';
     align-items: center;
     column-gap: rem(16);
     row-gap: rem(10);
@@ -39,10 +46,18 @@
     overflow: hidden;
     text-overflow: ellipsis;
 
-    &_completed { background-color: $green; }
-    &_delivery { background-color: $violet; }
-    &_return { background-color: $black; }
-    &_cancelled { background-color: $orange; }
+    &_completed {
+      background-color: $green;
+    }
+    &_delivery {
+      background-color: $violet;
+    }
+    &_return {
+      background-color: $black;
+    }
+    &_cancelled {
+      background-color: $orange;
+    }
   }
 
   &__orderId {
@@ -137,7 +152,7 @@
     background: $black;
 
     &:disabled {
-      opacity: .55;
+      opacity: 0.55;
       cursor: default;
     }
   }
@@ -224,7 +239,6 @@
       @include font(13, $fw-light);
     }
 
-
     &__information_sum {
       @include font(16, $fw-light);
     }
@@ -239,11 +253,11 @@
     &__content {
       grid-template-columns: max-content minmax(0, 1fr);
       grid-template-areas:
-        "label label"
-        "orderId date"
-        "information information"
-        "actions actions"
-        "delivery delivery";
+        'label label'
+        'orderId date'
+        'information information'
+        'actions actions'
+        'delivery delivery';
       row-gap: rem(10);
     }
 
@@ -300,7 +314,7 @@
   padding: rem(8);
   text-align: center;
   background: $gray;
-  color: rgba($black, .45);
+  color: rgba($black, 0.45);
   @include font(11, $fw-light);
 }
 

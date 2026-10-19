@@ -1,20 +1,23 @@
-import styles from "./AnswersToQuestionsSkeleton.module.scss";
-import SectionLayout from "@layouts/SectionLayout/SectionLayout";
-import MainLayoutContainer from "@layouts/MainLayoutContainer/MainLayoutContainer";
+import styles from './AnswersToQuestionsSkeleton.module.scss';
+import SectionLayout from '@layouts/SectionLayout/SectionLayout';
+import MainLayoutContainer from '@layouts/MainLayoutContainer/MainLayoutContainer';
 const skeletonItems = [1, 2, 3, 4];
 const AnswersToQuestionsSkeleton = () => {
-    return (<SectionLayout>
+  return (
+    <SectionLayout>
       <MainLayoutContainer className={styles.answers}>
         <div className={styles.answers__column}>
-          <div className={styles.skeleton__title}/>
-          <div className={styles.skeleton__button}/>
+          <div className={styles.skeleton__title} />
+          <div className={styles.skeleton__button} />
         </div>
 
         <div className={styles.answers__list}>
-          {skeletonItems.map((item) => (<div key={item} className={styles.skeleton__item}/>))}
+          {skeletonItems.map((item) => (
+            <div key={item} className={styles.skeleton__item} />
+          ))}
         </div>
       </MainLayoutContainer>
-    </SectionLayout>);
+    </SectionLayout>
+  );
 };
 export default AnswersToQuestionsSkeleton;
-

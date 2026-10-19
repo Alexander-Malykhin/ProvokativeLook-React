@@ -1,5 +1,14 @@
-.banner { display: grid; grid-template-columns: minmax(0, 1fr); width: 100%; min-width: 0; gap: rem(66); }
-.hero { position: relative; min-width: 0; }
+.banner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  min-width: 0;
+  gap: rem(66);
+}
+.hero {
+  position: relative;
+  min-width: 0;
+}
 .track {
   width: 100%;
   min-width: 0;
@@ -8,8 +17,13 @@
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   overscroll-behavior-x: contain;
-  &::-webkit-scrollbar { display: none; }
-  &[data-dragging] { cursor: grabbing; user-select: none; }
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  &[data-dragging] {
+    cursor: grabbing;
+    user-select: none;
+  }
 }
 .slide {
   position: relative;
@@ -22,12 +36,20 @@
   overflow: hidden;
   text-decoration: none;
   background: $gray;
-  &:focus-visible { outline: 2px solid currentColor; outline-offset: -4px; }
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: -4px;
+  }
 }
 .picture {
   position: absolute;
   inset: 0;
-  img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
 .information {
   color: inherit;
@@ -45,12 +67,40 @@
   overflow-wrap: anywhere;
   pointer-events: none;
 }
-.information p, .information a { color: inherit; }
-.title { @include font(40, $fw-extra-light); font-size: clamp(rem(20), 2.8vw, rem(40)); line-height: 1.15; width: 100%; white-space: pre-line; }
-.title:first-child { padding-left: rem(24); }
-.subtitle { font-size: clamp(rem(18), 2.52vw, rem(36)); }
-.label { @include font(20, $fw-extra-light); font-size: clamp(rem(16), 1.4vw, rem(20)); line-height: 1.2; text-align: center; text-decoration: underline; text-underline-offset: rem(4); text-decoration-thickness: rem(1); pointer-events: auto; padding: rem(8); margin-top: rem(12); cursor: pointer; }
-.label:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.information p,
+.information a {
+  color: inherit;
+}
+.title {
+  @include font(40, $fw-extra-light);
+  font-size: clamp(rem(20), 2.8vw, rem(40));
+  line-height: 1.15;
+  width: 100%;
+  white-space: pre-line;
+}
+.title:first-child {
+  padding-left: rem(24);
+}
+.subtitle {
+  font-size: clamp(rem(18), 2.52vw, rem(36));
+}
+.label {
+  @include font(20, $fw-extra-light);
+  font-size: clamp(rem(16), 1.4vw, rem(20));
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: underline;
+  text-underline-offset: rem(4);
+  text-decoration-thickness: rem(1);
+  pointer-events: auto;
+  padding: rem(8);
+  margin-top: rem(12);
+  cursor: pointer;
+}
+.label:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
 .information .label,
 .information .label:visited,
 .information .label:hover,
@@ -59,8 +109,15 @@
   text-decoration-line: underline;
   text-decoration-color: currentColor;
 }
-.error { padding: rem(24); text-align: center; }
-.error button { color: inherit; text-decoration: underline; cursor: pointer; }
+.error {
+  padding: rem(24);
+  text-align: center;
+}
+.error button {
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
 .dots {
   position: absolute;
   bottom: rem(4);
@@ -72,19 +129,58 @@
   max-width: calc(100% - 32px);
 }
 .dot {
-  display: grid; place-items: center; width: rem(24); height: rem(28); padding: 0;
-  border: 0; background: transparent; cursor: pointer;
-  &::before { content: ''; width: rem(4); height: rem(4); border-radius: 50%; background: rgba(34, 34, 34, .22); transition: background .2s; }
-  &[aria-pressed='true']::before { background: rgba(34, 34, 34, .55); }
-  &:focus-visible { outline: 2px solid #222; border-radius: 50%; }
+  display: grid;
+  place-items: center;
+  width: rem(24);
+  height: rem(28);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  &::before {
+    content: '';
+    width: rem(4);
+    height: rem(4);
+    border-radius: 50%;
+    background: rgba(34, 34, 34, 0.22);
+    transition: background 0.2s;
+  }
+  &[aria-pressed='true']::before {
+    background: rgba(34, 34, 34, 0.55);
+  }
+  &:focus-visible {
+    outline: 2px solid #222;
+    border-radius: 50%;
+  }
 }
 @media (max-width: rem($mobile)) {
-  .banner { gap: rem(56); }
-  .slide { aspect-ratio: 9 / 4; }
-  .information { width: 70%; max-width: none; margin-left: 30%; margin-right: 0; gap: 0; padding: rem(12) rem(8) rem(28); }
-  .title { display: none; }
-  .label { font-size: clamp(rem(16), 3.4vw, rem(24)); margin-top: 0; }
-  .dots { bottom: 0; }
+  .banner {
+    gap: rem(56);
+  }
+  .slide {
+    aspect-ratio: 9 / 4;
+  }
+  .information {
+    width: 70%;
+    max-width: none;
+    margin-left: 30%;
+    margin-right: 0;
+    gap: 0;
+    padding: rem(12) rem(8) rem(28);
+  }
+  .title {
+    display: none;
+  }
+  .label {
+    font-size: clamp(rem(16), 3.4vw, rem(24));
+    margin-top: 0;
+  }
+  .dots {
+    bottom: 0;
+  }
 }
-@media (prefers-reduced-motion: reduce) { .dot::before { transition: none; } }
-
+@media (prefers-reduced-motion: reduce) {
+  .dot::before {
+    transition: none;
+  }
+}

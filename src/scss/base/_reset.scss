@@ -1,4 +1,3 @@
-
 html {
   -webkit-text-size-adjust: 100%;
 }
@@ -19,8 +18,6 @@ body {
   box-sizing: border-box;
 }
 
-
-
 a,
 a:link,
 a:visited {
@@ -30,8 +27,6 @@ a:visited {
 a:hover {
   text-decoration: none;
 }
-
-
 
 aside,
 nav,
@@ -76,8 +71,6 @@ address {
   font-style: normal;
 }
 
-
-
 input,
 textarea,
 button,
@@ -97,7 +90,7 @@ textarea {
 }
 
 button,
-input[type="submit"] {
+input[type='submit'] {
   -webkit-appearance: none;
   appearance: none;
   display: inline-block;
@@ -120,6 +113,6 @@ legend {
   display: block;
 }
 
-input[type="file"] {
+input[type='file'] {
   max-width: 100%;
 }

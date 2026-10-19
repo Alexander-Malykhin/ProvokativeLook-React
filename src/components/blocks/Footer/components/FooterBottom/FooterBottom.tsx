@@ -1,14 +1,14 @@
-import Text from "@UI/typography/Text/Text.tsx";
-import { convertAliasTitle } from "@helpers/convertAliasTitle.tsx";
-import type { FooterBottomProps } from "./types";
-import styles from "./FooterBottom.module.scss";
+import Text from '@UI/typography/Text/Text.tsx';
+import { convertAliasTitle } from '@helpers/convertAliasTitle.tsx';
+import type { FooterBottomProps } from './types';
+import styles from './FooterBottom.module.scss';
 const FooterBottom = ({ requisites }: FooterBottomProps) => {
-    return (<div className={styles.bottom}>
+  return (
+    <div className={styles.bottom}>
       <div className={styles.bottom__legal}>
-        <Text>{convertAliasTitle(requisites.replace(/\r?\n/g, "#br#"))}</Text>
+        <Text>{convertAliasTitle(requisites.replace(/\r?\n/g, '#br#'))}</Text>
       </div>
-
-    </div>);
+    </div>
+  );
 };
 export default FooterBottom;
-

@@ -35,7 +35,7 @@
   &__button {
     max-width: max-content;
   }
-  
+
   @media (max-width: rem($mobile)) {
     &__title {
       @include font(96, $fw-extra-light);

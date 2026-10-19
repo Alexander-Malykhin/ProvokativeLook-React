@@ -1,37 +1,34 @@
-import { safeSessionStorage } from "@helpers/browserStorage";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import styles from "./PaymentRedirectPage.module.scss";
+import { safeSessionStorage } from '@helpers/browserStorage';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styles from './PaymentRedirectPage.module.scss';
 const PaymentRedirectPage = () => {
-    const navigate = useNavigate();
-    const [seconds, setSeconds] = useState(2);
-    useEffect(() => {
-        const paymentUrl = safeSessionStorage.getItem("provokativelook.payment.url") ?? "";
-        if (!paymentUrl) {
-            navigate("/profile/orders", { replace: true });
-            return;
-        }
-        const interval = window.setInterval(() => setSeconds((value) => Math.max(0, value - 1)), 1000);
-        const timeout = window.setTimeout(() => {
-            // Заказ уже создан. Перед уходом на платёжный шлюз заменяем
-            // /payment/redirect в истории на список заказов. Поэтому при
-            // нажатии браузерной кнопки «Назад» пользователь вернётся
-            // в /profile/orders, а не в корзину/оформление заказа.
-            window.history.replaceState(window.history.state, "", "/profile/orders");
-            window.location.assign(paymentUrl);
-        }, 1200);
-        return () => {
-            window.clearInterval(interval);
-            window.clearTimeout(timeout);
-        };
-    }, [navigate]);
-    return (<main className={styles.payment}>
+  const navigate = useNavigate();
+  const [seconds, setSeconds] = useState(2);
+  useEffect(() => {
+    const paymentUrl = safeSessionStorage.getItem('provokativelook.payment.url') ?? '';
+    if (!paymentUrl) {
+      navigate('/profile/orders', { replace: true });
+      return;
+    }
+    const interval = window.setInterval(() => setSeconds((value) => Math.max(0, value - 1)), 1000);
+    const timeout = window.setTimeout(() => {
+      window.history.replaceState(window.history.state, '', '/profile/orders');
+      window.location.assign(paymentUrl);
+    }, 1200);
+    return () => {
+      window.clearInterval(interval);
+      window.clearTimeout(timeout);
+    };
+  }, [navigate]);
+  return (
+    <main className={styles.payment}>
       <div className={styles.payment__brand}>PROVOKATIVELOOK</div>
-      <div className={styles.payment__loader} aria-hidden="true"/>
+      <div className={styles.payment__loader} aria-hidden="true" />
       <h1>Переходим к оплате</h1>
       <p>Сейчас откроется защищённая страница банка.</p>
-      <small>{seconds > 0 ? `Переход через ${seconds} сек.` : "Открываем оплату…"}</small>
-    </main>);
+      <small>{seconds > 0 ? `Переход через ${seconds} сек.` : 'Открываем оплату…'}</small>
+    </main>
+  );
 };
 export default PaymentRedirectPage;
-

@@ -113,7 +113,7 @@
       background-color: rgba($white, 0.62);
 
       &_active::after {
-        content: "";
+        content: '';
         position: absolute;
         inset: 50% auto auto 50%;
         width: rem(4);

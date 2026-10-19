@@ -1,12 +1,13 @@
-import styles from "./ProductBreadCrumbs.module.scss";
-import { Link } from "react-router-dom";
+import styles from './ProductBreadCrumbs.module.scss';
+import { Link } from 'react-router-dom';
 interface ProductBreadCrumbsProps {
-    title: string;
-    sectionTitle: string;
-    sectionSlug: string;
+  title: string;
+  sectionTitle: string;
+  sectionSlug: string;
 }
 const ProductBreadCrumbs = ({ title, sectionTitle, sectionSlug }: ProductBreadCrumbsProps) => {
-    return (<nav className={styles.navigation} aria-label="Хлебные крошки">
+  return (
+    <nav className={styles.navigation} aria-label="Хлебные крошки">
       <Link to="/" className={styles.navigation__link}>
         Главная
       </Link>
@@ -20,6 +21,7 @@ const ProductBreadCrumbs = ({ title, sectionTitle, sectionSlug }: ProductBreadCr
       </Link>
       <span className={styles.navigation__slash}>\</span>
       <span className={styles.navigation__link}>{title}</span>
-    </nav>);
+    </nav>
+  );
 };
 export default ProductBreadCrumbs;

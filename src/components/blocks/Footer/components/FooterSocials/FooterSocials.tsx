@@ -1,17 +1,28 @@
-import Text from "@UI/typography/Text/Text.tsx";
-import Image from "@UI/media/Image/Image";
-import type { FooterSocialsProps } from "./types";
-import styles from "./FooterSocials.module.scss";
+import Text from '@UI/typography/Text/Text.tsx';
+import Image from '@UI/media/Image/Image';
+import type { FooterSocialsProps } from './types';
+import styles from './FooterSocials.module.scss';
 const FooterSocials = ({ items }: FooterSocialsProps) => {
-    return (<div className={styles.socials}>
+  return (
+    <div className={styles.socials}>
       <Text>Присоединяйтесь к нам в социальных сетях:</Text>
 
       <div className={styles.socials__list}>
-        {items.map((item) => (<a href={item.properties.MESSENGERS_LINK} className={styles.socials__item} key={item.id} target="_blank" rel="noreferrer">
-            {item.properties.MESSENGERS_ICON && (<Image src={item.properties.MESSENGERS_ICON} alt={item.title} className={styles.socials__image}/>)}
-          </a>))}
+        {items.map((item) => (
+          <a
+            href={item.properties.MESSENGERS_LINK}
+            className={styles.socials__item}
+            key={item.id}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {item.properties.MESSENGERS_ICON && (
+              <Image src={item.properties.MESSENGERS_ICON} alt={item.title} className={styles.socials__image} />
+            )}
+          </a>
+        ))}
       </div>
-    </div>);
+    </div>
+  );
 };
 export default FooterSocials;
-

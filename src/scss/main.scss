@@ -1,11 +1,10 @@
-@use "base/reset.scss";
+@use 'base/reset.scss';
 
-
-@use "settings/fonts" as *;
-@use "settings/colors" as *;
-@use "settings/functions" as *;
-@use "settings/mixins" as *;
-@use "settings/containers" as *;
+@use 'settings/fonts' as *;
+@use 'settings/colors' as *;
+@use 'settings/functions' as *;
+@use 'settings/mixins' as *;
+@use 'settings/containers' as *;
 
 html {
   width: 100%;
@@ -56,7 +55,6 @@ textarea {
   }
 }
 
-
 * {
   font-family: $ff-unbounded;
   color: $black;
@@ -73,7 +71,6 @@ textarea {
   white-space: nowrap;
   border: 0;
 }
-
 
 @supports (-webkit-touch-callout: none) {
   @media (max-width: rem($mobile)) {

@@ -30,6 +30,6 @@
   p {
     margin: 0;
     @include font(15, $fw-light);
-    color: rgba($black, .55);
+    color: rgba($black, 0.55);
   }
 }

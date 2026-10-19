@@ -32,10 +32,12 @@
     border: rem(1) solid $border-light;
     border-radius: rem(3);
     background-color: $white;
-    transition: background-color 0.2s ease, border-color 0.2s ease;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease;
 
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       left: 50%;
       top: 46%;

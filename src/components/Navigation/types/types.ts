@@ -1,13 +1,12 @@
 export interface NavigationItemInterface {
-    id: number;
-    code: string;
-    title: string;
-    link: string;
+  id: number;
+  code: string;
+  title: string;
+  link: string;
 }
 export interface NavigationInterface {
-    items: NavigationItemInterface[];
+  items: NavigationItemInterface[];
 }
 export interface NavigationItemProps {
-    item: NavigationItemInterface;
+  item: NavigationItemInterface;
 }
-

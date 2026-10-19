@@ -1,11 +1,11 @@
 export interface BreadcrumbsInterface {
-    title?: string;
-    hideTitleOnMobile?: boolean;
-    hideTitle?: boolean;
-    items?: BreadcrumbItemInterface[];
+  title?: string;
+  hideTitleOnMobile?: boolean;
+  hideTitle?: boolean;
+  items?: BreadcrumbItemInterface[];
 }
 export interface BreadcrumbItemInterface {
-    title: string;
-    path: string;
-    hidden: boolean;
+  title: string;
+  path: string;
+  hidden: boolean;
 }

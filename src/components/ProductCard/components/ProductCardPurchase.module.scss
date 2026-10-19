@@ -4,13 +4,31 @@
   gap: rem(16);
   min-width: 0;
   font-size: rem(14);
-  button, input { font: inherit; color: inherit; }
-  button { cursor: pointer; }
-  button:disabled { opacity: 0.5; cursor: default; }
-  button:focus-visible, input:focus-visible { outline: 2px solid $black; outline-offset: 2px; }
-  a { text-decoration: underline; }
+  button,
+  input {
+    font: inherit;
+    color: inherit;
+  }
+  button {
+    cursor: pointer;
+  }
+  button:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+  button:focus-visible,
+  input:focus-visible {
+    outline: 2px solid $black;
+    outline-offset: 2px;
+  }
+  a {
+    text-decoration: underline;
+  }
 }
-.label { flex-basis: 100%; margin-bottom: rem(4); }
+.label {
+  flex-basis: 100%;
+  margin-bottom: rem(4);
+}
 .options {
   display: flex;
   flex-wrap: wrap;
@@ -23,7 +41,11 @@
     border: 1px solid $gray;
     border-radius: rem(8);
     background: $white;
-    &[aria-pressed="true"] { background: $black; color: $white; border-color: $black; }
+    &[aria-pressed='true'] {
+      background: $black;
+      color: $white;
+      border-color: $black;
+    }
   }
 }
 .quantityRow {
@@ -45,7 +67,14 @@
   align-items: center;
   flex-wrap: wrap;
   gap: rem(8);
-  input { width: rem(56); min-height: rem(32); border: 1px solid $gray; border-radius: rem(4); background: $white; padding: rem(4); }
+  input {
+    width: rem(56);
+    min-height: rem(32);
+    border: 1px solid $gray;
+    border-radius: rem(4);
+    background: $white;
+    padding: rem(4);
+  }
 }
 .row {
   display: flex;
@@ -53,7 +82,9 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: rem(4);
-  > span { white-space: nowrap; }
+  > span {
+    white-space: nowrap;
+  }
 }
 .add {
   border: 1px solid $gray;
@@ -61,22 +92,46 @@
   padding: rem(8);
   background: $white;
   white-space: nowrap;
-  &:hover:not(:disabled) { background: $black; color: $white; }
+  &:hover:not(:disabled) {
+    background: $black;
+    color: $white;
+  }
 }
 @media (max-width: rem($mobile)) {
-  .purchase { font-size: rem(12); gap: rem(12); }
-  .label { flex-basis: rem(58); margin-bottom: 0; }
+  .purchase {
+    font-size: rem(12);
+    gap: rem(12);
+  }
+  .label {
+    flex-basis: rem(58);
+    margin-bottom: 0;
+  }
   .options {
     align-items: center;
     gap: rem(6);
-    button { min-height: rem(36); padding: rem(6) rem(8); border-radius: rem(6); }
+    button {
+      min-height: rem(36);
+      padding: rem(6) rem(8);
+      border-radius: rem(6);
+    }
   }
-  .quantityRow { gap: rem(8); }
+  .quantityRow {
+    gap: rem(8);
+  }
   .quantity {
     gap: rem(4);
     font-size: rem(11);
-    input { width: rem(40); font-size: rem(16); }
+    input {
+      width: rem(40);
+      font-size: rem(16);
+    }
   }
-  .stock { font-size: rem(11); padding: rem(7) rem(6); }
-  .add { min-height: rem(38); padding: rem(8) rem(12); }
+  .stock {
+    font-size: rem(11);
+    padding: rem(7) rem(6);
+  }
+  .add {
+    min-height: rem(38);
+    padding: rem(8) rem(12);
+  }
 }

@@ -27,13 +27,24 @@
     font-size: rem(12);
     white-space: nowrap;
     cursor: pointer;
-    &:hover { background: $black; color: $white; }
-    &:focus-visible { outline: 2px solid $black; outline-offset: 2px; }
+    &:hover {
+      background: $black;
+      color: $white;
+    }
+    &:focus-visible {
+      outline: 2px solid $black;
+      outline-offset: 2px;
+    }
   }
 
   @media (max-width: rem($mobile)) {
-    &__purchase { gap: rem(4); }
-    &__quickBuy { font-size: rem(10); padding: rem(8) rem(5); }
+    &__purchase {
+      gap: rem(4);
+    }
+    &__quickBuy {
+      font-size: rem(10);
+      padding: rem(8) rem(5);
+    }
   }
 
   &__header {
@@ -66,9 +77,7 @@
     padding: rem(20);
     color: rgba($black, 0.48);
     text-align: center;
-    background:
-      linear-gradient(135deg, rgba($black, 0.025), transparent 45%),
-      $gray;
+    background: linear-gradient(135deg, rgba($black, 0.025), transparent 45%), $gray;
 
     @include font(13, $fw-light);
   }
@@ -107,7 +116,7 @@
       white-space: nowrap;
       color: $black;
 
-      &[data-marquee="true"]:hover .card__information_titleText {
+      &[data-marquee='true']:hover .card__information_titleText {
         animation: productTitleMarquee 4.5s linear infinite;
       }
     }
@@ -131,7 +140,9 @@
     max-width: none;
     gap: rem(10);
 
-    &__price { font-size: rem(12); }
+    &__price {
+      font-size: rem(12);
+    }
 
     &__header {
       aspect-ratio: 0.78;
@@ -148,9 +159,6 @@
     }
   }
 
-
-  /* Search modal has a compact product card from the design: image + title + price.
-     Sizes are intentionally hidden in ProductCard.tsx for this variant. */
   &_search {
     height: auto;
 
@@ -163,8 +171,6 @@
     }
   }
 
-  /* Catalog grid uses its own mobile card size.
-     Slider cards keep the 254 px width from the design. */
   &_catalog {
     @media (max-width: rem($mobile)) {
       flex: 0 1 auto;
@@ -194,9 +200,16 @@
   }
 }
 
-
 @keyframes productTitleMarquee {
-  0%, 12% { transform: translateX(0); }
-  78%, 90% { transform: translateX(var(--title-shift, 0)); }
-  100% { transform: translateX(0); }
+  0%,
+  12% {
+    transform: translateX(0);
+  }
+  78%,
+  90% {
+    transform: translateX(var(--title-shift, 0));
+  }
+  100% {
+    transform: translateX(0);
+  }
 }

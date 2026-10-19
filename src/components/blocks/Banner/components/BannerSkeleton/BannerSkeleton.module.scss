@@ -1,19 +1,55 @@
-.banner { display: grid; gap: rem(66); }
-.hero, .category {
-  position: relative; overflow: hidden; background: rgba($black, .06);
+.banner {
+  display: grid;
+  gap: rem(66);
+}
+.hero,
+.category {
+  position: relative;
+  overflow: hidden;
+  background: rgba($black, 0.06);
   &::after {
-    content: ''; position: absolute; inset: 0; transform: translateX(-100%);
-    background: linear-gradient(90deg, transparent, rgba($white, .55), transparent);
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba($white, 0.55), transparent);
     animation: skeleton-loading 1.4s infinite;
   }
 }
-.hero { aspect-ratio: 9 / 4; }
-.categories { display: flex; justify-content: center; gap: rem(16); overflow: hidden; }
-.category { flex: 0 0 rem(90); height: rem(90); border-radius: 50%; }
-@media (max-width: rem($mobile)) {
-  .banner { gap: rem(56); }
-  .hero { aspect-ratio: 9 / 4; }
-  .category { flex-basis: rem(72); height: rem(72); }
+.hero {
+  aspect-ratio: 9 / 4;
 }
-@keyframes skeleton-loading { to { transform: translateX(100%); } }
-@media (prefers-reduced-motion: reduce) { .hero::after, .category::after { animation: none; } }
+.categories {
+  display: flex;
+  justify-content: center;
+  gap: rem(16);
+  overflow: hidden;
+}
+.category {
+  flex: 0 0 rem(90);
+  height: rem(90);
+  border-radius: 50%;
+}
+@media (max-width: rem($mobile)) {
+  .banner {
+    gap: rem(56);
+  }
+  .hero {
+    aspect-ratio: 9 / 4;
+  }
+  .category {
+    flex-basis: rem(72);
+    height: rem(72);
+  }
+}
+@keyframes skeleton-loading {
+  to {
+    transform: translateX(100%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero::after,
+  .category::after {
+    animation: none;
+  }
+}

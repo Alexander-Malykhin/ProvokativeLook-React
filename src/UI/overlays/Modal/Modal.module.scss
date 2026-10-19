@@ -1,11 +1,41 @@
-.overlay { animation: modalFade .22s ease-out both; }
-.content { animation: modalEnter .22s ease-out both; }
-.handle { display: none; }
-@keyframes modalFade { from { opacity: 0; } to { opacity: 1; } }
-@keyframes modalEnter { from { transform: translateY(16px) scale(.98); } to { transform: none; } }
-@keyframes sheetEnter { from { transform: translateY(100%); } to { transform: none; } }
+.overlay {
+  animation: modalFade 0.22s ease-out both;
+}
+.content {
+  animation: modalEnter 0.22s ease-out both;
+}
+.handle {
+  display: none;
+}
+@keyframes modalFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes modalEnter {
+  from {
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes sheetEnter {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
 @media (max-width: 767px) {
-  .overlay { align-items: flex-end !important; padding: 0 !important; }
+  .overlay {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
   .content {
     width: 100% !important;
     max-width: 100% !important;
@@ -15,13 +45,36 @@
     padding-top: 44px !important;
     animation-name: sheetEnter;
   }
-  .content button[aria-label^="Закрыть"],
-  .content [data-modal-close] { display: none !important; }
+  .content button[aria-label^='Закрыть'],
+  .content [data-modal-close] {
+    display: none !important;
+  }
   .handle {
-    display: grid; place-items: center; position: absolute; top: 0; left: 50%;
-    transform: translateX(-50%); width: 96px; height: 32px; padding: 0;
-    border: 0; background: transparent; touch-action: none; cursor: grab;
-    &::after { content: ''; width: 40px; height: 4px; border-radius: 4px; background: #b5b5b5; }
+    display: grid;
+    place-items: center;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 96px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    touch-action: none;
+    cursor: grab;
+    &::after {
+      content: '';
+      width: 40px;
+      height: 4px;
+      border-radius: 4px;
+      background: #b5b5b5;
+    }
   }
 }
-@media (prefers-reduced-motion: reduce) { .overlay, .content { animation: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .content {
+    animation: none;
+  }
+}

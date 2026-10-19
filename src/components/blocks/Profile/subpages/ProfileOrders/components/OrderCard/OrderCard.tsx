@@ -1,110 +1,140 @@
-import { safeSessionStorage } from "@helpers/browserStorage";
-import { Link, useNavigate } from "react-router-dom";
-import styles from "./OrderCard.module.scss";
-import type { OrderDto } from "@store/api/orders/types";
-import { usePayOrderMutation } from "@store/api/orders/ordersApi";
-import Image from "@UI/media/Image/Image";
+import { safeSessionStorage } from '@helpers/browserStorage';
+import { useDeadline } from '@hooks/useDeadline';
+import { Link, useNavigate } from 'react-router-dom';
+import styles from './OrderCard.module.scss';
+import type { OrderDto } from '@store/api/orders/types';
+import { usePayOrderMutation } from '@store/api/orders/ordersApi';
+import Image from '@UI/media/Image/Image';
 import DeliveryPayment from '../OrderDetails/DeliveryPayment';
 interface OrderCardProps {
-    order: OrderDto;
+  order: OrderDto;
 }
 const formatMoney = (value: number, currency: string): string => {
-    try {
-        return new Intl.NumberFormat("ru-RU", {
-            style: "currency",
-            currency: currency || "RUB",
-            maximumFractionDigits: 0,
-        }).format(value);
-    }
-    catch {
-        return `${new Intl.NumberFormat("ru-RU").format(value)} ${currency}`;
-    }
+  try {
+    return new Intl.NumberFormat('ru-RU', {
+      style: 'currency',
+      currency: currency || 'RUB',
+      maximumFractionDigits: 0,
+    }).format(value);
+  } catch {
+    return `${new Intl.NumberFormat('ru-RU').format(value)} ${currency}`;
+  }
 };
 const OrderCard = ({ order }: OrderCardProps) => {
-    const navigate = useNavigate();
-    const [payOrder, { isLoading: isPaying }] = usePayOrderMutation();
-    const isReservedOrder = /резерв/iu.test(`${order.stage?.name ?? ""} ${order.statusText ?? ""}`);
-    const paymentName = order.payment?.name || (isReservedOrder ? "Оплата при получении" : "");
-    const returnedOrder = typeof window !== "undefined" ? safeSessionStorage.getItem("provokativelook.payment.returnedOrder") : null;
-    const pendingUntil = typeof window !== "undefined" ? Number(safeSessionStorage.getItem("provokativelook.payment.pendingUntil") ?? 0) : 0;
-    const justReturnedFromPayment = safeSessionStorage.getItem('provokativelook.payment.purpose') !== 'delivery' && !order.isPaid && pendingUntil > Date.now() && Boolean(returnedOrder)
-        && (String(order.orderId ?? "") === returnedOrder || String(order.number) === returnedOrder);
-    const paymentPending = order.paymentState === "pending" || justReturnedFromPayment;
-    const isCancelled = order.status === "cancelled" || /отмен/iu.test(`${order.stage?.name ?? ""} ${order.statusText ?? ""}`);
-    const canPay = !isCancelled && !order.isPaid && !paymentPending && order.canPay;
-    const handlePay = async () => {
-        if (!order.orderId || isPaying || isCancelled)
-            return;
-        const response = await payOrder({ orderId: order.orderId }).unwrap();
-        if (response.payment.paid) {
-            navigate(`/profile/orders/${order.id}`);
-            return;
-        }
-        if (response.payment.url) {
-            safeSessionStorage.removeItem('provokativelook.payment.purpose');
-            safeSessionStorage.setItem("provokativelook.payment.url", response.payment.url);
-            safeSessionStorage.setItem("provokativelook.payment.order", String(order.orderId));
-            navigate("/payment/redirect");
-        }
-    };
-    return (<article className={styles.card}>
+  const navigate = useNavigate();
+  const [payOrder, { isLoading: isPaying }] = usePayOrderMutation();
+  const isReservedOrder = /резерв/iu.test(`${order.stage?.name ?? ''} ${order.statusText ?? ''}`);
+  const paymentName = order.payment?.name || (isReservedOrder ? 'Оплата при получении' : '');
+  const returnedOrder =
+    typeof window !== 'undefined' ? safeSessionStorage.getItem('provokativelook.payment.returnedOrder') : null;
+  const pendingUntil =
+    typeof window !== 'undefined' ? Number(safeSessionStorage.getItem('provokativelook.payment.pendingUntil') ?? 0) : 0;
+  const paymentWindowOpen = useDeadline(pendingUntil);
+  const justReturnedFromPayment =
+    safeSessionStorage.getItem('provokativelook.payment.purpose') !== 'delivery' &&
+    !order.isPaid &&
+    paymentWindowOpen &&
+    Boolean(returnedOrder) &&
+    (String(order.orderId ?? '') === returnedOrder || String(order.number) === returnedOrder);
+  const paymentPending = order.paymentState === 'pending' || justReturnedFromPayment;
+  const isCancelled =
+    order.status === 'cancelled' || /отмен/iu.test(`${order.stage?.name ?? ''} ${order.statusText ?? ''}`);
+  const canPay = !isCancelled && !order.isPaid && !paymentPending && order.canPay;
+  const handlePay = async () => {
+    if (!order.orderId || isPaying || isCancelled) return;
+    const response = await payOrder({ orderId: order.orderId }).unwrap();
+    if (response.payment.paid) {
+      navigate(`/profile/orders/${order.id}`);
+      return;
+    }
+    if (response.payment.url) {
+      safeSessionStorage.removeItem('provokativelook.payment.purpose');
+      safeSessionStorage.setItem('provokativelook.payment.url', response.payment.url);
+      safeSessionStorage.setItem('provokativelook.payment.order', String(order.orderId));
+      navigate('/payment/redirect');
+    }
+  };
+  return (
+    <article className={styles.card}>
       <div className={styles.card__content}>
-        <span className={`${styles.card__label} ${styles[`card__label_${order.status}`]}`} title={`Стадия CRM: ${order.stage.name}`}>
+        <span
+          className={`${styles.card__label} ${styles[`card__label_${order.status}`]}`}
+          title={`Стадия CRM: ${order.stage.name}`}
+        >
           {order.statusText}
         </span>
 
         <span className={styles.card__orderId}>Заказ №{order.number}</span>
 
-        <span className={styles.card__date}>
-          {order.date ? `от ${order.date}` : ""}
-        </span>
+        <span className={styles.card__date}>{order.date ? `от ${order.date}` : ''}</span>
 
         <div className={styles.card__information}>
           <p className={styles.card__information_text}>Сумма:</p>
 
-          <h2 className={styles.card__information_sum}>
-            {formatMoney(order.total, order.currency)}
-          </h2>
+          <h2 className={styles.card__information_sum}>{formatMoney(order.total, order.currency)}</h2>
 
-          <span className={styles.card__information_counter}>
-            / {order.productsCount} товаров
-          </span>
+          <span className={styles.card__information_counter}>/ {order.productsCount} товаров</span>
         </div>
 
-        {(paymentName || order.delivery?.name) && (<div className={styles.card__delivery}>
+        {(paymentName || order.delivery?.name) && (
+          <div className={styles.card__delivery}>
             {paymentName && <span>Способ оплаты: {paymentName}</span>}
             {order.delivery?.name && <span>Доставка: {order.delivery.name}</span>}
 
-            {order.delivery?.trackingNumber && (<div className={styles.card__tracking}>
+            {order.delivery?.trackingNumber && (
+              <div className={styles.card__tracking}>
                 <span>Трек-номер: {order.delivery.trackingNumber}</span>
-
-              </div>)}
-          </div>)}
+              </div>
+            )}
+          </div>
+        )}
 
         <div className={styles.card__actions}>
           <button type="button" className={styles.card__button} onClick={() => navigate(`/profile/orders/${order.id}`)}>
             Подробнее о заказе
           </button>
-          {paymentPending && !order.isPaid ? (<span className={styles.card__paymentPending}>Подтверждаем оплату…</span>) : canPay ? (<button type="button" className={styles.card__payButton} onClick={() => void handlePay()} disabled={isPaying}>
-              {isPaying ? "Переходим к оплате..." : "Оплатить заказ"}
-            </button>) : null}
+          {paymentPending && !order.isPaid ? (
+            <span className={styles.card__paymentPending}>Подтверждаем оплату…</span>
+          ) : canPay ? (
+            <button
+              type="button"
+              className={styles.card__payButton}
+              onClick={() => void handlePay()}
+              disabled={isPaying}
+            >
+              {isPaying ? 'Переходим к оплате...' : 'Оплатить заказ'}
+            </button>
+          ) : null}
         </div>
-        <div className={styles.card__shipping}><DeliveryPayment order={order}/></div>
+        <div className={styles.card__shipping}>
+          <DeliveryPayment order={order} />
+        </div>
       </div>
 
       <div className={styles.card__list}>
         {order.products.slice(0, 4).map((item, index) => {
-        const productPath = item.slug && item.sectionSlug ? `/catalog/${item.sectionSlug}/${item.slug}/` : null;
-        const media = item.image ? (<Image src={item.image} alt={item.name} className={styles.card__list_image}/>) : (<div className={styles.card__list_placeholder}>Фото скоро</div>);
-        return (<article className={styles.card__list_item} key={`${item.id}-${index}`}>
-            {productPath ? <Link to={productPath} aria-label={`Открыть товар ${item.name}`} className={styles.card__list_link}>{media}</Link> : media}
-          </article>);
-    })}
+          const productPath = item.slug && item.sectionSlug ? `/catalog/${item.sectionSlug}/${item.slug}/` : null;
+          const media = item.image ? (
+            <Image src={item.image} alt={item.name} className={styles.card__list_image} />
+          ) : (
+            <div className={styles.card__list_placeholder}>Фото скоро</div>
+          );
+          return (
+            <article className={styles.card__list_item} key={`${item.id}-${index}`}>
+              {productPath ? (
+                <Link to={productPath} aria-label={`Открыть товар ${item.name}`} className={styles.card__list_link}>
+                  {media}
+                </Link>
+              ) : (
+                media
+              )}
+            </article>
+          );
+        })}
 
-        {order.products.length > 4 && (<article className={styles.card__list_end}>
-            {order.products.length - 4}+
-          </article>)}
+        {order.products.length > 4 && <article className={styles.card__list_end}>{order.products.length - 4}+</article>}
       </div>
-    </article>);
+    </article>
+  );
 };
 export default OrderCard;

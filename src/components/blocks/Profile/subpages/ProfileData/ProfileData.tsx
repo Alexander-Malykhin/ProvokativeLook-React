@@ -1,238 +1,249 @@
-import { useEffect, useMemo, useState } from "react";
-import styles from "./ProfileData.module.scss";
-import type { ProfilePageProps } from "@components/blocks/Profile/types/types.ts";
-import { useGetUserQuery, useUpdateUserMutation, } from "@store/api/user/userApi.ts";
-import { useLazyGeocodeAddressQuery, useLazyGetAddressSuggestionsQuery, } from "@store/api/address/addressApi";
-import type { Suggestion } from "@components/blocks/Profile/subpages/ProfileAddresses/model/types";
-import { getRequestErrorMessage } from "@store/api/getRequestErrorMessage";
-import BirthdayPicker from "./components/BirthdayPicker/BirthdayPicker";
-import { useLazySearchCountriesQuery } from "@store/api/countries/countriesApi";
+import { useEffect, useMemo, useState } from 'react';
+import styles from './ProfileData.module.scss';
+import type { ProfilePageProps } from '@components/blocks/Profile/types/types.ts';
+import { useGetUserQuery, useUpdateUserMutation } from '@store/api/user/userApi.ts';
+import { useLazyGeocodeAddressQuery, useLazyGetAddressSuggestionsQuery } from '@store/api/address/addressApi';
+import type { Suggestion } from '@components/blocks/Profile/subpages/ProfileAddresses/model/types';
+import { getRequestErrorMessage } from '@store/api/getRequestErrorMessage';
+import BirthdayPicker from './components/BirthdayPicker/BirthdayPicker';
+import { useLazySearchCountriesQuery } from '@store/api/countries/countriesApi';
 import PhoneVerification from '@components/auth/PhoneVerification';
 import Modal from '@UI/overlays/Modal/Modal';
 import { animateModalClose } from '@UI/overlays/Modal/animateModalClose';
 import authStyles from '@components/modals/AuthModal/AuthModal.module.scss';
-import { formatPhone } from "@components/common/PhoneInput/phone";
+import { formatPhone } from '@components/common/PhoneInput/phone';
 interface ProfileFormState {
-    firstName: string;
-    lastName: string;
-    birthday: string;
-    email: string;
-    phone: string;
-    city: string;
-    country: string;
-    countryId: number | null;
+  firstName: string;
+  lastName: string;
+  birthday: string;
+  email: string;
+  phone: string;
+  city: string;
+  country: string;
+  countryId: number | null;
 }
 const EMPTY_FORM: ProfileFormState = {
-    firstName: "",
-    lastName: "",
-    birthday: "",
-    email: "",
-    phone: "",
-    city: "",
-    country: "",
-    countryId: null,
+  firstName: '',
+  lastName: '',
+  birthday: '',
+  email: '',
+  phone: '',
+  city: '',
+  country: '',
+  countryId: null,
 };
 const displayBirthday = (value: string): string => {
-    const match = value.match(/^(\d{2})[./](\d{2})[./](\d{4})$/);
-    if (!match)
-        return value || "Не указана";
-    return `${match[1]} / ${match[2]} / ${match[3]}`;
+  const match = value.match(/^(\d{2})[./](\d{2})[./](\d{4})$/);
+  if (!match) return value || 'Не указана';
+  return `${match[1]} / ${match[2]} / ${match[3]}`;
 };
 const ProfileData = ({ title }: ProfilePageProps) => {
-    const { data, isLoading, isError } = useGetUserQuery();
-    const [updateUser, updateState] = useUpdateUserMutation();
-    const [getSuggestions] = useLazyGetAddressSuggestionsQuery();
-    const [geocode] = useLazyGeocodeAddressQuery();
-    const [searchCountries] = useLazySearchCountriesQuery();
-    const [isEditing, setIsEditing] = useState(false);
-    const [changingPhone, setChangingPhone] = useState(false);
-    const [form, setForm] = useState<ProfileFormState>(EMPTY_FORM);
-    const [citySuggestions, setCitySuggestions] = useState<Suggestion[]>([]);
-    const [cityOpen, setCityOpen] = useState(false);
-    const [message, setMessage] = useState("");
-    const user = data?.user;
-    const initialForm = useMemo<ProfileFormState>(() => {
-        if (!user)
-            return EMPTY_FORM;
-        return {
-            firstName: user.firstName ?? "",
-            lastName: user.lastName ?? "",
-            birthday: user.birthday ?? "",
-            email: user.email ?? "",
-            phone: user.phone ?? "",
-            city: user.city ?? "",
-            country: user.country ?? "",
-            countryId: user.countryId ?? null,
-        };
-    }, [
-        user?.id,
-        user?.firstName,
-        user?.lastName,
-        user?.birthday,
-        user?.email,
-        user?.phone,
-        user?.city,
-        user?.country,
-        user?.countryId,
-    ]);
-    useEffect(() => {
-        if (isEditing)
-            return;
-        setForm((current) => JSON.stringify(current) === JSON.stringify(initialForm) ? current : initialForm);
-    }, [initialForm, isEditing]);
-    useEffect(() => {
-        if (!isEditing) {
-            setCitySuggestions([]);
-            setCityOpen(false);
-            return;
-        }
-        const query = form.city.trim();
-        if (query.length < 2 || query === (user?.city ?? "")) {
-            setCitySuggestions([]);
-            setCityOpen(false);
-            return;
-        }
-        let cancelled = false;
-        const timer = window.setTimeout(() => {
-            void getSuggestions({ query })
-                .unwrap()
-                .then((items) => {
-                if (cancelled)
-                    return;
-                setCitySuggestions(items.slice(0, 8));
-                setCityOpen(items.length > 0);
-            })
-                .catch(() => {
-                if (cancelled)
-                    return;
-                setCitySuggestions([]);
-                setCityOpen(false);
-            });
-        }, 300);
-        return () => {
-            cancelled = true;
-            window.clearTimeout(timer);
-        };
-    }, [form.city, getSuggestions, isEditing, user?.city]);
-    const changeField = (field: keyof ProfileFormState, value: string) => {
-        setForm((previous) => ({
-            ...previous,
-            [field]: value,
-            ...(field === "city" ? { country: "", countryId: null } : {}),
-        }));
-        setMessage("");
+  const { data, isLoading, isError } = useGetUserQuery();
+  const [updateUser, updateState] = useUpdateUserMutation();
+  const [getSuggestions] = useLazyGetAddressSuggestionsQuery();
+  const [geocode] = useLazyGeocodeAddressQuery();
+  const [searchCountries] = useLazySearchCountriesQuery();
+  const [isEditing, setIsEditing] = useState(false);
+  const [changingPhone, setChangingPhone] = useState(false);
+  const [draftForm, setForm] = useState<ProfileFormState>(EMPTY_FORM);
+  const [citySuggestions, setCitySuggestions] = useState<Suggestion[]>([]);
+  const [cityOpen, setCityOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const user = data?.user;
+  const initialForm = useMemo<ProfileFormState>(() => {
+    if (!user) return EMPTY_FORM;
+    return {
+      firstName: user.firstName ?? '',
+      lastName: user.lastName ?? '',
+      birthday: user.birthday ?? '',
+      email: user.email ?? '',
+      phone: user.phone ?? '',
+      city: user.city ?? '',
+      country: user.country ?? '',
+      countryId: user.countryId ?? null,
     };
-    const selectCity = async (suggestion: Suggestion) => {
-        setCityOpen(false);
-        setCitySuggestions([]);
-        try {
-            const result = await geocode({ geocode: suggestion.fullText, results: 1 }).unwrap();
-            const address = result[0];
-            if (!address) {
-                setForm((previous) => ({ ...previous, city: suggestion.title }));
-                return;
-            }
-            const resolvedCountry = (address.country || "").trim();
-            let resolvedCountryId: number | null = null;
-            let resolvedCountryName = resolvedCountry;
-            if (resolvedCountry) {
-                try {
-                    const countries = await searchCountries({ query: resolvedCountry, limit: 10 }).unwrap();
-                    const exact = countries.countries.find((country) => country.name.trim().toLocaleLowerCase("ru-RU") === resolvedCountry.toLocaleLowerCase("ru-RU")) ?? countries.countries[0];
-                    if (exact) {
-                        resolvedCountryId = exact.id;
-                        resolvedCountryName = exact.name;
-                    }
-                }
-                catch {
-                }
-            }
-            setForm((previous) => ({
-                ...previous,
-                city: address.city || suggestion.title,
-                country: resolvedCountryName || previous.country,
-                countryId: resolvedCountryId ?? previous.countryId,
-            }));
-        }
-        catch {
-            setForm((previous) => ({ ...previous, city: suggestion.title }));
-        }
-    };
-    const startEditing = () => {
-        setForm(initialForm);
-        setMessage("");
-        setIsEditing(true);
-    };
-    const cancelEditing = () => {
-        setForm(initialForm);
-        setCitySuggestions([]);
-        setCityOpen(false);
-        setMessage("");
-        setIsEditing(false);
-    };
-    const save = async () => {
-        setMessage("");
-        if (!form.firstName.trim() || !form.lastName.trim()) {
-            setMessage("Заполните имя и фамилию");
-            return;
-        }
-        try {
-            await updateUser({
-                firstName: form.firstName.trim(),
-                lastName: form.lastName.trim(),
-                birthday: form.birthday.trim(),
-                city: form.city.trim(),
-                ...(form.country.trim() ? { country: form.country.trim(), countryId: form.countryId } : {}),
-            }).unwrap();
-            setMessage("");
-            setIsEditing(false);
-        }
-        catch (error) {
-            setMessage(getRequestErrorMessage(error, "Не удалось сохранить данные"));
-        }
-    };
-    if (isLoading) {
-        return (<div className={styles.content}>
-        <h2 className={styles.content__title}>{title}</h2>
-        <div className={styles.content__skeleton}/>
-      </div>);
+  }, [user]);
+  const form = isEditing ? draftForm : initialForm;
+  useEffect(() => {
+    if (!isEditing) {
+      return;
     }
-    if (isError || !user) {
-        return (<div className={styles.content}>
+    const query = form.city.trim();
+    if (query.length < 2 || query === (user?.city ?? '')) {
+      return;
+    }
+    let cancelled = false;
+    const timer = window.setTimeout(() => {
+      void getSuggestions({ query })
+        .unwrap()
+        .then((items) => {
+          if (cancelled) return;
+          setCitySuggestions(items.slice(0, 8));
+          setCityOpen(items.length > 0);
+        })
+        .catch(() => {
+          if (cancelled) return;
+          setCitySuggestions([]);
+          setCityOpen(false);
+        });
+    }, 300);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [form.city, getSuggestions, isEditing, user?.city]);
+  const changeField = (field: keyof ProfileFormState, value: string) => {
+    if (field === 'city') {
+      setCitySuggestions([]);
+      setCityOpen(false);
+    }
+    setForm((previous) => ({
+      ...previous,
+      [field]: value,
+      ...(field === 'city' ? { country: '', countryId: null } : {}),
+    }));
+    setMessage('');
+  };
+  const selectCity = async (suggestion: Suggestion) => {
+    setCityOpen(false);
+    setCitySuggestions([]);
+    try {
+      const result = await geocode({ geocode: suggestion.fullText, results: 1 }).unwrap();
+      const address = result[0];
+      if (!address) {
+        setForm((previous) => ({ ...previous, city: suggestion.title }));
+        return;
+      }
+      const resolvedCountry = (address.country || '').trim();
+      let resolvedCountryId: number | null = null;
+      let resolvedCountryName = resolvedCountry;
+      if (resolvedCountry) {
+        try {
+          const countries = await searchCountries({ query: resolvedCountry, limit: 10 }).unwrap();
+          const exact =
+            countries.countries.find(
+              (country) =>
+                country.name.trim().toLocaleLowerCase('ru-RU') === resolvedCountry.toLocaleLowerCase('ru-RU'),
+            ) ?? countries.countries[0];
+          if (exact) {
+            resolvedCountryId = exact.id;
+            resolvedCountryName = exact.name;
+          }
+        } catch {}
+      }
+      setForm((previous) => ({
+        ...previous,
+        city: address.city || suggestion.title,
+        country: resolvedCountryName || previous.country,
+        countryId: resolvedCountryId ?? previous.countryId,
+      }));
+    } catch {
+      setForm((previous) => ({ ...previous, city: suggestion.title }));
+    }
+  };
+  const startEditing = () => {
+    setForm(initialForm);
+    setMessage('');
+    setIsEditing(true);
+  };
+  const cancelEditing = () => {
+    setForm(initialForm);
+    setCitySuggestions([]);
+    setCityOpen(false);
+    setMessage('');
+    setIsEditing(false);
+  };
+  const save = async () => {
+    setMessage('');
+    if (!form.firstName.trim() || !form.lastName.trim()) {
+      setMessage('Заполните имя и фамилию');
+      return;
+    }
+    try {
+      await updateUser({
+        firstName: form.firstName.trim(),
+        lastName: form.lastName.trim(),
+        birthday: form.birthday.trim(),
+        city: form.city.trim(),
+        ...(form.country.trim() ? { country: form.country.trim(), countryId: form.countryId } : {}),
+      }).unwrap();
+      setMessage('');
+      setIsEditing(false);
+    } catch (error) {
+      setMessage(getRequestErrorMessage(error, 'Не удалось сохранить данные'));
+    }
+  };
+  if (isLoading) {
+    return (
+      <div className={styles.content}>
+        <h2 className={styles.content__title}>{title}</h2>
+        <div className={styles.content__skeleton} />
+      </div>
+    );
+  }
+  if (isError || !user) {
+    return (
+      <div className={styles.content}>
         <h2 className={styles.content__title}>{title}</h2>
         <p className={styles.content__error}>Не удалось загрузить данные пользователя</p>
-      </div>);
-    }
-    return (<div className={styles.content}>
+      </div>
+    );
+  }
+  return (
+    <div className={styles.content}>
       <div className={styles.content__heading}>
         <h2 className={styles.content__title}>{title}</h2>
 
-        {!isEditing ? (<button type="button" className={styles.content__edit} onClick={startEditing}>
+        {!isEditing ? (
+          <button type="button" className={styles.content__edit} onClick={startEditing}>
             Изменить данные
-          </button>) : (<div className={styles.content__actions}>
+          </button>
+        ) : (
+          <div className={styles.content__actions}>
             <button type="button" className={styles.content__cancel} onClick={cancelEditing}>
               Отмена
             </button>
             <button type="button" className={styles.content__save} disabled={updateState.isLoading} onClick={save}>
-              {updateState.isLoading ? "Сохраняем..." : "Сохранить"}
+              {updateState.isLoading ? 'Сохраняем...' : 'Сохранить'}
             </button>
-          </div>)}
+          </div>
+        )}
       </div>
 
       <div className={styles.content__fields}>
         <label className={styles.content__field}>
           <span className={styles.content__label}>Имя*</span>
-          {isEditing ? (<input className={styles.content__input} value={form.firstName} onChange={(event) => changeField("firstName", event.target.value)}/>) : (<p className={styles.content__value}>{form.firstName || "Не указано"}</p>)}
+          {isEditing ? (
+            <input
+              className={styles.content__input}
+              value={form.firstName}
+              onChange={(event) => changeField('firstName', event.target.value)}
+            />
+          ) : (
+            <p className={styles.content__value}>{form.firstName || 'Не указано'}</p>
+          )}
         </label>
 
         <label className={styles.content__field}>
           <span className={styles.content__label}>Фамилия*</span>
-          {isEditing ? (<input className={styles.content__input} value={form.lastName} onChange={(event) => changeField("lastName", event.target.value)}/>) : (<p className={styles.content__value}>{form.lastName || "Не указано"}</p>)}
+          {isEditing ? (
+            <input
+              className={styles.content__input}
+              value={form.lastName}
+              onChange={(event) => changeField('lastName', event.target.value)}
+            />
+          ) : (
+            <p className={styles.content__value}>{form.lastName || 'Не указано'}</p>
+          )}
         </label>
 
         <div className={styles.content__field}>
           <span className={styles.content__label}>Дата рождения</span>
-          {isEditing ? (<BirthdayPicker value={form.birthday} onChange={(value) => changeField("birthday", value)}/>) : (<p className={styles.content__value}>{displayBirthday(form.birthday)}</p>)}
+          {isEditing ? (
+            <BirthdayPicker value={form.birthday} onChange={(value) => changeField('birthday', value)} />
+          ) : (
+            <p className={styles.content__value}>{displayBirthday(form.birthday)}</p>
+          )}
         </div>
 
         <div className={`${styles.content__field} ${styles.content__field_locked}`}>
@@ -240,44 +251,88 @@ const ProfileData = ({ title }: ProfilePageProps) => {
             <span className={styles.content__label}>Электронная почта</span>
             <span className={styles.content__locked}>Не редактируется</span>
           </div>
-          <p className={styles.content__value}>{form.email || "Не указано"}</p>
+          <p className={styles.content__value}>{form.email || 'Не указано'}</p>
         </div>
 
         <div className={styles.content__field}>
           <span className={styles.content__label}>Телефон*</span>
           <p className={styles.content__value}>{user.phone ? formatPhone(user.phone) : 'Не указано'}</p>
-          <button type="button" className={styles.content__edit} onClick={() => setChangingPhone(true)}>Изменить номер</button>
+          <button type="button" className={styles.content__edit} onClick={() => setChangingPhone(true)}>
+            Изменить номер
+          </button>
         </div>
 
         <label className={styles.content__field}>
           <span className={styles.content__label}>Город</span>
-          {isEditing ? (<>
-              <input className={styles.content__input} value={form.city} placeholder="Начните вводить город" autoComplete="off" onChange={(event) => changeField("city", event.target.value)} onFocus={() => citySuggestions.length && setCityOpen(true)}/>
+          {isEditing ? (
+            <>
+              <input
+                className={styles.content__input}
+                value={form.city}
+                placeholder="Начните вводить город"
+                autoComplete="off"
+                onChange={(event) => changeField('city', event.target.value)}
+                onFocus={() => citySuggestions.length && setCityOpen(true)}
+              />
 
-              {cityOpen && citySuggestions.length > 0 && (<div className={styles.content__suggestions}>
-                  {citySuggestions.map((suggestion) => (<button key={suggestion.id} type="button" className={styles.content__suggestion} onMouseDown={(event) => event.preventDefault()} onClick={() => void selectCity(suggestion)}>
+              {cityOpen && citySuggestions.length > 0 && (
+                <div className={styles.content__suggestions}>
+                  {citySuggestions.map((suggestion) => (
+                    <button
+                      key={suggestion.id}
+                      type="button"
+                      className={styles.content__suggestion}
+                      onMouseDown={(event) => event.preventDefault()}
+                      onClick={() => void selectCity(suggestion)}
+                    >
                       <span>{suggestion.title}</span>
                       <small>{suggestion.subtitle}</small>
-                    </button>))}
-                </div>)}
-            </>) : (<p className={styles.content__value}>{form.city || "Не указано"}</p>)}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </>
+          ) : (
+            <p className={styles.content__value}>{form.city || 'Не указано'}</p>
+          )}
         </label>
 
         <div className={styles.content__field}>
           <span className={styles.content__label}>Страна</span>
-          <p className={`${styles.content__value} ${isEditing ? styles.content__value_muted : ""}`}>
-            {form.country || (isEditing ? "Определится после выбора города" : "Не указано")}
+          <p className={`${styles.content__value} ${isEditing ? styles.content__value_muted : ''}`}>
+            {form.country || (isEditing ? 'Определится после выбора города' : 'Не указано')}
           </p>
         </div>
-
       </div>
 
       {message && <p className={styles.content__message}>{message}</p>}
-      <Modal open={changingPhone} onClose={() => animateModalClose(() => setChangingPhone(false))} overlayClassName={authStyles.overlay} contentClassName={authStyles.modal} ariaLabelledBy="auth-modal-title">
-        <button type="button" aria-label="Закрыть" className={authStyles.modal__close} onClick={() => animateModalClose(() => setChangingPhone(false))}><span/><span/></button>
-        {changingPhone && <PhoneVerification purpose="change" onDone={() => {setIsEditing(false); animateModalClose(() => setChangingPhone(false));}}/>}
+      <Modal
+        open={changingPhone}
+        onClose={() => animateModalClose(() => setChangingPhone(false))}
+        overlayClassName={authStyles.overlay}
+        contentClassName={authStyles.modal}
+        ariaLabelledBy="auth-modal-title"
+      >
+        <button
+          type="button"
+          aria-label="Закрыть"
+          className={authStyles.modal__close}
+          onClick={() => animateModalClose(() => setChangingPhone(false))}
+        >
+          <span />
+          <span />
+        </button>
+        {changingPhone && (
+          <PhoneVerification
+            purpose="change"
+            onDone={() => {
+              setIsEditing(false);
+              animateModalClose(() => setChangingPhone(false));
+            }}
+          />
+        )}
       </Modal>
-
-    </div>);
+    </div>
+  );
 };
 export default ProfileData;

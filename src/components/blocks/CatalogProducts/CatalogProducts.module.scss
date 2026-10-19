@@ -3,14 +3,14 @@
   flex-direction: column;
   gap: rem(40);
 
-
   &__content {
     display: grid;
-    grid-template-columns: minmax(0, rem(322)) 1fr;
+    grid-template-columns: minmax(0, rem(322)) minmax(0, 1fr);
     gap: rem(24);
   }
 
   &__list {
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: rem(40);
@@ -19,7 +19,7 @@
   @media (max-width: rem($mobile)) {
     &__content {
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 }

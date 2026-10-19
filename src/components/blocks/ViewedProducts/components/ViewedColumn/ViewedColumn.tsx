@@ -1,24 +1,23 @@
-import styles from "./ViewedColumn.module.scss";
-import ArrowRightImage from "@assets/arrows/arrow-right-gray.svg";
-import ArrowLeftImage from "@assets/arrows/arrow-left-gray.svg";
-import Image from "@UI/buttons/Image/Image";
-import type { ViewedColumnProps, } from "@components/blocks/ViewedProducts/types/types";
-const ViewedColumn = ({ onPrev, onNext, }: ViewedColumnProps) => {
-    return (<div className={styles.column}>
-            <h2 className={styles.column__title}>
-                Вы смотрели
-            </h2>
+import styles from './ViewedColumn.module.scss';
+import ArrowRightImage from '@assets/arrows/arrow-right-gray.svg';
+import ArrowLeftImage from '@assets/arrows/arrow-left-gray.svg';
+import Image from '@UI/buttons/Image/Image';
+import type { ViewedColumnProps } from '@components/blocks/ViewedProducts/types/types';
+const ViewedColumn = ({ onPrev, onNext }: ViewedColumnProps) => {
+  return (
+    <div className={styles.column}>
+      <h2 className={styles.column__title}>Вы смотрели</h2>
 
-            <div className={styles.column__buttons}>
-                <button type="button" className={styles.column__arrow} onClick={onPrev}>
-                    <Image src={ArrowLeftImage} alt="Стрелка влево" className={styles.column__arrow_image}/>
-                </button>
+      <div className={styles.column__buttons}>
+        <button type="button" className={styles.column__arrow} onClick={onPrev}>
+          <Image src={ArrowLeftImage} alt="Стрелка влево" className={styles.column__arrow_image} />
+        </button>
 
-                <button type="button" className={styles.column__arrow} onClick={onNext}>
-                    <Image src={ArrowRightImage} alt="Стрелка вправо" className={styles.column__arrow_image}/>
-                </button>
-            </div>
-        </div>);
+        <button type="button" className={styles.column__arrow} onClick={onNext}>
+          <Image src={ArrowRightImage} alt="Стрелка вправо" className={styles.column__arrow_image} />
+        </button>
+      </div>
+    </div>
+  );
 };
 export default ViewedColumn;
-

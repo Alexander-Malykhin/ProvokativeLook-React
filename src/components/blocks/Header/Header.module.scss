@@ -5,7 +5,8 @@
   background-color: $white;
   box-shadow: 0 rem(2) rem(4) rgba($black, 0.1);
 
-  padding: calc(#{rem(18)} + env(safe-area-inset-top)) max(#{rem(40)}, env(safe-area-inset-right)) rem(18) max(#{rem(40)}, env(safe-area-inset-left));
+  padding: calc(#{rem(18)} + env(safe-area-inset-top)) max(#{rem(40)}, env(safe-area-inset-right)) rem(18)
+    max(#{rem(40)}, env(safe-area-inset-left));
 
   &__content {
     display: flex;
@@ -22,6 +23,7 @@
   }
 
   @media (max-width: rem($tablet)) {
-    padding: calc(#{rem(12)} + env(safe-area-inset-top)) max(#{rem(10)}, env(safe-area-inset-right)) rem(12) max(#{rem(10)}, env(safe-area-inset-left));
+    padding: calc(#{rem(12)} + env(safe-area-inset-top)) max(#{rem(10)}, env(safe-area-inset-right)) rem(12)
+      max(#{rem(10)}, env(safe-area-inset-left));
   }
 }

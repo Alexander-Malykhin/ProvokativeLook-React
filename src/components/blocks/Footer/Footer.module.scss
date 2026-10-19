@@ -12,8 +12,8 @@
     display: grid;
     grid-template-columns: minmax(rem(260), rem(440)) 1fr;
     grid-template-areas:
-      "contacts nav"
-      "socials bottom";
+      'contacts nav'
+      'socials bottom';
     gap: rem(24);
     padding: rem(40) rem(20) rem(24);
   }
@@ -29,10 +29,10 @@
     &__content {
       grid-template-columns: 1fr;
       grid-template-areas:
-        "nav"
-        "contacts"
-        "socials"
-        "bottom";
+        'nav'
+        'contacts'
+        'socials'
+        'bottom';
     }
   }
 

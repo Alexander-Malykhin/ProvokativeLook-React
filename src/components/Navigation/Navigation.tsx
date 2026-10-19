@@ -1,10 +1,13 @@
-import styles from "./Navigation.module.scss";
-import NavigationItem from "@components/Navigation/components/NavigationItem/NavigationItem.tsx";
-import type { NavigationInterface } from "./types/types.ts";
+import styles from './Navigation.module.scss';
+import NavigationItem from '@components/Navigation/components/NavigationItem/NavigationItem.tsx';
+import type { NavigationInterface } from './types/types.ts';
 const Navigation = ({ items }: NavigationInterface) => {
-    return (<nav className={styles.navigation}>
-      {items.map((item) => (<NavigationItem key={item.id} item={item}/>))}
-    </nav>);
+  return (
+    <nav className={styles.navigation}>
+      {items.map((item) => (
+        <NavigationItem key={item.id} item={item} />
+      ))}
+    </nav>
+  );
 };
 export default Navigation;
-

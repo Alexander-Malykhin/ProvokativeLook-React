@@ -1,19 +1,104 @@
 .form {
- display:grid;gap:20px;
- h2{font-size:26px;line-height:1.2;text-align:center;text-wrap:balance;}
- p{line-height:1.5;font-size:14px;text-align:center;}
- > label{display:grid;gap:8px;}
- input:not([type=checkbox]){width:100%;min-width:0;padding:12px;border:1px solid #d9d9df;border-radius:6px;background:white;font:inherit;}
- input:focus,input:focus-visible{outline:2px solid #000;outline-offset:-1px;border-color:#000;box-shadow:none;}
- button{cursor:pointer;} button:disabled{cursor:default;opacity:.5;}
- .primary{display:flex;align-items:center;justify-content:center;gap:10px;background:#222;color:white;min-height:46px;padding:12px 18px;}
- .error{color:#b42318;}
- .passwordField{border:0;padding:0;background:transparent;}
- .passwordField > span{font:inherit;color:inherit;}
- .passwordField input{padding-right:44px;}
+  display: grid;
+  gap: 20px;
+  h2 {
+    font-size: 26px;
+    line-height: 1.2;
+    text-align: center;
+    text-wrap: balance;
+  }
+  p {
+    line-height: 1.5;
+    font-size: 14px;
+    text-align: center;
+  }
+  > label {
+    display: grid;
+    gap: 8px;
+  }
+  input:not([type='checkbox']) {
+    width: 100%;
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid #d9d9df;
+    border-radius: 6px;
+    background: white;
+    font: inherit;
+  }
+  input:focus,
+  input:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: -1px;
+    border-color: #000;
+    box-shadow: none;
+  }
+  button {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: default;
+    opacity: 0.5;
+  }
+  .primary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #222;
+    color: white;
+    min-height: 46px;
+    padding: 12px 18px;
+  }
+  .error {
+    color: #b42318;
+  }
+  .passwordField {
+    border: 0;
+    padding: 0;
+    background: transparent;
+  }
+  .passwordField > span {
+    font: inherit;
+    color: inherit;
+  }
+  .passwordField input {
+    padding-right: 44px;
+  }
 }
-.loading{display:grid;justify-items:center;align-content:center;gap:16px;min-height:160px;text-align:center;color:#555;font-size:14px;}
-.spinner,.buttonSpinner{display:inline-block;width:32px;height:32px;border:2px solid #ddd;border-top-color:#111;border-radius:50%;animation:phoneSpin .8s linear infinite;}
-.buttonSpinner{width:18px;height:18px;border-color:#ffffff50;border-top-color:#fff;}
-@keyframes phoneSpin{to{transform:rotate(360deg);}}
-@media(prefers-reduced-motion:reduce){.spinner,.buttonSpinner{animation-duration:2s;}}
+.loading {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 16px;
+  min-height: 160px;
+  text-align: center;
+  color: #555;
+  font-size: 14px;
+}
+.spinner,
+.buttonSpinner {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  border: 2px solid #ddd;
+  border-top-color: #111;
+  border-radius: 50%;
+  animation: phoneSpin 0.8s linear infinite;
+}
+.buttonSpinner {
+  width: 18px;
+  height: 18px;
+  border-color: #ffffff50;
+  border-top-color: #fff;
+}
+@keyframes phoneSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spinner,
+  .buttonSpinner {
+    animation-duration: 2s;
+  }
+}

@@ -28,12 +28,12 @@
     gap: rem(10);
 
     &_title {
-      @include font(14, $fw-extra-light)
+      @include font(14, $fw-extra-light);
     }
   }
 
   &__price {
-    @include font(14, $fw-extra-light)
+    @include font(14, $fw-extra-light);
   }
 
   @media (max-width: rem($mobile)) {

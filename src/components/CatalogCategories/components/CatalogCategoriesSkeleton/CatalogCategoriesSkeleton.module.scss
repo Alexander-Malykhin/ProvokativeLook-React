@@ -7,17 +7,12 @@
   background: linear-gradient(180deg, #e4e4ec 0%, #f6f6fa 58%, #d8d8dc 100%);
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     inset: 0;
     z-index: 3;
 
-    background: linear-gradient(
-      100deg,
-      transparent 0%,
-      rgba(255, 255, 255, 0.9) 45%,
-      transparent 90%
-    );
+    background: linear-gradient(100deg, transparent 0%, rgba(255, 255, 255, 0.9) 45%, transparent 90%);
 
     transform: translateX(-100%);
     animation: skeleton-loading 0.9s infinite;

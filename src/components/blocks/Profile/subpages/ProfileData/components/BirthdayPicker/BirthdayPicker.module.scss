@@ -27,7 +27,7 @@
 
     &::before,
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       background: rgba($black, 0.45);
     }
@@ -95,7 +95,9 @@
     color: $black;
     @include font(13, $fw-light);
     cursor: pointer;
-    transition: border-color .18s ease, box-shadow .18s ease;
+    transition:
+      border-color 0.18s ease,
+      box-shadow 0.18s ease;
 
     &:hover,
     &_open {
@@ -111,7 +113,7 @@
     border-right: rem(1) solid $black;
     border-bottom: rem(1) solid $black;
     transform: translateY(rem(-2)) rotate(45deg);
-    transition: transform .18s ease;
+    transition: transform 0.18s ease;
   }
 
   &__selectButton_open &__selectChevron {
@@ -178,7 +180,9 @@
     border-radius: 50%;
     background: $white;
     cursor: pointer;
-    transition: background-color .18s ease, border-color .18s ease;
+    transition:
+      background-color 0.18s ease,
+      border-color 0.18s ease;
 
     &:hover {
       background: rgba($black, 0.035);
@@ -186,7 +190,7 @@
     }
 
     &::before {
-      content: "";
+      content: '';
       position: absolute;
       top: 50%;
       left: 50%;
@@ -233,7 +237,10 @@
     color: $black;
     @include font(13, $fw-light);
     cursor: pointer;
-    transition: background-color .16s ease, color .16s ease, transform .16s ease;
+    transition:
+      background-color 0.16s ease,
+      color 0.16s ease,
+      transform 0.16s ease;
 
     &:hover:not(:disabled) {
       background: rgba($black, 0.055);
